@@ -1,4 +1,4 @@
-# Amphibian
+# Lymbo
 
 ## Aim
 

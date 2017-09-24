@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="1" id="de.interoberlin.amphibian" version="1.0.0">
-    <name>Amphibian</name>
+<widget android-versionCode="1" id="de.interoberlin.lymbo" version="1.0.0">
+    <name>Lymbo</name>
     <description>
     A sample Apache Cordova application
   </description>

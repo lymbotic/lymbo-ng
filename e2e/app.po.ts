@@ -1,6 +1,6 @@
 import { browser, element, by } from 'protractor';
 
-export class AmphibianPage {
+export class LymboPage {
   navigateTo() {
     return browser.get('/');
   }

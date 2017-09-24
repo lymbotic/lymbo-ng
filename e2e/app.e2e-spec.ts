@@ -1,10 +1,10 @@
-import {AmphibianPage} from './app.po';
+import {LymboPage} from './app.po';
 
-describe('amphibian App', function () {
-  let page: AmphibianPage;
+describe('lymbo App', function () {
+  let page: LymboPage;
 
   beforeEach(() => {
-    page = new AmphibianPage();
+    page = new LymboPage();
   });
 
   it('should display message saying app works', () => {

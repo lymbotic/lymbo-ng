@@ -6,7 +6,7 @@
         <source><x id="INTERPOLATION"/></source>
         <target>App funktioniert</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">C:/Users/flori/git/amphibian/src/app/app.component.ts</context>
+          <context context-type="sourcefile">C:/Users/flori/git/lymbo/src/app/app.component.ts</context>
           <context context-type="linenumber">2</context>
         </context-group>
         <note priority="1" from="description">app works</note>
@@ -17,7 +17,7 @@
         </source>
         <target>die App funktioniert!</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">C:/Users/flori/git/amphibian/src/app/app.component.ts</context>
+          <context context-type="sourcefile">C:/Users/flori/git/lymbo/src/app/app.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
         <note priority="1" from="description">app works</note>
@@ -26,7 +26,7 @@
         <source>with</source>
         <target>mit</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">C:/Users/flori/git/amphibian/src/app/app.component.ts</context>
+          <context context-type="sourcefile">C:/Users/flori/git/lymbo/src/app/app.component.ts</context>
           <context context-type="linenumber">5</context>
         </context-group>
         <note priority="1" from="description">with</note>
@@ -35,7 +35,7 @@
         <source>on a smart TV</source>
         <target>auf einem Smart TV</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">C:/Users/flori/git/amphibian/src/app/app.component.ts</context>
+          <context context-type="sourcefile">C:/Users/flori/git/lymbo/src/app/app.component.ts</context>
           <context context-type="linenumber">6</context>
         </context-group>
         <note priority="1" from="description">on a smart TV</note>
@@ -44,7 +44,7 @@
         <source>on a desktop</source>
         <target>auf einem Desktop</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">C:/Users/flori/git/amphibian/src/app/app.component.ts</context>
+          <context context-type="sourcefile">C:/Users/flori/git/lymbo/src/app/app.component.ts</context>
           <context context-type="linenumber">7</context>
         </context-group>
         <note priority="1" from="description">on a desktop</note>
@@ -53,7 +53,7 @@
         <source>on a tablet</source>
         <target>auf einem Tablet</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">C:/Users/flori/git/amphibian/src/app/app.component.ts</context>
+          <context context-type="sourcefile">C:/Users/flori/git/lymbo/src/app/app.component.ts</context>
           <context context-type="linenumber">8</context>
         </context-group>
         <note priority="1" from="description">on a tablet</note>
@@ -62,7 +62,7 @@
         <source>on a mobile device</source>
         <target>auf einem mobilen Geraet</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">C:/Users/flori/git/amphibian/src/app/app.component.ts</context>
+          <context context-type="sourcefile">C:/Users/flori/git/lymbo/src/app/app.component.ts</context>
           <context context-type="linenumber">9</context>
         </context-group>
         <note priority="1" from="description">on a mobile device</note>

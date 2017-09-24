@@ -49,5 +49,5 @@ task releaseAndroid(type: NpmTask, dependsOn: 'npmInstall') { args = ['run', 're
 task releaseNotes(type: NpmTask, dependsOn: 'npmInstall') { args = ['run', 'release-notes'] }
 
 task wrapper(type: Wrapper) {
-  gradleVersion = '2.12'
+  gradleVersion = '3.3'
 }
