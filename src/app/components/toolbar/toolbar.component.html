@@ -1,0 +1,12 @@
+<md-toolbar color="primary">
+  <div class="toolbar-block">
+    <span class="toolbar-title">{{ title | uppercase }}</span>
+  </div>
+  <div class="flexbox"></div>
+  <button md-button class="toolbar-menu-item" [mdMenuTriggerFor]="menu"><img
+    src="assets/icons/ic_more_vert_white_24px.svg">
+  </button>
+  <md-menu #menu="mdMenu">
+    <button md-menu-item (click)="clickMenuItem('settings')">Settings</button>
+  </md-menu>
+</md-toolbar>

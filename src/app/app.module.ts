@@ -1,22 +1,29 @@
-import {BrowserModule} from "@angular/platform-browser";
-import {NgModule} from "@angular/core";
-import {FormsModule} from "@angular/forms";
-import {HttpModule} from "@angular/http";
-import {AppComponent} from "./app.component";
-import {MaterialModule} from "@angular/material";
-import {PlatformService} from "./services/platform.service";
-import {ResponsiveModule} from "ng2-responsive";
+import {BrowserModule} from '@angular/platform-browser';
+import {NgModule} from '@angular/core';
+import {FormsModule} from '@angular/forms';
+import {HttpModule} from '@angular/http';
+import {AppComponent} from './app.component';
+import {PlatformService} from './services/platform.service';
+import {ResponsiveModule} from 'ng2-responsive';
+import {ToolbarComponent} from './components/toolbar/toolbar.component';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
+import {MdButtonModule, MdMenuModule, MdSnackBarModule, MdToolbarModule} from '@angular/material';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    ToolbarComponent
   ],
   imports: [
     BrowserModule,
+    NoopAnimationsModule,
     FormsModule,
     HttpModule,
-    MaterialModule,
-    ResponsiveModule
+    ResponsiveModule,
+    MdButtonModule,
+    MdToolbarModule,
+    MdSnackBarModule,
+    MdMenuModule
   ],
   providers: [PlatformService],
   bootstrap: [AppComponent]

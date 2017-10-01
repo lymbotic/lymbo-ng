@@ -1,10 +1,5 @@
-<h1>
-  <span i18n="app works">{{ title }}</span>
-</h1>
-<p>
-  <span i18n="with">with</span> {{operatingSystem}}
-  <span *isSmartTv i18n="on a smart TV">on a smart TV</span>
-  <span *isDesktop i18n="on a desktop">on a desktop</span>
-  <span *isTablet i18n="on a tablet">on a tablet</span>
-  <span *isMobile i18n="on a mobile device">on a mobile device</span>
-</p>
+<app-toolbar
+  [title]="title"
+  (onMenuItemClicked)="onMenuItemClicked($event)"></app-toolbar>
+<div class="content" layout="row">
+</div>
