@@ -10,12 +10,14 @@ import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {MdButtonModule, MdCardModule, MdMenuModule, MdSnackBarModule, MdToolbarModule} from '@angular/material';
 import {StacksService} from './services/stacks.service';
 import {StackComponent} from './components/stack/stack.component';
+import {StacksComponent} from './components/stacks/stacks.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ToolbarComponent,
-    StackComponent
+    StackComponent,
+    StacksComponent
   ],
   imports: [
     BrowserModule,
