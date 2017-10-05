@@ -8,6 +8,8 @@ import {ResponsiveModule} from 'ng2-responsive';
 import {ToolbarComponent} from './components/toolbar/toolbar.component';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {MdButtonModule, MdCardModule, MdMenuModule, MdSnackBarModule, MdToolbarModule} from '@angular/material';
+import {FileDropComponent} from './components/file-drop/file-drop.component';
+import {FileUploadModule} from 'ng2-file-upload';
 import {StacksService} from './services/stacks.service';
 import {StackComponent} from './components/stack/stack.component';
 import {StacksComponent} from './components/stacks/stacks.component';
@@ -15,6 +17,7 @@ import {StacksComponent} from './components/stacks/stacks.component';
 @NgModule({
   declarations: [
     AppComponent,
+    FileDropComponent,
     ToolbarComponent,
     StackComponent,
     StacksComponent
@@ -22,6 +25,7 @@ import {StacksComponent} from './components/stacks/stacks.component';
   imports: [
     BrowserModule,
     NoopAnimationsModule,
+    FileUploadModule,
     FormsModule,
     HttpModule,
     ResponsiveModule,
