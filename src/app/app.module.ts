@@ -7,12 +7,13 @@ import {PlatformService} from './services/platform.service';
 import {ResponsiveModule} from 'ng2-responsive';
 import {ToolbarComponent} from './components/toolbar/toolbar.component';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
-import {MdButtonModule, MdMenuModule, MdSnackBarModule, MdToolbarModule} from '@angular/material';
+import {MdButtonModule, MdCardModule, MdMenuModule, MdSnackBarModule, MdToolbarModule} from '@angular/material';
+import {StacksService} from './services/stacks.service';
 
 @NgModule({
   declarations: [
     AppComponent,
-    ToolbarComponent
+    ToolbarComponent,
   ],
   imports: [
     BrowserModule,
@@ -23,9 +24,10 @@ import {MdButtonModule, MdMenuModule, MdSnackBarModule, MdToolbarModule} from '@
     MdButtonModule,
     MdToolbarModule,
     MdSnackBarModule,
+    MdCardModule,
     MdMenuModule
   ],
-  providers: [PlatformService],
+  providers: [PlatformService, StacksService],
   bootstrap: [AppComponent]
 })
 
