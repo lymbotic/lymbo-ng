@@ -1,5 +1,8 @@
 <app-toolbar
+  class="fixed"
   [title]="title"
   (onMenuItemClicked)="onMenuItemClicked($event)"></app-toolbar>
 <div class="content" layout="row">
+  <app-file-drop (uploadedFiles)="uploadedFiles($event)"></app-file-drop>
+  <router-outlet></router-outlet>
 </div>
