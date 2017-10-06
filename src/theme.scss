@@ -17,9 +17,9 @@ $app-warn:    mat-palette($mat-red);
 // Create the theme object (a Sass map containing all of the palettes).
 $app-theme: mat-light-theme($app-primary, $app-accent, $app-warn);
 
-$md-xsmall: 'screen and (max-width: 800px)';
-$md-small: 'screen and (min-width: 800px) and (max-width: 1200px)';
-$md-medium: 'screen and (min-width: 1200px)';
+$md-small: 'screen and (max-width: 600px)';
+$md-medium: 'screen and (min-width: 600px) and (max-width: 1080px)';
+$md-large: 'screen and (min-width: 1080px)';
 
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component

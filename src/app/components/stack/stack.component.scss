@@ -1,7 +1,23 @@
 @import '../../../theme';
 
 md-card {
-  margin: 10px 10px;
+  float: left;
+  margin-top: 10px;
+
+  @media #{$md-small} {
+    width: 100%;
+    -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+    box-sizing: border-box;         /* Opera/IE 8+ */
+  }
+  @media #{$md-medium} {
+    width: 300px;
+    margin-right: 10px;
+  }
+  @media #{$md-large} {
+    width: 300px;
+    margin-right: 10px;
+  }
 }
 
 md-card-header {
