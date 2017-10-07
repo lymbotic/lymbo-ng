@@ -14,8 +14,9 @@ import {StacksService} from './services/stacks.service';
 import {StackComponent} from './components/stack/stack.component';
 import {StacksComponent} from './components/stacks/stacks.component';
 import {AppRoutingModule} from './app-routing.module';
-import { CardsComponent } from './components/cards/cards.component';
-import { CardComponent } from './components/card/card.component';
+import {CardsComponent} from './components/cards/cards.component';
+import {CardComponent} from './components/card/card.component';
+import {CardsResolver} from './resolver/cards.resolver';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,7 @@ import { CardComponent } from './components/card/card.component';
     MdCardModule,
     MdMenuModule
   ],
-  providers: [PlatformService, StacksService],
+  providers: [PlatformService, StacksService, CardsResolver],
   bootstrap: [AppComponent]
 })
 

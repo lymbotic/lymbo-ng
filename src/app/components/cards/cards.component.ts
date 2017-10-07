@@ -11,7 +11,7 @@ import {Stack} from '../../model/stack.model';
 })
 export class CardsComponent implements OnInit {
   stackId: number;
-  cards: Card[] = [];
+  stack: Stack;
 
   constructor(private route: ActivatedRoute, private stacksService: StacksService) {
   }
@@ -20,8 +20,7 @@ export class CardsComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.stackId = +params['id'];
     });
-
-    this.cards = this.stacksService.getStack(this.stackId).cards;
+    this.stack = this.route.snapshot.data['stack'];
   }
 
 }
