@@ -14,6 +14,8 @@ import {StacksService} from './services/stacks.service';
 import {StackComponent} from './components/stack/stack.component';
 import {StacksComponent} from './components/stacks/stacks.component';
 import {AppRoutingModule} from './app-routing.module';
+import { CardsComponent } from './components/cards/cards.component';
+import { CardComponent } from './components/card/card.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +23,9 @@ import {AppRoutingModule} from './app-routing.module';
     FileDropComponent,
     ToolbarComponent,
     StackComponent,
-    StacksComponent
+    StacksComponent,
+    CardsComponent,
+    CardComponent
   ],
   imports: [
     AppRoutingModule,

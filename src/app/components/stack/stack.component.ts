@@ -1,4 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
+import {Stack} from '../../model/stack.model';
+import {Card} from '../../model/card.model';
 
 @Component({
   selector: 'app-stack',

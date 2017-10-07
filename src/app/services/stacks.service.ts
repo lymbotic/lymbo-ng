@@ -19,4 +19,8 @@ export class StacksService {
     this.stacks[stack.id] = stack;
     this.stacksSubject.next(stack);
   }
+
+  getStack(id: number): Stack {
+    return this.stacks[id];
+  }
 }

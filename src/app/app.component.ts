@@ -2,7 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {PlatformService} from './services/platform.service';
 import {OperatingSystem} from './model/operating-system';
 import {MdSnackBar} from '@angular/material';
-import {DropResult, SUCCESS} from './components/file-drop/file-drop.component';
 import {Subject} from 'rxjs/Subject';
 import {StacksService} from './services/stacks.service';
 import {Stack} from './model/stack.model';
@@ -41,14 +40,6 @@ export class AppComponent implements OnInit {
       default: {
         break;
       }
-    }
-  }
-
-  public uploadedFiles(result: DropResult) {
-    if (result.result == SUCCESS) {
-      this.dropContent.next(result.payload);
-    } else {
-      this.openSnackBar('ERROR: Failed to parse dropped file.', '');
     }
   }
 
