@@ -1,20 +1,20 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import {ToolbarComponent} from './Toolbar.component';
+import {StacksToolbarComponent} from './stacks-toolbar.component';
 
-describe('ToolbarComponent', () => {
-  let component: ToolbarComponent;
-  let fixture: ComponentFixture<ToolbarComponent>;
+describe('StacksToolbarComponent', () => {
+  let component: StacksToolbarComponent;
+  let fixture: ComponentFixture<StacksToolbarComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ToolbarComponent]
+      declarations: [StacksToolbarComponent]
     })
       .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ToolbarComponent);
+    fixture = TestBed.createComponent(StacksToolbarComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

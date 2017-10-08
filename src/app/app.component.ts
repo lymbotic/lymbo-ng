@@ -2,9 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {PlatformService} from './services/platform.service';
 import {OperatingSystem} from './model/operating-system';
 import {MdSnackBar} from '@angular/material';
-import {Subject} from 'rxjs/Subject';
 import {StacksService} from './services/stacks.service';
-import {Stack} from './model/stack.model';
+import {SnackbarService} from './services/snackbar.service';
 
 @Component({
   selector: 'app-root',
@@ -12,35 +11,20 @@ import {Stack} from './model/stack.model';
   styles: [require('./app.component.scss')],
 })
 export class AppComponent implements OnInit {
-  title = 'Lymbo';
   operatingSystem = '';
 
-  dropContent: Subject<Stack> = new Subject();
-
-  constructor(platformService: PlatformService, private stacksService: StacksService, public snackBar: MdSnackBar) {
+  constructor(platformService: PlatformService,
+              private snackbarService: SnackbarService,
+              public snackBar: MdSnackBar) {
     this.operatingSystem = `${OperatingSystem[platformService.operatingSystem]}`;
   }
 
   ngOnInit(): void {
-    this.dropContent.asObservable().subscribe((result) => {
-      this.stacksService.addStack(result);
-    });
-  }
-
-  /**
-   * Handles click on menu items
-   * @param menuItem
-   */
-  onMenuItemClicked(menuItem: string) {
-    switch (menuItem) {
-      case 'settings': {
-        this.openSnackBar('Clicked on menu item Settings', '');
-        break;
+    this.snackbarService.messageSubject.subscribe(
+      (snack) => {
+        this.openSnackBar(snack[0], snack[1]);
       }
-      default: {
-        break;
-      }
-    }
+    );
   }
 
   /**

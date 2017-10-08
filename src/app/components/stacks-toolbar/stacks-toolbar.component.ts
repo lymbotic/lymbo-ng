@@ -1,11 +1,11 @@
 import {Component, EventEmitter, Input, isDevMode, Output} from '@angular/core';
 
 @Component({
-  selector: 'app-toolbar',
-  templateUrl: './toolbar.component.html',
-  styles: [require('./toolbar.component.scss')]
+  selector: 'app-stacks-toolbar',
+  templateUrl: './stacks-toolbar.component.html',
+  styles: [require('./stacks-toolbar.component.scss')]
 })
-export class ToolbarComponent {
+export class StacksToolbarComponent {
   @Input() title = '';
   @Output() onSearchItemChanged = new EventEmitter<string>();
   @Output() onMenuItemClicked = new EventEmitter<string>();

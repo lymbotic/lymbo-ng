@@ -1,2 +1,8 @@
-<app-card *ngFor="let c of stack.cards" [card]="c">
-</app-card>
+<app-cards-toolbar
+  class="fixed"
+  [title]="title"
+  (onMenuItemClicked)="onMenuItemClicked($event)"></app-cards-toolbar>
+<div class="content" layout="row">
+  <app-card *ngFor="let c of stack.cards" [card]="c">
+  </app-card>
+</div>
