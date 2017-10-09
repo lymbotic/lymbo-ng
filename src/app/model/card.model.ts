@@ -1,4 +1,5 @@
+import {Side} from './side.model';
 export class Card {
   id: string;
-  title: string;
+  side: Side[];
 }

@@ -6,7 +6,7 @@ import {AppComponent} from './app.component';
 import {PlatformService} from './services/platform.service';
 import {ResponsiveModule} from 'ng2-responsive';
 import {StacksToolbarComponent} from './components/stacks-toolbar/stacks-toolbar.component';
-import {NoopAnimationsModule} from '@angular/platform-browser/animations';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MdButtonModule, MdCardModule, MdMenuModule, MdSnackBarModule, MdToolbarModule} from '@angular/material';
 import {FileDropComponent} from './components/file-drop/file-drop.component';
 import {FileUploadModule} from 'ng2-file-upload';
@@ -19,6 +19,7 @@ import {CardComponent} from './components/card/card.component';
 import {CardsResolver} from './resolver/cards.resolver';
 import {SnackbarService} from './services/snackbar.service';
 import {CardsToolbarComponent} from './components/cards-toolbar/cards-toolbar.component';
+import {SideComponent} from './components/side/side.component';
 
 @NgModule({
   declarations: [
@@ -29,12 +30,13 @@ import {CardsToolbarComponent} from './components/cards-toolbar/cards-toolbar.co
     StacksToolbarComponent,
     CardComponent,
     CardsComponent,
-    CardsToolbarComponent
+    CardsToolbarComponent,
+    SideComponent
   ],
   imports: [
     AppRoutingModule,
     BrowserModule,
-    NoopAnimationsModule,
+    BrowserAnimationsModule,
     FileUploadModule,
     FormsModule,
     HttpModule,

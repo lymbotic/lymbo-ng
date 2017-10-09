@@ -1,10 +1,1 @@
-<md-card>
-  <md-card-header>
-    <md-card-title><h1>{{ card.title }}</h1></md-card-title>
-    <md-card-subtitle></md-card-subtitle>
-  </md-card-header>
-  <md-card-content>
-  </md-card-content>
-  <md-card-actions align="right">
-  </md-card-actions>
-</md-card>
+<app-side [side]="activeSide" (click)="flipCard()"></app-side>

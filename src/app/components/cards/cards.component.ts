@@ -26,8 +26,6 @@ export class CardsComponent implements OnInit {
     });
     this.stack = this.route.snapshot.data['stack'];
     this.title = this.stack != null ? `Lymbo | ${this.stack.title}` : `Lymbo`;
-
-    console.log(`stack: ${this.stacksService.stacks[this.stackId].title}`);
   }
 
   /**
