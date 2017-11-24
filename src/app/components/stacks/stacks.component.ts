@@ -1,9 +1,10 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {Stack} from '../../model/stack.model';
 import {StacksService} from '../../services/stacks.service';
 import {DropResult, SUCCESS} from '../file-drop/file-drop.component';
 import {Subject} from 'rxjs/Subject';
 import {SnackbarService} from '../../services/snackbar.service';
+import {MdSidenav} from '@angular/material';
 
 @Component({
   selector: 'app-stacks',
@@ -13,8 +14,9 @@ import {SnackbarService} from '../../services/snackbar.service';
 export class StacksComponent implements OnInit {
   title = 'Lymbo';
   stacks: Stack[] = [];
-
   dropContent: Subject<Stack> = new Subject();
+
+  @ViewChild('sidenav') sidenav: MdSidenav;
 
   constructor(private stacksService: StacksService,
               private snackbarService: SnackbarService) {
@@ -40,6 +42,10 @@ export class StacksComponent implements OnInit {
    */
   onMenuItemClicked(menuItem: string) {
     switch (menuItem) {
+      case 'menu': {
+        this.sidenav.toggle();
+        break;
+      }
       case 'settings': {
         this.snackbarService.showSnackbar('Clicked on menu item Settings', '');
         break;
@@ -48,6 +54,14 @@ export class StacksComponent implements OnInit {
         break;
       }
     }
+  }
+
+  /**
+   * Handles click on side menu items
+   * @param menuItem
+   */
+  onSideMenuItemClicked(menuItem: string) {
+    this.snackbarService.showSnackbar(`Clicked on side menu item ${menuItem}`, '');
   }
 
 
