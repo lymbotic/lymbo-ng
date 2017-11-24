@@ -1,17 +1,17 @@
 @import '../../../theme';
 
 .content {
-  @media #{$md-small} {
+  @media #{$mat-small} {
     padding-top: 88px;
     margin-left: 10px;
     margin-right: 10px;
   }
-  @media #{$md-medium} {
+  @media #{$mat-medium} {
     padding-top: 88px;
     margin-left: 20px;
     margin-right: 20px;
   }
-  @media #{$md-large} {
+  @media #{$mat-large} {
     padding-top: 88px;
     margin-left: 40px;
     margin-right: 40px;

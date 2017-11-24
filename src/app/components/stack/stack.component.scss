@@ -1,35 +1,35 @@
 @import '../../../theme';
 
-md-card {
+mat-card {
   float: left;
   margin-top: 10px;
 
-  @media #{$md-small} {
+  @media #{$mat-small} {
     width: 100%;
     -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
     -moz-box-sizing: border-box;    /* Firefox, other Gecko */
     box-sizing: border-box;         /* Opera/IE 8+ */
   }
-  @media #{$md-medium} {
+  @media #{$mat-medium} {
     width: 300px;
     margin-right: 10px;
   }
-  @media #{$md-large} {
+  @media #{$mat-large} {
     width: 300px;
     margin-right: 10px;
   }
 }
 
-md-card-header {
+mat-card-header {
   margin-left: 0;
   cursor: pointer;
 }
 
-md-card-content {
+mat-card-content {
   margin-bottom: 0;
 }
 
-md-card-actions {
+mat-card-actions {
   padding: 0;
   margin: 0;
 }

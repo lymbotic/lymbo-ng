@@ -1,15 +1,15 @@
-<md-toolbar color="primary">
-  <button md-button class="toolbar-menu-item" (click)="clickMenuItem('back')"><img
+<mat-toolbar color="primary">
+  <button mat-button class="toolbar-menu-item" (click)="clickMenuItem('back')"><img
     src="assets/icons/ic_arrow_back_white_24px.svg">
   </button>
   <div class="toolbar-block">
     <span class="toolbar-title">{{ title | uppercase }}</span>
   </div>
   <div class="flexbox"></div>
-  <button md-button class="toolbar-menu-item" [mdMenuTriggerFor]="menu"><img
+  <button mat-button class="toolbar-menu-item" [mdMenuTriggerFor]="menu"><img
     src="assets/icons/ic_more_vert_white_24px.svg">
   </button>
-  <md-menu #menu="mdMenu">
-    <button md-menu-item (click)="clickMenuItem('settings')">Settings</button>
-  </md-menu>
-</md-toolbar>
+  <mat-menu #menu="mdMenu">
+    <button mat-menu-item (click)="clickMenuItem('settings')">Settings</button>
+  </mat-menu>
+</mat-toolbar>

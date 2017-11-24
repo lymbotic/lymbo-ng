@@ -7,7 +7,16 @@ import {PlatformService} from './services/platform.service';
 import {ResponsiveModule} from 'ng2-responsive';
 import {StacksToolbarComponent} from './components/stacks-toolbar/stacks-toolbar.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {MdButtonModule, MdCardModule, MdMenuModule, MdSnackBarModule, MdToolbarModule} from '@angular/material';
+import {
+  MATERIAL_COMPATIBILITY_MODE,
+  MdButtonModule,
+  MdCardModule,
+  MdListModule,
+  MdMenuModule,
+  MdSidenavModule,
+  MdSnackBarModule,
+  MdToolbarModule
+} from '@angular/material';
 import {FileDropComponent} from './components/file-drop/file-drop.component';
 import {FileUploadModule} from 'ng2-file-upload';
 import {StacksService} from './services/stacks.service';
@@ -20,6 +29,7 @@ import {CardsResolver} from './resolver/cards.resolver';
 import {SnackbarService} from './services/snackbar.service';
 import {CardsToolbarComponent} from './components/cards-toolbar/cards-toolbar.component';
 import {SideComponent} from './components/side/side.component';
+import {SideMenuComponent} from './components/side-menu/side-menu.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +41,8 @@ import {SideComponent} from './components/side/side.component';
     CardComponent,
     CardsComponent,
     CardsToolbarComponent,
-    SideComponent
+    SideComponent,
+    SideMenuComponent
   ],
   imports: [
     AppRoutingModule,
@@ -43,11 +54,18 @@ import {SideComponent} from './components/side/side.component';
     ResponsiveModule,
     MdButtonModule,
     MdToolbarModule,
+    MdSidenavModule,
     MdSnackBarModule,
     MdCardModule,
-    MdMenuModule
+    MdMenuModule,
+    MdListModule
   ],
-  providers: [PlatformService, StacksService, SnackbarService, CardsResolver],
+  providers: [
+    PlatformService,
+    StacksService,
+    SnackbarService,
+    CardsResolver,
+    {provide: MATERIAL_COMPATIBILITY_MODE, useValue: true}],
   bootstrap: [AppComponent]
 })
 
