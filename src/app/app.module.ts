@@ -11,6 +11,9 @@ import {
   MATERIAL_COMPATIBILITY_MODE,
   MdButtonModule,
   MdCardModule,
+  MdDialogModule,
+  MdIconModule,
+  MdInputModule,
   MdListModule,
   MdMenuModule,
   MdSidenavModule,
@@ -30,6 +33,7 @@ import {SnackbarService} from './services/snackbar.service';
 import {CardsToolbarComponent} from './components/cards-toolbar/cards-toolbar.component';
 import {SideComponent} from './components/side/side.component';
 import {SideMenuComponent} from './components/side-menu/side-menu.component';
+import {CardAddDialogComponent} from './components/card-add-dialog/card-add-dialog.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +46,8 @@ import {SideMenuComponent} from './components/side-menu/side-menu.component';
     CardsComponent,
     CardsToolbarComponent,
     SideComponent,
-    SideMenuComponent
+    SideMenuComponent,
+    CardAddDialogComponent
   ],
   imports: [
     AppRoutingModule,
@@ -58,7 +63,13 @@ import {SideMenuComponent} from './components/side-menu/side-menu.component';
     MdSnackBarModule,
     MdCardModule,
     MdMenuModule,
-    MdListModule
+    MdListModule,
+    MdIconModule,
+    MdDialogModule,
+    MdInputModule
+  ],
+  entryComponents: [
+    CardAddDialogComponent
   ],
   providers: [
     PlatformService,

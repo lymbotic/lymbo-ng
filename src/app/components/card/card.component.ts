@@ -18,7 +18,7 @@ export class CardComponent implements OnInit {
     this.activeSide = this.card.sides[this.activeSideIndex];
   }
 
-  public  flipCard() {
+  public flipCard() {
     this.activeSideIndex++;
     if (this.activeSideIndex >= this.card.sides.length) {
       this.activeSideIndex = 0;

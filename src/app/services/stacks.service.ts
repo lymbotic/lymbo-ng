@@ -11,6 +11,7 @@ export class StacksService {
   constructor() {
     if (isDevMode) {
       this.stacks['0'] = MOCK_STACK;
+      this.stacksSubject.next(MOCK_STACK);
     }
   }
 

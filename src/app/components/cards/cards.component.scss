@@ -24,3 +24,21 @@
   top: 0;
   z-index: 999;
 }
+
+.fab {
+  top: auto !important;
+  @media #{$mat-small} {
+    right: 20px !important;
+    bottom: 10px !important;
+  }
+  @media #{$mat-medium} {
+    right: 40px !important;
+    bottom: 20px !important;
+  }
+  @media #{$mat-large} {
+    right: 40px !important;
+    bottom: 20px !important;
+  }
+  left: auto !important;
+  position: fixed !important;
+}

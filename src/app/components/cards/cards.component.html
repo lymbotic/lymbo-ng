@@ -5,4 +5,8 @@
 <div class="content" layout="row">
   <app-card *ngFor="let c of stack.cards" [card]="c">
   </app-card>
+
+  <button mat-fab class="fab" (click)="onMenuItemClicked('add')">
+    <mat-icon svgIcon="add"></mat-icon>
+  </button>
 </div>
