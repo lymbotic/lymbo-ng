@@ -1,6 +1,7 @@
-import {Injectable} from '@angular/core';
+import {Injectable, isDevMode} from '@angular/core';
 import {Stack} from '../model/stack.model';
 import {Subject} from 'rxjs/Subject';
+import {MOCK_STACK} from '../model/mock/stack.mock';
 
 @Injectable()
 export class StacksService {
@@ -8,6 +9,9 @@ export class StacksService {
   stacksSubject = new Subject<Stack>();
 
   constructor() {
+    if (isDevMode) {
+      this.stacks['0'] = MOCK_STACK;
+    }
   }
 
   clear() {
