@@ -12,6 +12,10 @@
     <app-file-drop (uploadedFiles)="uploadedFiles($event)"></app-file-drop>
     <app-stack *ngFor="let s of stacks" [stack]="s">
     </app-stack>
+
+    <button mat-fab class="fab" (click)="onMenuItemClicked('add')">
+      <mat-icon svgIcon="add"></mat-icon>
+    </button>
   </div>
 
 </mat-sidenav-container>

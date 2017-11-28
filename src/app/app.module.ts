@@ -34,6 +34,8 @@ import {CardsToolbarComponent} from './components/cards-toolbar/cards-toolbar.co
 import {SideComponent} from './components/side/side.component';
 import {SideMenuComponent} from './components/side-menu/side-menu.component';
 import {CardAddDialogComponent} from './components/card-add-dialog/card-add-dialog.component';
+import {StackAddDialogComponent} from './components/stack-add-dialog/stack-add-dialog.component';
+import {CardsService} from './services/cards.service';
 
 @NgModule({
   declarations: [
@@ -47,7 +49,8 @@ import {CardAddDialogComponent} from './components/card-add-dialog/card-add-dial
     CardsToolbarComponent,
     SideComponent,
     SideMenuComponent,
-    CardAddDialogComponent
+    CardAddDialogComponent,
+    StackAddDialogComponent
   ],
   imports: [
     AppRoutingModule,
@@ -69,11 +72,13 @@ import {CardAddDialogComponent} from './components/card-add-dialog/card-add-dial
     MdInputModule
   ],
   entryComponents: [
-    CardAddDialogComponent
+    CardAddDialogComponent,
+    StackAddDialogComponent
   ],
   providers: [
     PlatformService,
     StacksService,
+    CardsService,
     SnackbarService,
     CardsResolver,
     {provide: MATERIAL_COMPATIBILITY_MODE, useValue: true}],

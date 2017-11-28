@@ -44,7 +44,6 @@ export class FileDropComponent implements OnInit, OnDestroy {
           };
         })
           .map((value: string) => {
-            console.log(value);
             return JSON.parse(value);
           }).map((results: Array<any>) => {
             return {result: SUCCESS, payload: results};

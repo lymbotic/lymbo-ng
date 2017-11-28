@@ -2,11 +2,19 @@
   class="fixed"
   [title]="title"
   (onMenuItemClicked)="onMenuItemClicked($event)"></app-cards-toolbar>
-<div class="content" layout="row">
-  <app-card *ngFor="let c of stack.cards" [card]="c">
-  </app-card>
 
-  <button mat-fab class="fab" (click)="onMenuItemClicked('add')">
-    <mat-icon svgIcon="add"></mat-icon>
-  </button>
-</div>
+<mat-sidenav-container class="sidenav-container" layout="column">
+  <mat-sidenav #sidenav mode="side" class="sidenav">
+    <app-side-menu (onMenuItemClicked)="onSideMenuItemClicked($event)"></app-side-menu>
+  </mat-sidenav>
+
+  <div class="content">
+    <app-card *ngFor="let c of cards" [card]="c">
+    </app-card>
+
+    <button mat-fab class="fab" (click)="onMenuItemClicked('add')">
+      <mat-icon svgIcon="add"></mat-icon>
+    </button>
+  </div>
+
+</mat-sidenav-container>

@@ -1,7 +1,6 @@
-import {Injectable, isDevMode} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {Stack} from '../model/stack.model';
 import {Subject} from 'rxjs/Subject';
-import {MOCK_STACK} from '../model/mock/stack.mock';
 
 @Injectable()
 export class StacksService {
@@ -9,23 +8,44 @@ export class StacksService {
   stacksSubject = new Subject<Stack>();
 
   constructor() {
-    if (isDevMode) {
-      this.stacks['0'] = MOCK_STACK;
-      this.stacksSubject.next(MOCK_STACK);
-    }
   }
 
+  /**
+   * Clears all stacks
+   */
   clear() {
     this.stacks = {};
     this.stacksSubject.next(null);
   }
 
+  /**
+   * Publishes all stacks the its subscribers
+   */
+  publish() {
+    this.stacksSubject.next(null);
+    for (let id in this.stacks) {
+      if (id != null) {
+        let stack = this.stacks[id];
+        this.stacksSubject.next(stack);
+      }
+    }
+  }
+
+  /**
+   * Adds a stack
+   * @param stack stack to be added
+   */
   addStack(stack: Stack) {
     this.stacks[stack.id] = stack;
     this.stacksSubject.next(stack);
   }
 
+  /**
+   * Gets a stack by a given id
+   * @param id id of the stack
+   * @returns {Stack}
+   */
   getStack(id: number): Stack {
-    return this.stacks[id];
+    return this.stacks[id] as Stack;
   }
 }

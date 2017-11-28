@@ -1,12 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {Stack} from '../../model/stack.model';
 import {SnackbarService} from '../../services/snackbar.service';
-import {StacksService} from '../../services/stacks.service';
 import {MatIconRegistry, MdDialog} from '@angular/material';
 import {DomSanitizer} from '@angular/platform-browser';
 import {CardAddDialogComponent} from '../card-add-dialog/card-add-dialog.component';
 import {Card} from '../../model/card.model';
+import {CardsService} from '../../services/cards.service';
 
 @Component({
   selector: 'app-cards',
@@ -15,12 +14,11 @@ import {Card} from '../../model/card.model';
 })
 export class CardsComponent implements OnInit {
   title = 'Lymbo';
-  stackId: number;
-  stack: Stack;
+  cards: Card[] = [];
 
   constructor(private route: ActivatedRoute,
               private router: Router,
-              private stacksService: StacksService,
+              private cardsService: CardsService,
               private snackbarService: SnackbarService,
               public dialog: MdDialog,
               iconRegistry: MatIconRegistry,
@@ -31,11 +29,18 @@ export class CardsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.route.params.subscribe(params => {
-      this.stackId = +params['id'];
+    let stack = this.route.snapshot.data['stack'];
+
+    this.title = stack != null ? `Lymbo | ${stack.title}` : `Lymbo`;
+
+    this.cardsService.cardsSubject.subscribe((value) => {
+      if (value != null) {
+        this.cards.push(value as Card);
+      } else {
+        this.cards = [];
+      }
     });
-    this.stack = this.route.snapshot.data['stack'];
-    this.title = this.stack != null ? `Lymbo | ${this.stack.title}` : `Lymbo`;
+    this.cardsService.publish(stack);
   }
 
   /**
@@ -56,7 +61,7 @@ export class CardsComponent implements OnInit {
         let dialogRef = this.dialog.open(CardAddDialogComponent, {disableClose: true});
         dialogRef.afterClosed().subscribe(result => {
           if (result != null) {
-            this.stack.cards.push(result as Card);
+            this.cardsService.addCard(result as Card);
             this.snackbarService.showSnackbar('Added card', '');
           }
         });

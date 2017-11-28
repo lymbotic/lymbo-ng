@@ -1,5 +1,21 @@
 @import '../../../theme';
 
+.fixed {
+  width: 100%;
+  position: fixed;
+  top: 0;
+  z-index: 999;
+}
+
+.sidenav-container {
+  height: 100%;
+}
+
+.sidenav {
+  background: transparent;
+  width: 232px;
+}
+
 .content {
   @media #{$mat-small} {
     padding-top: 88px;
@@ -18,11 +34,19 @@
   }
 }
 
-.fixed {
-  width: 100%;
-  position: fixed;
-  top: 0;
-  z-index: 999;
+.sidenav {
+  @media #{$mat-small} {
+    padding-top: 88px;
+    margin-right: 10px;
+  }
+  @media #{$mat-medium} {
+    padding-top: 88px;
+    margin-right: 20px;
+  }
+  @media #{$mat-large} {
+    padding-top: 88px;
+    margin-right: 40px;
+  }
 }
 
 .fab {
@@ -42,3 +66,4 @@
   left: auto !important;
   position: fixed !important;
 }
+

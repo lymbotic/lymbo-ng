@@ -4,7 +4,9 @@ import {StacksService} from '../../services/stacks.service';
 import {DropResult, SUCCESS} from '../file-drop/file-drop.component';
 import {Subject} from 'rxjs/Subject';
 import {SnackbarService} from '../../services/snackbar.service';
-import {MdSidenav} from '@angular/material';
+import {MatIconRegistry, MdDialog, MdSidenav} from '@angular/material';
+import {DomSanitizer} from '@angular/platform-browser';
+import {StackAddDialogComponent} from '../stack-add-dialog/stack-add-dialog.component';
 
 @Component({
   selector: 'app-stacks',
@@ -19,8 +21,13 @@ export class StacksComponent implements OnInit {
   @ViewChild('sidenav') sidenav: MdSidenav;
 
   constructor(private stacksService: StacksService,
-              private snackbarService: SnackbarService) {
+              private snackbarService: SnackbarService,
+              public dialog: MdDialog,
+              iconRegistry: MatIconRegistry,
+              sanitizer: DomSanitizer) {
+    iconRegistry.addSvgIcon('add', sanitizer.bypassSecurityTrustResourceUrl('assets/icons/ic_add_white_24px.svg'));
   }
+
 
   ngOnInit() {
     this.dropContent.asObservable().subscribe((result) => {
@@ -34,6 +41,8 @@ export class StacksComponent implements OnInit {
         this.stacks = [];
       }
     });
+
+    this.stacksService.publish();
   }
 
   /**
@@ -48,6 +57,16 @@ export class StacksComponent implements OnInit {
       }
       case 'settings': {
         this.snackbarService.showSnackbar('Clicked on menu item Settings', '');
+        break;
+      }
+      case 'add': {
+        let dialogRef = this.dialog.open(StackAddDialogComponent, {disableClose: true});
+        dialogRef.afterClosed().subscribe(result => {
+          if (result != null) {
+            this.stacksService.addStack(result as Stack);
+            this.snackbarService.showSnackbar('Added stack', '');
+          }
+        });
         break;
       }
       default: {
@@ -72,5 +91,4 @@ export class StacksComponent implements OnInit {
       this.snackbarService.showSnackbar('ERROR: Failed to parse dropped file.', '');
     }
   }
-
 }
