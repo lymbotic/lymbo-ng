@@ -1,13 +1,13 @@
 <mat-toolbar color="primary">
-  <button mat-button class="toolbar-menu-item" (click)="clickMenuItem('menu')"><img
-    src="assets/icons/ic_menu_white_24px.svg">
+  <button mat-button class="toolbar-menu-item" (click)="clickMenuItem('menu')">
+    <mat-icon svgIcon="menu"></mat-icon>
   </button>
   <div class="toolbar-block">
     <span class="toolbar-title">{{ title | uppercase }}</span>
   </div>
   <div class="flexbox"></div>
-  <button mat-button class="toolbar-menu-item" [mdMenuTriggerFor]="menu"><img
-    src="assets/icons/ic_more_vert_white_24px.svg">
+  <button mat-button class="toolbar-menu-item" [mdMenuTriggerFor]="menu">
+    <mat-icon svgIcon="more"></mat-icon>
   </button>
   <mat-menu #menu="mdMenu">
     <button mat-menu-item (click)="clickMenuItem('settings')">Settings</button>

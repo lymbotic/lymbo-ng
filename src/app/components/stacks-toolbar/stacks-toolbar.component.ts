@@ -1,4 +1,6 @@
-import {Component, EventEmitter, Input, isDevMode, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {DomSanitizer} from '@angular/platform-browser';
+import {MatIconRegistry} from '@angular/material';
 
 @Component({
   selector: 'app-stacks-toolbar',
@@ -12,10 +14,10 @@ export class StacksToolbarComponent {
 
   public state = 'active';
 
-  devMode: boolean;
-
-  constructor() {
-    this.devMode = isDevMode();
+  constructor(iconRegistry: MatIconRegistry,
+              sanitizer: DomSanitizer) {
+    iconRegistry.addSvgIcon('menu', sanitizer.bypassSecurityTrustResourceUrl('assets/icons/ic_menu_white_24px.svg'));
+    iconRegistry.addSvgIcon('more', sanitizer.bypassSecurityTrustResourceUrl('assets/icons/ic_more_vert_white_24px.svg'));
   }
 
   public changeState(active: boolean, screenWidth: number) {
