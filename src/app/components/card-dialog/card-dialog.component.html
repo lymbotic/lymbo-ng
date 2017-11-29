@@ -1,14 +1,14 @@
-<h2 mat-dialog-title>Add card</h2>
+<h2 mat-dialog-title>{{ dialogTitle }}</h2>
 <mat-dialog-content>
   <form #formCtrl="ngForm">
     <mat-form-field>
-      <input matInput required type="text" name="frontTitle" placeholder="Front title" [(ngModel)]="frontTitle"/>
+      <input matInput required type="text" name="frontTitle" placeholder="Front title" [(ngModel)]="card.sides[0].title"/>
       <button mat-button *ngIf="frontTitle" matSuffix mat-icon-button aria-label="Clear" (click)="frontTitle=''">
         <mat-icon svgIcon="close"></mat-icon>
       </button>
     </mat-form-field>
     <mat-form-field>
-      <input matInput required type="text" name="backTitle" placeholder="Back title" [(ngModel)]="backTitle"/>
+      <input matInput required type="text" name="backTitle" placeholder="Back title" [(ngModel)]="card.sides[1].title"/>
       <button mat-button *ngIf="backTitle" matSuffix mat-icon-button aria-label="Clear" (click)="backTitle=''">
         <mat-icon svgIcon="close"></mat-icon>
       </button>
@@ -19,6 +19,9 @@
   <button mat-button [mat-dialog-close]=null>
     Cancel
   </button>
-  <!-- Can optionally provide a result for the closing dialog. -->
-  <button mat-button [disabled]="!formCtrl.form.valid" (click)="addCard()">Add card</button>
+  <button mat-button *ngIf="mode == DIALOG_MODE.ADD" [disabled]="!formCtrl.form.valid" (click)="addCard()">Add card
+  </button>
+  <button mat-button *ngIf="mode == DIALOG_MODE.UPDATE" [disabled]="!formCtrl.form.valid" (click)="updateCard()">Update
+    card
+  </button>
 </mat-dialog-actions>

@@ -3,9 +3,10 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {SnackbarService} from '../../services/snackbar.service';
 import {MatIconRegistry, MdDialog} from '@angular/material';
 import {DomSanitizer} from '@angular/platform-browser';
-import {CardAddDialogComponent} from '../card-add-dialog/card-add-dialog.component';
+import {CardDialogComponent} from '../card-dialog/card-dialog.component';
 import {Card} from '../../model/card.model';
 import {CardsService} from '../../services/cards.service';
+import {StacksService} from '../../services/stacks.service';
 
 @Component({
   selector: 'app-cards',
@@ -19,6 +20,7 @@ export class CardsComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               private router: Router,
               private cardsService: CardsService,
+              private stacksService: StacksService,
               private snackbarService: SnackbarService,
               public dialog: MdDialog,
               iconRegistry: MatIconRegistry,
@@ -58,7 +60,7 @@ export class CardsComponent implements OnInit {
         break;
       }
       case 'add': {
-        let dialogRef = this.dialog.open(CardAddDialogComponent, {disableClose: true});
+        let dialogRef = this.dialog.open(CardDialogComponent, {disableClose: true});
         dialogRef.afterClosed().subscribe(result => {
           if (result != null) {
             this.cardsService.addCard(result as Card);

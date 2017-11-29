@@ -42,6 +42,14 @@ export class CardsService {
   }
 
   /**
+   * Updates an existing card
+   * @param card card to be updated
+   */
+  updateCard(card: Card) {
+    this.cards[card.id] = card;
+  }
+
+  /**
    * Gets a card by a given id
    * @param id id of the card
    * @returns {Card}

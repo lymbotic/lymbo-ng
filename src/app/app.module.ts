@@ -33,7 +33,7 @@ import {SnackbarService} from './services/snackbar.service';
 import {CardsToolbarComponent} from './components/cards-toolbar/cards-toolbar.component';
 import {SideComponent} from './components/side/side.component';
 import {SideMenuComponent} from './components/side-menu/side-menu.component';
-import {CardAddDialogComponent} from './components/card-add-dialog/card-add-dialog.component';
+import {CardDialogComponent} from './components/card-dialog/card-dialog.component';
 import {StackAddDialogComponent} from './components/stack-add-dialog/stack-add-dialog.component';
 import {CardsService} from './services/cards.service';
 
@@ -49,7 +49,7 @@ import {CardsService} from './services/cards.service';
     CardsToolbarComponent,
     SideComponent,
     SideMenuComponent,
-    CardAddDialogComponent,
+    CardDialogComponent,
     StackAddDialogComponent
   ],
   imports: [
@@ -72,7 +72,7 @@ import {CardsService} from './services/cards.service';
     MdInputModule
   ],
   entryComponents: [
-    CardAddDialogComponent,
+    CardDialogComponent,
     StackAddDialogComponent
   ],
   providers: [

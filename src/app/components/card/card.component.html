@@ -1,1 +1,13 @@
-<app-side [side]="activeSide" (click)="flipCard()"></app-side>
+<mat-card>
+  <button mat-icon-button [matMenuTriggerFor]="menu" class="more">
+    <mat-icon svgIcon="more"></mat-icon>
+  </button>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item (click)="editCard()">
+      <mat-icon svgIcon="edit"></mat-icon>
+      <span>Edit</span>
+    </button>
+  </mat-menu>
+
+  <app-side [side]="activeSide" (click)="flipCard()"></app-side>
+</mat-card>

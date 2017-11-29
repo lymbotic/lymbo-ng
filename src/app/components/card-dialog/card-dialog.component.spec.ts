@@ -1,20 +1,20 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import {CardAddDialogComponent} from './card-add-dialog.component';
+import {CardDialogComponent} from './card-dialog.component';
 
-describe('CardAddDialogComponent', () => {
-  let component: CardAddDialogComponent;
-  let fixture: ComponentFixture<CardAddDialogComponent>;
+describe('CardDialogComponent', () => {
+  let component: CardDialogComponent;
+  let fixture: ComponentFixture<CardDialogComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [CardAddDialogComponent]
+      declarations: [CardDialogComponent]
     })
       .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CardAddDialogComponent);
+    fixture = TestBed.createComponent(CardDialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
