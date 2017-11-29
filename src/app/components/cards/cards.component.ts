@@ -7,6 +7,7 @@ import {CardDialogComponent} from '../card-dialog/card-dialog.component';
 import {Card} from '../../model/card.model';
 import {CardsService} from '../../services/cards.service';
 import {StacksService} from '../../services/stacks.service';
+import {Stack} from '../../model/stack.model';
 
 @Component({
   selector: 'app-cards',
@@ -15,7 +16,7 @@ import {StacksService} from '../../services/stacks.service';
 })
 export class CardsComponent implements OnInit {
   title = 'Lymbo';
-  cards: Card[] = [];
+  stack: Stack = new Stack();
 
   constructor(private route: ActivatedRoute,
               private router: Router,
@@ -31,18 +32,17 @@ export class CardsComponent implements OnInit {
   }
 
   ngOnInit() {
-    let stack = this.route.snapshot.data['stack'];
+    this.stack = this.route.snapshot.data['stack'];
 
-    this.title = stack != null ? `Lymbo | ${stack.title}` : `Lymbo`;
+    this.title = this.stack != null ? `Lymbo | ${this.stack.title}` : `Lymbo`;
 
     this.cardsService.cardsSubject.subscribe((value) => {
       if (value != null) {
-        this.cards.push(value as Card);
+        this.stack.cards.push(value as Card);
       } else {
-        this.cards = [];
+        this.stack.cards = [];
       }
     });
-    this.cardsService.publish(stack);
   }
 
   /**
@@ -56,6 +56,7 @@ export class CardsComponent implements OnInit {
         break;
       }
       case 'back': {
+        this.stacksService.updateStack(this.stack);
         this.router.navigate(['/stacks']);
         break;
       }

@@ -41,6 +41,14 @@ export class StacksService {
   }
 
   /**
+   * Updates a stack
+   * @param stack stack to be updated
+   */
+  updateStack(stack: Stack) {
+    this.stacks[stack.id] = stack;
+  }
+
+  /**
    * Gets a stack by a given id
    * @param id id of the stack
    * @returns {Stack}

@@ -20,19 +20,6 @@ export class CardsService {
   }
 
   /**
-   * Publishes all cards the its subscribers
-   * @param stack stack
-   */
-  publish(stack: Stack) {
-    for (let id in stack.cards) {
-      if (id != null) {
-        let card = stack.cards[id];
-        this.cardsSubject.next(card);
-      }
-    }
-  }
-
-  /**
    * Adds a card to the current stack
    * @param card card to be added
    */
