@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { StackAddDialogComponent } from './stack-add-dialog.component';
+import { StackDialogComponent } from './stack-dialog.component';
 
-describe('StackAddDialogComponent', () => {
-  let component: StackAddDialogComponent;
-  let fixture: ComponentFixture<StackAddDialogComponent>;
+describe('StackDialogComponent', () => {
+  let component: StackDialogComponent;
+  let fixture: ComponentFixture<StackDialogComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ StackAddDialogComponent ]
+      declarations: [ StackDialogComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(StackAddDialogComponent);
+    fixture = TestBed.createComponent(StackDialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

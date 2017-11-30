@@ -6,7 +6,7 @@ import {Subject} from 'rxjs/Subject';
 import {SnackbarService} from '../../services/snackbar.service';
 import {MatIconRegistry, MdDialog, MdSidenav} from '@angular/material';
 import {DomSanitizer} from '@angular/platform-browser';
-import {StackAddDialogComponent} from '../stack-add-dialog/stack-add-dialog.component';
+import {StackDialogComponent} from '../stack-dialog/stack-dialog.component';
 
 @Component({
   selector: 'app-stacks',
@@ -60,7 +60,7 @@ export class StacksComponent implements OnInit {
         break;
       }
       case 'add': {
-        let dialogRef = this.dialog.open(StackAddDialogComponent, {disableClose: true});
+        let dialogRef = this.dialog.open(StackDialogComponent, {disableClose: true});
         dialogRef.afterClosed().subscribe(result => {
           if (result != null) {
             this.stacksService.addStack(result as Stack);

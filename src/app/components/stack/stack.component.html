@@ -1,4 +1,13 @@
 <mat-card>
+  <button mat-icon-button [matMenuTriggerFor]="menu" class="more">
+    <mat-icon svgIcon="more"></mat-icon>
+  </button>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item (click)="editStack()">
+      <mat-icon svgIcon="edit"></mat-icon>
+      <span>Edit</span>
+    </button>
+  </mat-menu>
   <mat-card-header [routerLink]="['/cards', stack.id]">
     <mat-card-title><h1>{{ stack.title }}</h1></mat-card-title>
     <mat-card-subtitle>{{ stack.cards.length }} cards</mat-card-subtitle>

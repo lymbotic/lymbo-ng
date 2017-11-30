@@ -30,12 +30,12 @@ export class CardComponent implements OnInit {
     this.activeSide = this.card.sides[this.activeSideIndex];
   }
 
-  public editCard() {
+  public updateCard() {
     let dialogRef = this.dialog.open(CardDialogComponent, {disableClose: true, data: {card: this.card}});
     dialogRef.afterClosed().subscribe(result => {
       if (result != null) {
         this.cardsService.updateCard(result as Card);
-        this.snackbarService.showSnackbar('Edited card', '');
+        this.snackbarService.showSnackbar('Updated card', '');
       }
     });
   }

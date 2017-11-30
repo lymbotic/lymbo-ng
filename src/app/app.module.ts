@@ -34,7 +34,7 @@ import {CardsToolbarComponent} from './components/cards-toolbar/cards-toolbar.co
 import {SideComponent} from './components/side/side.component';
 import {SideMenuComponent} from './components/side-menu/side-menu.component';
 import {CardDialogComponent} from './components/card-dialog/card-dialog.component';
-import {StackAddDialogComponent} from './components/stack-add-dialog/stack-add-dialog.component';
+import {StackDialogComponent} from './components/stack-dialog/stack-dialog.component';
 import {CardsService} from './services/cards.service';
 
 @NgModule({
@@ -50,7 +50,7 @@ import {CardsService} from './services/cards.service';
     SideComponent,
     SideMenuComponent,
     CardDialogComponent,
-    StackAddDialogComponent
+    StackDialogComponent
   ],
   imports: [
     AppRoutingModule,
@@ -73,7 +73,7 @@ import {CardsService} from './services/cards.service';
   ],
   entryComponents: [
     CardDialogComponent,
-    StackAddDialogComponent
+    StackDialogComponent
   ],
   providers: [
     PlatformService,
