@@ -1,12 +1,12 @@
 import {Injectable} from '@angular/core';
 import {Card} from '../model/card.model';
 import {Subject} from 'rxjs/Subject';
-import {Stack} from '../model/stack.model';
 
 @Injectable()
 export class CardsService {
   cards: { [id: string]: Card; } = {};
-  cardsSubject = new Subject<Card>();
+  cardsAddSubject = new Subject<Card>();
+  cardsDeleteSubject = new Subject<Card>();
 
   constructor() {
   }
@@ -16,7 +16,7 @@ export class CardsService {
    */
   clear() {
     this.cards = {};
-    this.cardsSubject.next(null);
+    this.cardsAddSubject.next(null);
   }
 
   /**
@@ -24,8 +24,9 @@ export class CardsService {
    * @param card card to be added
    */
   addCard(card: Card) {
+    console.log(`DEBUG addCard() ${card.id}`);
     this.cards[card.id] = card;
-    this.cardsSubject.next(card);
+    this.cardsAddSubject.next(card);
   }
 
   /**
@@ -34,6 +35,15 @@ export class CardsService {
    */
   updateCard(card: Card) {
     this.cards[card.id] = card;
+  }
+
+  /**
+   * Deletes an existing card
+   * @param card card to be deleted
+   */
+  deleteCard(card: Card) {
+    delete this.cards[card.id];
+    this.cardsDeleteSubject.next(card);
   }
 
   /**

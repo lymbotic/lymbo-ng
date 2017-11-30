@@ -1,8 +1,12 @@
 <mat-card>
   <button mat-icon-button [matMenuTriggerFor]="menu" class="more">
-    <mat-icon svgIcon="more"></mat-icon>
+    <mat-icon svgIcon="more_black"></mat-icon>
   </button>
   <mat-menu #menu="matMenu">
+    <button mat-menu-item (click)="deleteCard()">
+      <mat-icon svgIcon="delete"></mat-icon>
+      <span>Delete</span>
+    </button>
     <button mat-menu-item (click)="updateCard()">
       <mat-icon svgIcon="edit"></mat-icon>
       <span>Edit</span>

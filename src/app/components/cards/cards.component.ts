@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {SnackbarService} from '../../services/snackbar.service';
 import {MatIconRegistry, MdDialog} from '@angular/material';
@@ -8,15 +8,17 @@ import {Card} from '../../model/card.model';
 import {CardsService} from '../../services/cards.service';
 import {StacksService} from '../../services/stacks.service';
 import {Stack} from '../../model/stack.model';
+import {Subject} from 'rxjs/Subject';
 
 @Component({
   selector: 'app-cards',
   templateUrl: './cards.component.html',
   styles: [require('./cards.component.scss')]
 })
-export class CardsComponent implements OnInit {
+export class CardsComponent implements OnInit, OnDestroy {
   title = 'Lymbo';
   stack: Stack = new Stack();
+  private cardsUnsubscribeSubject = new Subject();
 
   constructor(private route: ActivatedRoute,
               private router: Router,
@@ -36,13 +38,27 @@ export class CardsComponent implements OnInit {
 
     this.title = this.stack != null ? `Lymbo | ${this.stack.title}` : `Lymbo`;
 
-    this.cardsService.cardsSubject.subscribe((value) => {
+    this.cardsService.cardsAddSubject
+      .takeUntil(this.cardsUnsubscribeSubject)
+      .subscribe((value) => {
+        if (value != null) {
+          this.stack.cards.push(value as Card);
+        } else {
+          this.stack.cards = [];
+        }
+      });
+    this.cardsService.cardsDeleteSubject
+      .takeUntil(this.cardsUnsubscribeSubject)
+      .subscribe((value) => {
       if (value != null) {
-        this.stack.cards.push(value as Card);
-      } else {
-        this.stack.cards = [];
+        this.stack.cards = this.stack.cards.filter(c => c.id !== (value as Card).id);
       }
     });
+  }
+
+  ngOnDestroy(): void {
+    this.cardsUnsubscribeSubject.next();
+    this.cardsUnsubscribeSubject.complete();
   }
 
   /**

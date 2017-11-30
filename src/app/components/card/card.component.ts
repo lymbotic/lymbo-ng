@@ -6,6 +6,7 @@ import {SnackbarService} from '../../services/snackbar.service';
 import {CardsService} from '../../services/cards.service';
 import {CardDialogComponent} from '../card-dialog/card-dialog.component';
 import {Card} from '../../model/card.model';
+import {ConfirmationDialogComponent} from '../confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-card',
@@ -22,8 +23,9 @@ export class CardComponent implements OnInit {
               public dialog: MdDialog,
               iconRegistry: MatIconRegistry,
               sanitizer: DomSanitizer) {
-    iconRegistry.addSvgIcon('more', sanitizer.bypassSecurityTrustResourceUrl('assets/icons/ic_more_vert_black_18px.svg'));
+    iconRegistry.addSvgIcon('more_black', sanitizer.bypassSecurityTrustResourceUrl('assets/icons/ic_more_vert_black_18px.svg'));
     iconRegistry.addSvgIcon('edit', sanitizer.bypassSecurityTrustResourceUrl('assets/icons/ic_edit_black_18px.svg'));
+    iconRegistry.addSvgIcon('delete', sanitizer.bypassSecurityTrustResourceUrl('assets/icons/ic_delete_black_18px.svg'));
   }
 
   ngOnInit() {
@@ -31,11 +33,33 @@ export class CardComponent implements OnInit {
   }
 
   public updateCard() {
-    let dialogRef = this.dialog.open(CardDialogComponent, {disableClose: true, data: {card: this.card}});
+    let dialogRef = this.dialog.open(CardDialogComponent, {
+      disableClose: true, data: {
+        card: this.card
+      }
+    });
     dialogRef.afterClosed().subscribe(result => {
       if (result != null) {
         this.cardsService.updateCard(result as Card);
         this.snackbarService.showSnackbar('Updated card', '');
+      }
+    });
+  }
+
+  public deleteCard() {
+    let dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      disableClose: true,
+      data: {
+        title: 'Delete card',
+        text: 'Do you want to delete this card?',
+        action: 'Delete',
+        value: this.card
+      }
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result != null) {
+        this.cardsService.deleteCard(result as Card);
+        this.snackbarService.showSnackbar('Deleted card', '');
       }
     });
   }
