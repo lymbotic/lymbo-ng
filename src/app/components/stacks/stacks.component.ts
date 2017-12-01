@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {Stack} from '../../model/stack.model';
 import {StacksService} from '../../services/stacks.service';
 import {DropResult, SUCCESS} from '../file-drop/file-drop.component';
@@ -13,10 +13,11 @@ import {StackDialogComponent} from '../stack-dialog/stack-dialog.component';
   templateUrl: './stacks.component.html',
   styles: [require('./stacks.component.scss')]
 })
-export class StacksComponent implements OnInit {
+export class StacksComponent implements OnInit, OnDestroy {
   title = 'Lymbo';
   stacks: Stack[] = [];
   dropContent: Subject<Stack> = new Subject();
+  private stacksUnsubscribeSubject = new Subject();
 
   @ViewChild('sidenav') sidenav: MdSidenav;
 
@@ -34,15 +35,29 @@ export class StacksComponent implements OnInit {
       this.stacksService.addStack(result);
     });
 
-    this.stacksService.stacksSubject.subscribe((value) => {
-      if (value != null) {
-        this.stacks.push(value as Stack);
-      } else {
-        this.stacks = [];
-      }
-    });
+    this.stacksService.stacksSubject
+      .takeUntil(this.stacksUnsubscribeSubject)
+      .subscribe((value) => {
+        if (value != null) {
+          this.stacks.push(value as Stack);
+        } else {
+          this.stacks = [];
+        }
+      });
+    this.stacksService.stacksDeleteSubject
+      .takeUntil(this.stacksUnsubscribeSubject)
+      .subscribe((value) => {
+        if (value != null) {
+          this.stacks = this.stacks.filter(s => s.id !== (value as Stack).id);
+        }
+      });
 
     this.stacksService.publish();
+  }
+
+  ngOnDestroy(): void {
+    this.stacksUnsubscribeSubject.next();
+    this.stacksUnsubscribeSubject.complete();
   }
 
   /**

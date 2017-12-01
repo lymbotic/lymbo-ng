@@ -6,6 +6,7 @@ import {Subject} from 'rxjs/Subject';
 export class StacksService {
   stacks: { [id: string]: Stack; } = {};
   stacksSubject = new Subject<Stack>();
+  stacksDeleteSubject = new Subject<Stack>();
 
   constructor() {
   }
@@ -46,6 +47,15 @@ export class StacksService {
    */
   updateStack(stack: Stack) {
     this.stacks[stack.id] = stack;
+  }
+
+  /**
+   * Deletes an existing stack
+   * @param stack stack to be deleted
+   */
+  deleteStack(stack: Stack) {
+    delete this.stacks[stack.id];
+    this.stacksDeleteSubject.next(stack);
   }
 
   /**

@@ -3,7 +3,11 @@
     <mat-icon svgIcon="more_black"></mat-icon>
   </button>
   <mat-menu #menu="matMenu">
-    <button mat-menu-item (click)="editStack()">
+    <button mat-menu-item (click)="deleteStack()">
+      <mat-icon svgIcon="delete"></mat-icon>
+      <span>Delete</span>
+    </button>
+    <button mat-menu-item (click)="updateStack()">
       <mat-icon svgIcon="edit"></mat-icon>
       <span>Edit</span>
     </button>
