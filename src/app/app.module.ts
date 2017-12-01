@@ -36,7 +36,8 @@ import {SideMenuComponent} from './components/side-menu/side-menu.component';
 import {CardDialogComponent} from './components/card-dialog/card-dialog.component';
 import {StackDialogComponent} from './components/stack-dialog/stack-dialog.component';
 import {CardsService} from './services/cards.service';
-import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
+import {ConfirmationDialogComponent} from './components/confirmation-dialog/confirmation-dialog.component';
+import {SplashScreenComponent} from './components/splash-screen/splash-screen.component';
 
 @NgModule({
   declarations: [
@@ -52,7 +53,8 @@ import { ConfirmationDialogComponent } from './components/confirmation-dialog/co
     SideMenuComponent,
     CardDialogComponent,
     StackDialogComponent,
-    ConfirmationDialogComponent
+    ConfirmationDialogComponent,
+    SplashScreenComponent
   ],
   imports: [
     AppRoutingModule,

@@ -3,9 +3,10 @@ import {RouterModule, Routes} from '@angular/router';
 import {StacksComponent} from './components/stacks/stacks.component';
 import {CardsComponent} from './components/cards/cards.component';
 import {CardsResolver} from './resolver/cards.resolver';
+import {SplashScreenComponent} from './components/splash-screen/splash-screen.component';
 
 const routes: Routes = [
-  {path: '', redirectTo: '/stacks', pathMatch: 'full'},
+  {path: '', component: SplashScreenComponent},
   {path: 'stacks', component: StacksComponent},
   {
     path: 'cards/:id', component: CardsComponent, resolve: {
