@@ -12,7 +12,9 @@ export class CardsResolver implements Resolve<Stack> {
 
   resolve(route: ActivatedRouteSnapshot,
           state: RouterStateSnapshot): Observable<any> | Promise<any> | any {
-    let stack = this.stacksService.getStack(route.params.id);
+    let stack = this.stacksService.stacks.get(route.params.id);
+
+    console.log(`DEBUG resolve ${stack.id}`);
 
     return stack != null ? stack : new Stack();
   }

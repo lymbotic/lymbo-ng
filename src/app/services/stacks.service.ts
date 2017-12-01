@@ -1,69 +1,71 @@
-import {Injectable} from '@angular/core';
+import {Injectable, isDevMode} from '@angular/core';
 import {Stack} from '../model/stack.model';
 import {Subject} from 'rxjs/Subject';
+import {PouchDBService} from './pouchdb.service';
 
 @Injectable()
 export class StacksService {
-  stacks: { [id: string]: Stack; } = {};
-  stacksSubject = new Subject<Stack>();
-  stacksDeleteSubject = new Subject<Stack>();
+  stacks = new Map<String, Stack>();
+  stacksSubject = new Subject<Stack[]>();
 
-  constructor() {
+  constructor(private pouchDBService: PouchDBService) {
+    this.pouchDBService.getChangeListener().subscribe(
+      item => {
+        console.log(`DEBUG pouchDBService item`);
+        (item['change']['docs']).forEach(d => {
+          let stack = d as Stack;
+          this.stacks.set(stack.id, stack);
+          this.notify();
+        });
+      });
+  }
+
+  public createStack(stack: Stack) {
+    console.log(`DEBUG createCard ${stack.id}`);
+    this.stacks.set(stack.id, stack);
+    this.pouchDBService.put(stack.id, stack);
+    this.notify();
+  }
+
+  public updateStack(stack: Stack) {
+    console.log(`DEBUG updateCard ${stack.id}`);
+    this.stacks.set(stack.id, stack);
+    this.pouchDBService.put(stack.id, stack);
+    this.notify();
+  }
+
+  public deleteStack(stack: Stack) {
+    console.log(`DEBUG deleteCard ${stack.id}`);
+    this.stacks.delete(stack.id);
+    this.pouchDBService.remove(stack.id, stack);
+    this.notify();
   }
 
   /**
-   * Clears all stacks
+   * Informs subscribers that something has changed
    */
-  clear() {
-    this.stacks = {};
-    this.stacksSubject.next(null);
+  private notify() {
+    console.log(`DEBUG notify`);
+    this.stacksSubject.next(Array.from(this.stacks.values()));
   }
 
   /**
-   * Publishes all stacks the its subscribers
+   * Retrieves data from PouchDB
    */
-  publish() {
-    this.stacksSubject.next(null);
-    for (let id in this.stacks) {
-      if (id != null) {
-        let stack = this.stacks[id];
-        this.stacksSubject.next(stack);
+  public fetch() {
+    console.log(`DEBUG fetch`);
+    this.pouchDBService.fetch().then(result => {
+        result.rows.forEach(r => {
+          console.log(`DEBUG result row`);
+          let stack = r.doc as Stack;
+          this.stacks.set(stack.id, stack);
+          this.notify();
+        });
+      }, error => {
+        if (isDevMode()) {
+          console.error(error);
+        }
       }
-    }
-  }
-
-  /**
-   * Adds a stack
-   * @param stack stack to be added
-   */
-  addStack(stack: Stack) {
-    this.stacks[stack.id] = stack;
-    this.stacksSubject.next(stack);
-  }
-
-  /**
-   * Updates a stack
-   * @param stack stack to be updated
-   */
-  updateStack(stack: Stack) {
-    this.stacks[stack.id] = stack;
-  }
-
-  /**
-   * Deletes an existing stack
-   * @param stack stack to be deleted
-   */
-  deleteStack(stack: Stack) {
-    delete this.stacks[stack.id];
-    this.stacksDeleteSubject.next(stack);
-  }
-
-  /**
-   * Gets a stack by a given id
-   * @param id id of the stack
-   * @returns {Stack}
-   */
-  getStack(id: number): Stack {
-    return this.stacks[id] as Stack;
+    );
   }
 }

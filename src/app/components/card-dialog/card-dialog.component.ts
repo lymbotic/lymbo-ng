@@ -1,6 +1,6 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {Card} from '../../model/card.model';
-import {MAT_DIALOG_DATA, MatIconRegistry, MdDialogRef} from '@angular/material';
+import {MAT_DIALOG_DATA, MatIconRegistry, MatDialogRef} from '@angular/material';
 import {Side} from 'app/model/side.model';
 import {DomSanitizer} from '@angular/platform-browser';
 import {UUID} from '../../model/util/uuid';
@@ -17,7 +17,7 @@ export class CardDialogComponent implements OnInit {
   dialogTitle = '';
   card: Card;
 
-  constructor(public dialogRef: MdDialogRef<CardDialogComponent>,
+  constructor(public dialogRef: MatDialogRef<CardDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any,
               iconRegistry: MatIconRegistry,
               sanitizer: DomSanitizer) {

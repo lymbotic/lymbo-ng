@@ -1,9 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {PlatformService} from './services/platform.service';
 import {OperatingSystem} from './model/operating-system';
-import {MdSnackBar} from '@angular/material';
-import {StacksService} from './services/stacks.service';
+import {MatSnackBar} from '@angular/material';
 import {SnackbarService} from './services/snackbar.service';
+import {PouchDBService} from './services/pouchdb.service';
+import {Card} from './model/card.model';
 
 @Component({
   selector: 'app-root',
@@ -14,8 +15,9 @@ export class AppComponent implements OnInit {
   operatingSystem = '';
 
   constructor(platformService: PlatformService,
+              private pouchDBService: PouchDBService,
               private snackbarService: SnackbarService,
-              public snackBar: MdSnackBar) {
+              public snackBar: MatSnackBar) {
     this.operatingSystem = `${OperatingSystem[platformService.operatingSystem]}`;
   }
 
@@ -25,6 +27,8 @@ export class AppComponent implements OnInit {
         this.openSnackBar(snack[0], snack[1]);
       }
     );
+
+    this.pouchDBService.sync('http://localhost:5984/lymbo');
   }
 
   /**

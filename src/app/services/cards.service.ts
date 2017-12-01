@@ -1,57 +1,48 @@
 import {Injectable} from '@angular/core';
 import {Card} from '../model/card.model';
 import {Subject} from 'rxjs/Subject';
+import {Stack} from '../model/stack.model';
+import {PouchDBService} from './pouchdb.service';
 
 @Injectable()
 export class CardsService {
-  cards: { [id: string]: Card; } = {};
-  cardsAddSubject = new Subject<Card>();
-  cardsDeleteSubject = new Subject<Card>();
+  stack: Stack; // Just a helper
 
-  constructor() {
+  cards = new Map<String, Card>();
+  cardsSubject = new Subject<Card[]>();
+
+  constructor(private pouchDBService: PouchDBService) {
+  }
+
+  public createCard(card: Card) {
+    console.log(`DEBUG createCard ${card.id}`);
+    this.cards.set(card.id, card);
+    this.stack.cards = Array.from(this.cards.values());
+    this.pouchDBService.put(this.stack.id, this.stack);
+    this.notify();
+  }
+
+  public updateCard(card: Card) {
+    console.log(`DEBUG updateCard ${card.id}`);
+    this.cards.set(card.id, card);
+    this.stack.cards = Array.from(this.cards.values());
+    this.pouchDBService.put(this.stack.id, this.stack);
+    this.notify();
+  }
+
+  public deleteCard(card: Card) {
+    console.log(`DEBUG deleteCard ${card.id}`);
+    this.cards.delete(card.id);
+    this.stack.cards = Array.from(this.cards.values());
+    this.pouchDBService.put(this.stack.id, this.stack);
+    this.notify();
   }
 
   /**
-   * Clears all cards
+   * Informs subscribers that something has changed
    */
-  clear() {
-    this.cards = {};
-    this.cardsAddSubject.next(null);
-  }
-
-  /**
-   * Adds a card to the current stack
-   * @param card card to be added
-   */
-  addCard(card: Card) {
-    console.log(`DEBUG addCard() ${card.id}`);
-    this.cards[card.id] = card;
-    this.cardsAddSubject.next(card);
-  }
-
-  /**
-   * Updates an existing card
-   * @param card card to be updated
-   */
-  updateCard(card: Card) {
-    this.cards[card.id] = card;
-  }
-
-  /**
-   * Deletes an existing card
-   * @param card card to be deleted
-   */
-  deleteCard(card: Card) {
-    delete this.cards[card.id];
-    this.cardsDeleteSubject.next(card);
-  }
-
-  /**
-   * Gets a card by a given id
-   * @param id id of the card
-   * @returns {Card}
-   */
-  getCard(id: number): Card {
-    return this.cards[id] as Card;
+  private notify() {
+    console.log(`DEBUG notify`);
+    this.cardsSubject.next(Array.from(this.cards.values()));
   }
 }

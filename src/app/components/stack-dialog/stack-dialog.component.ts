@@ -1,5 +1,5 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatIconRegistry, MdDialogRef} from '@angular/material';
+import {MAT_DIALOG_DATA, MatIconRegistry, MatDialogRef} from '@angular/material';
 import {DomSanitizer} from '@angular/platform-browser';
 import {Stack} from '../../model/stack.model';
 import {UUID} from '../../model/util/uuid';
@@ -16,7 +16,7 @@ export class StackDialogComponent implements OnInit {
   dialogTitle = '';
   stack: Stack;
 
-  constructor(public dialogRef: MdDialogRef<StackDialogComponent>,
+  constructor(public dialogRef: MatDialogRef<StackDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any,
               iconRegistry: MatIconRegistry,
               sanitizer: DomSanitizer) {

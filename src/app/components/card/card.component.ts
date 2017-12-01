@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {MatIconRegistry, MdDialog} from '@angular/material';
+import {MatIconRegistry, MatDialog} from '@angular/material';
 import {Side} from '../../model/side.model';
 import {DomSanitizer} from '@angular/platform-browser';
 import {SnackbarService} from '../../services/snackbar.service';
@@ -20,7 +20,7 @@ export class CardComponent implements OnInit {
 
   constructor(private cardsService: CardsService,
               private snackbarService: SnackbarService,
-              public dialog: MdDialog,
+              public dialog: MatDialog,
               iconRegistry: MatIconRegistry,
               sanitizer: DomSanitizer) {
     iconRegistry.addSvgIcon('more_black', sanitizer.bypassSecurityTrustResourceUrl('assets/icons/ic_more_vert_black_18px.svg'));

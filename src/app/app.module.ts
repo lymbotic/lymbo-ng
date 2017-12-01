@@ -9,16 +9,16 @@ import {StacksToolbarComponent} from './components/stacks-toolbar/stacks-toolbar
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {
   MATERIAL_COMPATIBILITY_MODE,
-  MdButtonModule,
-  MdCardModule,
-  MdDialogModule,
-  MdIconModule,
-  MdInputModule,
-  MdListModule,
-  MdMenuModule,
-  MdSidenavModule,
-  MdSnackBarModule,
-  MdToolbarModule
+  MatButtonModule,
+  MatCardModule,
+  MatDialogModule,
+  MatIconModule,
+  MatInputModule,
+  MatListModule,
+  MatMenuModule,
+  MatSidenavModule,
+  MatSnackBarModule,
+  MatToolbarModule
 } from '@angular/material';
 import {FileDropComponent} from './components/file-drop/file-drop.component';
 import {FileUploadModule} from 'ng2-file-upload';
@@ -38,6 +38,7 @@ import {StackDialogComponent} from './components/stack-dialog/stack-dialog.compo
 import {CardsService} from './services/cards.service';
 import {ConfirmationDialogComponent} from './components/confirmation-dialog/confirmation-dialog.component';
 import {SplashScreenComponent} from './components/splash-screen/splash-screen.component';
+import {PouchDBService} from './services/pouchdb.service';
 
 @NgModule({
   declarations: [
@@ -64,16 +65,16 @@ import {SplashScreenComponent} from './components/splash-screen/splash-screen.co
     FormsModule,
     HttpModule,
     ResponsiveModule,
-    MdButtonModule,
-    MdToolbarModule,
-    MdSidenavModule,
-    MdSnackBarModule,
-    MdCardModule,
-    MdMenuModule,
-    MdListModule,
-    MdIconModule,
-    MdDialogModule,
-    MdInputModule
+    MatButtonModule,
+    MatToolbarModule,
+    MatSidenavModule,
+    MatSnackBarModule,
+    MatCardModule,
+    MatMenuModule,
+    MatListModule,
+    MatIconModule,
+    MatDialogModule,
+    MatInputModule
   ],
   entryComponents: [
     CardDialogComponent,
@@ -85,6 +86,7 @@ import {SplashScreenComponent} from './components/splash-screen/splash-screen.co
     StacksService,
     CardsService,
     SnackbarService,
+    PouchDBService,
     CardsResolver,
     {provide: MATERIAL_COMPATIBILITY_MODE, useValue: true}],
   bootstrap: [AppComponent]

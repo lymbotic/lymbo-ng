@@ -4,7 +4,7 @@ import {StacksService} from '../../services/stacks.service';
 import {DropResult, SUCCESS} from '../file-drop/file-drop.component';
 import {Subject} from 'rxjs/Subject';
 import {SnackbarService} from '../../services/snackbar.service';
-import {MatIconRegistry, MdDialog, MdSidenav} from '@angular/material';
+import {MatDialog, MatIconRegistry, MatSidenav} from '@angular/material';
 import {DomSanitizer} from '@angular/platform-browser';
 import {StackDialogComponent} from '../stack-dialog/stack-dialog.component';
 
@@ -19,11 +19,11 @@ export class StacksComponent implements OnInit, OnDestroy {
   dropContent: Subject<Stack> = new Subject();
   private stacksUnsubscribeSubject = new Subject();
 
-  @ViewChild('sidenav') sidenav: MdSidenav;
+  @ViewChild('sidenav') sidenav: MatSidenav;
 
   constructor(private stacksService: StacksService,
               private snackbarService: SnackbarService,
-              public dialog: MdDialog,
+              public dialog: MatDialog,
               iconRegistry: MatIconRegistry,
               sanitizer: DomSanitizer) {
     iconRegistry.addSvgIcon('add', sanitizer.bypassSecurityTrustResourceUrl('assets/icons/ic_add_white_24px.svg'));
@@ -31,28 +31,22 @@ export class StacksComponent implements OnInit, OnDestroy {
 
 
   ngOnInit() {
+    this.stacks = [];
+    this.stacksService.fetch();
+
     this.dropContent.asObservable().subscribe((result) => {
-      this.stacksService.addStack(result);
+      this.stacksService.createStack(result);
     });
 
     this.stacksService.stacksSubject
       .takeUntil(this.stacksUnsubscribeSubject)
       .subscribe((value) => {
         if (value != null) {
-          this.stacks.push(value as Stack);
+          this.stacks = value;
         } else {
           this.stacks = [];
         }
       });
-    this.stacksService.stacksDeleteSubject
-      .takeUntil(this.stacksUnsubscribeSubject)
-      .subscribe((value) => {
-        if (value != null) {
-          this.stacks = this.stacks.filter(s => s.id !== (value as Stack).id);
-        }
-      });
-
-    this.stacksService.publish();
   }
 
   ngOnDestroy(): void {
@@ -78,7 +72,7 @@ export class StacksComponent implements OnInit, OnDestroy {
         let dialogRef = this.dialog.open(StackDialogComponent, {disableClose: true});
         dialogRef.afterClosed().subscribe(result => {
           if (result != null) {
-            this.stacksService.addStack(result as Stack);
+            this.stacksService.createStack(result as Stack);
             this.snackbarService.showSnackbar('Added stack', '');
           }
         });

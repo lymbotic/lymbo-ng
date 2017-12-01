@@ -1,13 +1,11 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {SnackbarService} from '../../services/snackbar.service';
-import {MatIconRegistry, MdDialog} from '@angular/material';
+import {MatDialog, MatIconRegistry} from '@angular/material';
 import {DomSanitizer} from '@angular/platform-browser';
 import {CardDialogComponent} from '../card-dialog/card-dialog.component';
 import {Card} from '../../model/card.model';
 import {CardsService} from '../../services/cards.service';
-import {StacksService} from '../../services/stacks.service';
-import {Stack} from '../../model/stack.model';
 import {Subject} from 'rxjs/Subject';
 
 @Component({
@@ -17,15 +15,14 @@ import {Subject} from 'rxjs/Subject';
 })
 export class CardsComponent implements OnInit, OnDestroy {
   title = 'Lymbo';
-  stack: Stack = new Stack();
+  cards: Card[] = [];
   private cardsUnsubscribeSubject = new Subject();
 
   constructor(private route: ActivatedRoute,
               private router: Router,
               private cardsService: CardsService,
-              private stacksService: StacksService,
               private snackbarService: SnackbarService,
-              public dialog: MdDialog,
+              public dialog: MatDialog,
               iconRegistry: MatIconRegistry,
               sanitizer: DomSanitizer) {
     iconRegistry.addSvgIcon(
@@ -34,26 +31,21 @@ export class CardsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.stack = this.route.snapshot.data['stack'];
+    let stack = this.route.snapshot.data['stack'];
 
-    this.title = this.stack != null ? `Lymbo | ${this.stack.title}` : `Lymbo`;
+    this.title = stack != null ? `Lymbo | ${stack.title}` : `Lymbo`;
+    this.cards = stack.cards;
+    this.cardsService.stack = stack;
 
-    this.cardsService.cardsAddSubject
+    this.cardsService.cardsSubject
       .takeUntil(this.cardsUnsubscribeSubject)
       .subscribe((value) => {
         if (value != null) {
-          this.stack.cards.push(value as Card);
+          this.cards = value;
         } else {
-          this.stack.cards = [];
+          this.cards = [];
         }
       });
-    this.cardsService.cardsDeleteSubject
-      .takeUntil(this.cardsUnsubscribeSubject)
-      .subscribe((value) => {
-      if (value != null) {
-        this.stack.cards = this.stack.cards.filter(c => c.id !== (value as Card).id);
-      }
-    });
   }
 
   ngOnDestroy(): void {
@@ -72,7 +64,6 @@ export class CardsComponent implements OnInit, OnDestroy {
         break;
       }
       case 'back': {
-        this.stacksService.updateStack(this.stack);
         this.router.navigate(['/stacks']);
         break;
       }
@@ -80,7 +71,7 @@ export class CardsComponent implements OnInit, OnDestroy {
         let dialogRef = this.dialog.open(CardDialogComponent, {disableClose: true});
         dialogRef.afterClosed().subscribe(result => {
           if (result != null) {
-            this.cardsService.addCard(result as Card);
+            this.cardsService.createCard(result as Card);
             this.snackbarService.showSnackbar('Added card', '');
           }
         });
