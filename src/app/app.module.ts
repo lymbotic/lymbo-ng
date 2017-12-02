@@ -39,6 +39,7 @@ import {CardsService} from './services/cards.service';
 import {ConfirmationDialogComponent} from './components/confirmation-dialog/confirmation-dialog.component';
 import {SplashScreenComponent} from './components/splash-screen/splash-screen.component';
 import {PouchDBService} from './services/pouchdb.service';
+import { FilterCardsByPipe } from './pipes/filter-cards-by.pipe';
 
 @NgModule({
   declarations: [
@@ -55,7 +56,8 @@ import {PouchDBService} from './services/pouchdb.service';
     CardDialogComponent,
     StackDialogComponent,
     ConfirmationDialogComponent,
-    SplashScreenComponent
+    SplashScreenComponent,
+    FilterCardsByPipe
   ],
   imports: [
     AppRoutingModule,

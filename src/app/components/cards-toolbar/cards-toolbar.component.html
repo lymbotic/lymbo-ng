@@ -6,6 +6,9 @@
     <span class="toolbar-title">{{ title }}</span>
   </div>
   <div class="flexbox"></div>
+  <button mat-button class="toolbar-menu-item" (click)="clickMenuItem('refresh')">
+    <mat-icon svgIcon="refresh"></mat-icon>
+  </button>
   <button mat-button class="toolbar-menu-item" [matMenuTriggerFor]="menu">
     <mat-icon svgIcon="more"></mat-icon>
   </button>

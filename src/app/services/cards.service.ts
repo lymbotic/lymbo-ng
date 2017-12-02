@@ -3,6 +3,7 @@ import {Card} from '../model/card.model';
 import {Subject} from 'rxjs/Subject';
 import {Stack} from '../model/stack.model';
 import {PouchDBService} from './pouchdb.service';
+import {SnackbarService} from './snackbar.service';
 
 @Injectable()
 export class CardsService {
@@ -11,7 +12,8 @@ export class CardsService {
   cards = new Map<String, Card>();
   cardsSubject = new Subject<Card[]>();
 
-  constructor(private pouchDBService: PouchDBService) {
+  constructor(private snackbarService: SnackbarService,
+              private pouchDBService: PouchDBService) {
   }
 
   public createCard(card: Card) {
@@ -19,6 +21,7 @@ export class CardsService {
     this.cards.set(card.id, card);
     this.stack.cards = Array.from(this.cards.values());
     this.pouchDBService.put(this.stack.id, this.stack);
+    this.snackbarService.showSnackbar(`Created card`, '');
     this.notify();
   }
 
@@ -27,6 +30,7 @@ export class CardsService {
     this.cards.set(card.id, card);
     this.stack.cards = Array.from(this.cards.values());
     this.pouchDBService.put(this.stack.id, this.stack);
+    this.snackbarService.showSnackbar(`Updated card`, '');
     this.notify();
   }
 
@@ -35,6 +39,27 @@ export class CardsService {
     this.cards.delete(card.id);
     this.stack.cards = Array.from(this.cards.values());
     this.pouchDBService.put(this.stack.id, this.stack);
+    this.snackbarService.showSnackbar(`Deleted card`, '');
+    this.notify();
+  }
+
+  public checkCard(card: Card) {
+    console.log(`DEBUG checkCard ${card.id}`);
+    this.cards.get(card.id).checked = true;
+    this.stack.cards = Array.from(this.cards.values());
+    this.pouchDBService.put(this.stack.id, this.stack);
+    this.snackbarService.showSnackbar(`Checked card`, '');
+    this.notify();
+  }
+
+  public uncheckAll() {
+    console.log(`DEBUG uncheckAll`);
+    this.cards.forEach(c => {
+      c.checked = false;
+    });
+    this.stack.cards = Array.from(this.cards.values());
+    this.pouchDBService.put(this.stack.id, this.stack);
+    this.snackbarService.showSnackbar(`Recovered all cards`, '');
     this.notify();
   }
 

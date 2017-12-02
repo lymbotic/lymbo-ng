@@ -32,10 +32,14 @@ export class CardsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     let stack = this.route.snapshot.data['stack'];
+    let cardsMap = stack.cards.reduce(function (map, c) {
+      return map.set(c.id, c);
+    }, new Map<String, Card>());
 
     this.title = stack != null ? `Lymbo | ${stack.title}` : `Lymbo`;
     this.cards = stack.cards;
     this.cardsService.stack = stack;
+    this.cardsService.cards = cardsMap;
 
     this.cardsService.cardsSubject
       .takeUntil(this.cardsUnsubscribeSubject)
@@ -59,12 +63,16 @@ export class CardsComponent implements OnInit, OnDestroy {
    */
   onMenuItemClicked(menuItem: string) {
     switch (menuItem) {
+      case 'back': {
+        this.router.navigate(['/stacks']);
+        break;
+      }
       case 'settings': {
         this.snackbarService.showSnackbar('Clicked on menu item Settings', '');
         break;
       }
-      case 'back': {
-        this.router.navigate(['/stacks']);
+      case 'refresh': {
+        this.cardsService.uncheckAll();
         break;
       }
       case 'add': {

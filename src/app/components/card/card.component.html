@@ -13,5 +13,5 @@
     </button>
   </mat-menu>
 
-  <app-side [side]="activeSide" (click)="flipCard()"></app-side>
+  <app-side [card]="card" [sideIndex]="activeSideIndex" [side]="activeSide" (click)="flipCard()"></app-side>
 </mat-card>
