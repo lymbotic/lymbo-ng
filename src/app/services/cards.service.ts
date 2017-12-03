@@ -43,12 +43,22 @@ export class CardsService {
     this.notify();
   }
 
-  public checkCard(card: Card) {
-    console.log(`DEBUG checkCard ${card.id}`);
+  public putCardAside(card: Card) {
+    console.log(`DEBUG putCardAside ${card.id}`);
     this.cards.get(card.id).checked = true;
     this.stack.cards = Array.from(this.cards.values());
     this.pouchDBService.put(this.stack.id, this.stack);
-    this.snackbarService.showSnackbar(`Checked card`, '');
+    this.snackbarService.showSnackbar(`Put card aside`, '');
+    this.notify();
+  }
+
+  public putCardToEnd(card: Card) {
+    console.log(`DEBUG putCardToEnd ${card.id}`);
+    this.cards.delete(card.id);
+    this.cards.set(card.id, card);
+    this.stack.cards = Array.from(this.cards.values());
+    this.pouchDBService.put(this.stack.id, this.stack);
+    this.snackbarService.showSnackbar(`Put card to end`, '');
     this.notify();
   }
 

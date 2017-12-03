@@ -18,14 +18,19 @@ export class SideComponent implements OnInit {
   constructor(private cardsService: CardsService,
               iconRegistry: MatIconRegistry,
               sanitizer: DomSanitizer) {
+    iconRegistry.addSvgIcon('undo', sanitizer.bypassSecurityTrustResourceUrl('assets/icons/ic_undo_black_24px.svg'));
     iconRegistry.addSvgIcon('check', sanitizer.bypassSecurityTrustResourceUrl('assets/icons/ic_check_black_24px.svg'));
   }
 
   ngOnInit() {
   }
 
-  checkCard() {
-    this.cardsService.checkCard(this.card);
+  putCardAside() {
+    this.cardsService.putCardAside(this.card);
+  }
+
+  putCardToEnd() {
+    this.cardsService.putCardToEnd(this.card);
   }
 
 }

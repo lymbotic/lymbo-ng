@@ -5,7 +5,10 @@
 <mat-card-content>
 </mat-card-content>
 <mat-card-actions align="right">
-  <button mat-button *ngIf="sideIndex == 1" (click)="checkCard()">
-      <mat-icon svgIcon="check"></mat-icon>
+  <button mat-button *ngIf="sideIndex == 1" (click)="putCardToEnd()">
+    <mat-icon svgIcon="undo"></mat-icon>
+  </button>
+  <button mat-button *ngIf="sideIndex == 1" (click)="putCardAside()">
+    <mat-icon svgIcon="check"></mat-icon>
   </button>
 </mat-card-actions>
