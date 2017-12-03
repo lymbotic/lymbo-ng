@@ -5,7 +5,7 @@ import {HttpModule} from '@angular/http';
 import {AppComponent} from './app.component';
 import {PlatformService} from './services/platform.service';
 import {ResponsiveModule} from 'ng2-responsive';
-import {StacksToolbarComponent} from './components/stacks-toolbar/stacks-toolbar.component';
+import {StacksToolbarComponent} from './view/toolbars/stacks-toolbar/stacks-toolbar.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {
   MATERIAL_COMPATIBILITY_MODE,
@@ -20,24 +20,24 @@ import {
   MatSnackBarModule,
   MatToolbarModule
 } from '@angular/material';
-import {FileDropComponent} from './components/file-drop/file-drop.component';
+import {FileDropComponent} from './view/components/file-drop/file-drop.component';
 import {FileUploadModule} from 'ng2-file-upload';
 import {StacksService} from './services/stacks.service';
-import {StackComponent} from './components/stack/stack.component';
-import {StacksComponent} from './components/stacks/stacks.component';
+import {StackComponent} from './view/components/stack/stack.component';
+import {StacksComponent} from './view/pages/stacks/stacks.component';
 import {AppRoutingModule} from './app-routing.module';
-import {CardsComponent} from './components/cards/cards.component';
-import {CardComponent} from './components/card/card.component';
+import {CardsComponent} from './view/pages/cards/cards.component';
+import {CardComponent} from './view/components/card/card.component';
 import {CardsResolver} from './resolver/cards.resolver';
 import {SnackbarService} from './services/snackbar.service';
-import {CardsToolbarComponent} from './components/cards-toolbar/cards-toolbar.component';
-import {SideComponent} from './components/side/side.component';
-import {SideMenuComponent} from './components/side-menu/side-menu.component';
-import {CardDialogComponent} from './components/card-dialog/card-dialog.component';
-import {StackDialogComponent} from './components/stack-dialog/stack-dialog.component';
+import {CardsToolbarComponent} from './view/toolbars/cards-toolbar/cards-toolbar.component';
+import {SideComponent} from './view/components/side/side.component';
+import {SideMenuComponent} from './view/components/side-menu/side-menu.component';
+import {CardDialogComponent} from './view/dialogs/card-dialog/card-dialog.component';
+import {StackDialogComponent} from './view/dialogs/stack-dialog/stack-dialog.component';
 import {CardsService} from './services/cards.service';
-import {ConfirmationDialogComponent} from './components/confirmation-dialog/confirmation-dialog.component';
-import {SplashScreenComponent} from './components/splash-screen/splash-screen.component';
+import {ConfirmationDialogComponent} from './view/dialogs/confirmation-dialog/confirmation-dialog.component';
+import {SplashScreenComponent} from './view/pages/splash-screen/splash-screen.component';
 import {PouchDBService} from './services/pouchdb.service';
 import { FilterCardsByPipe } from './pipes/filter-cards-by.pipe';
 
