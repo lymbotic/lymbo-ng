@@ -42,30 +42,30 @@ export class StacksService {
   }
 
   /**
-   * Informs subscribers that something has changed
-   */
-  private notify() {
-    console.log(`DEBUG notify`);
-    this.stacksSubject.next(Array.from(this.stacks.values()));
-  }
-
-  /**
    * Retrieves data from PouchDB
    */
   public fetch() {
     console.log(`DEBUG fetch`);
     this.pouchDBService.fetch().then(result => {
         result.rows.forEach(r => {
-          console.log(`DEBUG result row`);
           let stack = r.doc as Stack;
+          console.log(`DEBUG fetch stack ${stack.id}`);
           this.stacks.set(stack.id, stack);
-          this.notify();
         });
+      this.notify();
       }, error => {
         if (isDevMode()) {
           console.error(error);
         }
       }
     );
+  }
+
+  /**
+   * Informs subscribers that something has changed
+   */
+  private notify() {
+    console.log(`DEBUG notify`);
+    this.stacksSubject.next(Array.from(this.stacks.values()));
   }
 }
