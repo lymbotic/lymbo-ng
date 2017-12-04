@@ -1,5 +1,5 @@
 <h2 mat-dialog-title>{{ dialogTitle }}</h2>
-<mat-dialog-content>
+<mat-dialog-content (keyup)="onKey($event)">
   <form #formCtrl="ngForm">
     <mat-form-field>
       <input matInput required type="text" name="title" placeholder="Title" [(ngModel)]="stack.title"/>

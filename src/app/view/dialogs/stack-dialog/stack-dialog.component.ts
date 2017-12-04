@@ -1,5 +1,5 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatIconRegistry, MatDialogRef} from '@angular/material';
+import {MAT_DIALOG_DATA, MatDialogRef, MatIconRegistry} from '@angular/material';
 import {DomSanitizer} from '@angular/platform-browser';
 import {Stack} from '../../../model/stack.model';
 import {UUID} from '../../../model/util/uuid';
@@ -46,5 +46,19 @@ export class StackDialogComponent implements OnInit {
 
   updateStack() {
     this.dialogRef.close(this.stack);
+  }
+
+  onKey(event: any) {
+    if (event.keyCode === 13) {
+      event.preventDefault();
+
+      if (this.stack.title) {
+        if (this.mode === DIALOG_MODE.ADD) {
+          this.addStack();
+        } else if (this.mode === DIALOG_MODE.UPDATE) {
+          this.updateStack();
+        }
+      }
+    }
   }
 }

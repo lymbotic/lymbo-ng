@@ -1,12 +1,12 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {MatIconRegistry, MatDialog} from '@angular/material';
+import {MatDialog, MatIconRegistry} from '@angular/material';
 import {Side} from '../../../model/side.model';
 import {DomSanitizer} from '@angular/platform-browser';
 import {SnackbarService} from '../../../services/snackbar.service';
 import {CardsService} from '../../../services/cards.service';
-import {CardDialogComponent} from '../../../view/dialogs/card-dialog/card-dialog.component';
+import {CardDialogComponent} from '../../dialogs/card-dialog/card-dialog.component';
 import {Card} from '../../../model/card.model';
-import {ConfirmationDialogComponent} from '../../../view/dialogs/confirmation-dialog/confirmation-dialog.component';
+import {ConfirmationDialogComponent} from '../../dialogs/confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-card',

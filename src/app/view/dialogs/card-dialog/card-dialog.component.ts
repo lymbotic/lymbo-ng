@@ -1,6 +1,6 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {Card} from '../../../model/card.model';
-import {MAT_DIALOG_DATA, MatIconRegistry, MatDialogRef} from '@angular/material';
+import {MAT_DIALOG_DATA, MatDialogRef, MatIconRegistry} from '@angular/material';
 import {Side} from 'app/model/side.model';
 import {DomSanitizer} from '@angular/platform-browser';
 import {UUID} from '../../../model/util/uuid';
@@ -49,5 +49,19 @@ export class CardDialogComponent implements OnInit {
 
   updateCard() {
     this.dialogRef.close(this.card);
+  }
+
+  onKey(event: any) {
+    if (event.keyCode === 13) {
+      event.preventDefault();
+
+      if (this.card.sides[0].title.length > 0 && this.card.sides[1].title.length > 0) {
+        if (this.mode === DIALOG_MODE.ADD) {
+          this.addCard();
+        } else if (this.mode === DIALOG_MODE.UPDATE) {
+          this.updateCard();
+        }
+      }
+    }
   }
 }

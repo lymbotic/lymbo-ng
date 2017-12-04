@@ -64,7 +64,7 @@ export class CardsComponent implements OnInit, OnDestroy {
   onMenuItemClicked(menuItem: string) {
     switch (menuItem) {
       case 'back': {
-        this.router.navigate(['/stacks']);
+        this.router.navigate(['/stacks']).then();
         break;
       }
       case 'settings': {
