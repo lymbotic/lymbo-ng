@@ -3,7 +3,7 @@
   <form #formCtrl="ngForm">
     <mat-form-field>
       <input matInput required type="text" name="title" placeholder="Title" [(ngModel)]="stack.title"/>
-      <button mat-button *ngIf="title" matSuffix mat-icon-button aria-label="Clear" (click)="title=''">
+      <button mat-button *ngIf="stack.title" matSuffix mat-icon-button aria-label="Clear" (click)="title=''">
         <mat-icon svgIcon="close"></mat-icon>
       </button>
     </mat-form-field>
