@@ -91,4 +91,11 @@ export class CardsComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Handles click on side menu items
+   * @param menuItem
+   */
+  onSideMenuItemClicked(menuItem: string) {
+    this.snackbarService.showSnackbar(`Clicked on side menu item ${menuItem}`, '');
+  }
 }
