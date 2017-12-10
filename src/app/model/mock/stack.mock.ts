@@ -7,6 +7,7 @@ export const MOCK_STACK: Stack = {
       {title: 'front'},
       {title: 'back'}
     ],
+    tags: [],
     checked: false
   }],
   id: '000000000-0000-0000-0000-000000042',
