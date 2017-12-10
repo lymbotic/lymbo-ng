@@ -20,8 +20,18 @@ mat-card {
   }
 }
 
-.more {
+#more {
   float: right;
+}
+
+.hidden {
+  display: none;
+}
+
+mat-card {
+  &:hover .hidden {
+    display: inline-block;
+  }
 }
 
 mat-card-header {
