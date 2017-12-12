@@ -16,6 +16,7 @@
     "build-aot-de": "npm run build-aot --locale de --i18n-file src/locale/messages.de.xlf --i18n-format xlf",
     "precache": "sw-precache --verbose --config=sw-precache-config.js",
     "static-serve": "cd dist && live-server --port=4200 --host=localhost --entry-file=/index.html",
+    "progressive-build": "ng build && npm run precache",
     "progressive-build-prod": "ng build --env=prod --aot && npm run precache",
     "progressive-start": "npm run progressive-build-prod && npm run static-serve",
     "electron-build": "ng build && cd ./src/electron && copyfiles ./* ./../../dist/",
