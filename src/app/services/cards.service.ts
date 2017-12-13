@@ -4,6 +4,7 @@ import {Subject} from 'rxjs/Subject';
 import {Stack} from '../model/stack.model';
 import {PouchDBService} from './pouchdb.service';
 import {SnackbarService} from './snackbar.service';
+import {Tag} from '../model/tag.model';
 
 @Injectable()
 export class CardsService {
@@ -71,6 +72,39 @@ export class CardsService {
     this.pouchDBService.put(this.stack.id, this.stack);
     this.snackbarService.showSnackbar(`Recovered all cards`, '');
     this.notify();
+  }
+
+  /**
+   * Updates list of all cards' tags
+   */
+  getAllTags(): Tag[] {
+    let tagNames = [];
+
+    this.cards.forEach(c => {
+        c.tags.forEach(t => {
+          tagNames.push(t.value);
+        });
+      }
+    );
+
+    // Return array of unique tags
+    return Array.from(new Set(tagNames)).sort((t1, t2) => {
+      return (t1.value > t2.value) ? 1 : -1;
+    }).map(u => {
+      return new Tag(u, false);
+    });
+  }
+
+  private containsTag(tags: Tag[], tag: Tag) {
+    tags.forEach(t => {
+      console.log(`DEBUG containsTag ${tag.value} / ${t.value}`);
+      if (t.value === tag.value) {
+        console.log(`DEBUG containsTag true`);
+        return true;
+      }
+    });
+
+    return false;
   }
 
   /**

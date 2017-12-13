@@ -18,7 +18,7 @@ import {
   MatMenuModule,
   MatSidenavModule,
   MatSnackBarModule,
-  MatToolbarModule
+  MatToolbarModule, MatCheckboxModule
 } from '@angular/material';
 import {FileDropComponent} from './view/components/file-drop/file-drop.component';
 import {FileUploadModule} from 'ng2-file-upload';
@@ -76,7 +76,8 @@ import { FilterCardsByPipe } from './pipes/filter-cards-by.pipe';
     MatListModule,
     MatIconModule,
     MatDialogModule,
-    MatInputModule
+    MatInputModule,
+    MatCheckboxModule
   ],
   entryComponents: [
     CardDialogComponent,
