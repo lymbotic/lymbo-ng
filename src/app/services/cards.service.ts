@@ -12,6 +12,7 @@ export class CardsService {
 
   cards = new Map<String, Card>();
   cardsSubject = new Subject<Card[]>();
+  tags: Tag[] = [];
 
   constructor(private snackbarService: SnackbarService,
               private pouchDBService: PouchDBService) {
@@ -75,24 +76,33 @@ export class CardsService {
   }
 
   /**
-   * Updates list of all cards' tags
+   * Returns an array of unique tags
+   * @returns {Tag[]}
    */
   getAllTags(): Tag[] {
-    let tagNames = [];
+    let ts = [];
 
     this.cards.forEach(c => {
         c.tags.forEach(t => {
-          tagNames.push(t.value);
+          let unique = true;
+          ts.forEach(tt => {
+            if (t.value === tt.value) {
+              unique = false;
+            }
+          });
+
+          if (unique) {
+            ts.push(t);
+          }
         });
       }
     );
 
-    // Return array of unique tags
-    return Array.from(new Set(tagNames)).sort((t1, t2) => {
+    this.tags = ts.sort((t1, t2) => {
       return (t1.value > t2.value) ? 1 : -1;
-    }).map(u => {
-      return new Tag(u, false);
     });
+
+    return this.tags;
   }
 
   private containsTag(tags: Tag[], tag: Tag) {
