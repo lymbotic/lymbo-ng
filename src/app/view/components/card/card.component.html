@@ -15,5 +15,7 @@
 
   <app-side [card]="card" [sideIndex]="activeSideIndex" [side]="activeSide" (click)="flipCard()"></app-side>
 
-  <div *ngFor="let t of card.tags">{{ t.value }}</div>
+  <span class="tag" *ngFor="let t of card.tags">
+    <label class="tag-label">{{ t.value }}</label>
+  </span>
 </mat-card>
