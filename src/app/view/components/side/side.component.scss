@@ -5,6 +5,12 @@ mat-card-header {
   cursor: pointer;
 }
 
+.title {
+  font-family: 'Roboto Condensed',arial,sans-serif;
+  font-size: 17px;
+  font-weight: bold;
+}
+
 mat-card-content {
   margin-bottom: 0;
 }

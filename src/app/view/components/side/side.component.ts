@@ -11,9 +11,9 @@ import {Card} from '../../../model/card.model';
   styles: [require('./side.component.scss')],
 })
 export class SideComponent implements OnInit {
-  @Input() card: Card;
+  @Input() card: Card = new Card();
   @Input() sideIndex: number;
-  @Input() side: Side;
+  @Input() side: Side = new Side();
 
   constructor(private cardsService: CardsService,
               iconRegistry: MatIconRegistry,
