@@ -49,15 +49,14 @@ export class CardDialogComponent implements OnInit {
       this.card = this.data.card as Card;
     }
 
-    this.existingTags = this.cardsService.getAllTags();
-    // Get existing existingTags and add empty tag
-    console.log(`DEBUG existing ${this.existingTags.length}`);
+    this.cardsService.getAllTags().forEach(t => {
+      this.existingTags.push(new Tag(t.value, false));
+    });
+
+    // Get existing tags and add empty tag to new tags
     this.existingTags.forEach(et => {
-      console.log(`DEBUG et ${et}`);
       this.card.tags.forEach(t => {
-        console.log(`DEBUG et ${t}`);
         if (et.value === t.value) {
-          console.log(`DEBUG hey ${et.value}`);
           et.checked = true;
         }
       });
