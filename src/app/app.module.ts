@@ -8,17 +8,18 @@ import {ResponsiveModule} from 'ng2-responsive';
 import {StacksToolbarComponent} from './view/toolbars/stacks-toolbar/stacks-toolbar.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {
-  MATERIAL_COMPATIBILITY_MODE,
   MatButtonModule,
   MatCardModule,
+  MatCheckboxModule,
   MatDialogModule,
+  MATERIAL_COMPATIBILITY_MODE,
   MatIconModule,
   MatInputModule,
   MatListModule,
   MatMenuModule,
   MatSidenavModule,
   MatSnackBarModule,
-  MatToolbarModule, MatCheckboxModule
+  MatToolbarModule
 } from '@angular/material';
 import {FileDropComponent} from './view/components/file-drop/file-drop.component';
 import {FileUploadModule} from 'ng2-file-upload';
@@ -39,7 +40,7 @@ import {CardsService} from './services/cards.service';
 import {ConfirmationDialogComponent} from './view/dialogs/confirmation-dialog/confirmation-dialog.component';
 import {SplashScreenComponent} from './view/pages/splash-screen/splash-screen.component';
 import {PouchDBService} from './services/pouchdb.service';
-import { FilterCardsByPipe } from './pipes/filter-cards-by.pipe';
+import {TagDialogComponent} from './view/dialogs/tag-dialog/tag-dialog.component';
 
 @NgModule({
   declarations: [
@@ -57,7 +58,7 @@ import { FilterCardsByPipe } from './pipes/filter-cards-by.pipe';
     StackDialogComponent,
     ConfirmationDialogComponent,
     SplashScreenComponent,
-    FilterCardsByPipe
+    TagDialogComponent,
   ],
   imports: [
     AppRoutingModule,
@@ -82,7 +83,8 @@ import { FilterCardsByPipe } from './pipes/filter-cards-by.pipe';
   entryComponents: [
     CardDialogComponent,
     StackDialogComponent,
-    ConfirmationDialogComponent
+    ConfirmationDialogComponent,
+    TagDialogComponent
   ],
   providers: [
     PlatformService,
