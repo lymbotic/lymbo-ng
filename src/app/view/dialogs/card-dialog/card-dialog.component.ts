@@ -33,10 +33,6 @@ export class CardDialogComponent implements OnInit {
 
     // Create basic card
     this.card = new Card();
-    this.card.sides.push(new Side());
-    this.card.sides.push(new Side());
-
-
   }
 
   ngOnInit() {
