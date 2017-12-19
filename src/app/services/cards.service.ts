@@ -141,6 +141,7 @@ export class CardsService {
    */
   private notify() {
     console.log(`DEBUG notify`);
+    this.tags = this.getAllTags();
     this.filteredCards = this.getFilteredCards();
     this.cardsSubject.next(this.filteredCards);
   }
