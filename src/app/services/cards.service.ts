@@ -81,15 +81,19 @@ export class CardsService {
       // Filter card that match selected tags
       let match = false;
 
-      c.tags.forEach(ct => {
-        this.tags.forEach(t => {
-          if (ct.value === t.value && t.checked) {
-            match = true;
-          }
+      if (c.tags.length === 0) {
+        return true;
+      } else {
+        c.tags.forEach(ct => {
+          this.tags.forEach(t => {
+            if (ct.value === t.value && t.checked) {
+              match = true;
+            }
+          });
         });
-      });
 
-      return match;
+        return match;
+      }
     }).filter(c => {
       // Filter cards that are not checked
       return !c.checked;
