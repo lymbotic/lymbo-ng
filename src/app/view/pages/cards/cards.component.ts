@@ -7,6 +7,8 @@ import {CardDialogComponent} from '../../dialogs/card-dialog/card-dialog.compone
 import {Card} from '../../../model/card.model';
 import {CardsService} from '../../../services/cards.service';
 import {Subject} from 'rxjs/Subject';
+import {TagDialogComponent} from '../../dialogs/tag-dialog/tag-dialog.component';
+import {Tag} from '../../../model/tag.model';
 
 @Component({
   selector: 'app-cards',
@@ -15,7 +17,8 @@ import {Subject} from 'rxjs/Subject';
 })
 export class CardsComponent implements OnInit, OnDestroy {
   title = 'Lymbo';
-  cards: Card[] = [];
+  filteredCards: Card[] = [];
+  tags: Tag[] = [];
   private cardsUnsubscribeSubject = new Subject();
 
   constructor(private route: ActivatedRoute,
@@ -32,23 +35,20 @@ export class CardsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     let stack = this.route.snapshot.data['stack'];
-    let cardsMap = stack.cards.reduce(function (map, c) {
+
+    this.title = stack != null ? `Lymbo | ${stack.title}` : `Lymbo`;
+    this.cardsService.stack = stack;
+    this.cardsService.cards = stack.cards.reduce((map, c) => {
       return map.set(c.id, c);
     }, new Map<String, Card>());
 
-    this.title = stack != null ? `Lymbo | ${stack.title}` : `Lymbo`;
-    this.cards = stack.cards;
-    this.cardsService.stack = stack;
-    this.cardsService.cards = cardsMap;
+    this.tags = this.cardsService.getAllTags();
+    this.filteredCards = this.cardsService.getFilteredCards();
 
     this.cardsService.cardsSubject
       .takeUntil(this.cardsUnsubscribeSubject)
       .subscribe((value) => {
-        if (value != null) {
-          this.cards = value;
-        } else {
-          this.cards = [];
-        }
+        this.filteredCards = value;
       });
   }
 
@@ -69,6 +69,16 @@ export class CardsComponent implements OnInit, OnDestroy {
       }
       case 'settings': {
         this.snackbarService.showSnackbar('Clicked on menu item Settings', '');
+        break;
+      }
+      case 'tags': {
+        let dialogRef = this.dialog.open(TagDialogComponent, {disableClose: true});
+        dialogRef.afterClosed().subscribe(result => {
+          if (result != null) {
+            this.cardsService.update();
+            this.snackbarService.showSnackbar('Tags selected', '');
+          }
+        });
         break;
       }
       case 'refresh': {

@@ -6,4 +6,9 @@ export class Card {
   tags: Tag[] = [];
 
   checked = false;
+
+  constructor() {
+    this.sides.push(new Side());
+    this.sides.push(new Side());
+  }
 }

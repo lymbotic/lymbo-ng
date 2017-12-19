@@ -14,7 +14,7 @@ import {ConfirmationDialogComponent} from '../../dialogs/confirmation-dialog/con
   styles: [require('./card.component.scss')],
 })
 export class CardComponent implements OnInit {
-  @Input() card;
+  @Input() card = new Card();
   activeSideIndex = 0;
   activeSide: Side;
 

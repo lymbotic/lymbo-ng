@@ -18,6 +18,7 @@ export class CardsToolbarComponent {
               sanitizer: DomSanitizer) {
     iconRegistry.addSvgIcon('back', sanitizer.bypassSecurityTrustResourceUrl('assets/icons/ic_arrow_back_white_24px.svg'));
     iconRegistry.addSvgIcon('menu', sanitizer.bypassSecurityTrustResourceUrl('assets/icons/ic_menu_white_24px.svg'));
+    iconRegistry.addSvgIcon('label', sanitizer.bypassSecurityTrustResourceUrl('assets/icons/ic_label_outline_white_24px.svg'));
     iconRegistry.addSvgIcon('refresh', sanitizer.bypassSecurityTrustResourceUrl('assets/icons/ic_refresh_white_24px.svg'));
     iconRegistry.addSvgIcon('more', sanitizer.bypassSecurityTrustResourceUrl('assets/icons/ic_more_vert_white_24px.svg'));
   }

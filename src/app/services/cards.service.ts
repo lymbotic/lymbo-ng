@@ -13,6 +13,7 @@ export class CardsService {
   cards = new Map<String, Card>();
   cardsSubject = new Subject<Card[]>();
   tags: Tag[] = [];
+  filteredCards: Card[] = [];
 
   constructor(private snackbarService: SnackbarService,
               private pouchDBService: PouchDBService) {
@@ -75,6 +76,28 @@ export class CardsService {
     this.notify();
   }
 
+  public getFilteredCards() {
+    this.filteredCards = Array.from(this.cards.values()).filter(c => {
+      // Filter card that match selected tags
+      let match = false;
+
+      c.tags.forEach(ct => {
+        this.tags.forEach(t => {
+          if (ct.value === t.value && t.checked) {
+            match = true;
+          }
+        });
+      });
+
+      return match;
+    }).filter(c => {
+      // Filter cards that are not checked
+      return !c.checked;
+    });
+
+    return this.filteredCards;
+  }
+
   /**
    * Returns an array of unique tags
    * @returns {Tag[]}
@@ -117,11 +140,16 @@ export class CardsService {
     return false;
   }
 
+  public update() {
+    this.notify();
+  }
+
   /**
    * Informs subscribers that something has changed
    */
   private notify() {
     console.log(`DEBUG notify`);
-    this.cardsSubject.next(Array.from(this.cards.values()));
+    this.filteredCards = this.getFilteredCards();
+    this.cardsSubject.next(this.filteredCards);
   }
 }

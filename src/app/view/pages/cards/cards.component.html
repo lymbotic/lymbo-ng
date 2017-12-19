@@ -9,7 +9,7 @@
   </mat-sidenav>
 
   <div class="content">
-    <app-card *ngFor="let c of cards | filterCardsBy:'unchecked'" [card]="c">
+    <app-card *ngFor="let c of filteredCards" [card]="c">
     </app-card>
 
     <button mat-fab class="fab" (click)="onMenuItemClicked('add')">
