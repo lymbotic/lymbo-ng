@@ -128,18 +128,6 @@ export class CardsService {
     return this.tags;
   }
 
-  private containsTag(tags: Tag[], tag: Tag) {
-    tags.forEach(t => {
-      console.log(`DEBUG containsTag ${tag.value} / ${t.value}`);
-      if (t.value === tag.value) {
-        console.log(`DEBUG containsTag true`);
-        return true;
-      }
-    });
-
-    return false;
-  }
-
   public update() {
     this.notify();
   }
