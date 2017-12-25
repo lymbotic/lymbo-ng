@@ -4,6 +4,8 @@ import {DomSanitizer} from '@angular/platform-browser';
 import {Stack} from '../../../model/stack.model';
 import {UUID} from '../../../model/util/uuid';
 import {DIALOG_MODE} from '../../../model/DialogMode';
+import {Tag} from '../../../model/tag.model';
+import {StacksService} from '../../../services/stacks.service';
 
 @Component({
   selector: 'app-stack-dialog',
@@ -16,7 +18,11 @@ export class StackDialogComponent implements OnInit {
   dialogTitle = '';
   stack: Stack;
 
-  constructor(public dialogRef: MatDialogRef<StackDialogComponent>,
+  existingTags: Tag[] = [];
+  newTags: Tag[] = [];
+
+  constructor(private stacksService: StacksService,
+              public dialogRef: MatDialogRef<StackDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any,
               iconRegistry: MatIconRegistry,
               sanitizer: DomSanitizer) {
@@ -37,6 +43,22 @@ export class StackDialogComponent implements OnInit {
       this.dialogTitle = 'Update stack';
       this.stack = this.data.stack as Stack;
     }
+
+    console.log(`DEBUG ${JSON.stringify(this.stack)}`);
+
+    this.stacksService.getAllTags().forEach(t => {
+      this.existingTags.push(new Tag(t.value, false));
+    });
+
+    // Get existing tags and add empty tag to new tags
+    this.existingTags.forEach(et => {
+      this.stack.tags.forEach(t => {
+        if (et.value === t.value) {
+          et.checked = true;
+        }
+      });
+    });
+    this.newTags.push(new Tag('', false));
   }
 
   addStack() {
@@ -45,7 +67,27 @@ export class StackDialogComponent implements OnInit {
   }
 
   updateStack() {
+    this.stack.tags = [];
+    this.existingTags.concat(this.newTags).filter(t => t.checked).forEach(t => {
+        this.stack.tags.push(t);
+      }
+    );
     this.dialogRef.close(this.stack);
+  }
+
+  tagChanged(value: string) {
+    let noEmptyTag = true;
+
+    this.newTags.forEach((t: Tag) => {
+        if (t.value.trim().length === 0) {
+          noEmptyTag = false;
+        }
+      }
+    );
+
+    if (noEmptyTag) {
+      this.newTags.push(new Tag('', false));
+    }
   }
 
   onKey(event: any) {

@@ -8,6 +8,16 @@
       </button>
     </mat-form-field>
   </form>
+  <div class="label">Tags</div>
+  <div *ngFor="let t of existingTags">
+    <mat-checkbox [(ngModel)]=t.checked>{{ t.value}}</mat-checkbox>
+  </div>
+  <div *ngFor="let n of newTags">
+    <mat-checkbox [(ngModel)]=n.checked>
+      <input matInput class="tag-input" type="text" name="tag" placeholder="New tag" [(ngModel)]="n.value"
+             (ngModelChange)="tagChanged($event)"/>
+    </mat-checkbox>
+  </div>
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-button [mat-dialog-close]=null>
