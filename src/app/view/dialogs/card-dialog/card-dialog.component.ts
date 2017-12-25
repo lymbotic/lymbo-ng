@@ -1,7 +1,6 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {Card} from '../../../model/card.model';
 import {MAT_DIALOG_DATA, MatDialogRef, MatIconRegistry} from '@angular/material';
-import {Side} from 'app/model/side.model';
 import {DomSanitizer} from '@angular/platform-browser';
 import {UUID} from '../../../model/util/uuid';
 import {DIALOG_MODE} from '../../../model/DialogMode';
