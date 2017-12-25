@@ -17,6 +17,9 @@
     <mat-card-subtitle>{{ stack.cards.length }} cards</mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
+    <span class="tag" *ngFor="let t of stack.tags">
+      <label class="tag-label">{{ t.value }}</label>
+    </span>
   </mat-card-content>
   <mat-card-actions align="right">
   </mat-card-actions>
