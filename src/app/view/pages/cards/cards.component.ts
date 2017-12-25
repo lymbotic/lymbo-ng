@@ -72,7 +72,13 @@ export class CardsComponent implements OnInit, OnDestroy {
         break;
       }
       case 'tags': {
-        let dialogRef = this.dialog.open(TagDialogComponent, {disableClose: true});
+        let dialogRef = this.dialog.open(TagDialogComponent, {
+          disableClose: true,
+          data: {
+            dialogTitle: 'Select tags',
+            tags: this.cardsService.getAllTags()
+          }
+        });
         dialogRef.afterClosed().subscribe(result => {
           if (result != null) {
             this.cardsService.update();

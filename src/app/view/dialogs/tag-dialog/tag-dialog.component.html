@@ -1,6 +1,6 @@
 <h2 mat-dialog-title>{{ dialogTitle }}</h2>
 <mat-dialog-content>
-  <div *ngFor="let t of cardsService.tags">
+  <div *ngFor="let t of tags">
     <mat-checkbox [(ngModel)]=t.checked>{{ t.value}}</mat-checkbox>
   </div>
 </mat-dialog-content>

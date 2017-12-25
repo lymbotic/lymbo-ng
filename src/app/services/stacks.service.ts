@@ -9,6 +9,7 @@ export class StacksService {
   stacks = new Map<String, Stack>();
   stacksSubject = new Subject<Stack[]>();
   tags: Tag[] = [];
+  filteredStacks: Stack[] = [];
 
   constructor(private pouchDBService: PouchDBService) {
     this.pouchDBService.getChangeListener().subscribe(
@@ -23,6 +24,7 @@ export class StacksService {
   }
 
   public createStack(stack: Stack) {
+    console.log(`DEBUG createCard ${JSON.stringify(stack)}`);
     console.log(`DEBUG createCard ${stack.id}`);
     this.stacks.set(stack.id, stack);
     this.pouchDBService.put(stack.id, stack);
@@ -54,13 +56,36 @@ export class StacksService {
           console.log(`DEBUG fetch stack ${stack.id}`);
           this.stacks.set(stack.id, stack);
         });
-      this.notify();
+        this.notify();
       }, error => {
         if (isDevMode()) {
           console.error(error);
         }
       }
     );
+  }
+
+  public getFilteredStacks() {
+    this.filteredStacks = Array.from(this.stacks.values()).filter(c => {
+      // Filter stacks that match selected tags
+      let match = false;
+
+      if (c.tags.length === 0) {
+        return true;
+      } else {
+        c.tags.forEach(ct => {
+          this.tags.forEach(t => {
+            if (ct.value === t.value && t.checked) {
+              match = true;
+            }
+          });
+        });
+
+        return match;
+      }
+    });
+
+    return this.filteredStacks;
   }
 
   /**
@@ -93,11 +118,17 @@ export class StacksService {
     return this.tags;
   }
 
+  public update() {
+    this.notify();
+  }
+
   /**
    * Informs subscribers that something has changed
    */
   private notify() {
     console.log(`DEBUG notify`);
-    this.stacksSubject.next(Array.from(this.stacks.values()));
+    this.tags = this.getAllTags();
+    this.filteredStacks = this.getFilteredStacks();
+    this.stacksSubject.next(this.filteredStacks);
   }
 }

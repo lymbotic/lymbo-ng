@@ -5,4 +5,7 @@ export class Stack {
   title: string;
   cards: Card[] = [];
   tags: Tag[] = [];
+
+  constructor() {
+  }
 }

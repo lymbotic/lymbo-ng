@@ -1,6 +1,10 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
 import {FileUploader} from 'ng2-file-upload/ng2-file-upload';
 import {Observable, Subject, Subscription} from 'rxjs';
+import {Stack} from '../../../model/stack.model';
+import {Card} from '../../../model/card.model';
+import {Tag} from '../../../model/tag.model';
+import {UUID} from '../../../model/util/uuid';
 
 const URL = 'https://foo.bar.com';
 
@@ -24,14 +28,51 @@ export class FileDropComponent implements OnInit, OnDestroy {
   public hasDropZoneOver = false;
   private subscription: Subscription;
   private filesSubject: Subject<File>;
-  private _uploadedFiles: Observable<{ result: string, payload: any }>;
+  private uploadedFilesObservable: Observable<{ result: string, payload: any }>;
 
   @Output()
   public uploadedFiles: EventEmitter<DropResult> = new EventEmitter();
 
+  static parseLymboFile(value: string): Stack {
+    if (value.trim().startsWith('{')) {
+      return FileDropComponent.parseJsonLymboFile(value);
+    } else {
+      return FileDropComponent.parseCsvLymboFile(value);
+    }
+  }
+
+  static parseJsonLymboFile(value: string): Stack {
+    return JSON.parse(value);
+  }
+
+  static parseCsvLymboFile(value: string): Stack {
+    let cards = [];
+    value.split('\n').forEach(c => {
+      let vs = c.split(',');
+      let card = new Card();
+
+      card.id = new UUID().toString();
+      card.sides[0].title = vs[0];
+      card.sides[1].title = vs[1];
+      card.tags = vs.splice(2, vs.length).map(v => {
+        return new Tag(v.trim().replace('\r', ''), true);
+      });
+
+      cards.push(card);
+    });
+
+    let stack = new Stack();
+    stack.id = new UUID().toString();
+    stack.title = `stack ${stack.id}`;
+    stack.cards = cards;
+    stack.tags = [];
+
+    return stack;
+  }
+
   constructor() {
     this.filesSubject = new Subject();
-    this._uploadedFiles = this.filesSubject.asObservable()
+    this.uploadedFilesObservable = this.filesSubject.asObservable()
       .switchMap((file: File) => {
         return new Observable<any>((observer) => {
           let reader: FileReader = new FileReader();
@@ -42,18 +83,17 @@ export class FileDropComponent implements OnInit, OnDestroy {
           return () => {
             reader.abort();
           };
+        }).map((value: string) => {
+          return FileDropComponent.parseLymboFile(value);
+        }).map((results: any) => {
+          return {result: SUCCESS, payload: results};
         })
-          .map((value: string) => {
-            return JSON.parse(value);
-          }).map((results: Array<any>) => {
-            return {result: SUCCESS, payload: results};
-          })
           .catch(e => Observable.of({result: FAILURE, payload: e}));
       });
   }
 
   ngOnInit() {
-    this.subscription = this._uploadedFiles.subscribe(this.uploadedFiles);
+    this.subscription = this.uploadedFilesObservable.subscribe(this.uploadedFiles);
   }
 
   ngOnDestroy() {

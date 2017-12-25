@@ -1,7 +1,6 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef, MatIconRegistry} from '@angular/material';
 import {DomSanitizer} from '@angular/platform-browser';
-import {CardsService} from '../../../services/cards.service';
 
 @Component({
   selector: 'app-tag-dialog',
@@ -10,19 +9,21 @@ import {CardsService} from '../../../services/cards.service';
 })
 export class TagDialogComponent implements OnInit {
   dialogTitle = '';
+  tags = [];
 
-  constructor(private cardsService: CardsService,
-              public dialogRef: MatDialogRef<TagDialogComponent>,
+  constructor(public dialogRef: MatDialogRef<TagDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any,
               iconRegistry: MatIconRegistry,
               sanitizer: DomSanitizer) {
     iconRegistry.addSvgIcon(
       'close',
       sanitizer.bypassSecurityTrustResourceUrl('assets/icons/ic_close_black_24px.svg'));
+
+    this.dialogTitle = data.dialogTitle;
+    this.tags = this.data.tags;
   }
 
   ngOnInit() {
-    this.cardsService.getAllTags();
   }
 
   applyTags() {

@@ -7,6 +7,7 @@ import {SnackbarService} from '../../../services/snackbar.service';
 import {MatDialog, MatIconRegistry, MatSidenav} from '@angular/material';
 import {DomSanitizer} from '@angular/platform-browser';
 import {StackDialogComponent} from '../../dialogs/stack-dialog/stack-dialog.component';
+import {TagDialogComponent} from '../../dialogs/tag-dialog/tag-dialog.component';
 
 @Component({
   selector: 'app-stacks',
@@ -66,6 +67,23 @@ export class StacksComponent implements OnInit, OnDestroy {
       }
       case 'settings': {
         this.snackbarService.showSnackbar('Clicked on menu item Settings', '');
+        break;
+      }
+      case 'tags': {
+        let dialogRef = this.dialog.open(TagDialogComponent, {
+            disableClose: true,
+            data: {
+              dialogTitle: 'Select tags',
+              tags: this.stacksService.getAllTags()
+            }
+          }
+        );
+        dialogRef.afterClosed().subscribe(result => {
+          if (result != null) {
+            this.stacksService.update();
+            this.snackbarService.showSnackbar('Tags selected', '');
+          }
+        });
         break;
       }
       case 'add': {

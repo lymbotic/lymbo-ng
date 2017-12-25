@@ -78,7 +78,7 @@ export class CardsService {
 
   public getFilteredCards() {
     this.filteredCards = Array.from(this.cards.values()).filter(c => {
-      // Filter card that match selected tags
+      // Filter cards that match selected tags
       let match = false;
 
       if (c.tags.length === 0) {

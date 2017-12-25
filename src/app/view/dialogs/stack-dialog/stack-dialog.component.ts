@@ -44,8 +44,6 @@ export class StackDialogComponent implements OnInit {
       this.stack = this.data.stack as Stack;
     }
 
-    console.log(`DEBUG ${JSON.stringify(this.stack)}`);
-
     this.stacksService.getAllTags().forEach(t => {
       this.existingTags.push(new Tag(t.value, false));
     });
