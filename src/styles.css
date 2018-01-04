@@ -34,7 +34,7 @@ app-root {
 }
 
 mat-icon {
-  font-family: 'Material Icons';
+  font-family: 'Material Icons', serif;
   font-weight: normal;
   font-style: normal;
   font-size: 24px;
@@ -47,4 +47,10 @@ mat-icon {
   direction: ltr;
   -webkit-font-feature-settings: 'liga';
   -webkit-font-smoothing: antialiased;
+}
+
+@media (max-width: 600px) {
+  .mat-button, .mat-fab, .mat-icon-button, .mat-mini-fab, .mat-raised-button {
+    min-width: 0 !important;
+  }
 }

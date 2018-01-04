@@ -9,7 +9,7 @@
   </mat-sidenav>
 
   <div class="content">
-    <app-file-drop (uploadedFiles)="uploadedFiles($event)"></app-file-drop>
+    <app-file-drop *ngIf="windowWidth > 600" (uploadedFiles)="uploadedFiles($event)"></app-file-drop>
     <app-stack *ngFor="let s of stacks" [stack]="s">
     </app-stack>
 

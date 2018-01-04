@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, HostListener, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {Stack} from '../../../model/stack.model';
 import {StacksService} from '../../../services/stacks.service';
 import {DropResult, SUCCESS} from '../../components/file-drop/file-drop.component';
@@ -8,6 +8,7 @@ import {MatDialog, MatIconRegistry, MatSidenav} from '@angular/material';
 import {DomSanitizer} from '@angular/platform-browser';
 import {StackDialogComponent} from '../../dialogs/stack-dialog/stack-dialog.component';
 import {TagDialogComponent} from '../../dialogs/tag-dialog/tag-dialog.component';
+import {Http} from '@angular/http';
 
 @Component({
   selector: 'app-stacks',
@@ -22,14 +23,23 @@ export class StacksComponent implements OnInit, OnDestroy {
 
   @ViewChild('sidenav') sidenav: MatSidenav;
 
+  private windowHeight = 0;
+  private windowWidth = 0;
+
   constructor(private stacksService: StacksService,
               private snackbarService: SnackbarService,
+              private http: Http,
               public dialog: MatDialog,
               iconRegistry: MatIconRegistry,
               sanitizer: DomSanitizer) {
     iconRegistry.addSvgIcon('add', sanitizer.bypassSecurityTrustResourceUrl('assets/icons/ic_add_white_24px.svg'));
   }
 
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.windowHeight = event.target.innerHeight;
+    this.windowWidth = event.target.innerWidth;
+  }
 
   ngOnInit() {
     this.stacks = [];
