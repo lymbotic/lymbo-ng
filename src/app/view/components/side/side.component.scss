@@ -6,7 +6,7 @@ mat-card-header {
 }
 
 .title {
-  font-family: 'Roboto Condensed',arial,sans-serif;
+  font-family: 'Roboto Condensed', arial, sans-serif;
   font-size: 17px;
   font-weight: bold;
 }
@@ -45,4 +45,18 @@ hr {
   margin-right: 0;
   padding-left: 15px;
   padding-right: 15px;
+}
+
+#more {
+  float: right;
+}
+
+.hidden {
+  display: none;
+}
+
+.side {
+  &:hover .hidden {
+    display: inline-block;
+  }
 }

@@ -1,14 +1,30 @@
-<mat-card-header>
-  <mat-card-title class="title"><h2>{{ side.title }}</h2></mat-card-title>
-  <mat-card-subtitle></mat-card-subtitle>
-</mat-card-header>
-<mat-card-content>
-</mat-card-content>
-<mat-card-actions align="right">
-  <button mat-button *ngIf="sideIndex == 1" (click)="putCardToEnd()">
-    <mat-icon svgIcon="undo"></mat-icon>
+<div class="side">
+  <img *ngIf="side.imageUrl !== ''" mat-card-image [attr.src]="side.imageUrl">
+  <button mat-icon-button [matMenuTriggerFor]="menu" id="more" class="hidden">
+    <mat-icon svgIcon="more_black"></mat-icon>
   </button>
-  <button mat-button *ngIf="sideIndex == 1" (click)="putCardAside()">
-    <mat-icon svgIcon="check"></mat-icon>
-  </button>
-</mat-card-actions>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item (click)="onCardClicked('update')">
+      <mat-icon svgIcon="edit"></mat-icon>
+      <span>Edit</span>
+    </button>
+    <button mat-menu-item (click)="onCardClicked('delete')">
+      <mat-icon svgIcon="delete"></mat-icon>
+      <span>Delete</span>
+    </button>
+  </mat-menu>
+  <mat-card-header>
+    <mat-card-title class="title" (click)="onCardClicked('flip')"><h2>{{ side.title }}</h2></mat-card-title>
+    <mat-card-subtitle></mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+  </mat-card-content>
+  <mat-card-actions align="right">
+    <button mat-button *ngIf="sideIndex == 1" (click)="onCardClicked('putToEnd')">
+      <mat-icon svgIcon="undo"></mat-icon>
+    </button>
+    <button mat-button *ngIf="sideIndex == 1" (click)="onCardClicked('putAside')">
+      <mat-icon svgIcon="check"></mat-icon>
+    </button>
+  </mat-card-actions>
+</div>

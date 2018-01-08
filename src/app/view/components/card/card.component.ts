@@ -1,7 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {MatDialog, MatIconRegistry} from '@angular/material';
+import {MatDialog} from '@angular/material';
 import {Side} from '../../../model/side.model';
-import {DomSanitizer} from '@angular/platform-browser';
 import {SnackbarService} from '../../../services/snackbar.service';
 import {CardsService} from '../../../services/cards.service';
 import {CardDialogComponent} from '../../dialogs/card-dialog/card-dialog.component';
@@ -20,16 +19,40 @@ export class CardComponent implements OnInit {
 
   constructor(private cardsService: CardsService,
               private snackbarService: SnackbarService,
-              public dialog: MatDialog,
-              iconRegistry: MatIconRegistry,
-              sanitizer: DomSanitizer) {
-    iconRegistry.addSvgIcon('more_black', sanitizer.bypassSecurityTrustResourceUrl('assets/icons/ic_more_vert_black_18px.svg'));
-    iconRegistry.addSvgIcon('edit', sanitizer.bypassSecurityTrustResourceUrl('assets/icons/ic_edit_black_18px.svg'));
-    iconRegistry.addSvgIcon('delete', sanitizer.bypassSecurityTrustResourceUrl('assets/icons/ic_delete_black_18px.svg'));
+              public dialog: MatDialog) {
   }
 
   ngOnInit() {
     this.activeSide = this.card.sides[this.activeSideIndex];
+  }
+
+  /**
+   * Handles click on the card
+   * @param value
+   */
+  onCardClicked(value: string) {
+    switch (value) {
+      case 'update': {
+        this.updateCard();
+        break;
+      }
+      case 'delete': {
+        this.deleteCard();
+        break;
+      }
+      case 'flip': {
+        this.flipCard();
+        break;
+      }
+      case 'putAside': {
+        this.putCardAside();
+        break;
+      }
+      case 'putToEnd': {
+        this.putCardToEnd();
+        break;
+      }
+    }
   }
 
   public updateCard() {
@@ -64,12 +87,20 @@ export class CardComponent implements OnInit {
     });
   }
 
-  public flipCard() {
+  private flipCard() {
     this.activeSideIndex++;
     if (this.activeSideIndex >= this.card.sides.length) {
       this.activeSideIndex = 0;
     }
 
     this.activeSide = this.card.sides[this.activeSideIndex];
+  }
+
+  private putCardAside() {
+    this.cardsService.putCardAside(this.card);
+  }
+
+  private putCardToEnd() {
+    this.cardsService.putCardToEnd(this.card);
   }
 }

@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Side} from '../../../model/side.model';
 import {DomSanitizer} from '@angular/platform-browser';
 import {MatIconRegistry} from '@angular/material';
@@ -15,22 +15,26 @@ export class SideComponent implements OnInit {
   @Input() sideIndex: number;
   @Input() side: Side = new Side();
 
+  @Output() onCardClickedEmitter = new EventEmitter<string>();
+
   constructor(private cardsService: CardsService,
               iconRegistry: MatIconRegistry,
               sanitizer: DomSanitizer) {
     iconRegistry.addSvgIcon('undo', sanitizer.bypassSecurityTrustResourceUrl('assets/icons/ic_undo_black_24px.svg'));
     iconRegistry.addSvgIcon('check', sanitizer.bypassSecurityTrustResourceUrl('assets/icons/ic_check_black_24px.svg'));
+    iconRegistry.addSvgIcon('more_black', sanitizer.bypassSecurityTrustResourceUrl('assets/icons/ic_more_vert_black_18px.svg'));
+    iconRegistry.addSvgIcon('edit', sanitizer.bypassSecurityTrustResourceUrl('assets/icons/ic_edit_black_18px.svg'));
+    iconRegistry.addSvgIcon('delete', sanitizer.bypassSecurityTrustResourceUrl('assets/icons/ic_delete_black_18px.svg'));
   }
 
   ngOnInit() {
   }
 
-  putCardAside() {
-    this.cardsService.putCardAside(this.card);
+  /**
+   * Handles click on the card
+   * @param value
+   */
+  onCardClicked(value: string) {
+    this.onCardClickedEmitter.next(value);
   }
-
-  putCardToEnd() {
-    this.cardsService.putCardToEnd(this.card);
-  }
-
 }
