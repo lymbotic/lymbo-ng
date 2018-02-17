@@ -1,161 +1,63 @@
 # Lymbo
 
-## Aim
+[![Lymbo logo](https://github.com/florianschwanz/lymbo-ng/blob/master/src/assets/logos/logo-144x144.png)](https://github.com/florianschwanz/lymbo-ng/blob/master/src/assets/logos/logo-144x144.png)
 
-This project can be used as an app template to target multiple platforms such as
+Visit [https://lymbo.interoberlin.de/](https://lymbo.interoberlin.de/) for a live demo.
 
-* Web servers
-* Desktop operating systems
-  * Linux
-  * MacOS
-  * Windows
-* Mobile operating systems
-  * Android
-  * iOS
-  * Windows Mobile
+## Purpose
 
-This template uses frameworks and guidelines to allow for a quick development such as
+Lymbo is an Angular based web application that helps you learn new languages by using digital flash cards.
 
-* [Angular](https://angular.io)
-* [Material Design](http://material.io/)
-* [Typescript](https://www.typescriptlang.org/)
-* [Sass](http://sass-lang.com/)
+<img src="https://github.com/florianschwanz/lymbo-ng/blob/master/docs/screenshots/01-overview.png" alt="Screenshot overview" height=45% width=45% /> <img src="https://github.com/florianschwanz/lymbo-ng/blob/master/docs/screenshots/04-add.png" alt="Screenshot add" height=45% width=45% />
 
-as well as frameworks to enable multi-platform support
+Write words you want to learn on flash cards together with their translation.
+Structure them in different stacks and start learning on the go.
 
-* [Electron](https://electron.atom.io/)
-* [Cordova](https://cordova.apache.org/)
+Share the stacks you created with friends.
 
-## Project structure
+### Features
 
-* **cordova** - cordova working dir (do not touch)
-* **doc** - release notes
-* **e2e** - end-to-end tests
-* **gradle** - gradle wrapper (do not touch)
-* **src** - app code
+| Tag       | Feature         |
+| ------------- |-------------|
+| 0.1 | Show stacks |
+| 0.2 | Show cards |
+| 0.3 | Add cards |
+| 0.4 | Add stacks |
+| 0.5 | Update cards |
+| 0.6 | Update stacks |
+| 0.7 | Delete cards |
+| 0.8 | Delete stacks |
+| 0.9 | Persist cards |
+| 0.10 | Put cards aside |
+| 0.11 | Put cards to end |
+| 0.12 | Tag cards |
+| 0.13 | Tag stacks |
+| 0.14 | CSV format |
 
-## Requirements
+### Planned features
 
-* you can run/build this template using either
-  * [NodeJS](https://nodejs.org/en/) or
-  * [Gradle](https://gradle.org/) which wraps NodejJS 
+* automatic translation
+* quiz cards
+* sharing stacks
+* multi-device synchronization
+* learning statistics
+* stack store
+
+### Based on Amphibian
+
+This app is powered by the [Amphibian app template](https://github.com/florianschwanz/amphibian).
+Therefore it can be built for the following plattforms
+
+* web
+* Linux / Windows / MacOS
+* Android / iOS
+
+See the Amphibian manual for further information.
 
 ## Development
 
-For some supported platforms there is a script that can be used to run the application locally.
-
-### Web
-
-* run the following command to start the web version of the application
-
+Call the following commands to build and start the app locally
 ```
+npm install
 npm run start
 ```
-or
-```
-gradlew start
-```
-
-* call ```http://localhost:4200``` in a browser to start the app
-
-### Desktop
-
-* run the following command to start the desktop version of the application
-
-```
-npm run electron-start
-```
-or
-```
-gradlew electronStart
-```
-
-* the application will be started in a separate window automatically
-
-### Android
-
-* run the following command to start the Android version of the application
-* note: for the Android version to run you need to have Android SDK installed
-
-```
-npm run cordova-android-start
-```
-or
-```
-gradlew cordovaAndroidStart
-```
-
-## Building
-
-For each supported platform there is a script that can be used to bundle the application.
-
-### Web
-
-* run the following command to create a release bundle for web
-
-```
-npm run release-web
-```
-or
-```
-gradlew releaseWeb
-```
-
-* a release bundle for web named ```%npm_package_name%-web-%npm_package_version%.zip``` will be created in directory ```release```
-
-### Linux
-
-* run the following command to create a release bundle for Linux (64-bit)
-
-```
-npm run release-linux
-```
-or
-```
-gradlew releaseLinux
-```
-
-* a release bundle for Linux named ```%npm_package_name%-linux-x64-%npm_package_version%.zip``` will be created in directory ```release```
-
-### MacOS
-
-* run the following command to create a release bundle for MacOS (64-bit)
-* note: to build for MacOS NodeJS command prompt must be run as administrator
-
-```
-npm run release-macos
-```
-or
-```
-gradlew releaseMacos
-```
-
-* a release bundle for MacOS named ```%npm_package_name%-macos-x64-%npm_package_version%.zip``` will be created in directory ```release```
-
-### Windows
-
-* run the following command to create a release bundle for Windows (64-bit)
-
-```
-npm run release-windows
-```
-or
-```
-gradlew releaseWindows
-```
-
-* a release bundle for Windows named ```%npm_package_name%-win32-x64-%npm_package_version%.zip``` will be created in directory ```release```
-
-### Android
-
-* run the following command to create a release bundle for Android
-
-```
-npm run release-android
-```
-or
-```
-gradlew releaseAndroid
-```
-
-* a release bundle for Android named ```%npm_package_name%-android-%npm_package_version%.zip``` will be created in directory ```release```
