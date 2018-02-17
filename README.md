@@ -2,6 +2,7 @@
 
 [![Lymbo logo](https://github.com/florianschwanz/lymbo-ng/blob/master/src/assets/logos/logo-144x144.png)](https://github.com/florianschwanz/lymbo-ng/blob/master/src/assets/logos/logo-144x144.png)
 
+Note that this app is developed for Android in parallel. See [https://github.com/florianschwanz/lymbo-android](https://github.com/florianschwanz/lymbo-android) for more information.
 Visit [https://lymbo.interoberlin.de/](https://lymbo.interoberlin.de/) for a live demo.
 
 ## Purpose
@@ -41,7 +42,7 @@ Share the stacks you created with friends.
 * sharing stacks
 * multi-device synchronization
 * learning statistics
-* stack store
+* stack in-app store
 
 ### Based on Amphibian
 
