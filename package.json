@@ -1,7 +1,7 @@
 {
   "name": "lymbo",
   "version": "0.14.0",
-  "license": "MIT",
+  "license": "AGPL",
   "angular-cli": {},
   "scripts": {
     "ng": "ng",
