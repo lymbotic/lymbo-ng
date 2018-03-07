@@ -4,8 +4,8 @@ export const MOCK_STACK: Stack = {
   cards: [{
     id: 'b7651336-1d26-4695-bead-eb479efd4f73',
     sides: [
-      {title: 'front'},
-      {title: 'back'}
+      {title: 'front', imageUrl: ''},
+      {title: 'back', imageUrl: ''}
     ],
     tags: [],
     checked: false
