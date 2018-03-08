@@ -81,7 +81,8 @@ export class CardsService {
       // Filter cards that match selected tags
       let match = false;
 
-      if (c.tags.length === 0) {
+
+      if (c.tags == null || c.tags.length === 0) {
         return true;
       } else {
         c.tags.forEach(ct => {
@@ -110,18 +111,20 @@ export class CardsService {
     let ts = [];
 
     this.cards.forEach(c => {
-        c.tags.forEach(t => {
-          let unique = true;
-          ts.forEach(tt => {
-            if (t.value === tt.value) {
-              unique = false;
+        if (c.tags != null) {
+          c.tags.forEach(t => {
+            let unique = true;
+            ts.forEach(tt => {
+              if (t.value === tt.value) {
+                unique = false;
+              }
+            });
+
+            if (unique) {
+              ts.push(t);
             }
           });
-
-          if (unique) {
-            ts.push(t);
-          }
-        });
+        }
       }
     );
 
