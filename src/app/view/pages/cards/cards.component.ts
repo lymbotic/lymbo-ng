@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {SnackbarService} from '../../../services/snackbar.service';
-import {MatDialog, MatIconRegistry} from '@angular/material';
+import {MatDialog, MatDialogConfig, MatIconRegistry} from '@angular/material';
 import {DomSanitizer} from '@angular/platform-browser';
 import {CardDialogComponent} from '../../dialogs/card-dialog/card-dialog.component';
 import {Card} from '../../../model/card.model';
@@ -9,6 +9,8 @@ import {CardsService} from '../../../services/cards.service';
 import {Subject} from 'rxjs/Subject';
 import {TagDialogComponent} from '../../dialogs/tag-dialog/tag-dialog.component';
 import {Tag} from '../../../model/tag.model';
+import {AboutDialogComponent} from '../../dialogs/about-dialog/about-dialog.component';
+import {environment} from '../../../../environments/environment';
 
 @Component({
   selector: 'app-cards',
@@ -97,6 +99,19 @@ export class CardsComponent implements OnInit, OnDestroy {
           if (result != null) {
             this.cardsService.createCard(result as Card);
             this.snackbarService.showSnackbar('Added card', '');
+          }
+        });
+        break;
+      }
+      case 'about': {
+        const dialogRef = this.dialog.open(AboutDialogComponent, <MatDialogConfig>{
+          disableClose: true,
+          data: {
+            title: 'About',
+            name: environment.NAME,
+            version: environment.VERSION,
+            license: environment.LICENSE,
+            homepage: environment.HOMEPAGE,
           }
         });
         break;

@@ -9,13 +9,15 @@
   <button mat-button class="toolbar-menu-item" (click)="clickMenuItem('tags')">
     <mat-icon svgIcon="label"></mat-icon>
   </button>
-  <button mat-button class="toolbar-menu-item" (click)="clickMenuItem('refresh')">
+  <button mat-button class="toolbar-menu-item" (click)="onClickMenuItem('refresh')">
     <mat-icon svgIcon="refresh"></mat-icon>
   </button>
-  <button mat-button class="toolbar-menu-item" [matMenuTriggerFor]="menu">
-    <mat-icon svgIcon="more"></mat-icon>
+  <button mat-button class="toolbar-menu-item right" [matMenuTriggerFor]="menu">
+    <mat-icon svgIcon="more_white"></mat-icon>
   </button>
   <mat-menu #menu="matMenu">
-    <button mat-menu-item (click)="clickMenuItem('settings')">Settings</button>
+    <button mat-menu-item (click)="onClickMenuItem('about')">
+      <span>About</span>
+    </button>
   </mat-menu>
 </mat-toolbar>

@@ -41,9 +41,11 @@ import {ConfirmationDialogComponent} from './view/dialogs/confirmation-dialog/co
 import {SplashScreenComponent} from './view/pages/splash-screen/splash-screen.component';
 import {PouchDBService} from './services/pouchdb.service';
 import {TagDialogComponent} from './view/dialogs/tag-dialog/tag-dialog.component';
+import {AboutDialogComponent} from './view/dialogs/about-dialog/about-dialog.component';
 
 @NgModule({
   declarations: [
+    AboutDialogComponent,
     AppComponent,
     FileDropComponent,
     StackComponent,
@@ -81,6 +83,7 @@ import {TagDialogComponent} from './view/dialogs/tag-dialog/tag-dialog.component
     MatCheckboxModule
   ],
   entryComponents: [
+    AboutDialogComponent,
     CardDialogComponent,
     StackDialogComponent,
     ConfirmationDialogComponent,

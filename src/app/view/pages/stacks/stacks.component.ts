@@ -4,11 +4,13 @@ import {StacksService} from '../../../services/stacks.service';
 import {DropResult, SUCCESS} from '../../components/file-drop/file-drop.component';
 import {Subject} from 'rxjs/Subject';
 import {SnackbarService} from '../../../services/snackbar.service';
-import {MatDialog, MatIconRegistry, MatSidenav} from '@angular/material';
+import {MatDialog, MatDialogConfig, MatIconRegistry, MatSidenav} from '@angular/material';
 import {DomSanitizer} from '@angular/platform-browser';
 import {StackDialogComponent} from '../../dialogs/stack-dialog/stack-dialog.component';
 import {TagDialogComponent} from '../../dialogs/tag-dialog/tag-dialog.component';
 import {Http} from '@angular/http';
+import {AboutDialogComponent} from '../../dialogs/about-dialog/about-dialog.component';
+import {environment} from '../../../../environments/environment.prod';
 
 @Component({
   selector: 'app-stacks',
@@ -102,6 +104,19 @@ export class StacksComponent implements OnInit, OnDestroy {
           if (result != null) {
             this.stacksService.createStack(result as Stack);
             this.snackbarService.showSnackbar('Added stack', '');
+          }
+        });
+        break;
+      }
+      case 'about': {
+        const dialogRef = this.dialog.open(AboutDialogComponent, <MatDialogConfig>{
+          disableClose: true,
+          data: {
+            title: 'About',
+            name: environment.NAME,
+            version: environment.VERSION,
+            license: environment.LICENSE,
+            homepage: environment.HOMEPAGE,
           }
         });
         break;

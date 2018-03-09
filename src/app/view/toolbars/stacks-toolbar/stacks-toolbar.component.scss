@@ -9,10 +9,24 @@ mat-toolbar {
 .toolbar-block {
   margin-left: 10px;
   margin-right: 10px;
+
+  @media #{$mat-small} {
+    width: 10%;
+  }
+  @media #{$mat-medium} {
+    width: 100px;
+  }
+  @media #{$mat-large} {
+    width: 350px;
+  }
 }
 
 .toolbar-menu-item {
   padding: 0 20px;
+}
+
+.right {
+  float: right;
 }
 
 .flexbox {
