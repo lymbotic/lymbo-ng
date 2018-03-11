@@ -38,7 +38,8 @@
     "release-macos": "mkdirp ./release && npm run electron-macos-prod && cd ./out && bestzip ./../release/%npm_package_name%-macos-x64-%npm_package_version%.zip ./%npm_package_name%-darwin-x64/*",
     "release-windows": "mkdirp ./release && npm run electron-windows-prod && cd ./out && bestzip ./../release/%npm_package_name%-win32-x64-%npm_package_version%.zip ./%npm_package_name%-win32-x64/*",
     "release-android": "mkdirp ./release && npm run cordova-android-prod && cd ./cordova/platforms/android/build/outputs/apk && bestzip ./../../../../../../release/%npm_package_name%-android-%npm_package_version%.zip ./android-release-unsigned.apk",
-    "release-notes": "mkdirp ./release && markdown ./doc/release-notes-%npm_package_version%.md > release/release-notes-%npm_package_version%.html"
+    "release-notes": "mkdirp ./release && markdown ./doc/release-notes-%npm_package_version%.md > release/release-notes-%npm_package_version%.html",
+    "git-tags": "echo { \"tags\": [ > tags.json && git tag --format=\"{ \\\"%(refname)\\\": \\\"%(subject)\\\"} ,\" >> tags.json && echo ]} >> tags.json"
   },
   "private": true,
   "dependencies": {
@@ -74,6 +75,7 @@
     "cordova": "^7.0.1",
     "electron": "^1.6.11",
     "electron-packager": "^8.7.1",
+    "git": "^0.1.5",
     "jasmine-core": "~2.5.2",
     "jasmine-spec-reporter": "~3.2.0",
     "karma": "~1.4.1",
