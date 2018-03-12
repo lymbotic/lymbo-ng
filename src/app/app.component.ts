@@ -1,10 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import {PlatformService} from './services/platform.service';
 import {OperatingSystem} from './model/operating-system';
-import {MatSnackBar} from '@angular/material';
+import {MatDialog, MatSnackBar} from '@angular/material';
 import {SnackbarService} from './services/snackbar.service';
 import {PouchDBService} from './services/pouchdb.service';
-import {Card} from './model/card.model';
+import {environment} from '../environments/environment.prod';
+import {GitTag} from './model/git-tag.model';
+import {NewFeaturesDialogComponent} from './view/dialogs/new-features-dialog/new-features-dialog.component';
 
 @Component({
   selector: 'app-root',
@@ -17,11 +19,29 @@ export class AppComponent implements OnInit {
   constructor(platformService: PlatformService,
               private pouchDBService: PouchDBService,
               private snackbarService: SnackbarService,
+              public dialog: MatDialog,
               public snackBar: MatSnackBar) {
     this.operatingSystem = `${OperatingSystem[platformService.operatingSystem]}`;
   }
 
   ngOnInit(): void {
+    (environment.TAGS as GitTag[]).forEach(t => {
+      console.log(`annotation: ${t.annotation}, message: ${t.message}`);
+    });
+
+    const dialogRef = this.dialog.open(NewFeaturesDialogComponent, {
+      disableClose: false,
+      data: {
+        dialogTitle: 'New features',
+        gitTags: environment.TAGS as GitTag[]
+      }
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result != null) {
+        // TODO Remember that those infos have been seen already
+      }
+    });
+
     this.snackbarService.messageSubject.subscribe(
       (snack) => {
         this.openSnackBar(snack[0], snack[1]);

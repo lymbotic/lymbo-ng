@@ -42,12 +42,14 @@ import {SplashScreenComponent} from './view/pages/splash-screen/splash-screen.co
 import {PouchDBService} from './services/pouchdb.service';
 import {TagDialogComponent} from './view/dialogs/tag-dialog/tag-dialog.component';
 import {AboutDialogComponent} from './view/dialogs/about-dialog/about-dialog.component';
+import {NewFeaturesDialogComponent} from './view/dialogs/new-features-dialog/new-features-dialog.component';
 
 @NgModule({
   declarations: [
     AboutDialogComponent,
     AppComponent,
     FileDropComponent,
+    NewFeaturesDialogComponent,
     StackComponent,
     StacksComponent,
     StacksToolbarComponent,
@@ -85,6 +87,7 @@ import {AboutDialogComponent} from './view/dialogs/about-dialog/about-dialog.com
   entryComponents: [
     AboutDialogComponent,
     CardDialogComponent,
+    NewFeaturesDialogComponent,
     StackDialogComponent,
     ConfirmationDialogComponent,
     TagDialogComponent
