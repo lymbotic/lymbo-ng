@@ -43,6 +43,8 @@ import {PouchDBService} from './services/pouchdb.service';
 import {TagDialogComponent} from './view/dialogs/tag-dialog/tag-dialog.component';
 import {AboutDialogComponent} from './view/dialogs/about-dialog/about-dialog.component';
 import {NewFeaturesDialogComponent} from './view/dialogs/new-features-dialog/new-features-dialog.component';
+import {PouchDBSettingsService} from './services/pouchdb-settings.service';
+import {SettingsService} from './services/settings.service';
 
 @NgModule({
   declarations: [
@@ -98,6 +100,8 @@ import {NewFeaturesDialogComponent} from './view/dialogs/new-features-dialog/new
     CardsService,
     SnackbarService,
     PouchDBService,
+    PouchDBSettingsService,
+    SettingsService,
     CardsResolver,
     {provide: MATERIAL_COMPATIBILITY_MODE, useValue: true}],
   bootstrap: [AppComponent]

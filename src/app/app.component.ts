@@ -7,6 +7,9 @@ import {PouchDBService} from './services/pouchdb.service';
 import {environment} from '../environments/environment.prod';
 import {GitTag} from './model/git-tag.model';
 import {NewFeaturesDialogComponent} from './view/dialogs/new-features-dialog/new-features-dialog.component';
+import {PouchDBSettingsService} from './services/pouchdb-settings.service';
+import {SettingsService} from './services/settings.service';
+import {Setting} from './model/settings/setting.model';
 
 @Component({
   selector: 'app-root',
@@ -19,15 +22,15 @@ export class AppComponent implements OnInit {
   constructor(platformService: PlatformService,
               private pouchDBService: PouchDBService,
               private snackbarService: SnackbarService,
+              private pouchDBSettingsService: PouchDBSettingsService,
+              private settingsService: SettingsService,
               public dialog: MatDialog,
               public snackBar: MatSnackBar) {
     this.operatingSystem = `${OperatingSystem[platformService.operatingSystem]}`;
   }
 
   ngOnInit(): void {
-    (environment.TAGS as GitTag[]).forEach(t => {
-      console.log(`annotation: ${t.annotation}, message: ${t.message}`);
-    });
+    this.settingsService.fetch();
 
     const dialogRef = this.dialog.open(NewFeaturesDialogComponent, {
       disableClose: false,
@@ -38,7 +41,7 @@ export class AppComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result != null) {
-        // TODO Remember that those infos have been seen already
+        this.settingsService.updateSetting(new Setting('version', result));
       }
     });
 
@@ -49,6 +52,7 @@ export class AppComponent implements OnInit {
     );
 
     this.pouchDBService.sync('http://localhost:5984/lymbo');
+    this.pouchDBSettingsService.sync('http://localhost:5984/lymbo-settings');
   }
 
   /**

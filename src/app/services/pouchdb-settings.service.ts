@@ -1,8 +1,8 @@
 import {EventEmitter, Injectable, isDevMode} from '@angular/core';
-let PouchDB = require('pouchdb');
+import PouchDB from 'pouchdb';
 
 @Injectable()
-export class PouchDBService {
+export class PouchDBSettingsService {
 
   private isInstantiated: boolean;
   private database: any;
@@ -10,7 +10,7 @@ export class PouchDBService {
 
   public constructor() {
     if (!this.isInstantiated) {
-      this.database = new PouchDB('lymbo');
+      this.database = new PouchDB('lymbo-settings');
       this.isInstantiated = true;
     }
   }
@@ -97,7 +97,7 @@ export class PouchDBService {
    */
   public sync(remote: string) {
     console.log(`DEBUG sync ${remote}`);
-    let remoteDatabase = new PouchDB(remote);
+    const remoteDatabase = new PouchDB(remote);
     this.database.sync(remoteDatabase, {
       live: true
     }).on('change', change => {
@@ -108,7 +108,7 @@ export class PouchDBService {
   }
 
   public syncWithUser(remote: string, username: string, password: string) {
-    let remoteDatabase = new PouchDB(remote);
+    const remoteDatabase = new PouchDB(remote);
     this.database.sync(remoteDatabase, {
       live: true,
       auth: {
