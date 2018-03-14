@@ -34,6 +34,7 @@ Share the stacks you created with friends.
 | 0.12 | Tag cards |
 | 0.13 | Tag stacks |
 | 0.14 | CSV format |
+| 0.15 | Show app information |
 
 ### Planned features
 
