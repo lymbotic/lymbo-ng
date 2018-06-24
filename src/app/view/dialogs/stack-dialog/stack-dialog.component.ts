@@ -3,7 +3,7 @@ import {MAT_DIALOG_DATA, MatDialogRef, MatIconRegistry} from '@angular/material'
 import {DomSanitizer} from '@angular/platform-browser';
 import {Stack} from '../../../model/stack.model';
 import {UUID} from '../../../model/util/uuid';
-import {DIALOG_MODE} from '../../../model/DialogMode';
+import {DIALOG_MODE} from '../../../model/dialog-mode.enum';
 import {Tag} from '../../../model/tag.model';
 import {StacksService} from '../../../services/stacks.service';
 
