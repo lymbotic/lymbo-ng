@@ -4,7 +4,6 @@ import {FormsModule} from '@angular/forms';
 import {HttpModule} from '@angular/http';
 import {AppComponent} from './app.component';
 import {PlatformService} from './services/platform.service';
-import {ResponsiveModule} from 'ng2-responsive';
 import {StacksToolbarComponent} from './view/toolbars/stacks-toolbar/stacks-toolbar.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {
@@ -12,7 +11,6 @@ import {
   MatCardModule,
   MatCheckboxModule,
   MatDialogModule,
-  MATERIAL_COMPATIBILITY_MODE,
   MatIconModule,
   MatInputModule,
   MatListModule,
@@ -45,6 +43,7 @@ import {AboutDialogComponent} from './view/dialogs/about-dialog/about-dialog.com
 import {NewFeaturesDialogComponent} from './view/dialogs/new-features-dialog/new-features-dialog.component';
 import {PouchDBSettingsService} from './services/pouchdb-settings.service';
 import {SettingsService} from './services/settings.service';
+import {HttpClientModule} from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -73,7 +72,7 @@ import {SettingsService} from './services/settings.service';
     FileUploadModule,
     FormsModule,
     HttpModule,
-    ResponsiveModule,
+    HttpClientModule,
     MatButtonModule,
     MatToolbarModule,
     MatSidenavModule,
@@ -102,8 +101,8 @@ import {SettingsService} from './services/settings.service';
     PouchDBService,
     PouchDBSettingsService,
     SettingsService,
-    CardsResolver,
-    {provide: MATERIAL_COMPATIBILITY_MODE, useValue: true}],
+    CardsResolver
+  ],
   bootstrap: [AppComponent]
 })
 

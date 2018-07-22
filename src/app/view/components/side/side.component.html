@@ -1,11 +1,11 @@
 <div class="side">
   <img *ngIf="side.imageUrl !== ''" mat-card-image [attr.src]="side.imageUrl">
   <button mat-icon-button [matMenuTriggerFor]="menu" id="more" class="hidden">
-    <mat-icon svgIcon="more_black"></mat-icon>
+    <mat-icon svgIcon="more_vert_18"></mat-icon>
   </button>
   <mat-menu #menu="matMenu">
     <button mat-menu-item (click)="onCardClicked('update')">
-      <mat-icon svgIcon="edit"></mat-icon>
+      <mat-icon svgIcon="mode_edit"></mat-icon>
       <span>Edit</span>
     </button>
     <button mat-menu-item (click)="onCardClicked('delete')">

@@ -1,4 +1,15 @@
-@import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
+// Theme
+@import '~@angular/material/theming';
+
+@include mat-core();
+@import 'theme.scss';
+@import 'sizes.scss';
+
+.app-theme {
+  @include angular-material-theme($app-theme);
+}
+
+// Rest
 
 html {
   height: 100%;
