@@ -5,6 +5,8 @@ import {Stack} from '../../../model/stack.model';
 import {Card} from '../../../model/card.model';
 import {Tag} from '../../../model/tag.model';
 import {UUID} from '../../../model/util/uuid';
+import {switchMap} from 'rxjs-compat/operator/switchMap';
+import {map} from 'rxjs-compat/operator/map';
 
 const URL = 'https://foo.bar.com';
 
@@ -19,7 +21,7 @@ export interface DropResult {
 @Component({
   selector: 'app-file-drop',
   templateUrl: './file-drop.component.html',
-  styles: [require('./file-drop.component.scss')],
+  styleUrls: ['./file-drop.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FileDropComponent implements OnInit, OnDestroy {
@@ -31,7 +33,7 @@ export class FileDropComponent implements OnInit, OnDestroy {
   private uploadedFilesObservable: Observable<{ result: string, payload: any }>;
 
   @Output()
-  public uploadedFiles: EventEmitter<DropResult> = new EventEmitter();
+  public uploadedFilesEmitter: EventEmitter<DropResult> = new EventEmitter();
 
   static parseLymboFile(value: string): Stack {
     if (value.trim().startsWith('{')) {
@@ -72,10 +74,10 @@ export class FileDropComponent implements OnInit, OnDestroy {
 
   constructor() {
     this.filesSubject = new Subject();
-    this.uploadedFilesObservable = this.filesSubject.asObservable()
-      .switchMap((file: File) => {
+    this.uploadedFilesObservable = this.filesSubject.asObservable().pipe(
+      switchMap((file: File) => {
         return new Observable<any>((observer) => {
-          let reader: FileReader = new FileReader();
+          const reader: FileReader = new FileReader();
           reader.onload = (e) => {
             observer.next((e.target as any).result);
           };
@@ -83,13 +85,12 @@ export class FileDropComponent implements OnInit, OnDestroy {
           return () => {
             reader.abort();
           };
-        }).map((value: string) => {
-          return FileDropComponent.parseLymboFile(value);
-        }).map((results: any) => {
-          return {result: SUCCESS, payload: results};
-        })
-          .catch(e => Observable.of({result: FAILURE, payload: e}));
-      });
+        });
+      }), map((value: string) => {
+        return FileDropComponent.parseLymboFile(value);
+      }), map((results: any) => {
+        return {result: SUCCESS, payload: results};
+      }));
   }
 
   ngOnInit() {
@@ -107,7 +108,10 @@ export class FileDropComponent implements OnInit, OnDestroy {
   }
 
   public fileDropped(files: FileList): void {
-    for (let i = 0; i < files.length; i++) {
+    for (let i = 0;
+         i < files.length;
+         i++
+    ) {
       this.filesSubject.next(files[i]);
     }
   }

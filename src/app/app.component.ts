@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {PlatformService} from './services/platform.service';
 import {OperatingSystem} from './model/operating-system';
-import {MatDialog, MatSnackBar} from '@angular/material';
+import {MatDialog, MatIconRegistry, MatSnackBar} from '@angular/material';
 import {SnackbarService} from './services/snackbar.service';
 import {PouchDBService} from './services/pouchdb.service';
 import {environment} from '../environments/environment.prod';
@@ -10,6 +10,7 @@ import {NewFeaturesDialogComponent} from './view/dialogs/new-features-dialog/new
 import {PouchDBSettingsService} from './services/pouchdb-settings.service';
 import {SettingsService} from './services/settings.service';
 import {Setting} from './model/settings/setting.model';
+import {DomSanitizer} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-root',
@@ -25,11 +26,16 @@ export class AppComponent implements OnInit {
               private pouchDBSettingsService: PouchDBSettingsService,
               private settingsService: SettingsService,
               public dialog: MatDialog,
-              public snackBar: MatSnackBar) {
+              public snackBar: MatSnackBar,
+              private iconRegistry: MatIconRegistry,
+              private sanitizer: DomSanitizer) {
     this.operatingSystem = `${OperatingSystem[platformService.operatingSystem]}`;
   }
 
   ngOnInit(): void {
+
+    this.initializeIcons();
+
     this.settingsService.fetch();
     this.settingsService.settingsSubject.subscribe(settings => {
       if (settings.get('version') != null) {
@@ -46,6 +52,59 @@ export class AppComponent implements OnInit {
 
     this.pouchDBService.sync('http://localhost:5984/lymbo');
     this.pouchDBSettingsService.sync('http://localhost:5984/lymbo-settings');
+  }
+
+  initializeIcons() {
+    const ICON_ROOT_DIR = 'assets/material-design-icons';
+    // const VARIANT_DESIGN = 'design';
+    const VARIANT_PRODUCTION = 'production';
+    const VARIANT = VARIANT_PRODUCTION;
+
+    class Icon {
+      topic: string;
+      name: string;
+      file: string;
+
+      constructor(topic: string, name: string, file: string) {
+        this.topic = topic;
+        this.name = name;
+        this.file = file;
+      }
+    }
+
+    const ACTION = 'action';
+    // const ALERT = 'alert';
+    // const AV = 'av';
+    const CONTENT = 'content';
+    // const COMMUNICATION = 'communication';
+    const EDITOR = 'editor';
+    // const FILE = 'file';
+    // const IMAGE = 'image';
+    // const MAPS = 'maps';
+    const NAVIGATION = 'navigation';
+    // const SOCIAL = 'social';
+
+    const icons: Icon[] = [];
+    icons.push(new Icon(ACTION, 'delete', 'ic_delete_24px.svg'));
+    icons.push(new Icon(ACTION, 'label', 'ic_label_24px.svg'));
+    icons.push(new Icon(CONTENT, 'add', 'ic_add_24px.svg'));
+    icons.push(new Icon(CONTENT, 'save', 'ic_save_24px.svg'));
+    icons.push(new Icon(CONTENT, 'undo', 'ic_undo_24px.svg'));
+    icons.push(new Icon(EDITOR, 'mode_edit', 'ic_mode_edit_24px.svg'));
+    icons.push(new Icon(NAVIGATION, 'arrow_back', 'ic_arrow_back_24px.svg'));
+    icons.push(new Icon(NAVIGATION, 'menu', 'ic_menu_24px.svg'));
+    icons.push(new Icon(NAVIGATION, 'check', 'ic_check_24px.svg'));
+    icons.push(new Icon(NAVIGATION, 'close', 'ic_close_24px.svg'));
+    icons.push(new Icon(NAVIGATION, 'more_vert', 'ic_more_vert_24px.svg'));
+    icons.push(new Icon(NAVIGATION, 'more_vert_18', 'ic_more_vert_18px.svg'));
+    icons.push(new Icon(NAVIGATION, 'refresh', 'ic_refresh_24px.svg'));
+
+    icons.forEach(icon => {
+      this.iconRegistry.addSvgIcon(icon.name,
+        this.sanitizer.bypassSecurityTrustResourceUrl(ICON_ROOT_DIR + '/' + icon.topic + '/svg/' + VARIANT + '/' + icon.file));
+    });
+
+    this.iconRegistry.addSvgIcon('blank', this.sanitizer.bypassSecurityTrustResourceUrl('assets/icons/ic_blank_24px.svg'));
   }
 
   /**

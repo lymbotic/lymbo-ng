@@ -1,8 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {SnackbarService} from '../../../services/snackbar.service';
-import {MatDialog, MatDialogConfig, MatIconRegistry} from '@angular/material';
-import {DomSanitizer} from '@angular/platform-browser';
+import {MatDialog, MatDialogConfig} from '@angular/material';
 import {CardDialogComponent} from '../../dialogs/card-dialog/card-dialog.component';
 import {Card} from '../../../model/card.model';
 import {CardsService} from '../../../services/cards.service';
@@ -11,6 +10,7 @@ import {TagDialogComponent} from '../../dialogs/tag-dialog/tag-dialog.component'
 import {Tag} from '../../../model/tag.model';
 import {AboutDialogComponent} from '../../dialogs/about-dialog/about-dialog.component';
 import {environment} from '../../../../environments/environment';
+import {takeUntil} from 'rxjs/internal/operators';
 
 @Component({
   selector: 'app-cards',
@@ -27,12 +27,7 @@ export class CardsComponent implements OnInit, OnDestroy {
               private router: Router,
               private cardsService: CardsService,
               private snackbarService: SnackbarService,
-              public dialog: MatDialog,
-              iconRegistry: MatIconRegistry,
-              sanitizer: DomSanitizer) {
-    iconRegistry.addSvgIcon(
-      'add',
-      sanitizer.bypassSecurityTrustResourceUrl('assets/icons/ic_add_white_24px.svg'));
+              public dialog: MatDialog) {
   }
 
   ngOnInit() {
@@ -47,11 +42,11 @@ export class CardsComponent implements OnInit, OnDestroy {
     this.tags = this.cardsService.getAllTags();
     this.filteredCards = this.cardsService.getFilteredCards();
 
-    this.cardsService.cardsSubject
-      .takeUntil(this.cardsUnsubscribeSubject)
-      .subscribe((value) => {
-        this.filteredCards = value;
-      });
+    this.cardsService.cardsSubject.pipe(
+      takeUntil(this.cardsUnsubscribeSubject)
+    ).subscribe((value) => {
+      this.filteredCards = value;
+    });
   }
 
   ngOnDestroy(): void {

@@ -1,9 +1,8 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {Card} from '../../../model/card.model';
-import {MAT_DIALOG_DATA, MatDialogRef, MatIconRegistry} from '@angular/material';
-import {DomSanitizer} from '@angular/platform-browser';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import {UUID} from '../../../model/util/uuid';
-import {DIALOG_MODE} from '../../../model/DialogMode';
+import {DIALOG_MODE} from '../../../model/dialog-mode.enum';
 import {CardsService} from '../../../services/cards.service';
 import {Tag} from '../../../model/tag.model';
 
@@ -23,12 +22,7 @@ export class CardDialogComponent implements OnInit {
 
   constructor(private cardsService: CardsService,
               public dialogRef: MatDialogRef<CardDialogComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: any,
-              iconRegistry: MatIconRegistry,
-              sanitizer: DomSanitizer) {
-    iconRegistry.addSvgIcon(
-      'close',
-      sanitizer.bypassSecurityTrustResourceUrl('assets/icons/ic_close_black_24px.svg'));
+              @Inject(MAT_DIALOG_DATA) public data: any) {
 
     // Create basic card
     this.card = new Card();

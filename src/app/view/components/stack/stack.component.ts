@@ -1,7 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {MatDialog, MatIconRegistry} from '@angular/material';
+import {MatDialog} from '@angular/material';
 import {SnackbarService} from '../../../services/snackbar.service';
-import {DomSanitizer} from '@angular/platform-browser';
 import {StacksService} from '../../../services/stacks.service';
 import {StackDialogComponent} from '../../../view/dialogs/stack-dialog/stack-dialog.component';
 import {Stack} from '../../../model/stack.model';
@@ -17,12 +16,7 @@ export class StackComponent implements OnInit {
 
   constructor(private stacksService: StacksService,
               private snackbarService: SnackbarService,
-              public dialog: MatDialog,
-              iconRegistry: MatIconRegistry,
-              sanitizer: DomSanitizer) {
-    iconRegistry.addSvgIcon('more_black', sanitizer.bypassSecurityTrustResourceUrl('assets/icons/ic_more_vert_black_18px.svg'));
-    iconRegistry.addSvgIcon('edit', sanitizer.bypassSecurityTrustResourceUrl('assets/icons/ic_edit_black_18px.svg'));
-    iconRegistry.addSvgIcon('delete', sanitizer.bypassSecurityTrustResourceUrl('assets/icons/ic_delete_black_18px.svg'));
+              public dialog: MatDialog) {
   }
 
   ngOnInit() {

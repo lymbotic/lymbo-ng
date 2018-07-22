@@ -4,13 +4,12 @@ import {StacksService} from '../../../services/stacks.service';
 import {DropResult, SUCCESS} from '../../components/file-drop/file-drop.component';
 import {Subject} from 'rxjs/Subject';
 import {SnackbarService} from '../../../services/snackbar.service';
-import {MatDialog, MatDialogConfig, MatIconRegistry, MatSidenav} from '@angular/material';
-import {DomSanitizer} from '@angular/platform-browser';
+import {MatDialog, MatDialogConfig, MatSidenav} from '@angular/material';
 import {StackDialogComponent} from '../../dialogs/stack-dialog/stack-dialog.component';
 import {TagDialogComponent} from '../../dialogs/tag-dialog/tag-dialog.component';
-import {Http} from '@angular/http';
 import {AboutDialogComponent} from '../../dialogs/about-dialog/about-dialog.component';
 import {environment} from '../../../../environments/environment.prod';
+import {takeUntil} from 'rxjs/internal/operators';
 
 @Component({
   selector: 'app-stacks',
@@ -30,11 +29,7 @@ export class StacksComponent implements OnInit, OnDestroy {
 
   constructor(private stacksService: StacksService,
               private snackbarService: SnackbarService,
-              private http: Http,
-              public dialog: MatDialog,
-              iconRegistry: MatIconRegistry,
-              sanitizer: DomSanitizer) {
-    iconRegistry.addSvgIcon('add', sanitizer.bypassSecurityTrustResourceUrl('assets/icons/ic_add_white_24px.svg'));
+              public dialog: MatDialog) {
   }
 
   @HostListener('window:resize', ['$event'])
@@ -51,15 +46,15 @@ export class StacksComponent implements OnInit, OnDestroy {
       this.stacksService.createStack(result);
     });
 
-    this.stacksService.stacksSubject
-      .takeUntil(this.stacksUnsubscribeSubject)
-      .subscribe((value) => {
-        if (value != null) {
-          this.stacks = value;
-        } else {
-          this.stacks = [];
-        }
-      });
+    this.stacksService.stacksSubject.pipe(
+      takeUntil(this.stacksUnsubscribeSubject)
+    ).subscribe((value) => {
+      if (value != null) {
+        this.stacks = value;
+      } else {
+        this.stacks = [];
+      }
+    });
   }
 
   ngOnDestroy(): void {
