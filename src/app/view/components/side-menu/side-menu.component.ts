@@ -6,7 +6,7 @@ import {Component, EventEmitter, OnInit, Output} from '@angular/core';
   styleUrls: ['./side-menu.component.scss']
 })
 export class SideMenuComponent implements OnInit {
-  @Output() onMenuItemClicked = new EventEmitter<string>();
+  @Output() menuItemClickedEmitter = new EventEmitter<string>();
 
   menuItems = [];
 
@@ -18,8 +18,8 @@ export class SideMenuComponent implements OnInit {
     this.menuItems.push('World');
   }
 
-  clickMenuItem(menuItem: string): void {
-    this.onMenuItemClicked.emit(menuItem);
+  onMenuItemClicked(menuItem: string): void {
+    this.menuItemClickedEmitter.emit(menuItem);
   }
 
 }

@@ -9,8 +9,8 @@ import {MatIconRegistry} from '@angular/material';
 })
 export class StacksToolbarComponent {
   @Input() title = '';
-  @Output() onSearchItemChanged = new EventEmitter<string>();
-  @Output() onMenuItemClicked = new EventEmitter<string>();
+  @Output() searchItemChangedEmitter = new EventEmitter<string>();
+  @Output() menuItemClickedEmitter = new EventEmitter<string>();
 
   public state = 'active';
 
@@ -25,7 +25,7 @@ export class StacksToolbarComponent {
     this.state = active ? 'active' : (screenWidth > 1200) ? 'inactive' : 'inactive-small';
   }
 
-  onClickMenuItem(menuItem: string): void {
-    this.onMenuItemClicked.emit(menuItem);
+  onMenuItemClicked(menuItem: string): void {
+    this.menuItemClickedEmitter.emit(menuItem);
   }
 }

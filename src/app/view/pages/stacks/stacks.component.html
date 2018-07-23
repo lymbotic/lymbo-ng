@@ -1,7 +1,7 @@
 <app-stacks-toolbar
   class="fixed"
   [title]="title"
-  (onMenuItemClicked)="onMenuItemClicked($event)"></app-stacks-toolbar>
+  (menuItemClickedEmitter)="onMenuItemClicked($event)"></app-stacks-toolbar>
 
 <mat-sidenav-container class="sidenav-container" layout="column">
   <mat-sidenav #sidenav mode="side" class="sidenav">

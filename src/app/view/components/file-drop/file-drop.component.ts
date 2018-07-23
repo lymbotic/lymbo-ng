@@ -1,17 +1,16 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
 import {FileUploader} from 'ng2-file-upload/ng2-file-upload';
 import {Observable, Subject, Subscription} from 'rxjs';
-import {Stack} from '../../../model/stack.model';
-import {Card} from '../../../model/card.model';
-import {Tag} from '../../../model/tag.model';
+import {map, switchMap} from 'rxjs/operators';
 import {UUID} from '../../../model/util/uuid';
-import {switchMap} from 'rxjs-compat/operator/switchMap';
-import {map} from 'rxjs-compat/operator/map';
+import {Stack} from '../../../model/stack.model';
+import {Tag} from '../../../model/tag.model';
+import {Card} from '../../../model/card.model';
 
 const URL = 'https://foo.bar.com';
 
 export const SUCCESS = 'success';
-export const FAILURE = 'failure';
+// export const FAILURE = 'failure';
 
 export interface DropResult {
   result: 'failure' | 'success';
@@ -94,7 +93,7 @@ export class FileDropComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.subscription = this.uploadedFilesObservable.subscribe(this.uploadedFiles);
+    this.subscription = this.uploadedFilesObservable.subscribe(this.uploadedFilesEmitter);
   }
 
   ngOnDestroy() {
@@ -108,10 +107,7 @@ export class FileDropComponent implements OnInit, OnDestroy {
   }
 
   public fileDropped(files: FileList): void {
-    for (let i = 0;
-         i < files.length;
-         i++
-    ) {
+    for (let i = 0; i < files.length; i++) {
       this.filesSubject.next(files[i]);
     }
   }

@@ -1,19 +1,19 @@
 <mat-toolbar color="primary">
-  <button mat-button class="toolbar-menu-item" (click)="clickMenuItem('menu')">
+  <button mat-button class="toolbar-menu-item" (click)="menuItemClickedEmitter('menu')">
     <mat-icon svgIcon="menu"></mat-icon>
   </button>
   <div class="toolbar-block">
     <span class="toolbar-title">{{ title }}</span>
   </div>
   <div class="flexbox"></div>
-  <button mat-button class="toolbar-menu-item" (click)="onClickMenuItem('tags')">
+  <button mat-button class="toolbar-menu-item" (click)="menuItemClickedEmitter('tags')">
     <mat-icon svgIcon="label"></mat-icon>
   </button>
   <button mat-button class="toolbar-menu-item right" [matMenuTriggerFor]="menu">
     <mat-icon svgIcon="more_white"></mat-icon>
   </button>
   <mat-menu #menu="matMenu">
-    <button mat-menu-item (click)="onClickMenuItem('about')">
+    <button mat-menu-item (click)="menuItemClickedEmitter('about')">
       <span>About</span>
     </button>
   </mat-menu>

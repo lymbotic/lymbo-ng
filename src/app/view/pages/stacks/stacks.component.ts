@@ -24,8 +24,8 @@ export class StacksComponent implements OnInit, OnDestroy {
 
   @ViewChild('sidenav') sidenav: MatSidenav;
 
-  private windowHeight = 0;
-  private windowWidth = 0;
+  public windowHeight = 0;
+  public windowWidth = 0;
 
   constructor(private stacksService: StacksService,
               private snackbarService: SnackbarService,

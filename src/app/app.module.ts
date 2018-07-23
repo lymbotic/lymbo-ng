@@ -44,12 +44,14 @@ import {NewFeaturesDialogComponent} from './view/dialogs/new-features-dialog/new
 import {PouchDBSettingsService} from './services/pouchdb-settings.service';
 import {SettingsService} from './services/settings.service';
 import {HttpClientModule} from '@angular/common/http';
+import {FilterCardsByPipe} from './pipes/filter-cards-by.pipe';
 
 @NgModule({
   declarations: [
     AboutDialogComponent,
     AppComponent,
     FileDropComponent,
+    FilterCardsByPipe,
     NewFeaturesDialogComponent,
     StackComponent,
     StacksComponent,
@@ -63,7 +65,7 @@ import {HttpClientModule} from '@angular/common/http';
     StackDialogComponent,
     ConfirmationDialogComponent,
     SplashScreenComponent,
-    TagDialogComponent,
+    TagDialogComponent
   ],
   imports: [
     AppRoutingModule,
