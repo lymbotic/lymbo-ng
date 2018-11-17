@@ -5,6 +5,9 @@
 
 export const environment = {
   production: false,
+  APP_NAME: 'Lymbo Dev',
+  DATABASE_ENTITIES: 'lymbo-dev',
+  DATABASE_SETTINGS: 'lymbo_settings-dev',
   NAME: require('../../package.json').name,
   VERSION: require('../../package.json').version,
   LICENSE: require('../../package.json').license,

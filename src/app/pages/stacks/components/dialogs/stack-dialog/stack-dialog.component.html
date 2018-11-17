@@ -1,0 +1,31 @@
+<h2 mat-dialog-title>{{ dialogTitle }}</h2>
+<mat-dialog-content (keyup)="onKey($event)">
+  <form #formCtrl="ngForm">
+    <mat-form-field>
+      <input matInput required type="text" name="title" placeholder="Title" [(ngModel)]="stack.title"/>
+      <button mat-button *ngIf="stack.title" matSuffix mat-icon-button aria-label="Clear" (click)="title=''">
+        <mat-icon svgIcon="close"></mat-icon>
+      </button>
+    </mat-form-field>
+  </form>
+  <div class="label">Tags</div>
+  <div *ngFor="let t of existingTags">
+    <mat-checkbox [(ngModel)]=t.checked>{{ t.value}}</mat-checkbox>
+  </div>
+  <div *ngFor="let n of newTags">
+    <mat-checkbox [(ngModel)]=n.checked>
+      <input matInput class="tag-input" type="text" name="tag" placeholder="New tag" [(ngModel)]="n.value"
+             (ngModelChange)="tagChanged($event)"/>
+    </mat-checkbox>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button [mat-dialog-close]=null>
+    Cancel
+  </button>
+  <button mat-button *ngIf="mode == modeType.ADD" [disabled]="!formCtrl.form.valid" (click)="addStack()">Add stack
+  </button>
+  <button mat-button *ngIf="mode == modeType.UPDATE" [disabled]="!formCtrl.form.valid" (click)="updateStack()">Update
+    stack
+  </button>
+</mat-dialog-actions>

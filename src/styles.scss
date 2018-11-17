@@ -5,8 +5,8 @@
 @import 'theme.scss';
 @import 'sizes.scss';
 
-.app-theme {
-  @include angular-material-theme($app-theme);
+.light-theme {
+  @include angular-material-theme($light-theme);
 }
 
 // Rest

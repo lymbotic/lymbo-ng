@@ -1,0 +1,20 @@
+<app-stacks-toolbar
+  class="fixed"
+  [title]="title"
+  (menuItemClickedEmitter)="onMenuItemClicked($event)"></app-stacks-toolbar>
+
+<mat-sidenav-container class="sidenav-container" layout="column">
+  <mat-sidenav #sidenav mode="side" class="sidenav">
+  </mat-sidenav>
+
+  <div class="content">
+    <app-file-drop-fragment *ngIf="windowWidth > 600" (uploadedFiles)="uploadedFiles($event)"></app-file-drop-fragment>
+    <app-stack *ngFor="let s of stacks" [stack]="s">
+    </app-stack>
+
+    <button mat-fab class="fab" (click)="onMenuItemClicked('add')">
+      <mat-icon svgIcon="add" class="icon-white"></mat-icon>
+    </button>
+  </div>
+
+</mat-sidenav-container>

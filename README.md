@@ -7,11 +7,11 @@ Visit [https://lymbo.interoberlin.de/](https://lymbo.interoberlin.de/) for a liv
 
 ## Purpose
 
-Lymbo is an Angular based web application that helps you learn new languages by using digital flash cards.
+Lymbo is an Angular based web application that helps you learn new languages by using digital flash card.
 
 <img src="https://github.com/florianschwanz/lymbo-ng/blob/master/doc/screenshots/01-overview.png" alt="Screenshot overview" height=45% width=45% /> <img src="https://github.com/florianschwanz/lymbo-ng/blob/master/doc/screenshots/04-add.png" alt="Screenshot add" height=45% width=45% />
 
-Write words you want to learn on flash cards together with their translation.
+Write words you want to learn on flash card together with their translation.
 Structure them in different stacks and start learning on the go.
 
 Share the stacks you created with friends.
@@ -39,7 +39,7 @@ Share the stacks you created with friends.
 ### Planned features
 
 * automatic translation
-* quiz cards
+* quiz card
 * sharing stacks
 * multi-device synchronization
 * learning statistics
