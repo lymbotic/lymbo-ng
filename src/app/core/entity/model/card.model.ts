@@ -1,14 +1,26 @@
 import {Side} from './side.model';
-import {Tag} from './tag.model';
-export class Card {
-  id: string;
-  sides: Side[] = [];
-  tags: Tag[] = [];
+import {Entity} from './entity.model';
+import {EntityType} from './entity-type.enum';
 
-  checked = false;
+/**
+ * Represents a card
+ */
+export class Card extends Entity {
 
+  /** Sides */
+  sides: Side[];
+  /** References to tags */
+  tagIds: string[];
+
+  /**
+   * Constructor
+   */
   constructor() {
+    super();
+    this.entityType = EntityType.CARD;
+    this.sides = [];
     this.sides.push(new Side());
     this.sides.push(new Side());
+    this.tagIds = [];
   }
 }

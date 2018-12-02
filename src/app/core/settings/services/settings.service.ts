@@ -2,7 +2,7 @@ import {Injectable, isDevMode} from '@angular/core';
 import {Setting} from '../model/setting.model';
 import {Subject} from 'rxjs';
 import {SettingType} from '../model/setting-type.enum';
-import {PouchDBSettingsService} from '../../entity/services/pouchdb-settings.service';
+import {PouchDBSettingsService} from '../../persistence/services/pouchdb-settings.service';
 
 /**
  * Handles settings

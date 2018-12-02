@@ -1,18 +1,23 @@
-import {Component, Inject, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef, MatIconRegistry} from '@angular/material';
-import {DomSanitizer} from '@angular/platform-browser';
+import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import {DialogMode} from '../../../../../core/entity/model/dialog-mode.enum';
 import {Stack} from '../../../../../core/entity/model/stack.model';
 import {Tag} from '../../../../../core/entity/model/tag.model';
-import {StacksService} from '../../../../../core/entity/services/stacks.service';
-import {UUID} from '../../../../../core/entity/model/uuid';
+import {CloneService} from '../../../../../core/entity/services/clone.service';
+import {SuggestionService} from '../../../../../core/entity/services/suggestion.service';
+import {DisplayAspect} from '../../../../../core/entity/services/stack/stack-display.service';
+import {Action} from '../../../../../core/entity/model/action.enum';
+import {StacksService} from '../../../../../core/entity/services/stack/stacks.service';
 
+/**
+ * Displays stack dialog
+ */
 @Component({
   selector: 'app-stack-dialog',
   templateUrl: './stack-dialog.component.html',
   styles: [require('./stack-dialog.component.scss')],
 })
-export class StackDialogComponent implements OnInit {
+export class StackDialogComponent implements OnInit, OnDestroy {
 
   /** Enum of dialog modes */
   public modeType = DialogMode;
@@ -22,82 +27,204 @@ export class StackDialogComponent implements OnInit {
   /** Dialog title */
   dialogTitle = '';
 
+  /** Stack to be displayed */
   stack: Stack;
 
-  existingTags: Tag[] = [];
-  newTags: Tag[] = [];
+  /** Temporarily displayed tags */
+  tags: Tag[] = [];
 
+  /** Tag options */
+  tagOptions: string[];
+
+  /** Enum of display aspects */
+  displayAspectType = DisplayAspect;
+
+  /**
+   * Constructor
+   * @param stacksService cards service
+   * @param suggestionService suggestion service
+   * @param dialogRef dialog reference
+   * @param data dialog data
+   */
   constructor(private stacksService: StacksService,
+              private suggestionService: SuggestionService,
               public dialogRef: MatDialogRef<StackDialogComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: any,
-              iconRegistry: MatIconRegistry,
-              sanitizer: DomSanitizer) {
-    iconRegistry.addSvgIcon(
-      'close',
-      sanitizer.bypassSecurityTrustResourceUrl('assets/icons/ic_close_black_24px.svg'));
-
-    // Create basic stack
-    this.stack = new Stack();
+              @Inject(MAT_DIALOG_DATA) public data: any) {
   }
 
+  //
+  // Lifecycle hooks
+  //
+
+  /**
+   * Handles on-init lifecycle phase
+   */
   ngOnInit() {
-    if (this.data == null) {
-      this.dialogTitle = 'Add stack';
-    } else {
-      this.dialogTitle = 'Update stack';
-      this.stack = this.data.stack as Stack;
-    }
-
-    this.stacksService.getAllTags().forEach(t => {
-      this.existingTags.push(new Tag(t.value, false));
-    });
-
-    // Get existing tags and add empty tag to new tags
-    this.existingTags.forEach(et => {
-      this.stack.tags.forEach(t => {
-        if (et.value === t.value) {
-          et.checked = true;
-        }
-      });
-    });
-    this.newTags.push(new Tag('', false));
+    this.initializeData();
+    this.initializeOptions();
   }
 
+  /**
+   * Handles on-destroy lifecycle phase
+   */
+  ngOnDestroy() {
+    this.handleStackChanges();
+  }
+
+  //
+  // Initialization
+  //
+
+  /**
+   * Initializes data
+   */
+  private initializeData() {
+    this.mode = this.data.mode;
+    this.dialogTitle = this.data.dialogTitle;
+    this.stack = this.data.stack != null ? CloneService.cloneStack(this.data.stack) : new Stack();
+    this.tags = this.data.tags != null ? CloneService.cloneTags(this.data.tags) : [];
+  }
+
+  /**
+   * Initializes options
+   */
+  private initializeOptions() {
+    this.tagOptions = Array.from(this.suggestionService.tagOptions.values()).sort((t1, t2) => {
+      return new Date(t2.modificationDate).getTime() > new Date(t1.modificationDate).getTime() ? 1 : -1;
+    }).map(t => {
+      return t.name;
+    });
+  }
+
+  //
+  // Actions
+  //
+
+  /**
+   * Handles stack title change
+   * @param stackTitle
+   */
+  onStackTitleChanged(stackTitle: string) {
+    this.stack.title = stackTitle;
+  }
+
+  /**
+   * Handles tag changes
+   * @param tags new tags
+   */
+  onTagsChanged(tags: string[]) {
+    this.tags = tags.map(t => {
+      return new Tag(t, true);
+    });
+  }
+
+  //
+  // Button actions
+  //
+
+  /**
+   * Handles click on add button
+   */
   addStack() {
-    this.stack.id = new UUID().toString();
-    this.dialogRef.close(this.stack);
+    this.tags = this.aggregateTags(this.stack);
+
+    this.dialogRef.close({
+      action: Action.ADD,
+      stack: this.stack,
+      tags: this.tags
+    });
   }
 
+  /**
+   * Handles click on update button
+   */
   updateStack() {
-    this.stack.tags = [];
-    this.existingTags.concat(this.newTags).filter(t => t.checked).forEach(t => {
-        this.stack.tags.push(t);
-      }
-    );
-    this.dialogRef.close(this.stack);
+    this.tags = this.aggregateTags(this.stack);
+
+    this.dialogRef.close({
+      action: Action.UPDATE,
+      stack: this.stack,
+      tags: this.tags
+    });
   }
 
-  tagChanged(value: string) {
-    let noEmptyTag = true;
+  /**
+   * Handles click on delete button
+   */
+  deleteStack() {
+    this.mode = DialogMode.DELETE;
+    this.dialogRef.close({action: Action.DELETE, stack: this.stack});
+  }
 
-    this.newTags.forEach((t: Tag) => {
-        if (t.value.trim().length === 0) {
-          noEmptyTag = false;
+  /**
+   * Handles key down event
+   * @param event
+   */
+  onKeyDown(event: any) {
+    const KEY_CODE_ENTER = 13;
+    if (event.keyCode === KEY_CODE_ENTER && event.ctrlKey) {
+      this.handleStackChanges();
+    }
+  }
+
+  /**
+   * Handles the creation, updating or continuation of a task
+   */
+  private handleStackChanges() {
+    switch (this.mode) {
+      case DialogMode.ADD: {
+        if (this.stacksService.containsDisplayAspect(DisplayAspect.CAN_BE_CREATED, this.stack)) {
+          this.addStack();
         }
+        break;
       }
-    );
-
-    if (noEmptyTag) {
-      this.newTags.push(new Tag('', false));
+      case DialogMode.UPDATE: {
+        if (this.stacksService.containsDisplayAspect(DisplayAspect.CAN_BE_UPDATED, this.stack)) {
+          this.updateStack();
+        }
+        break;
+      }
+      case DialogMode.DELETE: {
+        break;
+      }
+      case DialogMode.NONE: {
+        break;
+      }
     }
   }
 
-  onKey(event: any) {
-    if (event.keyCode === 13) {
-      event.preventDefault();
+  //
+  // Helpers
+  //
 
-      if (this.stack.title) {
-      }
-    }
+  // Tags
+
+  /**
+   * Aggregates tags
+   * @param {Stack} stack
+   * @returns {Tag[]}
+   */
+  private aggregateTags(stack: Stack): Tag[] {
+    const aggregatedTags = new Map<string, Tag>();
+
+    // Concatenate
+    this.tags.forEach(t => {
+      aggregatedTags.set(t.id, t);
+    });
+
+    return Array.from(aggregatedTags.values());
+  }
+
+  //
+  // Helpers
+  //
+
+  /**
+   * Determines whether the displayed stack contains a specific display aspect
+   * @param displayAspect display aspect
+   * @param stack stack
+   */
+  public containsDisplayAspect(displayAspect: DisplayAspect, stack: Stack): boolean {
+    return this.stacksService.containsDisplayAspect(displayAspect, stack);
   }
 }

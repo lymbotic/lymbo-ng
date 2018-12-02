@@ -101,6 +101,7 @@ export class MaterialIconService {
     icons.push(new Icon(IconTopic.CONTENT, 'mail', 'ic_mail_24px.svg'));
     icons.push(new Icon(IconTopic.CONTENT, 'people_18', 'ic_people_18px.svg'));
     icons.push(new Icon(IconTopic.CONTENT, 'reply', 'ic_reply_24px.svg'));
+    icons.push(new Icon(IconTopic.CONTENT, 'undo', 'ic_undo_24px.svg'));
     icons.push(new Icon(IconTopic.DEVICE, 'brightness_low', 'ic_brightness_low_24px.svg'));
     icons.push(new Icon(IconTopic.EDITOR, 'delete', 'ic_delete_24px.svg'));
     icons.push(new Icon(IconTopic.EDITOR, 'mode_edit', 'ic_mode_edit_24px.svg'));

@@ -1,19 +1,37 @@
 <app-cards-toolbar
   class="fixed"
   [title]="title"
-  (menuItemClickedEmitter)="onMenuItemClicked($event)"></app-cards-toolbar>
+  [media]="media"
+  [filterActive]="filterActive"
+  [cardsPutAsideNotEmpty]="cardsPutAsideNotEmpty"
+  (searchItemEventEmitter)="onSearchItemChanged($event)"
+  (menuItemEventEmitter)="onMenuItemClicked($event)"></app-cards-toolbar>
 
 <mat-sidenav-container class="sidenav-container" layout="column">
-  <mat-sidenav #sidenav mode="side" class="sidenav">
+  <mat-sidenav *ngIf="media > mediaType.MEDIUM" #sidenavStart mode="side"
+               position="start" [opened]="sidenavOpened"
+               class="sidenav sidenav-start">
+    <div [@toolbarAnimation]="scrollDirection">
+      <app-tag-list [tags]="tags" [tagsFiltered]="tagsFiltered" [recentCount]="'10'" [media]="media"
+                    (tagEventEmitter)="onTagEvent($event)"></app-tag-list>
+    </div>
+  </mat-sidenav>
+  <mat-sidenav *ngIf="media > mediaType.MEDIUM" #sidenavEnd mode="side"
+               position="end" [opened]="sidenavOpened"
+               class="sidenav sidenav-end">
+    <div [@toolbarAnimation]="scrollDirection"></div>
   </mat-sidenav>
 
-  <div class="content">
-    <app-card *ngFor="let c of filteredCards" [card]="c">
-    </app-card>
-
-    <button mat-fab class="fab" (click)="onMenuItemClicked('add')">
-      <mat-icon svgIcon="add" class="icon-white"></mat-icon>
-    </button>
-  </div>
+  <mat-sidenav-content cdkScrollable>
+    <div class="content">
+      <app-card-fragment *ngFor="let s of cards" [card]="s" [tags]="tagsMap"
+                          (cardEventEmitter)="onCardEvent($event)">
+      </app-card-fragment>
+    </div>
+  </mat-sidenav-content>
 
 </mat-sidenav-container>
+
+<button mat-fab class="fab" (click)="onAddCardClicked()">
+  <mat-icon svgIcon="add" class="icon-accent-contrast"></mat-icon>
+</button>

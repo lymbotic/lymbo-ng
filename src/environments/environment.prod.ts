@@ -3,6 +3,7 @@ export const environment = {
   APP_NAME: 'Lymbo',
   DATABASE_ENTITIES: 'lymbo',
   DATABASE_SETTINGS: 'lymbo_settings',
+  LIMIT_TAGS: 500,
   NAME: require('../../package.json').name,
   VERSION: require('../../package.json').version,
   LICENSE: require('../../package.json').license,

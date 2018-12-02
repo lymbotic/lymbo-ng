@@ -2,7 +2,7 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {CardsToolbarComponent} from './cards-toolbar.component';
 
-describe('cardsToolbarComponent', () => {
+describe('CardsToolbarComponent', () => {
   let component: CardsToolbarComponent;
   let fixture: ComponentFixture<CardsToolbarComponent>;
 

@@ -1,21 +1,24 @@
-import {Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {MatSnackBar, MatSnackBarConfig} from '@angular/material';
 import {environment} from '../environments/environment.prod';
 import {SnackbarService} from './core/ui/services/snackbar.service';
-import {PouchDBService} from './core/entity/services/pouchdb.service';
-import {PouchDBSettingsService} from './core/entity/services/pouchdb-settings.service';
 import {SettingsService} from './core/settings/services/settings.service';
 import {OverlayContainer} from '@angular/cdk/overlay';
 import {ThemeService} from './core/ui/services/theme.service';
-import {CardsService} from './core/entity/services/cards.service';
-import {StacksService} from './core/entity/services/stacks.service';
+import {StacksService} from './core/entity/services/stack/stacks.service';
+import {CardsService} from './core/entity/services/card/cards.service';
+import {PouchDBService} from './core/persistence/services/pouchdb.service';
+import {PouchDBSettingsService} from './core/persistence/services/pouchdb-settings.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styles: [require('./app.component.scss')],
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, AfterViewInit {
+
+  /** Default app theme */
+  themeClass = 'light-theme';
 
   /**
    * Constructor
@@ -40,8 +43,22 @@ export class AppComponent implements OnInit {
               public snackBar: MatSnackBar) {
   }
 
+  //
+  // Lifecycle hooks
+  //
+
+  /**
+   * Handles on-init lifecycle phase
+   */
   ngOnInit() {
     this.initializeSnackbar();
+  }
+
+  /**
+   * Handles after-view-init lifecycle phase
+   */
+  ngAfterViewInit() {
+    this.initializeDatabaseSync();
   }
 
   //

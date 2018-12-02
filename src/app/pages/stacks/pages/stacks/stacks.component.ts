@@ -1,94 +1,674 @@
-import {Component, HostListener, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {Subject} from 'rxjs/Subject';
-import {MatDialog, MatDialogConfig, MatSidenav} from '@angular/material';
-import {takeUntil} from 'rxjs/internal/operators';
 import {Stack} from '../../../../core/entity/model/stack.model';
-import {StacksService} from '../../../../core/entity/services/stacks.service';
 import {SnackbarService} from '../../../../core/ui/services/snackbar.service';
+import {environment} from '../../../../../environments/environment';
+import {AfterViewInit, Component, NgZone, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Subject} from 'rxjs';
+import {MatDialog, MatDialogConfig, MatIconRegistry, MatSidenav} from '@angular/material';
+import {Media} from '../../../../core/ui/model/media.enum';
+import {CdkScrollable, ScrollDispatcher} from '@angular/cdk/overlay';
+import {Animations, ScrollDirection, ScrollState} from './stacks.animation';
+import {map, takeUntil} from 'rxjs/operators';
+import {FilterService} from '../../../../core/entity/services/filter.service';
+import {SuggestionService} from '../../../../core/entity/services/suggestion.service';
+import {MaterialColorService} from '../../../../core/ui/services/material-color.service';
+import {MaterialIconService} from '../../../../core/ui/services/material-icon.service';
+import {MediaService} from '../../../../core/ui/services/media.service';
+import {DomSanitizer} from '@angular/platform-browser';
+import {SettingsService} from '../../../../core/settings/services/settings.service';
+import {SettingType} from '../../../../core/settings/model/setting-type.enum';
+import {Router} from '@angular/router';
+import {StacksService} from '../../../../core/entity/services/stack/stacks.service';
+import {Tag} from '../../../../core/entity/model/tag.model';
+import {CloneService} from '../../../../core/entity/services/clone.service';
+import {Action} from '../../../../core/entity/model/action.enum';
+import {ConfirmationDialogComponent} from '../../../../ui/confirmation-dialog/confirmation-dialog/confirmation-dialog.component';
+import {TagService} from '../../../../core/entity/services/tag.service';
+import {DialogMode} from '../../../../core/entity/model/dialog-mode.enum';
 import {StackDialogComponent} from '../../components/dialogs/stack-dialog/stack-dialog.component';
 import {AboutDialogComponent} from '../../../../ui/about-dialog/about-dialog/about-dialog.component';
-import {environment} from '../../../../../environments/environment';
+import {Setting} from '../../../../core/settings/model/setting.model';
+import {MatchService} from '../../../../core/entity/services/match.service';
+import {TagDialogComponent} from '../../components/dialogs/tag-dialog/tag-dialog.component';
+import {InformationDialogComponent} from '../../../../ui/information-dialog/information-dialog/information-dialog.component';
+import {Card} from '../../../../core/entity/model/card.model';
+import {CardsService} from '../../../../core/entity/services/card/cards.service';
 
 @Component({
   selector: 'app-stacks',
   templateUrl: './stacks.component.html',
-  styles: [require('./stacks.component.scss')]
+  styleUrls: ['./stacks.component.scss'],
+  animations: [
+    Animations.toolbarAnimation,
+    Animations.fabAnimation,
+    Animations.dateIndicatorAnimation,
+  ]
 })
-export class StacksComponent implements OnInit, OnDestroy {
+export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  title = 'Lymbo';
+  /** App title */
+  title = environment.APP_NAME;
+
+  /** Array of cards */
   stacks: Stack[] = [];
-  dropContent: Subject<Stack> = new Subject();
-  private stacksUnsubscribeSubject = new Subject();
 
-  @ViewChild('sidenav') sidenav: MatSidenav;
+  /** Map of tags */
+  public tagsMap = new Map<string, Tag>();
+  /** Array of tags */
+  public tags: Tag[] = [];
+  /** Array of tags with filter values */
+  public tagsFilter: Tag[] = [];
 
-  public windowHeight = 0;
-  public windowWidth = 0;
+  /** Array of tags that are currently filtered */
+  public tagsFiltered: Tag[] = [];
+  /** Indicates whether a filter is active */
+  public filterActive = false;
 
-  constructor(private stacksService: StacksService,
+  /** Search items options for auto-complete */
+  public searchOptions = [];
+
+  /** Enum of media types */
+  public mediaType = Media;
+  /** Current media */
+  public media: Media = Media.UNDEFINED;
+
+  /** Helper subject used to finish other subscriptions */
+  private unsubscribeSubject = new Subject();
+
+  /** Vertical scroll position */
+  private scrollPosLast = 0;
+  /** Scroll direction */
+  public scrollDirection: ScrollDirection = ScrollDirection.UP;
+  /** Scroll state */
+  public scrollState: ScrollState = ScrollState.NON_SCROLLING;
+
+  /** Sidenav state */
+  public sidenavOpened = false;
+
+  /** Side navigation at start */
+  @ViewChild('sidenavStart') sidenavStart: MatSidenav;
+  /** Side navigation at end */
+  @ViewChild('sidenavEnd') sidenavEnd: MatSidenav;
+  /** Scrollable directive */
+  @ViewChild(CdkScrollable) scrollable: CdkScrollable;
+
+  /**
+   * Constructor
+   * @param cardsService
+   * @param filterService
+   * @param iconRegistry
+   * @param matchService
+   * @param materialColorService
+   * @param materialIconService
+   * @param mediaService
+   * @param router
+   * @param sanitizer
+   * @param scroll
+   * @param settingsService
+   * @param stacksService
+   * @param snackbarService
+   * @param suggestionService
+   * @param tagService
+   * @param dialog
+   * @param zone
+   */
+  constructor(private cardsService: CardsService,
+              private filterService: FilterService,
+              private iconRegistry: MatIconRegistry,
+              private matchService: MatchService,
+              private materialColorService: MaterialColorService,
+              private materialIconService: MaterialIconService,
+              private mediaService: MediaService,
+              private router: Router,
+              private sanitizer: DomSanitizer,
+              private scroll: ScrollDispatcher,
+              private settingsService: SettingsService,
+              private stacksService: StacksService,
               private snackbarService: SnackbarService,
-              public dialog: MatDialog) {
+              private suggestionService: SuggestionService,
+              private tagService: TagService,
+              public dialog: MatDialog,
+              public zone: NgZone) {
   }
 
-  @HostListener('window:resize', ['$event'])
-  onResize(event) {
-    this.windowHeight = event.target.innerHeight;
-    this.windowWidth = event.target.innerWidth;
-  }
+  //
+  // Lifecycle hooks
+  //
 
+
+  /**
+   * Handles on-init lifecycle phase
+   */
   ngOnInit() {
-    this.stacks = [];
-    this.stacksService.fetch();
+    this.tagsMap = new Map(this.tagService.tags);
 
-    this.dropContent.asObservable().subscribe((result) => {
-      this.stacksService.createStack(result);
-    });
+    this.initializeStacks(Array.from(this.stacksService.stacks.values()));
+    this.initializeStackSubscription();
 
-    this.stacksService.stacksSubject.pipe(
-      takeUntil(this.stacksUnsubscribeSubject)
-    ).subscribe((value) => {
-      if (value != null) {
-        this.stacks = value;
-      } else {
-        this.stacks = [];
-      }
-    });
-  }
+    this.initializeFilterSubscription();
+    this.initializeTagSubscription();
+    this.initializeSuggestionSubscription();
 
-  ngOnDestroy(): void {
-    this.stacksUnsubscribeSubject.next();
-    this.stacksUnsubscribeSubject.complete();
+    this.initializeMaterial();
+    this.initializeMediaSubscription();
+
+    this.initializeSettings();
+
+    this.clearFilters();
+    this.findEntities();
   }
 
   /**
-   * Handles click on menu items
-   * @param menuItem
+   * Handles after-view-init lifecycle phase
    */
-  onMenuItemClicked(menuItem: string) {
-    switch (menuItem) {
-      case 'menu': {
-        this.sidenav.toggle();
-        break;
-      }
-      case 'settings': {
-        this.snackbarService.showSnackbar('Clicked on menu item Settings');
-        break;
-      }
+  ngAfterViewInit() {
+    this.initializeScrollDetection();
+  }
 
-      case 'add': {
-        let dialogRef = this.dialog.open(StackDialogComponent, {disableClose: true});
-        dialogRef.afterClosed().subscribe(result => {
-          if (result != null) {
-            this.stacksService.createStack(result as Stack);
-            this.snackbarService.showSnackbar('Added stack');
+  /**
+   * Handles on-destroy lifecycle phase
+   */
+  ngOnDestroy() {
+    this.unsubscribeSubject.next();
+    this.unsubscribeSubject.complete();
+  }
+
+  //
+  // Initialization
+  //
+
+  // Stacks
+
+  /**
+   * Initializes stack subscription
+   */
+  private initializeStackSubscription() {
+    this.stacksService.stacksSubject.pipe(
+      takeUntil(this.unsubscribeSubject)
+    ).subscribe((value) => {
+      if (value != null) {
+        this.initializeStacks(value as Stack[]);
+      }
+    });
+  }
+
+  /**
+   * Initializes cards by filtering them
+   * @param stacks cards
+   */
+  private initializeStacks(stacks: Stack[]) {
+    this.stacks = stacks.filter(stack => {
+      return this.filterStack(stack);
+    });
+  }
+
+  /**
+   * Checks if a stack matches current filter criteria
+   * @param stack stack
+   */
+  private filterStack(stack: Stack) {
+    const matchesSearchItem = this.matchService.stackMatchesEveryItem(stack, this.filterService.searchItem);
+    const matchesTags = this.matchService.stackMatchesTags(stack, Array.from(this.filterService.tags.values()));
+
+    return matchesSearchItem && matchesTags;
+  }
+
+  // Tags
+
+  /**
+   * Initializes tag subscription
+   */
+  private initializeTagSubscription() {
+    this.tagService.tagsSubject.pipe(
+      takeUntil(this.unsubscribeSubject)
+    ).subscribe((value) => {
+      // Create new instance to trigger change detection of child components
+      this.tagsMap = new Map(this.tagService.tags);
+
+      if (value != null) {
+        this.initializeTags(value as Tag[]);
+      }
+    });
+  }
+
+  /**
+   * Initializes tags by filtering them
+   * @param tags tags
+   */
+  private initializeTags(tags: Tag[]) {
+    this.tags = tags.filter(tag => {
+      return this.filterTag(tag);
+    });
+  }
+
+  /**
+   * Checks if a tag matches current filter criteria
+   * @param tag tag
+   */
+  private filterTag(tag: Tag): boolean {
+    return this.matchService.tagMatchesEveryItem(tag, this.filterService.searchItem);
+  }
+
+  // Other
+
+  /**
+   * Initializes filter subscription
+   */
+  private initializeFilterSubscription() {
+    this.filterService.filterSubject.pipe(
+      takeUntil(this.unsubscribeSubject)
+    ).subscribe(() => {
+      this.tagsFiltered = Array.from(this.filterService.tags.values());
+      this.filterActive = this.filterService.searchItem.length > 0
+        || this.tagsFiltered.length > 0;
+
+      // Filter cards
+      this.stacks = Array.from(this.stacksService.stacks.values()).filter((stack: Stack) => {
+        return this.filterStack(stack);
+      }).sort((s1, s2) => {
+        return new Date(s2.modificationDate).getTime() > new Date(s1.modificationDate).getTime() ? 1 : -1;
+      });
+    });
+  }
+
+  /**
+   * Initializes suggestion subscription
+   */
+  private initializeSuggestionSubscription() {
+    this.searchOptions = Array.from(this.suggestionService.searchOptions.values()).reverse();
+    this.suggestionService.searchOptionsSubject.pipe(
+      takeUntil(this.unsubscribeSubject)
+    ).subscribe((value) => {
+      if (value != null) {
+        this.searchOptions = (value as string[]).reverse();
+      }
+    });
+  }
+
+  /**
+   * Initializes material colors and icons
+   */
+  private initializeMaterial() {
+    this.materialColorService.initializeColors();
+    this.materialIconService.initializeIcons(this.iconRegistry, this.sanitizer);
+  }
+
+  /**
+   * Initializes media subscription
+   */
+  private initializeMediaSubscription() {
+    this.media = this.mediaService.media;
+    this.mediaService.mediaSubject.pipe(
+      takeUntil(this.unsubscribeSubject)
+    ).subscribe((value) => {
+      this.media = value as Media;
+    });
+  }
+
+  /**
+   * Initializes scroll detection
+   */
+  private initializeScrollDetection() {
+    let scrollTimeout = null;
+
+    this.scroll.scrolled(0)
+      .pipe(map(() => {
+        // Update scroll state
+        this.scrollState = ScrollState.SCROLLING;
+        clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(() => {
+          this.scrollState = ScrollState.NON_SCROLLING;
+        }, 500);
+
+        // Update scroll direction
+        const scrollPos = this.scrollable.getElementRef().nativeElement.scrollTop;
+        if (this.scrollDirection === ScrollDirection.UP && scrollPos > this.scrollPosLast) {
+          this.scrollDirection = ScrollDirection.DOWN;
+          // Since scroll is run outside Angular zone change detection must be triggered manually
+          this.zone.run(() => {
+          });
+        } else if (this.scrollDirection === ScrollDirection.DOWN && scrollPos < this.scrollPosLast) {
+          this.scrollDirection = ScrollDirection.UP;
+          // Since scroll is run outside Angular zone change detection must be triggered manually
+          this.zone.run(() => {
+          });
+        }
+
+        // Save current scroll position
+        this.scrollPosLast = scrollPos;
+      })).subscribe();
+  }
+
+  /**
+   * Initializes settings
+   */
+  private initializeSettings() {
+    this.settingsService.fetch();
+    this.settingsService.settingsSubject.subscribe(value => {
+      if (value != null) {
+        this.sidenavOpened = this.settingsService.isSettingActive(SettingType.STACKS_SIDENAV_OPENED);
+      }
+    });
+  }
+
+  /**
+   * Clears all filters
+   */
+  private clearFilters() {
+    this.filterService.clearAllFilters();
+  }
+
+  /**
+   * Triggers entity retrieval from database
+   */
+  private findEntities() {
+    if (this.stacks.length === 0) {
+      this.stacksService.findStacks();
+    }
+    if (this.tags.length === 0) {
+      this.tagService.findTags();
+    }
+  }
+
+  //
+  // Actions
+  //
+
+  /**
+   * Handles click on add stack button
+   */
+  onAddStackClicked() {
+    this.onStackEvent({action: Action.OPEN_DIALOG_ADD, stack: null});
+  }
+
+  /**
+   * Handles events targeting a stack
+   * @param {any} event event parameters
+   */
+  onStackEvent(event: { action: Action, stack: Stack, tags?: Tag[] }) {
+    const stack = CloneService.cloneStack(event.stack as Stack);
+    const tags = CloneService.cloneTags(event.tags as Tag[]);
+
+    switch (event.action) {
+      case Action.ADD: {
+        // Create new entities if necessary
+        this.evaluateStackTags(stack, tags);
+
+        // Create stack itself
+        this.stacksService.createStack(stack).then(() => {
+          this.snackbarService.showSnackbar('Added stack');
+        });
+        break;
+      }
+      case Action.UPDATE: {
+        // Create new entities if necessary
+        this.evaluateStackTags(stack, tags);
+
+        // Update stack itself
+        this.stacksService.updateStack(stack).then(() => {
+          this.snackbarService.showSnackbar('Updated stack');
+        });
+        break;
+      }
+      case Action.DELETE: {
+        const confirmationDialogRef = this.dialog.open(ConfirmationDialogComponent, <MatDialogConfig>{
+          disableClose: false,
+          data: {
+            title: 'Delete stack',
+            text: 'Do you want to delete this stack?',
+            action: 'Delete',
+            value: stack
+          }
+        });
+        confirmationDialogRef.afterClosed().subscribe(confirmationResult => {
+          if (confirmationResult != null) {
+            this.stacksService.deleteStack(confirmationResult as Stack).then(() => {
+            });
           }
         });
         break;
       }
+      case Action.OPEN_DIALOG_ADD: {
+        // Assemble data to be passed
+        const data = {
+          mode: DialogMode.ADD,
+          dialogTitle: 'Add stack',
+          stack: new Stack(),
+          tags: []
+        };
+
+        // Open dialog
+        const dialogRef = this.dialog.open(StackDialogComponent, {
+          disableClose: false,
+          data: data
+        });
+
+        // Handle dialog close
+        dialogRef.afterClosed().subscribe(result => {
+          if (result != null) {
+            const resultingAction = result.action as Action;
+            const resultingStack = result.stack as Stack;
+            const resultingTags = result.tags as Tag[];
+
+            this.onStackEvent({
+              action: resultingAction,
+              stack: resultingStack,
+              tags: resultingTags
+            });
+          }
+        });
+        break;
+      }
+      case Action.OPEN_DIALOG_UPDATE: {
+        // Assemble data to be passed
+        const data = {
+          mode: DialogMode.UPDATE,
+          dialogTitle: 'Update stack',
+          stack: stack,
+          tags: stack.tagIds.map(id => {
+            return this.tagService.tags.get(id);
+          }).filter(tag => {
+            return tag != null;
+          })
+        };
+
+        // Open dialog
+        const dialogRef = this.dialog.open(StackDialogComponent, {
+          disableClose: false,
+          data: data
+        });
+
+        // Handle dialog close
+        dialogRef.afterClosed().subscribe(result => {
+          if (result != null) {
+            const resultingAction = result.action as Action;
+            const resultingStack = result.stack as Stack;
+            const resultingTags = result.tags as Tag[];
+
+            this.onStackEvent({
+              action: resultingAction,
+              stack: resultingStack,
+              tags: resultingTags
+            });
+          }
+        });
+        break;
+      }
+      case Action.GO_INTO: {
+        this.router.navigate([`/cards/${stack.id}`]);
+        break;
+      }
+    }
+  }
+
+  /**
+   * Handles events targeting a tag
+   * @param {any} event event parameters
+   */
+  onTagEvent(event: { action: Action, tag?: Tag, tags?: Tag[] }) {
+    const tag = CloneService.cloneTag(event.tag as Tag);
+    const tags = CloneService.cloneTags(event.tags as Tag[]);
+
+    switch (event.action) {
+      case Action.ADD: {
+        this.filterService.updateTagsListIfNotEmpty([tag]);
+        this.tagService.createTag(tag).then(() => {
+        });
+        break;
+      }
+      case Action.UPDATE: {
+        this.filterService.updateTagsListIfNotEmpty([tag]);
+        this.tagService.updateTag(tag).then(() => {
+        });
+        break;
+      }
+      case Action.DELETE: {
+        const referencesStacks = Array.from(this.stacksService.stacks.values()).some((stack: Stack) => {
+          return stack.tagIds != null && stack.tagIds.some(tagId => {
+            return tagId === tag.id;
+          });
+        });
+        const referencesCards = Array.from(this.cardsService.cards.values()).some((card: Card) => {
+          return card.tagIds != null && card.tagIds.some(tagId => {
+            return tagId === tag.id;
+          });
+        });
+
+        if (referencesStacks || referencesCards) {
+          this.dialog.open(InformationDialogComponent, <MatDialogConfig>{
+            disableClose: false,
+            data: {
+              title: 'Cannot delete tag',
+              text: `There are still tasks associated with this tag.`,
+              action: 'Okay',
+              value: tag
+            }
+          });
+        } else {
+          const confirmationDialogRef = this.dialog.open(ConfirmationDialogComponent, <MatDialogConfig>{
+            disableClose: false,
+            data: {
+              title: 'Delete tag',
+              text: 'Do you want to delete this tag?',
+              action: 'Delete',
+              value: tag
+            }
+          });
+          confirmationDialogRef.afterClosed().subscribe(confirmationResult => {
+            if (confirmationResult != null) {
+              this.tagService.deleteTag(confirmationResult as Tag).then(() => {
+              });
+              this.filterService.tags.delete((confirmationResult as Tag).id);
+            }
+          });
+        }
+        break;
+      }
+      case Action.OPEN_DIALOG_ADD: {
+        // Assemble data to be passed
+        const data = {
+          mode: DialogMode.ADD,
+          dialogTitle: 'Add tag',
+          tag: new Tag('')
+        };
+
+        // Open dialog
+        const dialogRef = this.dialog.open(TagDialogComponent, {
+          disableClose: false,
+          data: data
+        });
+
+        // Handle dialog close
+        dialogRef.afterClosed().subscribe(result => {
+          if (result != null) {
+            const resultingAction = result.action as Action;
+            const resultingTag = result.tag as Tag;
+
+            this.onTagEvent({
+              action: resultingAction,
+              tag: resultingTag,
+            });
+          }
+        });
+        break;
+      }
+      case Action.OPEN_DIALOG_UPDATE: {
+        // Assemble data to be passed
+        const data = {
+          mode: DialogMode.UPDATE,
+          dialogTitle: 'Update tag',
+          tag: tag
+        };
+
+        // Open dialog
+        const dialogRef = this.dialog.open(TagDialogComponent, {
+          disableClose: false,
+          data: data
+        });
+
+        // Handle dialog close
+        dialogRef.afterClosed().subscribe(result => {
+          if (result != null) {
+            const resultingAction = result.action as Action;
+            const resultingTag = result.tag as Tag;
+
+            this.onTagEvent({
+              action: resultingAction,
+              tag: resultingTag
+            });
+          }
+        });
+        break;
+      }
+      case Action.FILTER_SINGLE: {
+        this.filterService.clearTags();
+        this.filterService.updateTagsList(tags);
+        break;
+      }
+      case Action.FILTER_LIST: {
+        this.filterService.updateTagsList(tags);
+        break;
+      }
+    }
+  }
+
+  /**
+   * Handles click on menu items
+   * @param {string} menuItem menu item that has been clicked
+   */
+  onMenuItemClicked(menuItem: string) {
+    switch (menuItem) {
+      case 'menu': {
+        this.sidenavStart.toggle().then(() => {
+          this.settingsService.updateSetting(new Setting(SettingType.STACKS_SIDENAV_OPENED, this.sidenavStart.opened));
+        });
+        this.sidenavEnd.toggle().then(() => {
+        });
+        break;
+      }
+      case 'clear-filter': {
+        this.filterService.clearAllFilters();
+        this.snackbarService.showSnackbar('Filters cleared');
+        break;
+      }
+      case 'settings': {
+        this.router.navigate(['/settings']);
+        break;
+      }
+      case 'android-release': {
+        const filename = 'basalt-release.apk';
+        const element = document.createElement('a');
+        element.setAttribute('href', 'assets/basalt.apk');
+        element.setAttribute('download', filename);
+
+        element.style.display = 'none';
+        document.body.appendChild(element);
+        element.click();
+        document.body.removeChild(element);
+        break;
+      }
       case 'about': {
-        const dialogRef = this.dialog.open(AboutDialogComponent, <MatDialogConfig>{
-          disableClose: true,
+        this.dialog.open(AboutDialogComponent, <MatDialogConfig>{
+          disableClose: false,
           data: {
             title: 'About',
             name: environment.NAME,
@@ -106,10 +686,40 @@ export class StacksComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Handles click on side menu items
-   * @param menuItem
+   * Handles search item typed into the search field
+   * @param {string} searchItem new search item
    */
-  onSideMenuItemClicked(menuItem: string) {
-    this.snackbarService.showSnackbar(`Clicked on side menu item ${menuItem}`);
+  onSearchItemChanged(searchItem: string) {
+    this.filterService.updateSearchItem(searchItem);
+  }
+
+  /**
+   * Determines whether the tags assigned to a given stack already exist, otherwise creates new ones
+   * @param {stack} stack task assign tags to
+   * @param {Tag[]} tags array of tags to be checked
+   */
+  private evaluateStackTags(stack: Stack, tags: Tag[]) {
+    if (tags != null) {
+      const aggregatedTagIds = new Map<string, string>();
+
+      // New tag
+      tags.forEach(t => {
+        let tag = this.tagService.getTagByName(t.name);
+
+        if (tag == null) {
+          tag = new Tag(t.name, true);
+          this.tagService.createTag(tag).then(() => {
+          });
+        }
+
+        this.filterService.updateTagsListIfNotEmpty([tag]);
+        aggregatedTagIds.set(tag.id, tag.id);
+      });
+
+      stack.tagIds = Array.from(aggregatedTagIds.values());
+    } else {
+      // Unassign tags
+      stack.tagIds = [];
+    }
   }
 }

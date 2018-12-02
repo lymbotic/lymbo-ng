@@ -2,7 +2,7 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {StacksToolbarComponent} from './stacks-toolbar.component';
 
-describe('StacksToolbarComponent', () => {
+describe('CardsToolbarComponent', () => {
   let component: StacksToolbarComponent;
   let fixture: ComponentFixture<StacksToolbarComponent>;
 

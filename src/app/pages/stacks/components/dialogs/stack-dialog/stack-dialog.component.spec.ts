@@ -2,7 +2,7 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {StackDialogComponent} from './stack-dialog.component';
 
-describe('StackDialogComponent', () => {
+describe('CardDialogComponent', () => {
   let component: StackDialogComponent;
   let fixture: ComponentFixture<StackDialogComponent>;
 

@@ -1,0 +1,36 @@
+<div [class]="themeClass">
+  <mat-card>
+    <img *ngIf="stack.imageUrl !== ''" mat-card-image [attr.src]="stack.imageUrl" (click)="onStackClicked()">
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item (click)="onUpdateClicked()">
+        <mat-icon svgIcon="mode_edit"></mat-icon>
+        <span>Update</span>
+      </button>
+    </mat-menu>
+    <div class="flexcontainer">
+      <mat-card-header (click)="onStackClicked()">
+        <mat-card-title class="stack-title">{{ stack.title }}</mat-card-title>
+        <mat-card-subtitle>{{ stack.cards.length }} cards</mat-card-subtitle>
+      </mat-card-header>
+      <div class="flexbox"></div>
+      <button mat-icon-button [matMenuTriggerFor]="menu" id="more" class="hidden">
+        <mat-icon svgIcon="more_vert"></mat-icon>
+      </button>
+    </div>
+
+    <mat-card-content class="content">
+    </mat-card-content>
+
+    <mat-card-footer>
+      <div class="flexcontainer">
+        <div class="tags-holder"
+             (click)="onStackClicked()">
+          <span *ngFor="let t of stack.tagIds">
+            <span class="tag" *ngIf="tags.get(t) != null"><label class="tag-label">{{ tags.get(t).name }}</label></span>
+            </span>
+        </div>
+      </div>
+    </mat-card-footer>
+  </mat-card>
+</div>
+

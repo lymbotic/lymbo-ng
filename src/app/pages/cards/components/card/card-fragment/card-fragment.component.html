@@ -1,0 +1,17 @@
+<div [class]="themeClass">
+  <mat-card>
+    <app-side-fragment [card]="card" [sideIndex]="activeSideIndex" [side]="activeSide"
+                       (onSideClickedEmitter)="onCardClicked($event)"></app-side-fragment>
+
+    <mat-card-footer>
+      <div class="flexcontainer">
+        <div class="tags-holder"
+             (click)="onCardClicked(actionType.NONE)">
+          <span *ngFor="let t of card.tagIds">
+            <span class="tag" *ngIf="tags.get(t) != null"><label class="tag-label">{{ tags.get(t).name }}</label></span>
+            </span>
+        </div>
+      </div>
+    </mat-card-footer>
+  </mat-card>
+</div>

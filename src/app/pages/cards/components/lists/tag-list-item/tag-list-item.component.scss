@@ -1,0 +1,25 @@
+@import '../../../../../../theme';
+@import '../../../../../../flex';
+
+//
+// Custom
+//
+
+.entity {
+  overflow: hidden;
+  text-align: start;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.list-icon {
+  margin-right: 16px;
+}
+
+.action{
+  margin-left: 8px;
+}
+
+.action-buttons {
+  min-width: 65px;
+}

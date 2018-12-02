@@ -1,11 +1,11 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
+import {StackResolver} from './resolvers/stack.resolver';
 import {CardsComponent} from './pages/cards/cards.component';
-import {CardsResolver} from './resolvers/cards.resolver';
 
 const routes: Routes = [
   {path: '', component: CardsComponent},
-  {path: 'cards/:id', component: CardsComponent, resolve: {task: CardsResolver}},
+  {path: 'cards/:id', component: CardsComponent, resolve: {stack: StackResolver}},
 ];
 
 @NgModule({

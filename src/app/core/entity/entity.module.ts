@@ -1,9 +1,10 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {CardsService} from './services/cards.service';
-import {PouchDBService} from './services/pouchdb.service';
-import {PouchDBSettingsService} from './services/pouchdb-settings.service';
-import {StacksService} from './services/stacks.service';
+import {FilterService} from './services/filter.service';
+import {TagService} from './services/tag.service';
+import {CardsService} from './services/card/cards.service';
+import {StacksService} from './services/stack/stacks.service';
+import {MatchService} from './services/match.service';
 
 @NgModule({
   imports: [
@@ -12,9 +13,10 @@ import {StacksService} from './services/stacks.service';
   declarations: [],
   providers: [
     CardsService,
-    PouchDBService,
-    PouchDBSettingsService,
-    StacksService
+    FilterService,
+    MatchService,
+    StacksService,
+    TagService
   ]
 })
 /**

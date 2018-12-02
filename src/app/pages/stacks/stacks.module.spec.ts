@@ -1,4 +1,4 @@
-import { StacksModule } from './stacks.module';
+import {StacksModule} from './stacks.module';
 
 describe('StacksModule', () => {
   let stacksModule: StacksModule;

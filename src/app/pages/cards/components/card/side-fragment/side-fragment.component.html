@@ -1,0 +1,36 @@
+<div class="side">
+  <img *ngIf="side.imageUrl !== ''" mat-card-image [attr.src]="side.imageUrl" (click)="onSideClicked()">
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item (click)="onUpdateClicked()">
+      <mat-icon svgIcon="mode_edit"></mat-icon>
+      <span>Update</span>
+    </button>
+  </mat-menu>
+  <div class="flexcontainer">
+    <mat-card-header (click)="onSideClicked()">
+      <mat-card-title class="side-title">{{ side.title }}</mat-card-title>
+    </mat-card-header>
+    <div class="flexbox"></div>
+    <button mat-icon-button [matMenuTriggerFor]="menu" id="more" class="hidden">
+      <mat-icon svgIcon="more_vert"></mat-icon>
+    </button>
+  </div>
+  <mat-card-content>
+  </mat-card-content>
+  <mat-card-actions align="right">
+    <button mat-button *ngIf="sideIndex == 1"
+            matTooltip="Put card to end"
+            matTooltipPosition="above"
+            matTooltipShowDelay="250"
+            (click)="onUndoClicked()">
+      <mat-icon svgIcon="undo"></mat-icon>
+    </button>
+    <button mat-button *ngIf="sideIndex == 1"
+            matTooltip="Put card aside"
+            matTooltipPosition="above"
+            matTooltipShowDelay="250"
+            (click)="onCheckClicked()">
+      <mat-icon svgIcon="check"></mat-icon>
+    </button>
+  </mat-card-actions>
+</div>

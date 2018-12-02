@@ -1,0 +1,7 @@
+<div class="searchbox">
+  <input class="search-input" matInput name="search" type="text" [placeholder]="placeholder"
+         [ngModel]="sideTitle"
+         (ngModelChange)="onSideTitleChanged($event)"
+         [disabled]="readonly"
+         (keyup)="onKeyUp()">
+</div>

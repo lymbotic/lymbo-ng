@@ -17,17 +17,17 @@
 }
 
 .content {
-  @media #{$mat-small} {
+  @media #{$breakpoint-small} {
     padding-top: 88px;
     margin-left: 10px;
     margin-right: 10px;
   }
-  @media #{$mat-medium} {
+  @media #{$breakpoint-medium} {
     padding-top: 88px;
     margin-left: 20px;
     margin-right: 20px;
   }
-  @media #{$mat-large} {
+  @media #{$breakpoint-large} {
     padding-top: 88px;
     margin-left: 40px;
     margin-right: 40px;
@@ -35,15 +35,15 @@
 }
 
 .sidenav {
-  @media #{$mat-small} {
+  @media #{$breakpoint-small} {
     padding-top: 88px;
     margin-right: 10px;
   }
-  @media #{$mat-medium} {
+  @media #{$breakpoint-medium} {
     padding-top: 88px;
     margin-right: 20px;
   }
-  @media #{$mat-large} {
+  @media #{$breakpoint-large} {
     padding-top: 88px;
     margin-right: 40px;
   }
@@ -51,22 +51,20 @@
 
 .fab {
   top: auto !important;
-  @media #{$mat-small} {
+  z-index: 2;
+
+  @media #{$breakpoint-small} {
     right: 20px !important;
     bottom: 10px !important;
   }
-  @media #{$mat-medium} {
+  @media #{$breakpoint-medium} {
     right: 40px !important;
     bottom: 20px !important;
   }
-  @media #{$mat-large} {
+  @media #{$breakpoint-large} {
     right: 40px !important;
     bottom: 20px !important;
   }
   left: auto !important;
   position: fixed !important;
-}
-
-.icon-white {
-  fill: white;
 }

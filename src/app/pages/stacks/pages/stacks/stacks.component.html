@@ -1,20 +1,36 @@
 <app-stacks-toolbar
   class="fixed"
   [title]="title"
-  (menuItemClickedEmitter)="onMenuItemClicked($event)"></app-stacks-toolbar>
+  [media]="media"
+  [filterActive]="filterActive"
+  (searchItemEventEmitter)="onSearchItemChanged($event)"
+  (menuItemEventEmitter)="onMenuItemClicked($event)"></app-stacks-toolbar>
 
 <mat-sidenav-container class="sidenav-container" layout="column">
-  <mat-sidenav #sidenav mode="side" class="sidenav">
+  <mat-sidenav *ngIf="media > mediaType.MEDIUM" #sidenavStart mode="side"
+               position="start" [opened]="sidenavOpened"
+               class="sidenav sidenav-start">
+    <div [@toolbarAnimation]="scrollDirection">
+      <app-tag-list [tags]="tags" [tagsFiltered]="tagsFiltered" [recentCount]="'10'" [media]="media"
+                    (tagEventEmitter)="onTagEvent($event)"></app-tag-list>
+    </div>
+  </mat-sidenav>
+  <mat-sidenav *ngIf="media > mediaType.MEDIUM" #sidenavEnd mode="side"
+               position="end" [opened]="sidenavOpened"
+               class="sidenav sidenav-end">
+    <div [@toolbarAnimation]="scrollDirection"></div>
   </mat-sidenav>
 
-  <div class="content">
-    <app-file-drop-fragment *ngIf="windowWidth > 600" (uploadedFiles)="uploadedFiles($event)"></app-file-drop-fragment>
-    <app-stack *ngFor="let s of stacks" [stack]="s">
-    </app-stack>
-
-    <button mat-fab class="fab" (click)="onMenuItemClicked('add')">
-      <mat-icon svgIcon="add" class="icon-white"></mat-icon>
-    </button>
-  </div>
+  <mat-sidenav-content cdkScrollable>
+    <div class="content">
+      <app-stack-fragment *ngFor="let s of stacks" [stack]="s" [tags]="tagsMap"
+                          (stackEventEmitter)="onStackEvent($event)">
+      </app-stack-fragment>
+    </div>
+  </mat-sidenav-content>
 
 </mat-sidenav-container>
+
+<button mat-fab class="fab" (click)="onAddStackClicked()">
+  <mat-icon svgIcon="add" class="icon-accent-contrast"></mat-icon>
+</button>

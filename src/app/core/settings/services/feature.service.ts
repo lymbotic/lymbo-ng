@@ -2,7 +2,6 @@ import {Injectable} from '@angular/core';
 import {Feature} from '../model/feature.model';
 import {FeatureType} from '../model/feature-type.enum';
 import {ColorService} from '../../ui/services/color.service';
-import {SettingType} from '../model/setting-type.enum';
 import {SettingsService} from './settings.service';
 
 /**
@@ -44,7 +43,6 @@ export class FeatureService {
 
       switch (type) {
         case FeatureType.UNDEFINED: {
-          this.features.push(new Feature(type, 'code', iconColor, backgroundColor, SettingType.DEVELOPMENT));
           break;
         }
       }

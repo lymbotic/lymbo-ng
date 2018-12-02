@@ -1,20 +1,82 @@
-<mat-toolbar color="primary">
-  <button mat-button class="toolbar-menu-item" (click)="onMenuItemClicked('menu')">
-    <mat-icon svgIcon="menu"></mat-icon>
-  </button>
-  <div class="toolbar-block">
-    <span class="toolbar-title">{{ title }}</span>
+<mat-toolbar class="toolbar flexcontainer">
+  <div class="toolbar-block start">
+    <button mat-button class="toolbar-menu-item" (click)="onMenuItemClicked('menu')">
+      <mat-icon svgIcon="menu"></mat-icon>
+    </button>
+    <span *ngIf="media != mediaType.SMALL" class="toolbar-title">{{ title }}</span>
   </div>
   <div class="flexbox"></div>
-  <button mat-button class="toolbar-menu-item" (click)="onMenuItemClicked('tags')">
-    <mat-icon svgIcon="label"></mat-icon>
-  </button>
-  <button mat-button class="toolbar-menu-item right" [matMenuTriggerFor]="menu">
-    <mat-icon svgIcon="more_white"></mat-icon>
-  </button>
-  <mat-menu #menu="matMenu">
-    <button mat-menu-item (click)="onMenuItemClicked('about')">
-      <span>About</span>
+  <div class="searchbox">
+    <mat-form-field floatLabel="never" class="search-form-field">
+      <button mat-button *ngIf="!searchItem" matSuffix mat-icon-button aria-label="Search">
+        <mat-icon svgIcon="search"></mat-icon>
+      </button>
+      <mat-label>Search</mat-label>
+      <input class="search-input" matInput #search name="search" type="text"
+             [ngModel]="searchItem"
+             (ngModelChange)="onSearchItemChanged($event)"
+             [matAutocomplete]="auto"
+             (keyup)="onKeyUp()"
+             (click)="onSearchFieldClicked()">
+      <button mat-button *ngIf="searchItem" matSuffix mat-icon-button aria-label="Clear"
+              (click)="onClearButtonClicked()">
+        <mat-icon svgIcon="close_18"></mat-icon>
+      </button>
+    </mat-form-field>
+    <mat-autocomplete #auto="matAutocomplete">
+      <mat-option *ngFor="let option of searchOptionsFiltered" [value]="option"
+                  (click)="onOptionSelected($event)">
+        {{ option }}
+      </mat-option>
+
+    </mat-autocomplete>
+  </div>
+  <div class="flexbox"></div>
+  <div class="toolbar-block end">
+    <button *ngIf="media > mediaType.MEDIUM"
+            mat-button
+            class="toolbar-menu-item"
+            [disabled]="!filterActive"
+            [matTooltip]="'Clear filters'"
+            [matTooltipPosition]="'left'"
+            (click)="onClearFiltersButtonClicked()">
+      <mat-icon svgIcon="layers_clear"></mat-icon>
     </button>
-  </mat-menu>
+    <mat-menu #menuSwitcher="matMenu">
+      <button mat-button class="toolbar-menu-item" (click)="onMenuItemClicked('scope-work')">
+        <mat-icon svgIcon="business"></mat-icon>
+      </button>
+      <button mat-button class="toolbar-menu-item" (click)="onMenuItemClicked('scope-freetime')">
+        <mat-icon svgIcon="nature"></mat-icon>
+      </button>
+    </mat-menu>
+    <button mat-button class="toolbar-menu-item right" [matMenuTriggerFor]="menu">
+      <mat-icon svgIcon="more_vert"></mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item (click)="onMenuItemClicked('download')">
+        <mat-icon svgIcon="file_download"></mat-icon>
+        <span>Export</span>
+      </button>
+      <button mat-menu-item (click)="onMenuItemClicked('upload')">
+        <mat-icon svgIcon="file_upload"></mat-icon>
+        <span>Import</span>
+      </button>
+      <mat-divider></mat-divider>
+      <button mat-menu-item (click)="onMenuItemClicked('android-release')">
+        <mat-icon svgIcon="android"></mat-icon>
+        <span>Download Android App</span>
+      </button>
+      <mat-divider></mat-divider>
+      <button mat-menu-item (click)="onMenuItemClicked('settings')">
+        <mat-icon svgIcon="settings"></mat-icon>
+        <span>Settings</span>
+      </button>
+      <mat-divider></mat-divider>
+      <button mat-menu-item (click)="onMenuItemClicked('about')">
+        <mat-icon svgIcon="blank"></mat-icon>
+        <span>About</span>
+      </button>
+    </mat-menu>
+  </div>
 </mat-toolbar>
