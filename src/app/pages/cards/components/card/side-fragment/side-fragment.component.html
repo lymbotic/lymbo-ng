@@ -5,6 +5,10 @@
       <mat-icon svgIcon="mode_edit"></mat-icon>
       <span>Update</span>
     </button>
+    <button mat-menu-item (click)="onDeleteClicked()">
+      <mat-icon svgIcon="delete"></mat-icon>
+      <span>Delete</span>
+    </button>
   </mat-menu>
   <div class="flexcontainer">
     <mat-card-header (click)="onSideClicked()">

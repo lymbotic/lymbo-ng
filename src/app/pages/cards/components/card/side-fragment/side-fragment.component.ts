@@ -35,10 +35,17 @@ export class SideFragmentComponent {
   }
 
   /**
-   * Handles click on the card
+   * Handles click on update button
    */
   onUpdateClicked() {
     this.onSideClickedEmitter.emit(Action.OPEN_DIALOG_UPDATE);
+  }
+
+  /**
+   * Handles click on delete button
+   */
+  onDeleteClicked() {
+    this.onSideClickedEmitter.emit(Action.DELETE);
   }
 
   /**

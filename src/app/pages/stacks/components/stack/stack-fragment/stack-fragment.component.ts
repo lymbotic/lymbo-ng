@@ -54,4 +54,11 @@ export class StackFragmentComponent {
   onUpdateClicked() {
     this.stackEventEmitter.emit({action: Action.OPEN_DIALOG_UPDATE, stack: this.stack, tags: Array.from(this.tags.values())});
   }
+
+  /**
+   * Handles click on delete button
+   */
+  onDeleteClicked() {
+    this.stackEventEmitter.emit({action: Action.DELETE, stack: this.stack});
+  }
 }

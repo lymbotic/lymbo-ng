@@ -72,6 +72,7 @@ export class MaterialIconService {
     icons.push(new Icon(IconTopic.ACTION, 'bug_report', 'ic_bug_report_24px.svg'));
     icons.push(new Icon(IconTopic.ACTION, 'check_circle', 'ic_check_circle_24px.svg'));
     icons.push(new Icon(IconTopic.ACTION, 'code', 'ic_code_24px.svg'));
+    icons.push(new Icon(IconTopic.ACTION, 'delete', 'ic_delete_24px.svg'));
     icons.push(new Icon(IconTopic.ACTION, 'gavel', 'ic_gavel_24px.svg'));
     icons.push(new Icon(IconTopic.ACTION, 'info', 'ic_info_24px.svg'));
     icons.push(new Icon(IconTopic.ACTION, 'help_outline', 'ic_help_outline_24px.svg'));
@@ -103,7 +104,6 @@ export class MaterialIconService {
     icons.push(new Icon(IconTopic.CONTENT, 'reply', 'ic_reply_24px.svg'));
     icons.push(new Icon(IconTopic.CONTENT, 'undo', 'ic_undo_24px.svg'));
     icons.push(new Icon(IconTopic.DEVICE, 'brightness_low', 'ic_brightness_low_24px.svg'));
-    icons.push(new Icon(IconTopic.EDITOR, 'delete', 'ic_delete_24px.svg'));
     icons.push(new Icon(IconTopic.EDITOR, 'mode_edit', 'ic_mode_edit_24px.svg'));
     icons.push(new Icon(IconTopic.EDITOR, 'mode_edit_18', 'ic_mode_edit_18px.svg'));
     icons.push(new Icon(IconTopic.EDITOR, 'short_text', 'ic_short_text_24px.svg'));
