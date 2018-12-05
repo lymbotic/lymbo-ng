@@ -17,6 +17,9 @@ export class Stack extends Entity {
   /** References to tags */
   tagIds: string[];
 
+  /**
+   * Constructor
+   */
   constructor() {
     super();
     this.entityType = EntityType.STACK;

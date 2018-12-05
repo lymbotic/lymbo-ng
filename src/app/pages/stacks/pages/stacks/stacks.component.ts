@@ -33,6 +33,9 @@ import {InformationDialogComponent} from '../../../../ui/information-dialog/info
 import {Card} from '../../../../core/entity/model/card.model';
 import {CardsService} from '../../../../core/entity/services/card/cards.service';
 
+/**
+ * Displays stacks page
+ */
 @Component({
   selector: 'app-stacks',
   templateUrl: './stacks.component.html',
@@ -93,23 +96,23 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
 
   /**
    * Constructor
-   * @param cardsService
-   * @param filterService
-   * @param iconRegistry
-   * @param matchService
-   * @param materialColorService
-   * @param materialIconService
-   * @param mediaService
-   * @param router
-   * @param sanitizer
-   * @param scroll
-   * @param settingsService
-   * @param stacksService
-   * @param snackbarService
-   * @param suggestionService
-   * @param tagService
-   * @param dialog
-   * @param zone
+   * @param cardsService cards service
+   * @param filterService filter service
+   * @param iconRegistry icon registry
+   * @param matchService match service
+   * @param materialColorService material color service
+   * @param materialIconService material icon service
+   * @param mediaService media service
+   * @param router router
+   * @param sanitizer sanitizer
+   * @param scroll scroll
+   * @param settingsService settings service
+   * @param stacksService stacks service
+   * @param snackbarService snackbar service
+   * @param suggestionService suggestion service
+   * @param tagService tag service
+   * @param dialog dialog
+   * @param zone zone
    */
   constructor(private cardsService: CardsService,
               private filterService: FilterService,

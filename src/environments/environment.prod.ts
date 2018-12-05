@@ -1,3 +1,6 @@
+/**
+ * Environment settings for production environment
+ */
 export const environment = {
   production: true,
   APP_NAME: 'Lymbo',

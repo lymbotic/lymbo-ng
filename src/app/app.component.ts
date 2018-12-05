@@ -10,6 +10,9 @@ import {CardsService} from './core/entity/services/card/cards.service';
 import {PouchDBService} from './core/persistence/services/pouchdb.service';
 import {PouchDBSettingsService} from './core/persistence/services/pouchdb-settings.service';
 
+/**
+ * Displays root element
+ */
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',

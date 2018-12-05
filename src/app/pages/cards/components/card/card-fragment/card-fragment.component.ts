@@ -30,7 +30,9 @@ export class CardFragmentComponent implements OnInit {
   /** Enum of action types */
   public actionType = Action;
 
+  /** Index of active side */
   activeSideIndex = 0;
+  /** Active side */
   activeSide: Side;
 
   /**

@@ -3,6 +3,9 @@ import {Media} from '../../../../../core/ui/model/media.enum';
 import {Subject} from 'rxjs';
 import {debounceTime} from 'rxjs/operators';
 
+/**
+ * Displays stacks toolbar
+ */
 @Component({
   selector: 'app-stacks-toolbar',
   templateUrl: './stacks-toolbar.component.html',

@@ -28,9 +28,9 @@ export class StackFragmentComponent {
 
   /**
    * Constructor
-   * @param stacksService
-   * @param snackbarService
-   * @param dialog
+   * @param stacksService stacks service
+   * @param snackbarService snackbar service
+   * @param dialog dialog
    */
   constructor(private stacksService: StacksService,
               private snackbarService: SnackbarService,

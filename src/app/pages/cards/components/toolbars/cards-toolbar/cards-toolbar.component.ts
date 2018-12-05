@@ -3,6 +3,9 @@ import {Media} from '../../../../../core/ui/model/media.enum';
 import {Subject} from 'rxjs';
 import {debounceTime} from 'rxjs/operators';
 
+/**
+ * Displays cards toolbar
+ */
 @Component({
   selector: 'app-cards-toolbar',
   templateUrl: './cards-toolbar.component.html',

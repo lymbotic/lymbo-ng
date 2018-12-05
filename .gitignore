@@ -7,15 +7,18 @@
 /www
 /platforms/*
 
+# documentation
+/documentation
+
 # releases
 /release
 
 # dependencies
 /node_modules
+/cordova/node_modules
 
 # IDEs and editors
 /.idea
-.idea/vcs.xml
 .project
 .classpath
 .c9/
@@ -35,7 +38,7 @@
 /connect.lock
 /coverage/*
 /libpeerconnection.log
-npm-debug*.log
+npm-debug.log
 testem.log
 /typings
 
@@ -46,6 +49,3 @@ testem.log
 #System Files
 .DS_Store
 Thumbs.db
-
-# logs
-npm-debug.*
