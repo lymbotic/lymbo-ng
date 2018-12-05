@@ -27,9 +27,9 @@ import {CloneService} from '../../../../core/entity/services/clone.service';
 import {InformationDialogComponent} from '../../../../ui/information-dialog/information-dialog/information-dialog.component';
 import {ConfirmationDialogComponent} from '../../../../ui/confirmation-dialog/confirmation-dialog/confirmation-dialog.component';
 import {DialogMode} from '../../../../core/entity/model/dialog-mode.enum';
-import {TagDialogComponent} from '../../../stacks/components/dialogs/tag-dialog/tag-dialog.component';
 import {StacksService} from '../../../../core/entity/services/stack/stacks.service';
 import {CardDialogComponent} from '../../components/dialogs/card-dialog/card-dialog.component';
+import {TagDialogComponent} from '../../components/dialogs/tag-dialog/tag-dialog.component';
 
 @Component({
   selector: 'app-cards',
