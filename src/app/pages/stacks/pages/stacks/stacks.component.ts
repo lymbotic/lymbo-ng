@@ -187,6 +187,8 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
     ).subscribe((value) => {
       if (value != null) {
         this.initializeStacks(value as Stack[]);
+
+        this.tagService.findTags();
       }
     });
   }
@@ -236,8 +238,37 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
    */
   private initializeTags(tags: Tag[]) {
     this.tags = tags.filter(tag => {
+      return this.tagIsContainedInStacks(tag, this.stacks);
+    }).filter(tag => {
       return this.filterTag(tag);
     });
+  }
+
+  /**
+   * Determines whether a tag is contained in a list of stacks
+   * @param tag tag
+   * @param stacks stacks
+   */
+  private tagIsContainedInStacks(tag: Tag, stacks: Stack[]) {
+    return this.getTagIdsByStacks(stacks).some(id => {
+      return id === tag.id;
+    });
+  }
+
+  /**
+   * Aggregates all tag IDs of a list of given stacks
+   * @param stacks stacks
+   */
+  private getTagIdsByStacks(stacks: Stack[]): string[] {
+    const tagIds = new Map<string, string>();
+
+    stacks.forEach(stack => {
+      stack.tagIds.forEach(tagId => {
+        tagIds.set(tagId, tagId);
+      })
+    });
+
+    return Array.from(tagIds.values());
   }
 
   /**
@@ -361,12 +392,7 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
    * Triggers entity retrieval from database
    */
   private findEntities() {
-    if (this.stacks.length === 0) {
-      this.stacksService.findStacks();
-    }
-    if (this.tags.length === 0) {
-      this.tagService.findTags();
-    }
+    this.stacksService.findStacks();
   }
 
   //

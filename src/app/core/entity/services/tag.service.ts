@@ -5,6 +5,7 @@ import {EntityType} from '../model/entity-type.enum';
 import {environment} from '../../../../environments/environment';
 import {PouchDBService} from '../../persistence/services/pouchdb.service';
 import {SnackbarService} from '../../ui/services/snackbar.service';
+import {Card} from '../model/card.model';
 
 /**
  * Handles tags including
@@ -104,6 +105,23 @@ export class TagService {
         }
       }
     );
+  }
+
+
+  /**
+   * Aggregates all tag IDs of a list of given cards
+   * @param cards cards
+   */
+  private getTagIdsByCards(cards: Card[]): string[] {
+    const tagIds = new Map<string, string>();
+
+    cards.forEach(card => {
+      card.tagIds.forEach(tagId => {
+        tagIds.set(tagId, tagId);
+      })
+    });
+
+    return Array.from(tagIds.values());
   }
 
   // </editor-fold>

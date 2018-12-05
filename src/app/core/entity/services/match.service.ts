@@ -14,17 +14,6 @@ import {Side} from '../model/side.model';
 export class MatchService {
 
   /**
-   * Constructor
-   * @param {StacksService} stacksService
-   * @param {CardsService} cardsService
-   * @param {TagService} tagService
-   */
-  constructor(private stacksService: StacksService,
-              private cardsService: CardsService,
-              private tagService: TagService) {
-  }
-
-  /**
    * Normalizes a string in order to make comparison less prone to errors
    * @param {string} value input value
    * @returns {string} normalized string
@@ -149,6 +138,17 @@ export class MatchService {
    */
   static tagNameMatchesSingleItem(tag: Tag, item: string): boolean {
     return (tag != null) ? MatchService.textMatchesSingleItem(tag.name, item) : false;
+  }
+
+  /**
+   * Constructor
+   * @param {StacksService} stacksService
+   * @param {CardsService} cardsService
+   * @param {TagService} tagService
+   */
+  constructor(private stacksService: StacksService,
+              private cardsService: CardsService,
+              private tagService: TagService) {
   }
 
   //
