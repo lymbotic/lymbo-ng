@@ -51,14 +51,6 @@
             (click)="onClearFiltersButtonClicked()">
       <mat-icon svgIcon="layers_clear"></mat-icon>
     </button>
-    <mat-menu #menuSwitcher="matMenu">
-      <button mat-button class="toolbar-menu-item" (click)="onMenuItemClicked('scope-work')">
-        <mat-icon svgIcon="business"></mat-icon>
-      </button>
-      <button mat-button class="toolbar-menu-item" (click)="onMenuItemClicked('scope-freetime')">
-        <mat-icon svgIcon="nature"></mat-icon>
-      </button>
-    </mat-menu>
     <button mat-button class="toolbar-menu-item right" [matMenuTriggerFor]="menu">
       <mat-icon svgIcon="more_vert"></mat-icon>
     </button>
