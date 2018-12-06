@@ -30,6 +30,15 @@ export class CloneService {
   }
 
   /**
+   * Clones a given array of cards
+   * @param {Card[]} original
+   * @returns {Card[]} cloned object
+   */
+  static cloneCards(original: Card[]): Card[] {
+    return original != null ? JSON.parse(JSON.stringify(original)) : null;
+  }
+
+  /**
    * Clones a given tag
    * @param {Tag} original
    * @returns {Tag} cloned object

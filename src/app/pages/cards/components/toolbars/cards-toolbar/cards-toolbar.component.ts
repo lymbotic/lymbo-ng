@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Media} from '../../../../../core/ui/model/media.enum';
 import {Subject} from 'rxjs';
 import {debounceTime} from 'rxjs/operators';
@@ -9,7 +9,8 @@ import {debounceTime} from 'rxjs/operators';
 @Component({
   selector: 'app-cards-toolbar',
   templateUrl: './cards-toolbar.component.html',
-  styles: [require('./cards-toolbar.component.scss')]
+  styles: [require('./cards-toolbar.component.scss')],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CardsToolbarComponent implements OnInit {
 
@@ -23,6 +24,8 @@ export class CardsToolbarComponent implements OnInit {
   @Input() filterActive = false;
   /** Indicates whether cards are put aside */
   @Input() cardsPutAsideNotEmpty = false;
+  /** Indicates that stack is not empty */
+  @Input() stackNotEmpty = false;
   /** Event emitter indicating changes in search bar */
   @Output() searchItemEventEmitter = new EventEmitter<string>();
   /** Event emitter indicating menu items being clicked */
@@ -127,6 +130,13 @@ export class CardsToolbarComponent implements OnInit {
    */
   onRestoreCardsBeingPutAsideButtonClicked() {
     this.menuItemEventEmitter.emit('restore-cards');
+  }
+
+  /**
+   * Handles click on shuffle-cards button
+   */
+  onShuffleCardsButtonClicked() {
+    this.menuItemEventEmitter.emit('shuffle-cards');
   }
 
   /**
