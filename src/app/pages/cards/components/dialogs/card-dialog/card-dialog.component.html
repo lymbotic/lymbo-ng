@@ -2,14 +2,18 @@
   <h2 mat-dialog-title>{{ dialogTitle }}</h2>
   <mat-dialog-content>
     <form #formCtrl="ngForm">
-      <app-side-title-fragment
-        [sideTitle]="card.sides[0].title" [placeholder]="'Front'"
-        (sideTitleChangedEmitter)="onFrontTitleChanged($event)">
-      </app-side-title-fragment>
-      <app-side-title-fragment
-        [sideTitle]="card.sides[1].title" [placeholder]="'Back'"
-        (sideTitleChangedEmitter)="onBackTitleChanged($event)">
-      </app-side-title-fragment>
+      <div class="side-title">
+        <app-side-title-fragment
+          [sideTitle]="card.sides[0].title" [placeholder]="'Front'"
+          (sideTitleChangedEmitter)="onFrontTitleChanged($event)">
+        </app-side-title-fragment>
+      </div>
+      <div class="side-title">
+        <app-side-title-fragment
+          [sideTitle]="card.sides[1].title" [placeholder]="'Back'"
+          (sideTitleChangedEmitter)="onBackTitleChanged($event)">
+        </app-side-title-fragment>
+      </div>
       <app-tag-chips [tags]="tags | tagNames"
                      [tagOptions]="tagOptions"
                      [readonly]=false

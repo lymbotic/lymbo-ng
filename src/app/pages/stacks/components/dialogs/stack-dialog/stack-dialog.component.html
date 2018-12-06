@@ -2,10 +2,12 @@
   <h2 mat-dialog-title>{{ dialogTitle }}</h2>
   <mat-dialog-content>
     <form #formCtrl="ngForm">
-      <app-stack-title-fragment
-        [stackTitle]="stack.title" [placeholder]="'Stack name'"
-        (stackTitleChangedEmitter)="onStackTitleChanged($event)">
-      </app-stack-title-fragment>
+      <div class="stack-title">
+        <app-stack-title-fragment
+          [stackTitle]="stack.title" [placeholder]="'Stack name'"
+          (stackTitleChangedEmitter)="onStackTitleChanged($event)">
+        </app-stack-title-fragment>
+      </div>
       <app-tag-chips [tags]="tags | tagNames"
                      [tagOptions]="tagOptions"
                      [readonly]=false
