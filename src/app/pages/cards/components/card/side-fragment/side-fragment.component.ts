@@ -21,7 +21,7 @@ export class SideFragmentComponent {
   @Input() side: Side;
 
   /** Event emitter indicating click on side */
-  @Output() onSideClickedEmitter = new EventEmitter<Action>();
+  @Output() sideClickedEmitter = new EventEmitter<Action>();
 
   //
   // Actions
@@ -31,34 +31,34 @@ export class SideFragmentComponent {
    * Handles click on the card
    */
   onSideClicked() {
-    this.onSideClickedEmitter.emit(Action.NONE);
+    this.sideClickedEmitter.emit(Action.NONE);
   }
 
   /**
    * Handles click on update button
    */
   onUpdateClicked() {
-    this.onSideClickedEmitter.emit(Action.OPEN_DIALOG_UPDATE);
+    this.sideClickedEmitter.emit(Action.OPEN_DIALOG_UPDATE);
   }
 
   /**
    * Handles click on delete button
    */
   onDeleteClicked() {
-    this.onSideClickedEmitter.emit(Action.DELETE);
+    this.sideClickedEmitter.emit(Action.DELETE);
   }
 
   /**
    * Handles click on check button
    */
   onCheckClicked() {
-    this.onSideClickedEmitter.emit(Action.PUT_ASIDE);
+    this.sideClickedEmitter.emit(Action.PUT_ASIDE);
   }
 
   /**
    * Handles click on undo button
    */
   onUndoClicked() {
-    this.onSideClickedEmitter.emit(Action.PUT_TO_END);
+    this.sideClickedEmitter.emit(Action.PUT_TO_END);
   }
 }

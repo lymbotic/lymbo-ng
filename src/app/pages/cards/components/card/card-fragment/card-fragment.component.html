@@ -1,7 +1,7 @@
 <div [class]="themeClass">
   <mat-card>
     <app-side-fragment [card]="card" [sideIndex]="activeSideIndex" [side]="activeSide"
-                       (onSideClickedEmitter)="onCardClicked($event)"></app-side-fragment>
+                       (sideClickedEmitter)="onCardClicked($event)"></app-side-fragment>
 
     <mat-card-footer>
       <div class="flexcontainer">

@@ -118,7 +118,7 @@ export class TagService {
     cards.forEach(card => {
       card.tagIds.forEach(tagId => {
         tagIds.set(tagId, tagId);
-      })
+      });
     });
 
     return Array.from(tagIds.values());

@@ -116,7 +116,7 @@ export class MatchService {
    */
   static cardMatchesSingleItem(card: Card, item: string): boolean {
     return (card != null) ? card.sides.some(side => {
-      return MatchService.sideMatchesSingleItem(side, item)
+      return MatchService.sideMatchesSingleItem(side, item);
     }) : false;
   }
 

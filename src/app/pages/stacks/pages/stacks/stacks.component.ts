@@ -268,7 +268,7 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
     stacks.forEach(stack => {
       stack.tagIds.forEach(tagId => {
         tagIds.set(tagId, tagId);
-      })
+      });
     });
 
     return Array.from(tagIds.values());
