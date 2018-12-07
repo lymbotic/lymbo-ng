@@ -1,4 +1,5 @@
 <app-stacks-toolbar
+  [@toolbarAnimation]="scrollDirection"
   class="fixed"
   [title]="title"
   [media]="media"
@@ -31,6 +32,6 @@
 
 </mat-sidenav-container>
 
-<button mat-fab class="fab" (click)="onAddStackClicked()">
+<button mat-fab class="fab" [@dateIndicatorAnimation]="scrollState" (click)="onAddStackClicked()">
   <mat-icon svgIcon="add" class="icon-accent-contrast"></mat-icon>
 </button>

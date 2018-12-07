@@ -1,4 +1,5 @@
 <app-cards-toolbar
+  [@toolbarAnimation]="scrollDirection"
   class="fixed"
   [title]="title"
   [media]="media"
@@ -32,6 +33,6 @@
 
 </mat-sidenav-container>
 
-<button mat-fab class="fab" (click)="onAddCardClicked()">
+<button mat-fab class="fab" [@dateIndicatorAnimation]="scrollState" (click)="onAddCardClicked()">
   <mat-icon svgIcon="add" class="icon-accent-contrast"></mat-icon>
 </button>
