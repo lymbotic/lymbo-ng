@@ -22,6 +22,7 @@
     "test.ts"
   ],
   "angularCompilerOptions": {
-    "genDir": "../src/locale"
+    "genDir": "../src/locale",
+    "enableIvy": true
   }
 }
