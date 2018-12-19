@@ -16,7 +16,7 @@ import {PouchDBSettingsService} from './core/persistence/services/pouchdb-settin
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styles: [require('./app.component.scss')],
+  styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit, AfterViewInit {
 

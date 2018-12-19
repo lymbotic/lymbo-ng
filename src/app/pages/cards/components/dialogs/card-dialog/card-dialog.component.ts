@@ -15,7 +15,7 @@ import {CardsService} from '../../../../../core/entity/services/card/cards.servi
 @Component({
   selector: 'app-card-dialog',
   templateUrl: './card-dialog.component.html',
-  styles: [require('./card-dialog.component.scss')],
+  styleUrls: ['./card-dialog.component.scss'],
 })
 export class CardDialogComponent implements OnInit, OnDestroy {
 

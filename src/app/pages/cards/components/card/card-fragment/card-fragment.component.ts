@@ -13,7 +13,7 @@ import {Action} from '../../../../../core/entity/model/action.enum';
 @Component({
   selector: 'app-card-fragment',
   templateUrl: './card-fragment.component.html',
-  styles: [require('./card-fragment.component.scss')],
+  styleUrls: ['./card-fragment.component.scss'],
 })
 export class CardFragmentComponent implements OnInit {
 

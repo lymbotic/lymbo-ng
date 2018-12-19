@@ -9,7 +9,7 @@ import {debounceTime} from 'rxjs/operators';
 @Component({
   selector: 'app-stacks-toolbar',
   templateUrl: './stacks-toolbar.component.html',
-  styles: [require('./stacks-toolbar.component.scss')]
+  styleUrls: ['./stacks-toolbar.component.scss']
 })
 export class StacksToolbarComponent implements OnInit {
 

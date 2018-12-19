@@ -15,7 +15,7 @@ import {StacksService} from '../../../../../core/entity/services/stack/stacks.se
 @Component({
   selector: 'app-stack-dialog',
   templateUrl: './stack-dialog.component.html',
-  styles: [require('./stack-dialog.component.scss')],
+  styleUrls: ['./stack-dialog.component.scss'],
 })
 export class StackDialogComponent implements OnInit, OnDestroy {
 

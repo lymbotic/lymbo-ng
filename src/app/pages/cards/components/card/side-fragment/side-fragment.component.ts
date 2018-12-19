@@ -9,7 +9,7 @@ import {Action} from '../../../../../core/entity/model/action.enum';
 @Component({
   selector: 'app-side-fragment',
   templateUrl: './side-fragment.component.html',
-  styles: [require('./side-fragment.component.scss')],
+  styleUrls: ['./side-fragment.component.scss'],
 })
 export class SideFragmentComponent {
 

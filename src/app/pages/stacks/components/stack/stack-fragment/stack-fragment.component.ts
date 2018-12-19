@@ -12,7 +12,7 @@ import {Tag} from '../../../../../core/entity/model/tag.model';
 @Component({
   selector: 'app-stack-fragment',
   templateUrl: './stack-fragment.component.html',
-  styles: [require('./stack-fragment.component.scss')]
+  styleUrls: ['./stack-fragment.component.scss']
 })
 export class StackFragmentComponent {
 

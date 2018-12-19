@@ -9,7 +9,7 @@ import {debounceTime} from 'rxjs/operators';
 @Component({
   selector: 'app-cards-toolbar',
   templateUrl: './cards-toolbar.component.html',
-  styles: [require('./cards-toolbar.component.scss')]
+  styleUrls: ['./cards-toolbar.component.scss']
 })
 export class CardsToolbarComponent implements OnInit {
 
