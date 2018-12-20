@@ -35,6 +35,7 @@ Share the cards you created with friends.
 | 0.13 | Tag stacks |
 | 0.14 | CSV format |
 | 0.15 | Show app information |
+| 0.16 | Randomize cards |
 
 ### Planned features
 
