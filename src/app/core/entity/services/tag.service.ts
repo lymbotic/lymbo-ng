@@ -6,6 +6,7 @@ import {environment} from '../../../../environments/environment';
 import {PouchDBService} from '../../persistence/services/pouchdb.service';
 import {SnackbarService} from '../../ui/services/snackbar.service';
 import {Card} from '../model/card.model';
+import {SuggestionService} from './suggestion.service';
 
 /**
  * Handles tags including
@@ -27,9 +28,11 @@ export class TagService {
    * Constructor
    * @param {PouchDBService} pouchDBService
    * @param {SnackbarService} snackbarService
+   * @param {SuggestionService} suggestionService
    */
   constructor(private pouchDBService: PouchDBService,
-              private snackbarService: SnackbarService) {
+              private snackbarService: SnackbarService,
+              private suggestionService: SuggestionService) {
     this.initializeTagSubscription();
     this.findTags();
   }
@@ -49,6 +52,8 @@ export class TagService {
           this.tags.set(tag.id, tag);
         }
       );
+
+      this.suggestionService.updateByTags(Array.from(this.tags.values()));
     });
   }
 

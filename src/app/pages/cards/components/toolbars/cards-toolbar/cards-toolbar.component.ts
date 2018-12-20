@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Media} from '../../../../../core/ui/model/media.enum';
 import {Subject} from 'rxjs';
 import {debounceTime} from 'rxjs/operators';
@@ -9,7 +9,7 @@ import {debounceTime} from 'rxjs/operators';
 @Component({
   selector: 'app-cards-toolbar',
   templateUrl: './cards-toolbar.component.html',
-  styleUrls: ['./cards-toolbar.component.scss']
+  styleUrls: ['./cards-toolbar.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CardsToolbarComponent implements OnInit {

@@ -3,7 +3,6 @@ import {Subject} from 'rxjs/Subject';
 import {Tag} from '../model/tag.model';
 import {Stack} from '../model/stack.model';
 import {Card} from '../model/card.model';
-import {CardsService} from './card/cards.service';
 
 /**
  * Service handling suggestions
@@ -27,7 +26,7 @@ export class SuggestionService {
   /**
    * Constructor
    */
-  constructor(private cardsService: CardsService) {
+  constructor() {
     this.searchOptions = new Map<string, string>();
     this.tagOptions = new Map<string, Tag>();
   }
@@ -61,7 +60,9 @@ export class SuggestionService {
    * @param {Card[]} cards new array of cards
    */
   public updateByCards(cards: Card[]) {
-    cards.sort(this.cardsService.sortCards).forEach(c => {
+    cards.sort((cardA: Card, cardB: Card) => {
+      return new Date(cardA.modificationDate).getTime() - new Date(cardB.modificationDate).getTime();
+    }).forEach(c => {
       if (c != null) {
         c.sides.forEach(s => {
           // Add title to search items
