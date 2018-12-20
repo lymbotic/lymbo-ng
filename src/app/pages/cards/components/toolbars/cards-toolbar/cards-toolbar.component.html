@@ -45,6 +45,15 @@
     <button *ngIf="media > mediaType.MEDIUM"
             mat-button
             class="toolbar-menu-item"
+            [disabled]="!stackNotEmpty"
+            [matTooltip]="'Shuffle cards'"
+            [matTooltipPosition]="'left'"
+            (click)="onShuffleCardsButtonClicked()">
+      <mat-icon svgIcon="shuffle"></mat-icon>
+    </button>
+    <button *ngIf="media > mediaType.MEDIUM"
+            mat-button
+            class="toolbar-menu-item"
             [disabled]="!filterActive"
             [matTooltip]="'Clear filters'"
             [matTooltipPosition]="'left'"

@@ -5,6 +5,7 @@
   [media]="media"
   [filterActive]="filterActive"
   [cardsPutAsideNotEmpty]="cardsPutAsideNotEmpty"
+  [stackNotEmpty]="cards.length > 0"
   (searchItemEventEmitter)="onSearchItemChanged($event)"
   (menuItemEventEmitter)="onMenuItemClicked($event)"></app-cards-toolbar>
 
@@ -26,7 +27,7 @@
   <mat-sidenav-content cdkScrollable>
     <div class="content">
       <app-card-fragment *ngFor="let s of cards" [card]="s" [tags]="tagsMap"
-                          (cardEventEmitter)="onCardEvent($event)">
+                         (cardEventEmitter)="onCardEvent($event)">
       </app-card-fragment>
     </div>
   </mat-sidenav-content>

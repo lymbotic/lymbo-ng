@@ -750,6 +750,12 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
         });
         break;
       }
+      case 'shuffle-cards': {
+        this.shuffleCards().then(() => {
+          this.snackbarService.showSnackbar('Shuffled cards');
+        });
+        break;
+      }
       case 'clear-filter': {
         this.filterService.clearAllFilters().then(() => {
           this.snackbarService.showSnackbar('Filters cleared');
@@ -850,4 +856,28 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
       this.initializeCards(cardsAll);
     });
   }
+
+  private shuffleCards(): Promise<any> {
+    return new Promise(() => {
+      const cards = CloneService.cloneCards(this.cards);
+
+      let currentIndex = cards.length, temporaryValue, randomIndex;
+
+      // While there remain elements to shuffle...
+      while (0 !== currentIndex) {
+
+        // Pick a remaining element...
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex -= 1;
+
+        // And swap it with the current element.
+        temporaryValue = cards[currentIndex];
+        cards[currentIndex] = cards[randomIndex];
+        cards[randomIndex] = temporaryValue;
+      }
+
+      this.initializeCards(cards);
+    });
+  }
+
 }

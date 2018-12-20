@@ -10,6 +10,7 @@ import {debounceTime} from 'rxjs/operators';
   selector: 'app-cards-toolbar',
   templateUrl: './cards-toolbar.component.html',
   styleUrls: ['./cards-toolbar.component.scss']
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CardsToolbarComponent implements OnInit {
 
@@ -23,6 +24,8 @@ export class CardsToolbarComponent implements OnInit {
   @Input() filterActive = false;
   /** Indicates whether cards are put aside */
   @Input() cardsPutAsideNotEmpty = false;
+  /** Indicates that stack is not empty */
+  @Input() stackNotEmpty = false;
   /** Event emitter indicating changes in search bar */
   @Output() searchItemEventEmitter = new EventEmitter<string>();
   /** Event emitter indicating menu items being clicked */
@@ -127,6 +130,13 @@ export class CardsToolbarComponent implements OnInit {
    */
   onRestoreCardsBeingPutAsideButtonClicked() {
     this.menuItemEventEmitter.emit('restore-cards');
+  }
+
+  /**
+   * Handles click on shuffle-cards button
+   */
+  onShuffleCardsButtonClicked() {
+    this.menuItemEventEmitter.emit('shuffle-cards');
   }
 
   /**
