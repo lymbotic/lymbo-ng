@@ -125,28 +125,6 @@ export class CardsToolbarComponent implements OnInit {
     this.searchItemDebouncer.next(this.searchItem);
   }
 
-  /**
-   * Handles click on restore-cards button
-   */
-  onRestoreCardsBeingPutAsideButtonClicked() {
-    this.menuItemEventEmitter.emit('restore-cards');
-  }
-
-  /**
-   * Handles click on shuffle-cards button
-   */
-  onShuffleCardsButtonClicked() {
-    this.menuItemEventEmitter.emit('shuffle-cards');
-  }
-
-  /**
-   * Handles click on clear-filter button
-   */
-  onClearFiltersButtonClicked() {
-    this.menuItemEventEmitter.emit('clear-filter');
-    this.searchItem = '';
-  }
-
   //
   // Filters
   //

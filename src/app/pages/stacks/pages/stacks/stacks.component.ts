@@ -674,7 +674,7 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
         });
         break;
       }
-      case 'clear-filter': {
+      case 'clear-filters': {
         this.filterService.clearAllFilters();
         this.snackbarService.showSnackbar('Filters cleared');
         break;

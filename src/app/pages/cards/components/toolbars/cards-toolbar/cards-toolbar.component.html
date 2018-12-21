@@ -33,13 +33,16 @@
   </div>
   <div class="flexbox"></div>
   <div class="toolbar-block end">
+
+
+    <!-- Optional buttons desktop -->
     <button *ngIf="media > mediaType.MEDIUM"
             mat-button
             class="toolbar-menu-item"
             [disabled]="!cardsPutAsideNotEmpty"
             [matTooltip]="'Restore cards being put aside'"
             [matTooltipPosition]="'left'"
-            (click)="onRestoreCardsBeingPutAsideButtonClicked()">
+            (click)="onMenuItemClicked('restore-cards')">
       <mat-icon svgIcon="refresh"></mat-icon>
     </button>
     <button *ngIf="media > mediaType.MEDIUM"
@@ -48,7 +51,7 @@
             [disabled]="!stackNotEmpty"
             [matTooltip]="'Shuffle cards'"
             [matTooltipPosition]="'left'"
-            (click)="onShuffleCardsButtonClicked()">
+            (click)="onMenuItemClicked('shuffle-cards')">
       <mat-icon svgIcon="shuffle"></mat-icon>
     </button>
     <button *ngIf="media > mediaType.MEDIUM"
@@ -57,13 +60,32 @@
             [disabled]="!filterActive"
             [matTooltip]="'Clear filters'"
             [matTooltipPosition]="'left'"
-            (click)="onClearFiltersButtonClicked()">
+            (click)="onMenuItemClicked('clear-filters')">
       <mat-icon svgIcon="layers_clear"></mat-icon>
     </button>
+
     <button mat-button class="toolbar-menu-item right" [matMenuTriggerFor]="menu">
       <mat-icon svgIcon="more_vert"></mat-icon>
     </button>
     <mat-menu #menu="matMenu">
+
+      <!-- Optional buttons mobile -->
+      <div *ngIf="media < mediaType.LARGE">
+        <button mat-menu-item [disabled]="!cardsPutAsideNotEmpty" (click)="onMenuItemClicked('restore-cards')">
+          <mat-icon svgIcon="refresh"></mat-icon>
+          <span>Restore cards</span>
+        </button>
+        <button mat-menu-item [disabled]="!stackNotEmpty" (click)="onMenuItemClicked('shuffle-cards')">
+          <mat-icon svgIcon="shuffle"></mat-icon>
+          <span>Shuffle cards</span>
+        </button>
+        <button mat-menu-item [disabled]="!filterActive" (click)="onMenuItemClicked('clear-filters')">
+          <mat-icon svgIcon="layers_clear"></mat-icon>
+          <span>Clear filters</span>
+        </button>
+        <mat-divider></mat-divider>
+      </div>
+
       <button mat-menu-item (click)="onMenuItemClicked('download')">
         <mat-icon svgIcon="file_download"></mat-icon>
         <span>Export</span>
