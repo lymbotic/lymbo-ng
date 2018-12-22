@@ -1,0 +1,24 @@
+@import '../../../../theme';
+
+.container {
+  padding: 5px 5px;
+  width: 100px;
+  overflow: hidden;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fab {
+  display: block;
+  margin: 0 auto 15px;
+}
+
+.label {
+  color: mat-color($mat-grey, 700);
+  overflow: hidden;
+  text-align: start;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100px;
+}
