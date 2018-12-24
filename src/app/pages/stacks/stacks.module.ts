@@ -19,6 +19,10 @@ import {TagListComponent} from './components/lists/tag-list/tag-list.component';
 import {TagListItemComponent} from './components/lists/tag-list-item/tag-list-item.component';
 import {TagDialogComponent} from './components/dialogs/tag-dialog/tag-dialog.component';
 import {InformationDialogModule} from '../../ui/information-dialog/information-dialog.module';
+import {UploadDialogComponent} from './components/dialogs/upload-dialog/upload-dialog.component';
+import {StackTypeFragmentComponent} from './components/fragments/stack-type-fragment/stack-type-fragment.component';
+import {SuggestedActionButtonModule} from '../../ui/suggested-action-button/suggested-action-button.module';
+import { LanguageSelectionFragmentComponent } from './components/fragments/language-selection-fragment/language-selection-fragment.component';
 
 @NgModule({
   imports: [
@@ -34,6 +38,7 @@ import {InformationDialogModule} from '../../ui/information-dialog/information-d
     AboutDialogModule,
     ConfirmationDialogModule,
     NewFeaturesDialogModule,
+    SuggestedActionButtonModule,
     TagChipsModule,
     TagsNamePipeModule
   ],
@@ -43,11 +48,14 @@ import {InformationDialogModule} from '../../ui/information-dialog/information-d
 
     // Fragments
     FileDropFragmentComponent,
+    LanguageSelectionFragmentComponent,
     StackTitleFragmentComponent,
+    StackTypeFragmentComponent,
 
     // Dialogs
     StackDialogComponent,
     TagDialogComponent,
+    UploadDialogComponent,
 
     // Lists
     TagListComponent,
@@ -58,12 +66,15 @@ import {InformationDialogModule} from '../../ui/information-dialog/information-d
 
     // Stacks
     StackFragmentComponent,
+
+    LanguageSelectionFragmentComponent,
   ], entryComponents: [
     // Pages
     StacksComponent,
     // Dialogs
     StackDialogComponent,
     TagDialogComponent,
+    UploadDialogComponent
   ], providers: [], exports: [
     StacksComponent
   ]

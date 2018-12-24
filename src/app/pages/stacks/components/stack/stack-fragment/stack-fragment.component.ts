@@ -61,4 +61,11 @@ export class StackFragmentComponent {
   onDeleteClicked() {
     this.stackEventEmitter.emit({action: Action.DELETE, stack: this.stack});
   }
+
+  /**
+   * Handles click on export button
+   */
+  onExportClicked() {
+    this.stacksService.downloadStack(this.stack);
+  }
 }

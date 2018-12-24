@@ -766,6 +766,22 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
         this.router.navigate(['/settings']);
         break;
       }
+      case 'upload': {
+        /*
+        this.dialog.open(UploadDialogComponent, <MatDialogConfig>{
+          disableClose: false,
+          data: {
+            title: 'Upload'
+          }
+        });
+                */
+
+        break;
+      }
+      case 'download': {
+        this.stacksService.downloadStack(this.stack);
+        break;
+      }
       case 'android-release': {
         const filename = 'basalt-release.apk';
         const element = document.createElement('a');

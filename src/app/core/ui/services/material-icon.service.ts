@@ -72,6 +72,7 @@ export class MaterialIconService {
     icons.push(new Icon(IconTopic.ACTION, 'label_outline', 'ic_label_outline_24px.svg'));
     icons.push(new Icon(IconTopic.ACTION, 'search', 'ic_search_24px.svg'));
     icons.push(new Icon(IconTopic.ACTION, 'settings', 'ic_settings_24px.svg'));
+    icons.push(new Icon(IconTopic.ACTION, 'translate', 'ic_translate_24px.svg'));
     icons.push(new Icon(IconTopic.AV, 'shuffle', 'ic_shuffle_24px.svg'));
     icons.push(new Icon(IconTopic.CONTENT, 'add', 'ic_add_24px.svg'));
     icons.push(new Icon(IconTopic.CONTENT, 'filter_list', 'ic_filter_list_24px.svg'));
@@ -80,6 +81,7 @@ export class MaterialIconService {
     icons.push(new Icon(IconTopic.EDITOR, 'mode_edit', 'ic_mode_edit_24px.svg'));
     icons.push(new Icon(IconTopic.FILE, 'file_download', 'ic_file_download_24px.svg'));
     icons.push(new Icon(IconTopic.FILE, 'file_upload', 'ic_file_upload_24px.svg'));
+    icons.push(new Icon(IconTopic.IMAGE, 'crop_free', 'ic_crop_free_24px.svg'));
     icons.push(new Icon(IconTopic.MAPS, 'layers_clear', 'ic_layers_clear_24px.svg'));
     icons.push(new Icon(IconTopic.NAVIGATION, 'arrow_back', 'ic_arrow_back_24px.svg'));
     icons.push(new Icon(IconTopic.NAVIGATION, 'check', 'ic_check_24px.svg'));

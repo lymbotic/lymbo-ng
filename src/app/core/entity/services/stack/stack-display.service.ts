@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Stack} from '../../model/stack.model';
+import {StackType} from '../../model/stack-type.enum';
 
 /**
  * Enum representing display aspects
@@ -7,6 +8,8 @@ import {Stack} from '../../model/stack.model';
 export enum DisplayAspect {
   CAN_BE_CREATED,
   CAN_BE_UPDATED,
+
+  LANGUAGE
 }
 
 /**
@@ -35,5 +38,13 @@ export class StackDisplayService {
    */
   static canBeUpdated(stack: Stack): boolean {
     return stack != null && stack.title != null && stack.title.length > 0;
+  }
+
+  /**
+   * Determines whether a given stack contains languages
+   * @param stack stack
+   */
+  static containsLanguage(stack: Stack): boolean {
+    return stack.type === StackType.LANGUAGE;
   }
 }

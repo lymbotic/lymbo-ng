@@ -1,0 +1,9 @@
+<mat-form-field color="primary">
+  <mat-select name="type" [(ngModel)]="language" [placeholder]="placeholder"
+              (selectionChange)="onSelectionChanged()">
+    <mat-option *ngFor="let item of languages" [value]="item">
+      <mat-icon [svgIcon]=selectIcon(item)></mat-icon>
+      {{ item }}
+    </mat-option>
+  </mat-select>
+</mat-form-field>

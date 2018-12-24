@@ -6,6 +6,7 @@ import {Hue} from '../model/hue.model';
 import {Stack} from '../../entity/model/stack.model';
 import {Hash} from '../../entity/model/hash';
 import {FeatureType} from '../../settings/model/feature-type.enum';
+import {StackTypeGroup} from '../../entity/model/stack-type-group.enum';
 
 /**
  * Handles derived colors
@@ -85,6 +86,27 @@ export class ColorService {
     switch (feature) {
       case FeatureType.UNDEFINED: {
         return this.materialColorService.hue(PaletteType.GREEN, HueType._700);
+      }
+      default: {
+        return this.materialColorService.hue(PaletteType.GREY, HueType._300);
+      }
+    }
+  }
+
+  /**
+   * Returns a color associated to stack type group
+   * @param {StackTypeGroup} group stack type group
+   */
+  getStackTypeGroupColor(group: StackTypeGroup): Hue {
+    switch (group) {
+      case StackTypeGroup.UNSPECIFIED: {
+        return this.materialColorService.hue(PaletteType.GREY, HueType._50);
+      }
+      case StackTypeGroup.FREESTYLE: {
+        return this.materialColorService.hue(PaletteType.LIGHT_BLUE, HueType._600);
+      }
+      case StackTypeGroup.LANGUAGE: {
+        return this.materialColorService.hue(PaletteType.RED, HueType._600);
       }
       default: {
         return this.materialColorService.hue(PaletteType.GREY, HueType._300);

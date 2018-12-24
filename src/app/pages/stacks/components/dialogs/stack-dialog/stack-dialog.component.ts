@@ -8,6 +8,8 @@ import {SuggestionService} from '../../../../../core/entity/services/suggestion.
 import {DisplayAspect} from '../../../../../core/entity/services/stack/stack-display.service';
 import {Action} from '../../../../../core/entity/model/action.enum';
 import {StacksService} from '../../../../../core/entity/services/stack/stacks.service';
+import {StackType} from '../../../../../core/entity/model/stack-type.enum';
+import {Language} from '../../../../../core/entity/model/language.enum';
 
 /**
  * Displays stack dialog
@@ -101,11 +103,35 @@ export class StackDialogComponent implements OnInit, OnDestroy {
   //
 
   /**
+   * Handles stack type changes
+   * @param type stack type
+   */
+  onStackTypeChanged(type: StackType) {
+    this.stack.type = type;
+  }
+
+  /**
    * Handles stack title change
    * @param stackTitle
    */
   onStackTitleChanged(stackTitle: string) {
     this.stack.title = stackTitle;
+  }
+
+  /**
+   * Handles source language change
+   * @param language source language
+   */
+  onSourceLanguageChanged(language: Language) {
+    this.stack.sourceLanguage = language;
+  }
+
+  /**
+   * Handles target language change
+   * @param language target language
+   */
+  onTargetLanguageChanged(language: Language) {
+    this.stack.targetLanguage = language;
   }
 
   /**

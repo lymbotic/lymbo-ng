@@ -2,12 +2,22 @@
   <h2 mat-dialog-title>{{ dialogTitle }}</h2>
   <mat-dialog-content>
     <form #formCtrl="ngForm">
-      <div class="stack-title">
-        <app-stack-title-fragment
-          [stackTitle]="stack.title" [placeholder]="'Stack name'"
-          (stackTitleChangedEmitter)="onStackTitleChanged($event)">
-        </app-stack-title-fragment>
-      </div>
+      <app-stack-type-fragment [stack]="stack" (stackTypeEventEmitter)="onStackTypeChanged($event)">
+      </app-stack-type-fragment>
+      <app-stack-title-fragment class="stack-title"
+                                [stackTitle]="stack.title" [placeholder]="'Stack name'"
+                                (stackTitleChangedEmitter)="onStackTitleChanged($event)">
+      </app-stack-title-fragment>
+
+      <!-- Language -->
+      <app-language-selection-fragment *ngIf="containsDisplayAspect(displayAspectType.LANGUAGE, stack)"
+                                       [language]="stack.sourceLanguage" [placeholder]="'Source Language'"
+                                       (languageChangedEmitter)="onSourceLanguageChanged($event)"></app-language-selection-fragment>
+      <app-language-selection-fragment *ngIf="containsDisplayAspect(displayAspectType.LANGUAGE, stack)"
+                                       [language]="stack.targetLanguage" [placeholder]="'Target Language'"
+                                       (languageChangedEmitter)="onTargetLanguageChanged($event)"></app-language-selection-fragment>
+
+      <!-- Tags -->
       <app-tag-chips [tags]="tags | tagNames"
                      [tagOptions]="tagOptions"
                      [readonly]=false

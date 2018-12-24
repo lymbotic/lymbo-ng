@@ -10,6 +10,10 @@
         <mat-icon svgIcon="delete"></mat-icon>
         <span>Delete</span>
       </button>
+      <button mat-menu-item (click)="onExportClicked()">
+        <mat-icon svgIcon="file_download"></mat-icon>
+        <span>Export</span>
+      </button>
     </mat-menu>
     <div class="flexcontainer">
       <mat-card-header (click)="onStackClicked()">

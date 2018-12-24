@@ -1,0 +1,18 @@
+@import '../../../../../../sizes';
+@import '../../../../../../flex';
+
+//
+// Custom
+//
+
+.dialog {
+  @media #{$breakpoint-small} {
+    width: 100%;
+  }
+  @media #{$breakpoint-medium} {
+    width: 600px;
+  }
+  @media #{$breakpoint-large} {
+    width: 600px;
+  }
+}

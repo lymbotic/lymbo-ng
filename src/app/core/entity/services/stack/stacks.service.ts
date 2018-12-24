@@ -3,9 +3,11 @@ import {Subject} from 'rxjs/Subject';
 import {DisplayAspect, StackDisplayService} from './stack-display.service';
 import {Stack} from '../../model/stack.model';
 import {PouchDBService} from '../../../persistence/services/pouchdb.service';
-import {SnackbarService} from '../../../ui/services/snackbar.service';
 import {TagService} from '../tag.service';
 import {EntityType} from '../../model/entity-type.enum';
+import {StackTypeGroup} from '../../model/stack-type-group.enum';
+import {StackType} from '../../model/stack-type.enum';
+import {StackTypeService} from './stack-type.service';
 
 /**
  * Handles cards
@@ -29,10 +31,12 @@ export class StacksService {
    * Constructor
    * @param pouchDBService pouchDB service
    * @param stackDisplayService stack display service
+   * @param stackTypeService stack type service
    * @param tagService tag service
    */
   constructor(private pouchDBService: PouchDBService,
               private stackDisplayService: StackDisplayService,
+              private stackTypeService: StackTypeService,
               private tagService: TagService) {
     this.initializeStackSubscription();
     this.findStacks();
@@ -229,7 +233,79 @@ export class StacksService {
       case DisplayAspect.CAN_BE_UPDATED: {
         return StackDisplayService.canBeUpdated(stack);
       }
+      case DisplayAspect.LANGUAGE: {
+        return StackDisplayService.containsLanguage(stack);
+      }
     }
+  }
+
+
+  //
+  // Import/Export
+  //
+
+  /**
+   * Downloads a file containing a JSON formatted array of all entities
+   */
+  public downloadStack(stack: Stack) {
+
+    const fileContents = JSON.stringify(stack);
+    const filename = `${stack.title}.lymbo`;
+    // const filetype = 'text/plain';
+
+    const element = document.createElement('a');
+    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(fileContents));
+    element.setAttribute('download', filename);
+
+    element.style.display = 'none';
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+  }
+
+  //
+  // Delegated: stack types
+  //
+
+  /**
+   * Returns a list of stack types contained in a given stack type group
+   * @param group stack type group
+   */
+  public getStackTypesByGroup(group: StackTypeGroup): StackType[] {
+    return this.stackTypeService.getStackTypesByGroup(group);
+  }
+
+  /**
+   * Returns the stack type group of a given stack type
+   * @param type stack type
+   */
+  public getStackGroupByType(type: StackType): StackTypeGroup {
+    return this.stackTypeService.getStackGroupByType(type);
+  }
+
+  /**
+   * Determines if a stack type group contains a given stack type
+   * @param group stack type group
+   * @param type stack type
+   */
+  public groupContainsType(group: StackTypeGroup, type: StackType) {
+    return this.stackTypeService.groupContainsType(group, type);
+  }
+
+  /**
+   * Retrieves an icon by stack type
+   * @param group stack type group
+   */
+  public getIconByStackTypeGroup(group: StackTypeGroup): string {
+    return this.stackTypeService.getIconByStackTypeGroup(group);
+  }
+
+  /**
+   * Retrieves an icon by stack type
+   * @param type stack type
+   */
+  public getIconByStackType(type: StackType): string {
+    return this.stackTypeService.getIconByStackType(type);
   }
 
   //
