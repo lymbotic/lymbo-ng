@@ -5,6 +5,7 @@ import {Stack} from '../../../../../core/entity/model/stack.model';
 import {StacksService} from '../../../../../core/entity/services/stack/stacks.service';
 import {Action} from '../../../../../core/entity/model/action.enum';
 import {Tag} from '../../../../../core/entity/model/tag.model';
+import {DisplayAspect} from '../../../../../core/entity/services/stack/stack-display.service';
 
 /**
  * Displays a stack
@@ -25,6 +26,9 @@ export class StackFragmentComponent {
 
   /** Event emitter indicating click on stack */
   @Output() stackEventEmitter = new EventEmitter<{ action: Action, stack: Stack, tags?: Tag[] }>();
+
+  /** Enum of display aspects */
+  displayAspectType = DisplayAspect;
 
   /**
    * Constructor
@@ -67,5 +71,18 @@ export class StackFragmentComponent {
    */
   onExportClicked() {
     this.stacksService.downloadStack(this.stack);
+  }
+
+  //
+  // Helpers
+  //
+
+  /**
+   * Determines whether the displayed stack contains a specific display aspect
+   * @param displayAspect display aspect
+   * @param stack stack
+   */
+  public containsDisplayAspect(displayAspect: DisplayAspect, stack: Stack): boolean {
+    return this.stacksService.containsDisplayAspect(displayAspect, stack);
   }
 }

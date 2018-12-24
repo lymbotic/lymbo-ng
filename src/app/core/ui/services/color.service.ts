@@ -103,10 +103,10 @@ export class ColorService {
         return this.materialColorService.hue(PaletteType.GREY, HueType._50);
       }
       case StackTypeGroup.FREESTYLE: {
-        return this.materialColorService.hue(PaletteType.LIGHT_BLUE, HueType._600);
+        return this.materialColorService.hue(PaletteType.LIME, HueType._600);
       }
       case StackTypeGroup.LANGUAGE: {
-        return this.materialColorService.hue(PaletteType.RED, HueType._600);
+        return this.materialColorService.hue(PaletteType.AMBER, HueType._600);
       }
       default: {
         return this.materialColorService.hue(PaletteType.GREY, HueType._300);

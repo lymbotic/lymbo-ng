@@ -33,9 +33,16 @@
       <div class="flexcontainer">
         <div class="tags-holder"
              (click)="onStackClicked()">
+          <span *ngIf="containsDisplayAspect(displayAspectType.LANGUAGE, stack)
+          && stack.sourceLanguage != null
+          && stack.targetLanguage != null" class="language">
+            <label class="language-label">{{ stack.sourceLanguage }} > {{ stack.targetLanguage }}</label>
+          </span>
           <span *ngFor="let t of stack.tagIds">
-            <span class="tag" *ngIf="tags.get(t) != null"><label class="tag-label">{{ tags.get(t).name }}</label></span>
+            <span class="tag" *ngIf="tags.get(t) != null">
+              <label class="tag-label">{{ tags.get(t).name }}</label>
             </span>
+          </span>
         </div>
       </div>
     </mat-card-footer>
