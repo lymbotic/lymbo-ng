@@ -99,5 +99,6 @@ export class MaterialIconService {
     });
 
     iconRegistry.addSvgIcon('blank', sanitizer.bypassSecurityTrustResourceUrl('assets/icons/ic_blank_24px.svg'));
+    iconRegistry.addSvgIcon('auto_fix', sanitizer.bypassSecurityTrustResourceUrl('assets/icons/ic_auto_fix_24px.svg'));
   }
 }
