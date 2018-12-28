@@ -130,7 +130,7 @@ export class SettingsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.settingsService.settingsSubject.subscribe(value => {
       if (value != null) {
         this.settings = value;
-        this.apiKeyMicrosoftTextTranslate = JSON.parse(this.settings.get(SettingType.API_KEY_MICROSOFT_TEXT_TRANSLATE).value);
+        this.apiKeyMicrosoftTextTranslate = this.settings.get(SettingType.API_KEY_MICROSOFT_TEXT_TRANSLATE).value;
       }
     });
   }
