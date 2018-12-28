@@ -19,7 +19,6 @@ import {NgModule} from '@angular/core';
     BrowserAnimationsModule,
     BrowserModule,
     FormsModule,
-    HttpModule,
     HttpClientModule,
 
     MaterialModule,
@@ -31,7 +30,8 @@ import {NgModule} from '@angular/core';
 
     // Pages (loaded via lazy loading)
     // StacksModule,
-    // CardsModule
+    // CardsModule,
+    // SettingsModule,
   ],
   entryComponents: [],
   providers: [],

@@ -539,6 +539,7 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
           mode: DialogMode.ADD,
           dialogTitle: 'Add card',
           card: new Card(),
+          targetLanguage: this.stack.targetLanguage,
           tags: []
         };
 
@@ -570,6 +571,7 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
           mode: DialogMode.UPDATE,
           dialogTitle: 'Update card',
           card: card,
+          targetLanguage: this.stack.targetLanguage,
           tags: card.tagIds.map(id => {
             return this.tagService.tags.get(id);
           }).filter(tag => {

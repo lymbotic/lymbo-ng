@@ -5,7 +5,10 @@ const routes: Routes = [
   {path: '', redirectTo: 'stacks', pathMatch: 'full'},
   {path: 'stacks', loadChildren: './pages/stacks/stacks.module#StacksModule'},
   {path: 'cards', loadChildren: './pages/cards/cards.module#CardsModule'},
-  {path: 'cards/:id', loadChildren: './pages/cards/cards.module#CardsModule'}
+  {path: 'cards/:id', loadChildren: './pages/cards/cards.module#CardsModule'},
+  // Settings module
+  {path: 'settings', loadChildren: './pages/settings/settings.module#SettingsModule'},
+
 ];
 
 @NgModule({

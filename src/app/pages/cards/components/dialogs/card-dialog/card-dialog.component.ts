@@ -1,4 +1,4 @@
-import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
+import {Component, EventEmitter, Inject, OnDestroy, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import {DialogMode} from '../../../../../core/entity/model/dialog-mode.enum';
 import {Card} from '../../../../../core/entity/model/card.model';
@@ -8,6 +8,8 @@ import {SuggestionService} from '../../../../../core/entity/services/suggestion.
 import {DisplayAspect} from '../../../../../core/entity/services/card/card-display.service';
 import {Action} from '../../../../../core/entity/model/action.enum';
 import {CardsService} from '../../../../../core/entity/services/card/cards.service';
+import {MicrosoftTranslateService} from '../../../../../core/translate/services/microsoft-translate.service';
+import {Language} from '../../../../../core/entity/model/language.enum';
 
 /**
  * Displays card dialog
@@ -29,6 +31,8 @@ export class CardDialogComponent implements OnInit, OnDestroy {
 
   /** Card to be displayed */
   card: Card;
+  /** Target language */
+  targetLanguage: Language;
 
   /** Temporarily displayed tags */
   tags: Tag[] = [];
@@ -42,11 +46,13 @@ export class CardDialogComponent implements OnInit, OnDestroy {
   /**
    * Constructor
    * @param cardsService cards service
+   * @param microsoftTranslateService Microsoft translate service
    * @param suggestionService suggestion service
    * @param dialogRef dialog reference
    * @param data dialog data
    */
   constructor(private cardsService: CardsService,
+              private microsoftTranslateService: MicrosoftTranslateService,
               private suggestionService: SuggestionService,
               public dialogRef: MatDialogRef<CardDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any) {
@@ -82,6 +88,7 @@ export class CardDialogComponent implements OnInit, OnDestroy {
     this.mode = this.data.mode;
     this.dialogTitle = this.data.dialogTitle;
     this.card = this.data.card != null ? CloneService.cloneCard(this.data.card) : new Card();
+    this.targetLanguage = this.data.targetLanguage != null ? CloneService.cloneLanguage(this.data.targetLanguage) : Language.UNSPECIFIED;
     this.tags = this.data.tags != null ? CloneService.cloneTags(this.data.tags) : [];
   }
 
@@ -114,6 +121,15 @@ export class CardDialogComponent implements OnInit, OnDestroy {
    */
   onBackTitleChanged(sideTitle: string) {
     this.card.sides[1].title = sideTitle;
+  }
+
+  onTranslateClicked() {
+    const translationEmitter: EventEmitter<string> = new EventEmitter<string>();
+    translationEmitter.subscribe(value => {
+      this.onBackTitleChanged(value);
+    });
+
+    this.microsoftTranslateService.translate(this.card.sides[0].title, this.targetLanguage, translationEmitter);
   }
 
   /**

@@ -9,6 +9,8 @@ import {StacksService} from './core/entity/services/stack/stacks.service';
 import {CardsService} from './core/entity/services/card/cards.service';
 import {PouchDBService} from './core/persistence/services/pouchdb.service';
 import {PouchDBSettingsService} from './core/persistence/services/pouchdb-settings.service';
+import {SettingType} from './core/settings/model/setting-type.enum';
+import {Setting} from './core/settings/model/setting.model';
 
 /**
  * Displays root element
@@ -55,6 +57,7 @@ export class AppComponent implements OnInit, AfterViewInit {
    */
   ngOnInit() {
     this.initializeSnackbar();
+    this.initializeSettings();
   }
 
   /**
@@ -76,6 +79,28 @@ export class AppComponent implements OnInit, AfterViewInit {
         this.openSnackBar(snack[0], snack[1], snack[2]);
       }
     );
+  }
+
+  /**
+   * Initializes settings
+   */
+  private initializeSettings() {
+    this.settingsService.settingsSubject.subscribe(() => {
+      this.initializeSetting(SettingType.API_KEY_MICROSOFT_TEXT_TRANSLATE, '');
+    });
+    this.settingsService.fetch();
+  }
+
+  /**
+   * Initializes an unset settingType
+   * @param settings settingType
+   * @param value value
+   */
+  private initializeSetting(settings: SettingType, value: any) {
+    if (this.settingsService.settings.get(settings) == null) {
+      const setting = new Setting(settings, value);
+      this.settingsService.updateSetting(setting);
+    }
   }
 
   /**
