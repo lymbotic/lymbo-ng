@@ -10,6 +10,12 @@ export enum SettingType {
   //
 
   //
+  // API keys
+  //
+
+  API_KEY_MICROSOFT_TEXT_TRANSLATE = 'api-key-microsoft-text-translate',
+
+  //
   // Preferences
   //
 

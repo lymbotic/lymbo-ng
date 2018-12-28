@@ -1,0 +1,24 @@
+<app-settings-toolbar
+  [@toolbarAnimation]="scrollDirection"
+  class="fixed"
+  [title]="title"
+  [media]="media"
+  [searchOptions]="searchOptions"
+  (searchItemEventEmitter)="onSearchItemChanged($event)"
+  (menuItemEventEmitter)="onMenuItemClicked($event)"></app-settings-toolbar>
+
+<div cdkScrollable>
+  <div class="content">
+    <div class="details-box">
+      <div class="flexcontainer">
+        <mat-icon svgIcon="vpn_key" class="icon"></mat-icon>
+        <span>Microsoft Text Translate API key</span>
+        <div class="flexbox"></div>
+        <div class="text-input">
+          <input matInput type="text" placeholder="API key" [ngModel]="apiKeyMicrosoftTextTranslate"
+                 (ngModelChange)="onValueChanged(settingsType.API_KEY_MICROSOFT_TEXT_TRANSLATE, $event)"/>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
