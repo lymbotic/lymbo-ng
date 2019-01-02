@@ -37,6 +37,7 @@ Share the cards you created with friends.
 | 0.15 | Show app information |
 | 0.16 | Randomize cards |
 | 0.17 | Language stacks |
+| 0.18 | Auto-translate cards |
 
 ### Planned features
 

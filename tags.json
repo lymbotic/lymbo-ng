@@ -20,5 +20,6 @@
 { "annotation":"refs/tags/v0.14.0", "message": "CSV format"} ,
 { "annotation":"refs/tags/v0.15.0", "message": "Show app information"},
 { "annotation":"refs/tags/v0.16.0", "message": "Randomize cards"},
-{ "annotation":"refs/tags/v0.17.0", "message": "Language stacks"}
+{ "annotation":"refs/tags/v0.17.0", "message": "Language stacks"},
+{ "annotation":"refs/tags/v0.18.0", "message": "Auto-translate cards"}
 ]}
