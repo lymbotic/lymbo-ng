@@ -118,7 +118,9 @@ export class CardDialogComponent implements OnInit, OnDestroy {
       debounceTime(environment.TRANSLATE_DEBOUNCE_TIME),
       distinctUntilChanged()
     ).subscribe(() => {
-      this.translateText(this.card.sides[0].title, this.targetLanguage);
+      if (this.targetLanguage != null) {
+        this.translateText(this.card.sides[0].title, this.targetLanguage);
+      }
     });
   }
 
@@ -141,13 +143,6 @@ export class CardDialogComponent implements OnInit, OnDestroy {
    */
   onBackTitleChanged(sideTitle: string) {
     this.card.sides[1].title = sideTitle;
-  }
-
-  /**
-   * Handles click on translate button
-   */
-  onTranslateClicked() {
-    this.translateText(this.card.sides[0].title, this.targetLanguage);
   }
 
   /**
