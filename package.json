@@ -43,7 +43,8 @@
     "release-notes": "mkdirp ./release && markdown ./doc/release-notes-%npm_package_version%.md > release/release-notes-%npm_package_version%.html",
     "gh-pages": "ng build --output-path docs --base-href https://florianschwanz.github.io/basalt-ng/",
     "git-tags": "echo { \"tags\": [ > tags.json && git tag --format=\"{ \\\"annotation\\\":\\\"%(refname)\\\", \\\"message\\\": \\\"%(subject)\\\"} ,\" >> tags.json && replace ,\\n$ \"\" tags.json && echo ]} >> tags.json",
-    "compodoc": "compodoc -p tsconfig.json"
+    "compodoc": "compodoc -p tsconfig.json",
+    "fix-browser": "cd ./.fix && copyfiles ./browser.js ../node_modules/@angular-devkit/build-angular/src/angular-cli-files/models/webpack-configs"
   },
   "private": true,
   "dependencies": {
