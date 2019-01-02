@@ -123,6 +123,9 @@ export class CardDialogComponent implements OnInit, OnDestroy {
     this.card.sides[1].title = sideTitle;
   }
 
+  /**
+   * Handles click on translate button
+   */
   onTranslateClicked() {
     const translationEmitter: EventEmitter<string> = new EventEmitter<string>();
     translationEmitter.subscribe(value => {

@@ -875,6 +875,9 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
+  /**
+   * Shuffles cards
+   */
   private shuffleCards(): Promise<any> {
     return new Promise(() => {
       const cards = CloneService.cloneCards(this.cards);
@@ -897,5 +900,4 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
       this.initializeCards(cards);
     });
   }
-
 }

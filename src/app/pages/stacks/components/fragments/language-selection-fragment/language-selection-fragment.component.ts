@@ -1,6 +1,9 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {Language} from '../../../../../core/entity/model/language.enum';
 
+/**
+ * Displays language selection fragment
+ */
 @Component({
   selector: 'app-language-selection-fragment',
   templateUrl: './language-selection-fragment.component.html',
