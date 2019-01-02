@@ -15,44 +15,10 @@ import {SettingType} from '../../settings/model/setting-type.enum';
 export class MicrosoftTranslateService {
 
   /**
-   * Constructor
-   * @param settingsService settings service
-   * @param httpClient http client
-   */
-  constructor(private settingsService: SettingsService, private httpClient: HttpClient) {
-  }
-
-  /**
-   * Translates a given word into a target language
-   * @param text source text
-   * @param target target language
-   * @param translationEmitter translation emitter
-   */
-  translate(text: string, target: Language, translationEmitter: EventEmitter<string>) {
-    const languageCode = this.getLanguageCode(target);
-    const options = {
-      method: 'POST',
-      headers: {
-        'Ocp-Apim-Subscription-Key': this.settingsService.settings.get(SettingType.API_KEY_MICROSOFT_TEXT_TRANSLATE).value,
-        'Content-type': 'application/json',
-        'X-ClientTraceId': new UUID().toString()
-      },
-      json: true,
-    };
-
-    const ob = this.httpClient.post(`https://api.cognitive.microsofttranslator.com/translate?api-version=3.0&to=${languageCode}`, [{
-      'text': text
-    }], options);
-    ob.subscribe(value => {
-      translationEmitter.emit(value[0]['translations'][0]['text']);
-    });
-  }
-
-  /**
    * Returns the code of a given language
    * @param language language
    */
-  getLanguageCode(language: Language): string {
+  static getLanguageCode(language: Language): string {
     switch (language) {
       case Language.AFRIKAANS:
         return 'af';
@@ -184,6 +150,44 @@ export class MicrosoftTranslateService {
         return 'yua';
       default:
         return null;
+    }
+  }
+
+  /**
+   * Constructor
+   * @param settingsService settings service
+   * @param httpClient http client
+   */
+  constructor(private settingsService: SettingsService, private httpClient: HttpClient) {
+  }
+
+  /**
+   * Translates a given word into a target language
+   * @param text source text
+   * @param target target language
+   * @param translationEmitter translation emitter
+   */
+  translate(text: string, target: Language, translationEmitter: EventEmitter<string>) {
+    const languageCode = MicrosoftTranslateService.getLanguageCode(target);
+    const apiKey = this.settingsService.settings.get(SettingType.API_KEY_MICROSOFT_TEXT_TRANSLATE);
+
+    if (text != null && languageCode != null && apiKey != null && translationEmitter != null) {
+      const options = {
+        method: 'POST',
+        headers: {
+          'Ocp-Apim-Subscription-Key': apiKey.value,
+          'Content-type': 'application/json',
+          'X-ClientTraceId': new UUID().toString()
+        },
+        json: true,
+      };
+
+      const ob = this.httpClient.post(`https://api.cognitive.microsofttranslator.com/translate?api-version=3.0&to=${languageCode}`, [{
+        'text': text
+      }], options);
+      ob.subscribe(value => {
+        translationEmitter.emit(value[0]['translations'][0]['text']);
+      });
     }
   }
 }
