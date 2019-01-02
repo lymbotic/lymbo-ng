@@ -12,6 +12,9 @@ export const environment = {
   DATABASE_ENTITIES: 'lymbo-dev',
   DATABASE_SETTINGS: 'lymbo_settings-dev',
   LIMIT_TAGS: 500,
+
+  TRANSLATE_DEBOUNCE_TIME: 2000,
+
   NAME: require('../../package.json').name,
   VERSION: require('../../package.json').version,
   LICENSE: require('../../package.json').license,

@@ -10,6 +10,9 @@ import {Action} from '../../../../../core/entity/model/action.enum';
 import {CardsService} from '../../../../../core/entity/services/card/cards.service';
 import {MicrosoftTranslateService} from '../../../../../core/translate/services/microsoft-translate.service';
 import {Language} from '../../../../../core/entity/model/language.enum';
+import {Subject} from 'rxjs';
+import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
+import {environment} from '../../../../../../environments/environment';
 
 /**
  * Displays card dialog
@@ -43,6 +46,9 @@ export class CardDialogComponent implements OnInit, OnDestroy {
   /** Enum of display aspects */
   displayAspectType = DisplayAspect;
 
+  /** Subject of front title changes */
+  private frontTitleChangedSubject = new Subject<string>();
+
   /**
    * Constructor
    * @param cardsService cards service
@@ -68,6 +74,7 @@ export class CardDialogComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.initializeData();
     this.initializeOptions();
+    this.initializeFrontTitleChangedSubject();
   }
 
   /**
@@ -103,6 +110,18 @@ export class CardDialogComponent implements OnInit, OnDestroy {
     });
   }
 
+  /**
+   * Initializes front title subject
+   */
+  private initializeFrontTitleChangedSubject() {
+    this.frontTitleChangedSubject.pipe(
+      debounceTime(environment.TRANSLATE_DEBOUNCE_TIME),
+      distinctUntilChanged()
+    ).subscribe(() => {
+      this.translateText(this.card.sides[0].title, this.targetLanguage);
+    });
+  }
+
   //
   // Actions
   //
@@ -113,6 +132,7 @@ export class CardDialogComponent implements OnInit, OnDestroy {
    */
   onFrontTitleChanged(sideTitle: string) {
     this.card.sides[0].title = sideTitle;
+    this.frontTitleChangedSubject.next(sideTitle);
   }
 
   /**
@@ -127,12 +147,7 @@ export class CardDialogComponent implements OnInit, OnDestroy {
    * Handles click on translate button
    */
   onTranslateClicked() {
-    const translationEmitter: EventEmitter<string> = new EventEmitter<string>();
-    translationEmitter.subscribe(value => {
-      this.onBackTitleChanged(value);
-    });
-
-    this.microsoftTranslateService.translate(this.card.sides[0].title, this.targetLanguage, translationEmitter);
+    this.translateText(this.card.sides[0].title, this.targetLanguage);
   }
 
   /**
@@ -223,6 +238,22 @@ export class CardDialogComponent implements OnInit, OnDestroy {
   //
   // Helpers
   //
+
+  // Translation
+
+  /**
+   * Translates a given text and uses it as the back title
+   * @param text text
+   * @param targetLanguage target language
+   */
+  private translateText(text: string, targetLanguage: Language) {
+    const translationEmitter: EventEmitter<string> = new EventEmitter<string>();
+    translationEmitter.subscribe(value => {
+      this.onBackTitleChanged(value);
+    });
+
+    this.microsoftTranslateService.translate(text, targetLanguage, translationEmitter);
+  }
 
   // Tags
 
