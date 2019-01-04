@@ -13,6 +13,7 @@ import {Language} from '../../../../../core/entity/model/language.enum';
 import {Subject} from 'rxjs';
 import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
 import {environment} from '../../../../../../environments/environment';
+import {Stack} from '../../../../../core/entity/model/stack.model';
 
 /**
  * Displays card dialog
@@ -34,8 +35,8 @@ export class CardDialogComponent implements OnInit, OnDestroy {
 
   /** Card to be displayed */
   card: Card;
-  /** Target language */
-  targetLanguage: Language;
+  /** Stack the card is contained in */
+  stack: Stack;
 
   /** Temporarily displayed tags */
   tags: Tag[] = [];
@@ -95,7 +96,7 @@ export class CardDialogComponent implements OnInit, OnDestroy {
     this.mode = this.data.mode;
     this.dialogTitle = this.data.dialogTitle;
     this.card = this.data.card != null ? CloneService.cloneCard(this.data.card) : new Card();
-    this.targetLanguage = this.data.targetLanguage != null ? CloneService.cloneLanguage(this.data.targetLanguage) : Language.UNSPECIFIED;
+    this.stack = this.data.stack != null ? CloneService.cloneStack(this.data.stack) : new Stack();
     this.tags = this.data.tags != null ? CloneService.cloneTags(this.data.tags) : [];
   }
 
@@ -118,8 +119,8 @@ export class CardDialogComponent implements OnInit, OnDestroy {
       debounceTime(environment.TRANSLATE_DEBOUNCE_TIME),
       distinctUntilChanged()
     ).subscribe(() => {
-      if (this.targetLanguage != null) {
-        this.translateText(this.card.sides[0].title, this.targetLanguage);
+      if (this.stack.targetLanguage != null) {
+        this.translateText(this.card.sides[0].title, this.stack.targetLanguage);
       }
     });
   }

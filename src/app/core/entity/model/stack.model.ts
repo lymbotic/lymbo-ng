@@ -26,6 +26,8 @@ export class Stack extends Entity {
   sourceLanguage: Language;
   /** Target language */
   targetLanguage: Language;
+  /** Verb tenses */
+  tenses: string[];
 
   /**
    * Constructor
@@ -40,5 +42,6 @@ export class Stack extends Entity {
 
     this.sourceLanguage = Language.UNSPECIFIED;
     this.targetLanguage = Language.UNSPECIFIED;
+    this.tenses = [];
   }
 }

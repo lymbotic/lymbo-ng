@@ -18,6 +18,9 @@ import {SideFragmentComponent} from './components/card/side-fragment/side-fragme
 import {TagsNamePipeModule} from '../../ui/tags-name-pipe/tags-name-pipe.module';
 import {TagListComponent} from './components/lists/tag-list/tag-list.component';
 import {TagListItemComponent} from './components/lists/tag-list-item/tag-list-item.component';
+import {LanguageFormComponent} from './components/fragments/language-form/language-form.component';
+import {TensesFragmentComponent} from './components/fragments/tenses-fragment/tenses-fragment.component';
+import {ExamplesFragmentComponent} from './components/fragments/examples-fragment/examples-fragment.component';
 
 @NgModule({
   imports: [
@@ -39,7 +42,10 @@ import {TagListItemComponent} from './components/lists/tag-list-item/tag-list-it
     CardsComponent,
 
     // Fragments
+    ExamplesFragmentComponent,
+    LanguageFormComponent,
     SideTitleFragmentComponent,
+    TensesFragmentComponent,
 
     // Dialogs
     CardDialogComponent,
@@ -55,6 +61,8 @@ import {TagListItemComponent} from './components/lists/tag-list-item/tag-list-it
     // Cards
     CardFragmentComponent,
     SideFragmentComponent,
+    TensesFragmentComponent,
+    ExamplesFragmentComponent,
   ], entryComponents: [
     // Pages
     CardsComponent,

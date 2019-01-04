@@ -12,6 +12,13 @@ export class Card extends Entity {
   /** References to tags */
   tagIds: string[];
 
+  // Language
+
+  /** Verb tenses */
+  tenses: string[];
+  /** Word example */
+  example: string;
+
   /**
    * Constructor
    */
@@ -22,5 +29,8 @@ export class Card extends Entity {
     this.sides.push(new Side());
     this.sides.push(new Side());
     this.tagIds = [];
+
+    this.tenses = [];
+    this.example = '';
   }
 }

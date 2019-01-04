@@ -16,6 +16,8 @@
           </app-side-title-fragment>
         </div>
       </div>
+      <mat-divider></mat-divider>
+      <app-language-form [card]="card" [stack]="stack"></app-language-form>
       <app-tag-chips [tags]="tags | tagNames"
                      [tagOptions]="tagOptions"
                      [readonly]=false
