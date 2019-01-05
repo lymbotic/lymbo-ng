@@ -1,0 +1,18 @@
+<div class="tense-header flexcontainer">
+  <mat-card-subtitle>
+    {{ tenseGroup.tense }}
+  </mat-card-subtitle>
+  <div class="flexbox"></div>
+  <button mat-button class="hidden" color="warn" (click)="onDeleteTenseClicked(tenseGroup.tense)">
+    REMOVE
+  </button>
+  <button mat-button class="hidden" (click)="onClearTenseClicked(tenseGroup.tense)">
+    CLEAR
+  </button>
+</div>
+<mat-list>
+  <mat-list-item *ngFor="let form of tenseGroup.forms">
+    <input matInput type="text" autocomplete="off" [placeholder]=form.person
+           [readonly]="readonly" [ngModel]="form.value" (ngModelChange)="onFormChanged(form.person, $event)">
+  </mat-list-item>
+</mat-list>

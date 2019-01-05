@@ -1,3 +1,19 @@
-<p>
-  tenses-fragment works!
-</p>
+<mat-grid-list cols="2" rowHeight="2:1">
+  <mat-grid-tile *ngFor="let tenseGroup of tenseGroups">
+    <app-tense-fragment
+      [tenseGroup]="tenseGroup"
+      (tenseGroupChangedEventEmitter)="onTenseGroupChanged($event)"
+      (tenseDeletedEventEmitter)="onTenseDeleted($event)"
+      (tenseClearedEventEmitter)="onTenseCleared($event)"></app-tense-fragment>
+  </mat-grid-tile>
+</mat-grid-list>
+<button mat-button class="add-button" [matMenuTriggerFor]="menu">
+  ADD TENSE
+</button>
+<mat-menu #menu="matMenu">
+  <div *ngFor="let item of tensesFiltered">
+    <button mat-button [value]="item" (click)="onTenseSelected(item)">
+      {{ item }}
+    </button>
+  </div>
+</mat-menu>

@@ -9,7 +9,7 @@ import {DisplayAspect} from '../../../../../core/entity/services/stack/stack-dis
 import {Action} from '../../../../../core/entity/model/action.enum';
 import {StacksService} from '../../../../../core/entity/services/stack/stacks.service';
 import {StackType} from '../../../../../core/entity/model/stack-type.enum';
-import {Language} from '../../../../../core/entity/model/language.enum';
+import {Language} from '../../../../../core/entity/model/language/language.enum';
 
 /**
  * Displays stack dialog

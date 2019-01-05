@@ -1,0 +1,12 @@
+@import '../../../../../../flex';
+@import '../../../../../../theme';
+
+.hidden {
+  display: none;
+}
+
+.tense-header {
+  &:hover .hidden {
+    display: inline-block;
+  }
+}

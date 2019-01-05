@@ -1,5 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 
+/**
+ * Displays an example
+ */
 @Component({
   selector: 'app-examples-fragment',
   templateUrl: './examples-fragment.component.html',
@@ -7,9 +10,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ExamplesFragmentComponent implements OnInit {
 
-  constructor() { }
-
-  ngOnInit() {
+  /**
+   * Constructor
+   */
+  constructor() {
   }
 
+  //
+  // Lifecycle hooks
+  //
+
+  /**
+   * Handles on-init lifecycle phase
+   */
+  ngOnInit() {
+  }
 }

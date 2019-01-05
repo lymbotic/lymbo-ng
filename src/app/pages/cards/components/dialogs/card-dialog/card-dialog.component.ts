@@ -9,7 +9,7 @@ import {DisplayAspect} from '../../../../../core/entity/services/card/card-displ
 import {Action} from '../../../../../core/entity/model/action.enum';
 import {CardsService} from '../../../../../core/entity/services/card/cards.service';
 import {MicrosoftTranslateService} from '../../../../../core/translate/services/microsoft-translate.service';
-import {Language} from '../../../../../core/entity/model/language.enum';
+import {Language} from '../../../../../core/entity/model/language/language.enum';
 import {Subject} from 'rxjs';
 import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
 import {environment} from '../../../../../../environments/environment';

@@ -21,6 +21,7 @@ import {TagListItemComponent} from './components/lists/tag-list-item/tag-list-it
 import {LanguageFormComponent} from './components/fragments/language-form/language-form.component';
 import {TensesFragmentComponent} from './components/fragments/tenses-fragment/tenses-fragment.component';
 import {ExamplesFragmentComponent} from './components/fragments/examples-fragment/examples-fragment.component';
+import {TenseFragmentComponent} from './components/fragments/tense-fragment/tense-fragment.component';
 
 @NgModule({
   imports: [
@@ -63,6 +64,7 @@ import {ExamplesFragmentComponent} from './components/fragments/examples-fragmen
     SideFragmentComponent,
     TensesFragmentComponent,
     ExamplesFragmentComponent,
+    TenseFragmentComponent,
   ], entryComponents: [
     // Pages
     CardsComponent,

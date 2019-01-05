@@ -1,6 +1,7 @@
 import {Side} from './side.model';
 import {Entity} from './entity.model';
 import {EntityType} from './entity-type.enum';
+import {TenseGroup} from './language/tense-group';
 
 /**
  * Represents a card
@@ -15,7 +16,7 @@ export class Card extends Entity {
   // Language
 
   /** Verb tenses */
-  tenses: string[];
+  tenseGroups: TenseGroup[];
   /** Word example */
   example: string;
 
@@ -30,7 +31,7 @@ export class Card extends Entity {
     this.sides.push(new Side());
     this.tagIds = [];
 
-    this.tenses = [];
+    this.tenseGroups = [];
     this.example = '';
   }
 }

@@ -1,4 +1,4 @@
-import {Language} from '../../entity/model/language.enum';
+import {Language} from '../../entity/model/language/language.enum';
 import {EventEmitter, Injectable} from '@angular/core';
 
 /**

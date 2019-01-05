@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {Language} from '../../../../../core/entity/model/language.enum';
+import {Language} from '../../../../../core/entity/model/language/language.enum';
 
 /**
  * Displays language selection fragment

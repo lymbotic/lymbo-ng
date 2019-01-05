@@ -5,15 +5,15 @@
     *ngIf="stack.targetLanguage != null" (opened)="false" hideToggle>
     <mat-expansion-panel-header>
       <mat-panel-title>Tenses</mat-panel-title>
-      <mat-panel-description *ngIf="card.tenses.length === 0">
+      <mat-panel-description *ngIf="card.tenseGroups.length === 0">
         Add tenses
       </mat-panel-description>
-      <mat-panel-description *ngIf="card.tenses.length > 0" class="value-set">
+      <mat-panel-description *ngIf="card.tenseGroups.length > 0" class="value-set">
         Tenses are set
       </mat-panel-description>
       <mat-icon svgIcon="schedule"></mat-icon>
     </mat-expansion-panel-header>
-    <app-tenses-fragment>
+    <app-tenses-fragment [tenseGroups]="card.tenseGroups">
     </app-tenses-fragment>
   </mat-expansion-panel>
 

@@ -2,7 +2,8 @@ import {Injectable} from '@angular/core';
 import {Tag} from '../model/tag.model';
 import {Stack} from '../model/stack.model';
 import {Card} from '../model/card.model';
-import {Language} from '../model/language.enum';
+import {Language} from '../model/language/language.enum';
+import {Tense} from '../model/language/tense.enum';
 
 /**
  * Creates deep copies of objects
@@ -63,6 +64,15 @@ export class CloneService {
    * @returns {Language} cloned object
    */
   static cloneLanguage(original: Language): Language {
+    return original != null ? JSON.parse(JSON.stringify(original)) : null;
+  }
+
+  /**
+   * Clones a given array of tenses
+   * @param {Tense[]} original
+   * @returns {Tense[]} cloned object
+   */
+  static cloneTenses(original: Tense[]): Tense[] {
     return original != null ? JSON.parse(JSON.stringify(original)) : null;
   }
 }

@@ -2,7 +2,7 @@ import {Card} from './card.model';
 import {Entity} from './entity.model';
 import {EntityType} from './entity-type.enum';
 import {StackType} from './stack-type.enum';
-import {Language} from './language.enum';
+import {Language} from './language/language.enum';
 
 /**
  * Represents a stack

@@ -1,5 +1,5 @@
 import {EventEmitter, Injectable} from '@angular/core';
-import {Language} from '../../entity/model/language.enum';
+import {Language} from '../../entity/model/language/language.enum';
 import {UUID} from '../../entity/model/uuid';
 import {HttpClient} from '@angular/common/http';
 import {SettingsService} from '../../settings/services/settings.service';

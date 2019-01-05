@@ -1,6 +1,7 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Card} from '../../../../../core/entity/model/card.model';
 import {Stack} from '../../../../../core/entity/model/stack.model';
+import {TenseGroup} from '../../../../../core/entity/model/language/tense-group';
 
 /**
  * Displays form to set language properties
