@@ -10,7 +10,7 @@ import {debounceTime} from 'rxjs/operators';
   templateUrl: './side-title-fragment.component.html',
   styleUrls: ['./side-title-fragment.component.scss']
 })
-export class SideTitleFragmentComponent implements OnInit {
+export class SideTitleFragmentComponent {
 
   /** Side name to be displayed */
   @Input() sideTitle: string;
@@ -20,33 +20,6 @@ export class SideTitleFragmentComponent implements OnInit {
   @Input() readonly: false;
   /** Event emitter indicating changes in side title */
   @Output() sideTitleChangedEmitter = new EventEmitter<string>();
-
-  /** Debouncer for input field */
-  debouncer = new Subject();
-
-  //
-  // Lifecycle hooks
-  //
-
-  /**
-   * Handles on-init lifecycle phase
-   */
-  ngOnInit() {
-    this.initializeDebouncer();
-  }
-
-  //
-  // Initialization
-  //
-
-  /**
-   * Initializes debouncer
-   */
-  private initializeDebouncer() {
-    this.debouncer.pipe(
-      debounceTime(500)
-    ).subscribe((value: string) => this.sideTitleChangedEmitter.emit(value));
-  }
 
   //
   // Actions
@@ -58,31 +31,6 @@ export class SideTitleFragmentComponent implements OnInit {
    */
   onSideTitleChanged(sideTitle: string) {
     this.sideTitle = sideTitle;
-    this.debouncer.next(sideTitle);
-  }
-
-  /**
-   * Handles key up event
-   */
-  onKeyUp() {
-    this.notify();
-  }
-
-  /**
-   * Handles option selection
-   */
-  onOptionSelected() {
-    this.notify();
-  }
-
-  //
-  // Notification
-  //
-
-  /**
-   * Informs subscribers that something has changed
-   */
-  private notify() {
-    this.debouncer.next(this.sideTitle);
+    this.sideTitleChangedEmitter.emit(this.sideTitle);
   }
 }
