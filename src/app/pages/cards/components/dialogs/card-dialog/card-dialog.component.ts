@@ -38,6 +38,10 @@ export class CardDialogComponent implements OnInit, OnDestroy {
   /** Stack the card is contained in */
   stack: Stack;
 
+  /** Placeholder front */
+  placeholderFront = '';
+  /** Placeholder back */
+  placeholderBack = '';
   /** Temporarily displayed tags */
   tags: Tag[] = [];
 
@@ -74,6 +78,7 @@ export class CardDialogComponent implements OnInit, OnDestroy {
    */
   ngOnInit() {
     this.initializeData();
+    this.initializePlaceholders();
     this.initializeOptions();
     this.initializeFrontTitleChangedSubject();
   }
@@ -98,6 +103,19 @@ export class CardDialogComponent implements OnInit, OnDestroy {
     this.card = this.data.card != null ? CloneService.cloneCard(this.data.card) : new Card();
     this.stack = this.data.stack != null ? CloneService.cloneStack(this.data.stack) : new Stack();
     this.tags = this.data.tags != null ? CloneService.cloneTags(this.data.tags) : [];
+  }
+
+  /**
+   * Initializes placeholders
+   */
+  private initializePlaceholders() {
+    if (this.isLanguageStack()) {
+      this.placeholderFront = this.stack.sourceLanguage;
+      this.placeholderBack = this.stack.targetLanguage;
+    } else {
+      this.placeholderFront = 'Front';
+      this.placeholderBack = 'Back';
+    }
   }
 
   /**
@@ -234,6 +252,13 @@ export class CardDialogComponent implements OnInit, OnDestroy {
   //
   // Helpers
   //
+
+  /**
+   * Determines if this card belongs to a language stack
+   */
+  isLanguageStack(): boolean {
+    return this.stack.sourceLanguage != null;
+  }
 
   // Translation
 

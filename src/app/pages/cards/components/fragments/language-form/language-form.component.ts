@@ -2,6 +2,7 @@ import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output}
 import {Card} from '../../../../../core/entity/model/card.model';
 import {Stack} from '../../../../../core/entity/model/stack.model';
 import {TenseGroup} from '../../../../../core/entity/model/language/tense-group';
+import {Vocabel} from '../../../../../core/entity/model/language/vocabel.model';
 
 /**
  * Displays form to set language properties
@@ -51,10 +52,10 @@ export class LanguageFormComponent implements OnInit {
 
   /**
    * Handles example changes
-   * @param example example
+   * @param examples examples
    */
-  onExampleChanged(example: string) {
-    this.card.example = example;
+  onExampleChanged(examples: Vocabel[]) {
+    this.card.examples = examples;
   }
 
   //

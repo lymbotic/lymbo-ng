@@ -1,4 +1,5 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Vocabel} from '../../../../../core/entity/model/language/vocabel.model';
 
 /**
  * Displays an example
@@ -8,12 +9,40 @@ import {Component, EventEmitter, Input, Output} from '@angular/core';
   templateUrl: './examples-fragment.component.html',
   styleUrls: ['./examples-fragment.component.scss']
 })
-export class ExamplesFragmentComponent {
+export class ExamplesFragmentComponent implements OnInit {
 
-  /** Example to be displayed */
-  @Input() example: string;
-  /** Event emitter indicating change in example*/
-  @Output() exampleChangedEventEmitter = new EventEmitter<string>();
+  /** Examples to be displayed */
+  @Input() examples: Vocabel[];
+  /** Placeholder front */
+  @Input() placeholderFront = '';
+  /** Placeholder back */
+  @Input() placeholderBack = '';
+  /** Event emitter indicating change in examples */
+  @Output() exampleChangedEventEmitter = new EventEmitter<Vocabel[]>();
+
+  //
+  // Lifecycle hooks
+  //
+
+  /**
+   * Handles on-init lifecycle phase
+   */
+  ngOnInit() {
+    this.initializeExamples();
+  }
+
+  //
+  // Initialization
+  //
+
+  /**
+   * Initializes examples
+   */
+  private initializeExamples() {
+    this.examples = this.examples.filter(example => {
+      return example.source.trim() !== '' && example.target.trim() !== '';
+    });
+  }
 
   //
   // Actions
@@ -21,10 +50,28 @@ export class ExamplesFragmentComponent {
 
   /**
    * Handles example changes
-   * @param value value
    */
-  onExampleChanged(value: string) {
-    this.example = value;
-    this.exampleChangedEventEmitter.emit(this.example);
+  onExampleChanged() {
+    this.exampleChangedEventEmitter.emit(this.examples);
+  }
+
+  /**
+   * Handles click on add button
+   */
+  onAddButtonClicked() {
+    this.examples.push(new Vocabel());
+  }
+
+  //
+  // Helpers
+  //
+
+  /**
+   * Determines if there is an empty example
+   */
+  emptyExampleExists(): boolean {
+    return this.examples.length > 0 && this.examples.some(example => {
+      return example.source.trim() === '' || example.target.trim() === '';
+    });
   }
 }

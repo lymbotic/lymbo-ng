@@ -1,1 +1,18 @@
-<textarea matInput placeholder="Example" [ngModel]="example" (ngModelChange)="onExampleChanged($event)"></textarea>
+<mat-list>
+  <mat-list-item *ngFor="let example of examples">
+    <div class="example">
+      <input matInput title="example-source" autocomplete="off"
+             [placeholder]="placeholderFront"
+             [(ngModel)]="example.source"
+             (ngModelChange)="onExampleChanged()">
+      <input matInput title="example-target" class="target" autocomplete="off"
+             [placeholder]="placeholderBack"
+             [(ngModel)]="example.target"
+             (ngModelChange)="onExampleChanged()">
+    </div>
+  </mat-list-item>
+</mat-list>
+
+<button mat-button class="add-button" [disabled]="emptyExampleExists()" (click)="onAddButtonClicked()">
+  ADD EXAMPLE
+</button>
