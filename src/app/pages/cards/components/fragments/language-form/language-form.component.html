@@ -28,7 +28,7 @@
       </mat-panel-description>
       <mat-icon svgIcon="chat_bubble_outline"></mat-icon>
     </mat-expansion-panel-header>
-    <app-examples-fragment [example]="card.example">
+    <app-examples-fragment [example]="card.example" (exampleChangedEventEmitter)="onExampleChanged($event)">
     </app-examples-fragment>
   </mat-expansion-panel>
 

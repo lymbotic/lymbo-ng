@@ -49,6 +49,14 @@ export class LanguageFormComponent implements OnInit {
     this.card.tenseGroups = tenseGroups;
   }
 
+  /**
+   * Handles example changes
+   * @param example example
+   */
+  onExampleChanged(example: string) {
+    this.card.example = example;
+  }
+
   //
   // Notifications
   //
