@@ -31,6 +31,7 @@
       <mat-icon svgIcon="chat_bubble_outline"></mat-icon>
     </mat-expansion-panel-header>
     <app-examples-fragment [examples]="card.examples"
+                           [targetLanguage]="stack.targetLanguage"
                            [placeholderFront]="stack.sourceLanguage"
                            [placeholderBack]="stack.targetLanguage"
                            (exampleChangedEventEmitter)="onExampleChanged($event)">

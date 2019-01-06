@@ -4,11 +4,11 @@
       <input matInput title="example-source" autocomplete="off"
              [placeholder]="placeholderFront"
              [(ngModel)]="example.source"
-             (ngModelChange)="onExampleChanged()">
+             (ngModelChange)="onExampleSourceChanged(example)">
       <input matInput title="example-target" class="target" autocomplete="off"
              [placeholder]="placeholderBack"
              [(ngModel)]="example.target"
-             (ngModelChange)="onExampleChanged()">
+             (ngModelChange)="onExampleTargetChanged()">
     </div>
   </mat-list-item>
 </mat-list>
