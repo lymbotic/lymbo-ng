@@ -12,7 +12,7 @@
 </button>
 <mat-menu #menu="matMenu">
   <div *ngFor="let item of tensesFiltered">
-    <button mat-button [value]="item" (click)="onTenseSelected(item)">
+    <button mat-menu-item class="tense-button" [value]="item" (click)="onTenseSelected(item)">
       {{ item }}
     </button>
   </div>

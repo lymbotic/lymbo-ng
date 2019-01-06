@@ -1,8 +1,9 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {TenseGroup} from '../../../../../core/entity/model/language/tense-group';
 import {Tense} from '../../../../../core/entity/model/language/tense.enum';
 import {GrammaticalPerson} from '../../../../../core/entity/model/language/grammatical-person.enum';
 import {Form} from '../../../../../core/entity/model/language/form.model';
+import {CloneService} from '../../../../../core/entity/services/clone.service';
 
 /**
  * Displays tenses
@@ -18,6 +19,8 @@ export class TensesFragmentComponent implements OnInit {
   @Input() tenseGroups: TenseGroup[];
   /** Readonly */
   @Input() readonly = false;
+  /** Event emitter indicating change in tense groups */
+  @Output() tenseGroupsChangedEventEmitter = new EventEmitter<TenseGroup[]>();
 
   /** Available tenses */
   tenses = Object.keys(Tense).map(key => Tense[key]);
@@ -32,7 +35,30 @@ export class TensesFragmentComponent implements OnInit {
    * Handles on-init lifecycle phase
    */
   ngOnInit() {
+    this.initializeTenseGroups();
     this.initializeTenses();
+  }
+
+  //
+  // Initialization
+  //
+
+  /**
+   * Initializes tense groups
+   */
+  private initializeTenseGroups() {
+    this.tenseGroups = CloneService.cloneTenseGroups(this.tenseGroups);
+  }
+
+  /**
+   * Initializes available tenses
+   */
+  private initializeTenses() {
+    this.tensesFiltered = this.tenses.filter(tense => {
+      return tense !== Tense.UNDEFINED && (this.tenseGroups == null || !this.tenseGroups.some(tenseGroup => {
+        return tenseGroup.tense === tense;
+      }));
+    });
   }
 
   //
@@ -49,6 +75,8 @@ export class TensesFragmentComponent implements OnInit {
         tg.forms = tenseGroup.forms;
       }
     });
+
+    this.tenseGroupsChangedEventEmitter.emit(this.tenseGroups);
   }
 
   /**
@@ -59,6 +87,9 @@ export class TensesFragmentComponent implements OnInit {
     this.tenseGroups = this.tenseGroups.filter(tenseGroup => {
       return tenseGroup.tense !== tense;
     });
+
+    this.tenseGroupsChangedEventEmitter.emit(this.tenseGroups);
+    this.initializeTenses();
   }
 
   /**
@@ -73,6 +104,8 @@ export class TensesFragmentComponent implements OnInit {
         });
       }
     });
+
+    this.tenseGroupsChangedEventEmitter.emit(this.tenseGroups);
   }
 
   /**
@@ -80,7 +113,7 @@ export class TensesFragmentComponent implements OnInit {
    */
   onTenseSelected(tense: Tense) {
     switch (tense) {
-      case Tense.PRESENT_TENSE: {
+      case Tense.PRESENT: {
         this.initializeTenseGroupWithPersons(tense);
         break;
       }
@@ -154,16 +187,5 @@ export class TensesFragmentComponent implements OnInit {
     tenseGroup.forms.push(new Form(GrammaticalPerson.PLURAL, ''));
 
     this.tenseGroups.push(tenseGroup);
-  }
-
-  /**
-   * Initializes available tenses
-   */
-  private initializeTenses() {
-    this.tensesFiltered = this.tenses.filter(tense => {
-      return tense !== Tense.UNDEFINED && !this.tenseGroups.some(tenseGroup => {
-        return tenseGroup.tense === tense;
-      });
-    });
   }
 }

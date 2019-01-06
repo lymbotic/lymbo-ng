@@ -1,7 +1,7 @@
 export enum Tense {
   UNDEFINED = '???',
 
-  PRESENT_TENSE = 'Present tense',
+  PRESENT = 'Present',
   INDEFINIDO = 'Indefinido',
   IMPERFECT = 'Imperfect',
   FUTURE = 'Future',

@@ -4,6 +4,7 @@ import {Stack} from '../model/stack.model';
 import {Card} from '../model/card.model';
 import {Language} from '../model/language/language.enum';
 import {Tense} from '../model/language/tense.enum';
+import {TenseGroup} from '../model/language/tense-group';
 
 /**
  * Creates deep copies of objects
@@ -73,6 +74,15 @@ export class CloneService {
    * @returns {Tense[]} cloned object
    */
   static cloneTenses(original: Tense[]): Tense[] {
+    return original != null ? JSON.parse(JSON.stringify(original)) : null;
+  }
+
+  /**
+   * Clones a given array of tenseGroups
+   * @param {TenseGroup[]} original
+   * @returns {TenseGroup[]} cloned object
+   */
+  static cloneTenseGroups(original: TenseGroup[]): TenseGroup[] {
     return original != null ? JSON.parse(JSON.stringify(original)) : null;
   }
 }
