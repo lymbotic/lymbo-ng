@@ -4,6 +4,7 @@ import {SettingsModule} from './settings/settings.module';
 import {EntityModule} from './entity/entity.module';
 import {UiModule} from './ui/ui.module';
 import {TranslateModule} from './translate/translate.module';
+import {UtilModule} from './common/util.module';
 
 @NgModule({
   imports: [
@@ -12,7 +13,8 @@ import {TranslateModule} from './translate/translate.module';
     EntityModule,
     SettingsModule,
     TranslateModule,
-    UiModule
+    UiModule,
+    UtilModule
   ],
   declarations: []
 })

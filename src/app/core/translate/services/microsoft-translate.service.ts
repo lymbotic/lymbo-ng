@@ -5,8 +5,7 @@ import {HttpClient} from '@angular/common/http';
 import {SettingsService} from '../../settings/services/settings.service';
 import {el} from '@angular/platform-browser/testing/src/browser_util';
 import {SettingType} from '../../settings/model/setting-type.enum';
-import {fromEvent, merge, Observable, of} from 'rxjs';
-import {mapTo} from 'rxjs/operators';
+import {ConnectionService} from '../../common/services/connection.service';
 
 /**
  * Handles calls to Microsoft Text Translation API
@@ -155,18 +154,15 @@ export class MicrosoftTranslateService {
     }
   }
 
-  private static isOnline(): Observable<boolean> {
-    return merge(of(navigator.onLine)),
-      fromEvent(window, 'online').pipe(mapTo(true)),
-      fromEvent(window, 'offline').pipe(mapTo(false));
-  }
-
   /**
    * Constructor
+   * @param connectionService connection service
    * @param settingsService settings service
    * @param httpClient http client
    */
-  constructor(private settingsService: SettingsService, private httpClient: HttpClient) {
+  constructor(private connectionService: ConnectionService,
+              private settingsService: SettingsService,
+              private httpClient: HttpClient) {
   }
 
   /**
@@ -176,30 +172,31 @@ export class MicrosoftTranslateService {
    * @param translationEmitter translation emitter
    */
   translate(text: string, target: Language, translationEmitter: EventEmitter<string>) {
-    MicrosoftTranslateService.isOnline().subscribe(online => {
-      if (online) {
-        const languageCode = MicrosoftTranslateService.getLanguageCode(target);
-        const apiKey = this.settingsService.settings.get(SettingType.API_KEY_MICROSOFT_TEXT_TRANSLATE);
 
-        if (text != null && languageCode != null && apiKey != null && translationEmitter != null) {
-          const options = {
-            method: 'POST',
-            headers: {
-              'Ocp-Apim-Subscription-Key': apiKey.value,
-              'Content-type': 'application/json',
-              'X-ClientTraceId': new UUID().toString()
-            },
-            json: true,
-          };
+    if (ConnectionService.isOnline()) {
+      const languageCode = MicrosoftTranslateService.getLanguageCode(target);
+      const apiKey = this.settingsService.settings.get(SettingType.API_KEY_MICROSOFT_TEXT_TRANSLATE);
 
-          const ob = this.httpClient.post(`https://api.cognitive.microsofttranslator.com/translate?api-version=3.0&to=${languageCode}`, [{
-            'text': text
-          }], options);
-          ob.subscribe(value => {
-            translationEmitter.emit(value[0]['translations'][0]['text']);
-          });
-        }
+      if (text != null && languageCode != null && apiKey != null && translationEmitter != null) {
+        const options = {
+          method: 'POST',
+          headers: {
+            'Ocp-Apim-Subscription-Key': apiKey.value,
+            'Content-type': 'application/json',
+            'X-ClientTraceId': new UUID().toString()
+          },
+          json: true,
+        };
+
+        const ob = this.httpClient.post(`https://api.cognitive.microsofttranslator.com/translate?api-version=3.0&to=${languageCode}`, [{
+          'text': text
+        }], options);
+        ob.subscribe(value => {
+          translationEmitter.emit(value[0]['translations'][0]['text']);
+        });
       }
-    });
+    } else {
+      console.error('Client is offline');
+    }
   }
 }
