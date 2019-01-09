@@ -1,0 +1,13 @@
+<mat-list>
+  <mat-list-item *ngFor="let example of examples">
+    <app-example-fragment [example]="example"
+                          [placeholderFront]="placeholderFront"
+                          [placeholderBack]="placeholderBack"
+                          (exampleSourceChangedEventEmitter)="onExampleSourceChanged($event)"
+                          (exampleTargetChangedEventEmitter)="onExampleTargetChanged()"></app-example-fragment>
+  </mat-list-item>
+</mat-list>
+
+<button mat-button class="add-button" [disabled]="emptyExampleExists()" (click)="onAddButtonClicked()">
+  ADD EXAMPLE
+</button>

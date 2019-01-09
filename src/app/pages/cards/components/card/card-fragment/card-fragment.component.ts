@@ -6,6 +6,8 @@ import {SnackbarService} from '../../../../../core/ui/services/snackbar.service'
 import {CardsService} from '../../../../../core/entity/services/card/cards.service';
 import {Tag} from '../../../../../core/entity/model/tag.model';
 import {Action} from '../../../../../core/entity/model/action.enum';
+import {TenseGroup} from '../../../../../core/entity/model/language/tense-group';
+import {Vocabel} from '../../../../../core/entity/model/language/vocabel.model';
 
 /**
  * Displays a card
@@ -35,6 +37,16 @@ export class CardFragmentComponent implements OnInit {
   /** Active side */
   activeSide: Side;
 
+  /** Index of active side */
+  activeTenseGroupIndex = 0;
+  /** Active tense group */
+  activeTenseGroup: TenseGroup;
+
+  /** Index of active side */
+  activeExampleIndex = 0;
+  /** Active example */
+  activeExample: Vocabel;
+
   /**
    * Constructor
    * @param cardsService card service
@@ -55,6 +67,7 @@ export class CardFragmentComponent implements OnInit {
    */
   ngOnInit() {
     this.activeSide = this.card.sides[this.activeSideIndex];
+    this.activeTenseGroup = null;
   }
 
   //
@@ -80,11 +93,74 @@ export class CardFragmentComponent implements OnInit {
    * Flips card to the next side
    */
   private flipCard() {
-    this.activeSideIndex++;
-    if (this.activeSideIndex >= this.card.sides.length) {
-      this.activeSideIndex = 0;
-    }
+    const totalSides = this.card.sides != null ? this.card.sides.length : 0;
+    const totalTenseGroups = this.card.tenseGroups != null ? this.card.tenseGroups.length : 0;
+    const totalExamples = this.card.examples != null ? this.card.examples.length : 0;
 
+    // Increase index and loop if needed
+    if (this.activeSide != null) {
+      this.activeSideIndex++;
+      this.activeSide = this.card.sides[this.activeSideIndex];
+
+      if (this.activeSideIndex >= totalSides) {
+        if (this.card.tenseGroups != null && this.card.tenseGroups.length > 0) {
+          this.switchToTenses();
+        } else if (this.card.examples != null && this.card.examples.length > 0) {
+          this.switchToExamples();
+        } else if (this.card.sides != null && this.card.sides.length > 0) {
+          this.switchToSides();
+        }
+      }
+    } else if (this.activeTenseGroup != null) {
+      this.activeTenseGroupIndex++;
+      this.activeTenseGroup = this.card.tenseGroups[this.activeTenseGroupIndex];
+
+      if (this.activeTenseGroupIndex >= totalTenseGroups) {
+        if (this.card.examples != null && this.card.examples.length > 0) {
+          this.switchToExamples();
+        } else if (this.card.sides != null && this.card.sides.length > 0) {
+          this.switchToSides();
+        }
+      }
+    } else if (this.activeExample != null) {
+      this.activeExampleIndex++;
+      this.activeExample = this.card.examples[this.activeExampleIndex];
+
+      if (this.activeExampleIndex >= totalExamples) {
+        if (this.card.sides != null && this.card.sides.length > 0) {
+          this.switchToSides();
+        }
+      }
+    }
+  }
+
+  /**
+   * Switches to tenses
+   */
+  private switchToTenses() {
+    this.activeTenseGroupIndex = 0;
+    this.activeSide = null;
+    this.activeTenseGroup = this.card.tenseGroups[this.activeTenseGroupIndex];
+    this.activeExample = null;
+  }
+
+  /**
+   * Switches to examples
+   */
+  private switchToExamples() {
+    this.activeExampleIndex = 0;
+    this.activeSide = null;
+    this.activeTenseGroup = null;
+    this.activeExample = this.card.examples[this.activeExampleIndex];
+  }
+
+  /**
+   * Switches to sides
+   */
+  private switchToSides() {
+    this.activeSideIndex = 0;
     this.activeSide = this.card.sides[this.activeSideIndex];
+    this.activeTenseGroup = null;
+    this.activeExample = null;
   }
 }

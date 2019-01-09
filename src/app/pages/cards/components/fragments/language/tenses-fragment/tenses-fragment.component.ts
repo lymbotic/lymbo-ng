@@ -1,9 +1,9 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {TenseGroup} from '../../../../../core/entity/model/language/tense-group';
-import {Tense} from '../../../../../core/entity/model/language/tense.enum';
-import {GrammaticalPerson} from '../../../../../core/entity/model/language/grammatical-person.enum';
-import {Form} from '../../../../../core/entity/model/language/form.model';
-import {CloneService} from '../../../../../core/entity/services/clone.service';
+import {TenseGroup} from '../../../../../../core/entity/model/language/tense-group';
+import {Tense} from '../../../../../../core/entity/model/language/tense.enum';
+import {CloneService} from '../../../../../../core/entity/services/clone.service';
+import {Form} from '../../../../../../core/entity/model/language/form.model';
+import {GrammaticalPerson} from '../../../../../../core/entity/model/language/grammatical-person.enum';
 
 /**
  * Displays tenses

@@ -3,10 +3,10 @@
     {{ tenseGroup.tense }}
   </button>
   <div class="flexbox"></div>
-  <button mat-button class="hidden" color="warn" (click)="onDeleteTenseClicked(tenseGroup.tense)">
+  <button *ngIf="!readonly" mat-button class="hidden" color="warn" (click)="onDeleteTenseClicked(tenseGroup.tense)">
     REMOVE
   </button>
-  <button mat-button class="hidden" (click)="onClearTenseClicked(tenseGroup.tense)">
+  <button *ngIf="!readonly" mat-button class="hidden" (click)="onClearTenseClicked(tenseGroup.tense)">
     CLEAR
   </button>
 </div>

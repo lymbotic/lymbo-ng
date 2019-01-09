@@ -1,0 +1,13 @@
+@import '../../../../../../../theme';
+
+.example {
+  margin-bottom: 10px;
+}
+
+.source {
+  color: mat-color($mat-grey, 900) !important;
+}
+
+.target {
+  color: mat-color($mat-grey, 500) !important;
+}

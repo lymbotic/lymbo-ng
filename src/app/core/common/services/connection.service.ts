@@ -1,6 +1,4 @@
-import {Injectable, Renderer, Renderer2} from '@angular/core';
-import {Observable} from 'rxjs';
-import {Renderer3} from '@angular/core/src/render3/interfaces/renderer';
+import {Injectable} from '@angular/core';
 
 /**
  * Checks internet connection
@@ -10,6 +8,9 @@ import {Renderer3} from '@angular/core/src/render3/interfaces/renderer';
 })
 export class ConnectionService {
 
+  /**
+   * Determines if client is online
+   */
   static isOnline(): boolean {
     return navigator.onLine;
   }

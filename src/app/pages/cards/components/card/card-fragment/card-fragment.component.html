@@ -1,17 +1,67 @@
 <div [class]="themeClass">
-  <mat-card>
-    <app-side-fragment [card]="card" [sideIndex]="activeSideIndex" [side]="activeSide"
-                       (sideClickedEmitter)="onCardClicked($event)"></app-side-fragment>
+  <mat-card class="container">
 
-    <mat-card-footer>
+      <!-- Menu -->
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="onCardClicked(actionType.OPEN_DIALOG_UPDATE)">
+          <mat-icon svgIcon="mode_edit"></mat-icon>
+          <span>Update</span>
+        </button>
+        <button mat-menu-item (click)="onCardClicked(actionType.DELETE)">
+          <mat-icon svgIcon="delete"></mat-icon>
+          <span>Delete</span>
+        </button>
+      </mat-menu>
+
       <div class="flexcontainer">
-        <div class="tags-holder"
-             (click)="onCardClicked(actionType.NONE)">
+        <div class="card-main-content" (click)="onCardClicked(actionType.NONE)">
+          <!-- Normal side -->
+          <mat-card-header>
+            <div *ngIf="activeSide != null">
+              <img *ngIf="activeSide.imageUrl !== ''" mat-card-image [attr.src]="activeSide.imageUrl">
+              <mat-card-title class="side-title">{{ activeSide.title }}</mat-card-title>
+            </div>
+          </mat-card-header>
+          <!-- Tense side -->
+          <app-tense-fragment *ngIf="activeTenseGroup != null"
+                              [tenseGroup]="activeTenseGroup" [readonly]="true">
+          </app-tense-fragment>
+          <!-- Examples -->
+          <app-example-fragment *ngIf="activeExample != null" class="side-example"
+                                [example]="activeExample" [readonly]="true">
+          </app-example-fragment>
+        </div>
+        <div class="flexbox"></div>
+        <button mat-icon-button [matMenuTriggerFor]="menu" id="more" class="hidden">
+          <mat-icon svgIcon="more_vert"></mat-icon>
+        </button>
+      </div>
+      <mat-card-footer>
+        <div class="flexcontainer">
+          <div class="tags-holder"
+               (click)="onCardClicked(actionType.NONE)">
           <span *ngFor="let t of card.tagIds">
             <span class="tag" *ngIf="tags.get(t) != null"><label class="tag-label">{{ tags.get(t).name }}</label></span>
             </span>
+          </div>
         </div>
-      </div>
-    </mat-card-footer>
+      </mat-card-footer>
+      <mat-card-actions *ngIf="activeSide === null || activeSideIndex !== 0" align="right">
+        <button mat-button
+                matTooltip="Put card to end"
+                matTooltipPosition="above"
+                matTooltipShowDelay="250"
+                (click)="onCardClicked(actionType.PUT_TO_END)">
+          <mat-icon svgIcon="undo"></mat-icon>
+        </button>
+        <button mat-button
+                matTooltip="Put card aside"
+                matTooltipPosition="above"
+                matTooltipShowDelay="250"
+                (click)="onCardClicked(actionType.PUT_ASIDE)">
+          <mat-icon svgIcon="check"></mat-icon>
+        </button>
+      </mat-card-actions>
+
   </mat-card>
 </div>

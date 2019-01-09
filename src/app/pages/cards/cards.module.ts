@@ -14,14 +14,14 @@ import {NewFeaturesDialogModule} from '../../ui/new-features-dialog/new-features
 import {SideTitleFragmentComponent} from './components/fragments/side-title-fragment/side-title-fragment.component';
 import {CardsComponent} from './pages/cards/cards.component';
 import {TagChipsModule} from '../../ui/tag-chips/tag-chips.module';
-import {SideFragmentComponent} from './components/card/side-fragment/side-fragment.component';
 import {TagsNamePipeModule} from '../../ui/tags-name-pipe/tags-name-pipe.module';
 import {TagListComponent} from './components/lists/tag-list/tag-list.component';
 import {TagListItemComponent} from './components/lists/tag-list-item/tag-list-item.component';
-import {LanguageFormComponent} from './components/fragments/language-form/language-form.component';
-import {TensesFragmentComponent} from './components/fragments/tenses-fragment/tenses-fragment.component';
-import {ExamplesFragmentComponent} from './components/fragments/examples-fragment/examples-fragment.component';
-import {TenseFragmentComponent} from './components/fragments/tense-fragment/tense-fragment.component';
+import {ExampleFragmentComponent} from './components/fragments/language/example-fragment/example-fragment.component';
+import {ExamplesFragmentComponent} from './components/fragments/language/examples-fragment/examples-fragment.component';
+import {LanguageFormComponent} from './components/fragments/language/language-form/language-form.component';
+import {TensesFragmentComponent} from './components/fragments/language/tenses-fragment/tenses-fragment.component';
+import {TenseFragmentComponent} from './components/fragments/language/tense-fragment/tense-fragment.component';
 
 @NgModule({
   imports: [
@@ -61,10 +61,11 @@ import {TenseFragmentComponent} from './components/fragments/tense-fragment/tens
 
     // Cards
     CardFragmentComponent,
-    SideFragmentComponent,
-    TensesFragmentComponent,
-    ExamplesFragmentComponent,
+
     TenseFragmentComponent,
+    TensesFragmentComponent,
+    ExampleFragmentComponent,
+    ExamplesFragmentComponent,
   ], entryComponents: [
     // Pages
     CardsComponent,

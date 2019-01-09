@@ -1,20 +1,72 @@
 @import '../../../../../../flex';
 @import '../../../../../../sizes';
+@import '../../../../../../flex';
 
-mat-card {
-  margin: 15px auto;
+//
+// Custom
+//
 
-  @media #{$breakpoint-small} {
-    width: 100%;
-    -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
-    -moz-box-sizing: border-box; /* Firefox, other Gecko */
-    box-sizing: border-box; /* Opera/IE 8+ */
-  }
-  @media #{$breakpoint-medium} {
-    width: 300px;
-  }
-  @media #{$breakpoint-large} {
-    width: 300px;
+.container {
+  min-height: 110px;
+}
+
+.card-header-content {
+  padding: 5px;
+  width: 100%;
+}
+
+.card-main-content {
+  min-height: 70px;
+}
+
+.side-title {
+  font-family: 'Roboto Slab', serif;
+  font-weight: 700;
+  font-size: 1.8em;
+}
+
+.side-example {
+  font-family: 'Roboto Slab', serif;
+  font-weight: 700;
+  font-size: 1.2em;
+}
+
+.label {
+  display: block;
+  color: rgba(0, 0, 0, .38);
+  padding-bottom: 5px;
+  font-size: 75%;
+  /*-webkit-transform: translateX(-20%) scale(.75);
+  transform: translateX(-12%) scale(.75);
+  width: 133.33333%;*/
+}
+
+#more {
+  float: right;
+}
+
+hr {
+  clear: left;
+  border: solid #444 1px;
+}
+
+.label {
+  display: block;
+  color: rgba(0, 0, 0, .38);
+  padding-bottom: 5px;
+  font-size: 75%;
+  /*-webkit-transform: translateX(-20%) scale(.75);
+  transform: translateX(-12%) scale(.75);
+  width: 133.33333%;*/
+}
+
+.hidden {
+  display: none;
+}
+
+.side {
+  &:hover .hidden {
+    display: inline-block;
   }
 }
 
@@ -46,7 +98,26 @@ mat-card {
   display: none;
 }
 
+//
+// Material
+//
+
 mat-card {
+  margin: 15px auto;
+
+  @media #{$breakpoint-small} {
+    width: 100%;
+    -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box; /* Firefox, other Gecko */
+    box-sizing: border-box; /* Opera/IE 8+ */
+  }
+  @media #{$breakpoint-medium} {
+    width: 300px;
+  }
+  @media #{$breakpoint-large} {
+    width: 300px;
+  }
+
   &:hover .hidden {
     display: inline-block;
   }
@@ -64,26 +135,6 @@ mat-card-content {
 mat-card-actions {
   padding: 0;
   margin: 0;
-}
-
-.card-header-content {
-  padding: 5px;
-  width: 100%;
-}
-
-hr {
-  clear: left;
-  border: solid #444 1px;
-}
-
-.label {
-  display: block;
-  color: rgba(0, 0, 0, .38);
-  padding-bottom: 5px;
-  font-size: 75%;
-  /*-webkit-transform: translateX(-20%) scale(.75);
-  transform: translateX(-12%) scale(.75);
-  width: 133.33333%;*/
 }
 
 .mat-card-actions .mat-button:first-child, .mat-card-actions .mat-raised-button:first-child {

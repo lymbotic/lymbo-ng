@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {Vocabel} from '../../../../../core/entity/model/language/vocabel.model';
-import {Language} from '../../../../../core/entity/model/language/language.enum';
-import {MicrosoftTranslateService} from '../../../../../core/translate/services/microsoft-translate.service';
+import {Vocabel} from '../../../../../../core/entity/model/language/vocabel.model';
+import {Language} from '../../../../../../core/entity/model/language/language.enum';
+import {MicrosoftTranslateService} from '../../../../../../core/translate/services/microsoft-translate.service';
 
 /**
  * Displays an example
@@ -66,14 +66,14 @@ export class ExamplesFragmentComponent implements OnInit {
    */
   onExampleSourceChanged(example: Vocabel) {
     this.translateExample(example, this.targetLanguage);
-    this.exampleChangedEventEmitter.emit(this.examples);
+    this.notify();
   }
 
   /**
    * Handles example changes
    */
   onExampleTargetChanged() {
-    this.exampleChangedEventEmitter.emit(this.examples);
+    this.notify();
   }
 
   /**
@@ -107,9 +107,20 @@ export class ExamplesFragmentComponent implements OnInit {
     const translationEmitter: EventEmitter<string> = new EventEmitter<string>();
     translationEmitter.subscribe(value => {
       example.target = value;
-      this.exampleChangedEventEmitter.emit(this.examples);
+      this.notify();
     });
 
     this.microsoftTranslateService.translate(example.source, targetLanguage, translationEmitter);
+  }
+
+  //
+  // Notifications
+  //
+
+  /**
+   * Informs subscribers that something has changed
+   */
+  private notify() {
+    this.exampleChangedEventEmitter.emit(this.examples);
   }
 }

@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Inject, OnDestroy, OnInit} from '@angular/core';
+import {Component, EventEmitter, Inject, OnDestroy, OnInit, Renderer} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import {DialogMode} from '../../../../../core/entity/model/dialog-mode.enum';
 import {Card} from '../../../../../core/entity/model/card.model';
@@ -58,12 +58,14 @@ export class CardDialogComponent implements OnInit, OnDestroy {
    * Constructor
    * @param cardsService cards service
    * @param microsoftTranslateService Microsoft translate service
+   * @param renderer renderer
    * @param suggestionService suggestion service
    * @param dialogRef dialog reference
    * @param data dialog data
    */
   constructor(private cardsService: CardsService,
               private microsoftTranslateService: MicrosoftTranslateService,
+              private renderer: Renderer,
               private suggestionService: SuggestionService,
               public dialogRef: MatDialogRef<CardDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any) {
