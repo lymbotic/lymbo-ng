@@ -84,6 +84,7 @@ export class MaterialIconService {
     icons.push(new Icon(IconTopic.EDITOR, 'mode_edit', 'ic_mode_edit_24px.svg'));
     icons.push(new Icon(IconTopic.FILE, 'file_download', 'ic_file_download_24px.svg'));
     icons.push(new Icon(IconTopic.FILE, 'file_upload', 'ic_file_upload_24px.svg'));
+    icons.push(new Icon(IconTopic.HARDWARE, 'keyboard_tab', 'ic_keyboard_tab_24px.svg'));
     icons.push(new Icon(IconTopic.IMAGE, 'crop_free', 'ic_crop_free_24px.svg'));
     icons.push(new Icon(IconTopic.MAPS, 'layers_clear', 'ic_layers_clear_24px.svg'));
     icons.push(new Icon(IconTopic.NAVIGATION, 'arrow_back', 'ic_arrow_back_24px.svg'));
