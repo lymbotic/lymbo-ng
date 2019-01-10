@@ -38,6 +38,7 @@ Share the cards you created with friends.
 | 0.16 | Randomize cards |
 | 0.17 | Language stacks |
 | 0.18 | Auto-translate cards |
+| 0.19 | Vocabulary cards |
 
 ### Planned features
 
