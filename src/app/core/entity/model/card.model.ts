@@ -14,6 +14,10 @@ export class Card extends Entity {
   /** References to tags */
   tagIds: string[];
 
+  // Preferences
+
+  favorite: boolean;
+
   // Language
 
   /** Verb tenses */
@@ -31,6 +35,8 @@ export class Card extends Entity {
     this.sides.push(new Side());
     this.sides.push(new Side());
     this.tagIds = [];
+
+    this.favorite = false;
 
     this.tenseGroups = [];
     this.examples = [];

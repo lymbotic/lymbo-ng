@@ -69,6 +69,8 @@ export class MaterialIconService {
     const icons: Icon[] = [];
     icons.push(new Icon(IconTopic.ACTION, 'android', 'ic_android_24px.svg'));
     icons.push(new Icon(IconTopic.ACTION, 'delete', 'ic_delete_24px.svg'));
+    icons.push(new Icon(IconTopic.ACTION, 'favorite', 'ic_favorite_24px.svg'));
+    icons.push(new Icon(IconTopic.ACTION, 'favorite_border', 'ic_favorite_border_24px.svg'));
     icons.push(new Icon(IconTopic.ACTION, 'label_outline', 'ic_label_outline_24px.svg'));
     icons.push(new Icon(IconTopic.ACTION, 'search', 'ic_search_24px.svg'));
     icons.push(new Icon(IconTopic.ACTION, 'settings', 'ic_settings_24px.svg'));

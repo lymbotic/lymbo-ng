@@ -3,6 +3,14 @@
 
     <!-- Menu -->
     <mat-menu #menu="matMenu">
+      <button mat-menu-item *ngIf="!card.favorite" (click)="onCardClicked(actionType.SET_FAVORITE)">
+        <mat-icon svgIcon="favorite"></mat-icon>
+        <span>Add to favorites</span>
+      </button>
+      <button mat-menu-item *ngIf="card.favorite" (click)="onCardClicked(actionType.UNSET_FAVORITE)">
+        <mat-icon svgIcon="favorite_border"></mat-icon>
+        <span>Remove from favorites</span>
+      </button>
       <button mat-menu-item (click)="onCardClicked(actionType.OPEN_DIALOG_UPDATE)">
         <mat-icon svgIcon="mode_edit"></mat-icon>
         <span>Update</span>
@@ -37,12 +45,14 @@
       </button>
     </div>
     <mat-card-footer>
-      <div class="flexcontainer">
-        <div class="tags-holder"
-             (click)="onCardClicked(actionType.NONE)">
+      <div class="flexcontainer holder">
+        <div class="group">
+          <mat-icon *ngIf="card.favorite" svgIcon="favorite" class="favorite-icon"></mat-icon>
+        </div>
+        <div (click)="onCardClicked(actionType.NONE)">
           <span *ngFor="let t of card.tagIds">
             <span class="tag" *ngIf="tags.get(t) != null"><label class="tag-label">{{ tags.get(t).name }}</label></span>
-            </span>
+          </span>
         </div>
       </div>
     </mat-card-footer>

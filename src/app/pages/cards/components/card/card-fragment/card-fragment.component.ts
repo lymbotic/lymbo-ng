@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {MatDialog} from '@angular/material';
 import {Card} from '../../../../../core/entity/model/card.model';
 import {Side} from '../../../../../core/entity/model/side.model';
@@ -16,6 +16,7 @@ import {Vocabel} from '../../../../../core/entity/model/language/vocabel.model';
   selector: 'app-card-fragment',
   templateUrl: './card-fragment.component.html',
   styleUrls: ['./card-fragment.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CardFragmentComponent implements OnInit {
 

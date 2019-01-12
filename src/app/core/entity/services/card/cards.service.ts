@@ -79,17 +79,7 @@ export class CardsService {
     return new Promise(() => {
       if (card != null) {
 
-        // Update related objects
-        this.updateRelatedTags(card.tagIds);
         this.addCardToStack(this.stack, card);
-
-        // Create card
-        /*
-        return this.pouchDBService.upsert(card.id, card).then(() => {
-          this.cards.set(card.id, card);
-          this.notify();
-        });
-        */
       }
     });
   }
@@ -101,20 +91,10 @@ export class CardsService {
   public updateCard(card: Card): Promise<any> {
     return new Promise(() => {
       if (card != null) {
+        // Set modification date
         card.modificationDate = new Date();
 
-        // Update related objects
-        this.updateRelatedTags(card.tagIds);
         this.updateCardOfStack(this.stack, card);
-
-
-        // Update card
-        /*
-        return this.pouchDBService.upsert(card.id, card).then(() => {
-          this.cards.set(card.id, card);
-          this.notify();
-        });
-        */
       }
     });
   }
@@ -126,28 +106,21 @@ export class CardsService {
   public deleteCard(card: Card): Promise<any> {
     return new Promise(() => {
       if (card != null) {
-
         this.removeCardFromStack(this.stack, card);
-
-        // Delete card
-        /*
-        return this.pouchDBService.remove(card.id, card).then(() => {
-          this.cards.delete(card.id);
-          this.notify();
-        });
-        */
       }
     });
   }
 
   /**
    * Updates related tags
-   * @param tagIds tag IDs
+   * @param card card
    */
-  private updateRelatedTags(tagIds: string[]) {
-    tagIds.forEach(id => {
-      const tag = this.tagService.getTagById(id);
-      this.tagService.updateTag(tag, false).then(() => {
+  public updateRelatedTags(card: Card): Promise<any> {
+    return new Promise(() => {
+      card.tagIds.forEach(id => {
+        const tag = this.tagService.getTagById(id);
+        this.tagService.updateTag(tag, false).then(() => {
+        });
       });
     });
   }
@@ -211,12 +184,20 @@ export class CardsService {
   public putCardToEnd(stack: Stack, card: Card): Promise<any> {
     return new Promise(() => {
       card.modificationDate = new Date();
-
       this.updateCard(card);
+    });
+  }
 
-      this.updateRelatedStack(stack).then(() => {
-        this.notify();
-      });
+  /**
+   * Toggles favorite
+   * @param stack stack
+   * @param card card
+   * @param favorite favorite
+   */
+  public setFavorite(stack: Stack, card: Card, favorite: boolean) {
+    return new Promise(() => {
+      card.favorite = favorite;
+      this.updateCard(card);
     });
   }
 
@@ -261,7 +242,7 @@ export class CardsService {
    * @param cardB seconds card
    */
   public sortCards(cardA: Card, cardB: Card) {
-    return new Date(cardA.modificationDate).getTime() - new Date(cardB.modificationDate).getTime();
+    return new Date(cardA.creationDate).getTime() - new Date(cardB.creationDate).getTime();
   }
 
   //

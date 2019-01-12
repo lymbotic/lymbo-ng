@@ -149,8 +149,6 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
    * Handles on-init lifecycle phase
    */
   ngOnInit() {
-    this.tagsMap = new Map(this.tagService.tags);
-
     this.initializeParameters();
     this.initializeResolvedData();
     this.initializeStackSubscription();
@@ -489,6 +487,9 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
         // Create card itself
         this.cardsService.createCard(card).then(() => {
           this.snackbarService.showSnackbar('Added card');
+          this.cardsService.updateRelatedTags(card).then(() => {
+            this.snackbarService.showSnackbar('Updated tags');
+          });
         });
         break;
       }
@@ -499,6 +500,9 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
         // Update card itself
         this.cardsService.updateCard(card).then(() => {
           this.snackbarService.showSnackbar('Updated card');
+          this.cardsService.updateRelatedTags(card).then(() => {
+            this.snackbarService.showSnackbar('Updated tags');
+          });
         });
         break;
       }
@@ -512,6 +516,18 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
       case Action.PUT_TO_END: {
         this.cardsService.putCardToEnd(this.stack, card).then(() => {
           this.snackbarService.showSnackbar('Put card to end');
+        });
+        break;
+      }
+      case Action.SET_FAVORITE: {
+        this.cardsService.setFavorite(this.stack, card, true).then(() => {
+          this.snackbarService.showSnackbar('Set favorite');
+        });
+        break;
+      }
+      case Action.UNSET_FAVORITE: {
+        this.cardsService.setFavorite(this.stack, card, false).then(() => {
+          this.snackbarService.showSnackbar('Unset favorite');
         });
         break;
       }
@@ -758,7 +774,7 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
         });
         break;
       }
-      case 'clear-filter': {
+      case 'clear-filters': {
         this.filterService.clearAllFilters().then(() => {
           this.snackbarService.showSnackbar('Filters cleared');
         });

@@ -295,7 +295,7 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
       this.filterActive = this.filterService.searchItem.length > 0
         || this.tagsFiltered.length > 0;
 
-      // Filter cards
+      // Filter stacks
       this.stacks = Array.from(this.stacksService.stacks.values()).filter((stack: Stack) => {
         return this.filterStack(stack);
       }).sort((s1, s2) => {

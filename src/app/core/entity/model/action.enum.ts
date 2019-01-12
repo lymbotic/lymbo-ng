@@ -13,6 +13,9 @@ export enum Action {
   PUT_ASIDE,
   PUT_TO_END,
 
+  SET_FAVORITE,
+  UNSET_FAVORITE,
+
   OPEN_DIALOG_ADD,
   OPEN_DIALOG_UPDATE,
 

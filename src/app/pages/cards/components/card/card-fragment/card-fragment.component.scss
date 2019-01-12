@@ -1,6 +1,6 @@
 @import '../../../../../../flex';
 @import '../../../../../../sizes';
-@import '../../../../../../flex';
+@import '../../../../../../theme';
 
 //
 // Custom
@@ -70,8 +70,30 @@ hr {
   }
 }
 
-.tags-holder {
+.holder {
   padding: 0 24px 24px;
+
+  .group {
+    padding-right: 12px;
+  }
+}
+
+.light-theme {
+  .favorite-icon {
+    fill: mat-color($light-accent, 600);
+
+    margin-top: 5px;
+    vertical-align: baseline;
+  }
+}
+
+.dark-theme {
+  .favorite-icon {
+    fill: mat-color($dark-accent, 600);
+
+    margin-top: 5px;
+    vertical-align: baseline;
+  }
 }
 
 .tag {
