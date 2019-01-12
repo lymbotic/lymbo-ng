@@ -20,6 +20,8 @@ export class CardsToolbarComponent implements OnInit {
   @Input() media: Media;
   /** Search items options for auto-complete */
   @Input() searchOptions = [];
+  /** Indicates whether a filter for favorite cards is active */
+  @Input() filterFavorites = false;
   /** Indicates whether a filter is active */
   @Input() filterActive = false;
   /** Indicates whether cards are put aside */

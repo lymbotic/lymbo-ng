@@ -2,7 +2,7 @@ import {Card} from '../../../../core/entity/model/card.model';
 import {SnackbarService} from '../../../../core/ui/services/snackbar.service';
 import {AboutDialogComponent} from '../../../../ui/about-dialog/about-dialog/about-dialog.component';
 import {environment} from '../../../../../environments/environment';
-import {AfterViewInit, Component, NgZone, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, Input, NgZone, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {Subject} from 'rxjs';
 import {MatDialog, MatDialogConfig, MatIconRegistry, MatSidenav} from '@angular/material';
 import {Media} from '../../../../core/ui/model/media.enum';
@@ -69,6 +69,8 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   /** Array of tags that are currently filtered */
   public tagsFiltered: Tag[] = [];
+  /** Indicates whether a filter for favorite cards is active */
+  public filterFavorites = false;
   /** Indicates whether a filter is active */
   public filterActive = false;
 
@@ -271,11 +273,12 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
   private filterCard(card: Card) {
     const matchesSearchItem = this.matchService.cardMatchesEveryItem(card, this.filterService.searchItem);
     const matchesTags = this.matchService.cardMatchesTags(card, Array.from(this.filterService.tags.values()));
+    const matchesFavorites = this.matchService.cardMatchesFavorites(card, this.filterService.favorites);
     const isNotPutAside = !this.cardsPutAside.some(cardPutAside => {
       return cardPutAside.id === card.id;
     });
 
-    return matchesSearchItem && matchesTags && isNotPutAside;
+    return matchesSearchItem && matchesTags && matchesFavorites && isNotPutAside;
   }
 
   // Tags
@@ -353,6 +356,7 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
       takeUntil(this.unsubscribeSubject)
     ).subscribe(() => {
       this.tagsFiltered = Array.from(this.filterService.tags.values());
+      this.filterFavorites = this.filterService.favorites;
       this.filterActive = this.filterService.searchItem.length > 0
         || this.tagsFiltered.length > 0;
 
@@ -774,6 +778,18 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
         });
         break;
       }
+      case 'filter-favorites': {
+        this.filterService.updateFavorites(true).then(() => {
+          this.snackbarService.showSnackbar('Filtered favorites');
+        });
+        break;
+      }
+      case 'unfilter-favorites': {
+        this.filterService.updateFavorites(false).then(() => {
+          this.snackbarService.showSnackbar('Unfiltered favorites');
+        });
+        break;
+      }
       case 'clear-filters': {
         this.filterService.clearAllFilters().then(() => {
           this.snackbarService.showSnackbar('Filters cleared');
@@ -874,9 +890,10 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
    * @param card card
    */
   private putCardAside(card: Card): Promise<any> {
-    return new Promise(() => {
+    return new Promise((resolve) => {
       this.cardsPutAside.push(card);
       this.cardsPutAsideNotEmpty = this.cardsPutAside.length > 0;
+      resolve();
     });
   }
 
@@ -884,10 +901,11 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
    * Restores all cards that have been put aside
    */
   private restoreCards(): Promise<any> {
-    return new Promise(() => {
+    return new Promise((resolve) => {
       const cardsAll = this.cards.concat(this.cardsPutAside).sort(this.cardsService.sortCards);
       this.cardsPutAside = [];
       this.initializeCards(cardsAll);
+      resolve();
     });
   }
 
@@ -895,7 +913,7 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
    * Shuffles cards
    */
   private shuffleCards(): Promise<any> {
-    return new Promise(() => {
+    return new Promise((resolve) => {
       const cards = CloneService.cloneCards(this.cards);
 
       let currentIndex = cards.length, temporaryValue, randomIndex;
@@ -914,6 +932,7 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
       }
 
       this.initializeCards(cards);
+      resolve();
     });
   }
 }

@@ -76,11 +76,13 @@ export class CardsService {
    * @param card card to be created
    */
   public createCard(card: Card): Promise<any> {
-    return new Promise(() => {
-      if (card != null) {
-
-        this.addCardToStack(this.stack, card);
+    return new Promise((resolve, reject) => {
+      if (card == null) {
+        reject();
       }
+
+      this.addCardToStack(this.stack, card);
+      resolve();
     });
   }
 
@@ -89,13 +91,16 @@ export class CardsService {
    * @param card card to be updated
    */
   public updateCard(card: Card): Promise<any> {
-    return new Promise(() => {
-      if (card != null) {
-        // Set modification date
-        card.modificationDate = new Date();
-
-        this.updateCardOfStack(this.stack, card);
+    return new Promise((resolve, reject) => {
+      if (card == null) {
+        reject();
       }
+
+      // Set modification date
+      card.modificationDate = new Date();
+
+      this.updateCardOfStack(this.stack, card);
+      resolve();
     });
   }
 
@@ -104,10 +109,14 @@ export class CardsService {
    * @param {Card} card card to be deleted
    */
   public deleteCard(card: Card): Promise<any> {
-    return new Promise(() => {
-      if (card != null) {
-        this.removeCardFromStack(this.stack, card);
+    return new Promise((resolve, reject) => {
+      if (card == null) {
+        reject();
       }
+
+
+      this.removeCardFromStack(this.stack, card);
+      resolve();
     });
   }
 
@@ -116,10 +125,11 @@ export class CardsService {
    * @param card card
    */
   public updateRelatedTags(card: Card): Promise<any> {
-    return new Promise(() => {
+    return new Promise((resolve) => {
       card.tagIds.forEach(id => {
         const tag = this.tagService.getTagById(id);
         this.tagService.updateTag(tag, false).then(() => {
+          resolve();
         });
       });
     });
@@ -182,9 +192,11 @@ export class CardsService {
    * @param card card
    */
   public putCardToEnd(stack: Stack, card: Card): Promise<any> {
-    return new Promise(() => {
+    return new Promise((resolve) => {
       card.modificationDate = new Date();
-      this.updateCard(card);
+      this.updateCard(card).then(() => {
+        resolve();
+      });
     });
   }
 
@@ -195,9 +207,11 @@ export class CardsService {
    * @param favorite favorite
    */
   public setFavorite(stack: Stack, card: Card, favorite: boolean) {
-    return new Promise(() => {
+    return new Promise((resolve) => {
       card.favorite = favorite;
-      this.updateCard(card);
+      this.updateCard(card).then(() => {
+        resolve();
+      });
     });
   }
 
@@ -206,8 +220,10 @@ export class CardsService {
    * @param stack stack
    */
   private updateRelatedStack(stack: Stack): Promise<any> {
-    return new Promise(() => {
-      this.stackService.updateStack(stack);
+    return new Promise((resolve) => {
+      this.stackService.updateStack(stack).then(() => {
+        resolve();
+      });
     });
   }
 

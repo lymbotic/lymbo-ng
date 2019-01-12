@@ -278,4 +278,17 @@ export class MatchService {
       return MatchService.textMatchesSingleItem(t.name, item);
     });
   }
+
+  //
+  // Favorites
+  //
+
+  /**
+   * Determines whether a card matches favorites flag
+   * @param card card
+   * @param favorites favorites flag
+   */
+  public cardMatchesFavorites(card: Card, favorites: boolean) {
+    return !favorites || card.favorite;
+  }
 }

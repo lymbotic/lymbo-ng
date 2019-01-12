@@ -142,7 +142,7 @@ export class TagService {
    * @param {Tag} tag tag to be created
    */
   public createTag(tag: Tag): Promise<any> {
-    return new Promise(() => {
+    return new Promise((resolve) => {
       if (tag != null) {
         // Remove transient attributes
         tag.checked = undefined;
@@ -151,6 +151,7 @@ export class TagService {
           this.snackbarService.showSnackbar('Added tag');
           this.tags.set(tag.id, tag);
           this.notify();
+          resolve();
         });
       }
     });
@@ -162,7 +163,7 @@ export class TagService {
    * @param {boolean} showSnack shows snackbar if true
    */
   public updateTag(tag: Tag, showSnack = false): Promise<any> {
-    return new Promise(() => {
+    return new Promise((resolve) => {
       if (tag != null) {
         // Remove transient attributes
         tag.checked = undefined;
@@ -175,6 +176,7 @@ export class TagService {
           }
           this.tags.set(tag.id, tag);
           this.notify();
+          resolve();
         });
       }
     });
@@ -185,14 +187,17 @@ export class TagService {
    * @param {Tag} tag tag to be deleted
    */
   public deleteTag(tag: Tag): Promise<any> {
-    return new Promise(() => {
-      if (tag != null) {
-        return this.pouchDBService.remove(tag.id, tag).then(() => {
-          this.snackbarService.showSnackbar('Deleted tag');
-          this.tags.delete(tag.id);
-          this.notify();
-        });
+    return new Promise((resolve, reject) => {
+      if (tag == null) {
+        reject();
       }
+
+      return this.pouchDBService.remove(tag.id, tag).then(() => {
+        this.snackbarService.showSnackbar('Deleted tag');
+        this.tags.delete(tag.id);
+        this.notify();
+        resolve();
+      });
     });
   }
 

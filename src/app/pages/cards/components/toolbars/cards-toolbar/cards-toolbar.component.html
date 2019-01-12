@@ -79,6 +79,20 @@
           <mat-icon svgIcon="shuffle"></mat-icon>
           <span>Shuffle cards</span>
         </button>
+      </div>
+
+      <div>
+        <button *ngIf="!filterFavorites" mat-menu-item (click)="onMenuItemClicked('filter-favorites')">
+          <mat-icon svgIcon="favorite"></mat-icon>
+          <span>Filter favorites</span>
+        </button>
+        <button *ngIf="filterFavorites" mat-menu-item (click)="onMenuItemClicked('unfilter-favorites')">
+          <mat-icon svgIcon="favorite_border"></mat-icon>
+          <span>Unfilter favorites</span>
+        </button>
+      </div>
+
+      <div *ngIf="media < mediaType.LARGE">
         <button mat-menu-item [disabled]="!filterActive" (click)="onMenuItemClicked('clear-filters')">
           <mat-icon svgIcon="layers_clear"></mat-icon>
           <span>Clear filters</span>

@@ -148,22 +148,25 @@ export class StacksService {
    * @param stack stack to be created
    */
   public createStack(stack: Stack): Promise<any> {
-    return new Promise(() => {
+    return new Promise((resolve, reject) => {
+
+      if (stack == null) {
+        reject();
+      }
 
       // Update related objects
       this.updateRelatedTags(stack.tagIds);
 
-      if (stack != null) {
 
-        // Update related objects
-        this.updateRelatedTags(stack.tagIds);
+      // Update related objects
+      this.updateRelatedTags(stack.tagIds);
 
-        // Create stack
-        return this.pouchDBService.upsert(stack.id, stack).then(() => {
-          this.stacks.set(stack.id, stack);
-          this.notify();
-        });
-      }
+      // Create stack
+      return this.pouchDBService.upsert(stack.id, stack).then(() => {
+        this.stacks.set(stack.id, stack);
+        this.notify();
+        resolve();
+      });
     });
   }
 
@@ -172,20 +175,22 @@ export class StacksService {
    * @param stack stack to be updated
    */
   public updateStack(stack: Stack): Promise<any> {
-    return new Promise(() => {
-      if (stack != null) {
-
-        // Update related objects
-        this.updateRelatedTags(stack.tagIds);
-
-        stack.modificationDate = new Date();
-
-        // Update stack
-        return this.pouchDBService.upsert(stack.id, stack).then(() => {
-          this.stacks.set(stack.id, stack);
-          this.notify();
-        });
+    return new Promise((resolve, reject) => {
+      if (stack == null) {
+        reject();
       }
+
+      // Update related objects
+      this.updateRelatedTags(stack.tagIds);
+
+      stack.modificationDate = new Date();
+
+      // Update stack
+      return this.pouchDBService.upsert(stack.id, stack).then(() => {
+        this.stacks.set(stack.id, stack);
+        this.notify();
+        resolve();
+      });
     });
   }
 
@@ -194,13 +199,16 @@ export class StacksService {
    * @param {Stack} stack stack to be deleted
    */
   public deleteStack(stack: Stack): Promise<any> {
-    return new Promise(() => {
-      if (stack != null) {
-        return this.pouchDBService.remove(stack.id, stack).then(() => {
-          this.stacks.delete(stack.id);
-          this.notify();
-        });
+    return new Promise((resolve, reject) => {
+      if (stack == null) {
+        reject();
       }
+
+      return this.pouchDBService.remove(stack.id, stack).then(() => {
+        this.stacks.delete(stack.id);
+        this.notify();
+        resolve();
+      });
     });
   }
 

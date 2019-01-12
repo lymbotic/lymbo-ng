@@ -17,6 +17,8 @@ export class FilterService {
 
   /** Map of tags */
   tags: Map<string, Tag>;
+  /** Indicates whether a filter for favorite cards is active */
+  favorites = false;
 
   /** Subject publishing filter subjects */
   filterSubject = new Subject();
@@ -99,6 +101,29 @@ export class FilterService {
   }
 
   //
+  // Favorites
+  //
+
+  /**
+   * Clears favorite
+   */
+  public clearFavorites() {
+    this.favorites = false;
+  }
+
+  /**
+   * Updates favorites flag and notifies subscribers
+   * @param {boolean} favorites favorites flag
+   */
+  public updateFavorites(favorites: boolean): Promise<any> {
+    return new Promise((resolve) => {
+      this.favorites = favorites;
+      this.notify();
+      resolve();
+    });
+  }
+
+  //
   // Clear
   //
 
@@ -106,10 +131,12 @@ export class FilterService {
    * Clears all currently set filters
    */
   public clearAllFilters(): Promise<any> {
-    return new Promise(() => {
+    return new Promise((resolve) => {
       this.clearSearchItem();
+      this.clearFavorites();
       this.clearTags();
       this.notify();
+      resolve();
     });
   }
 
