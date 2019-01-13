@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { LanguageFormComponent } from './language-form.component';
+import { QuizFragmentComponent } from './quiz-fragment.component';
 
-describe('LanguageFormComponent', () => {
-  let component: LanguageFormComponent;
-  let fixture: ComponentFixture<LanguageFormComponent>;
+describe('QuizFragmentComponent', () => {
+  let component: QuizFragmentComponent;
+  let fixture: ComponentFixture<QuizFragmentComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ LanguageFormComponent ]
+      declarations: [ QuizFragmentComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(LanguageFormComponent);
+    fixture = TestBed.createComponent(QuizFragmentComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

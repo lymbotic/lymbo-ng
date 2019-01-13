@@ -7,6 +7,7 @@ import {Stack} from '../../entity/model/stack.model';
 import {Hash} from '../../entity/model/hash';
 import {FeatureType} from '../../settings/model/feature-type.enum';
 import {StackTypeGroup} from '../../entity/model/stack-type-group.enum';
+import {CardTypeGroup} from '../../entity/model/card-type-group.enum';
 
 /**
  * Handles derived colors
@@ -107,6 +108,30 @@ export class ColorService {
       }
       case StackTypeGroup.LANGUAGE: {
         return this.materialColorService.hue(PaletteType.AMBER, HueType._600);
+      }
+      default: {
+        return this.materialColorService.hue(PaletteType.GREY, HueType._300);
+      }
+    }
+  }
+
+  /**
+   * Returns a color associated to card type group
+   * @param {CardTypeGroup} group card type group
+   */
+  getCardTypeGroupColor(group: CardTypeGroup): Hue {
+    switch (group) {
+      case CardTypeGroup.UNSPECIFIED: {
+        return this.materialColorService.hue(PaletteType.GREY, HueType._50);
+      }
+      case CardTypeGroup.FREESTYLE: {
+        return this.materialColorService.hue(PaletteType.LIME, HueType._600);
+      }
+      case CardTypeGroup.VOCABULARY: {
+        return this.materialColorService.hue(PaletteType.AMBER, HueType._600);
+      }
+      case CardTypeGroup.QUIZ: {
+        return this.materialColorService.hue(PaletteType.LIGHT_BLUE, HueType._600);
       }
       default: {
         return this.materialColorService.hue(PaletteType.GREY, HueType._300);

@@ -1,0 +1,18 @@
+<div class="flexcontainer">
+  <div class="flexbox centered" *ngFor="let action of cardTypeActions" (mouseenter)="onHoverContainer(true, action)"
+       (mouseleave)="onHoverContainer(false, action)">
+    <app-suggested-action-button
+      [backgroundColor]="action.backgroundColor"
+      [iconColor]="action.iconColor"
+      [icon]="action.icon"
+      [label]="action.label"
+      (buttonClickedEmitter)="onSuggestedActionButtonClicked(action)">
+    </app-suggested-action-button>
+    <mat-select #select class="typeSelect">
+      <mat-option *ngFor="let type of action.cardTypes" [value]="type" (click)="onCardTypeSelected(type, action)">
+        <mat-icon [svgIcon]="getIconByCardType(type)"></mat-icon>
+        {{ type }}
+      </mat-option>
+    </mat-select>
+  </div>
+</div>

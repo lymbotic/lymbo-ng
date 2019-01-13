@@ -5,15 +5,15 @@ import {TenseGroup} from '../../../../../../core/entity/model/language/tense-gro
 import {Vocabel} from '../../../../../../core/entity/model/language/vocabel.model';
 
 /**
- * Displays form to set language properties
+ * Displays form to set vocabulary properties
  */
 @Component({
-  selector: 'app-language-form',
-  templateUrl: './language-form.component.html',
-  styleUrls: ['./language-form.component.scss'],
+  selector: 'app-vocabulary-form',
+  templateUrl: './vocabulary-form.component.html',
+  styleUrls: ['./vocabulary-form.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class LanguageFormComponent implements OnInit {
+export class VocabularyFormComponent implements OnInit {
 
   /** Card to be displayed */
   @Input() card: Card;

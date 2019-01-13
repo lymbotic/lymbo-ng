@@ -19,9 +19,13 @@ import {TagListComponent} from './components/lists/tag-list/tag-list.component';
 import {TagListItemComponent} from './components/lists/tag-list-item/tag-list-item.component';
 import {ExampleFragmentComponent} from './components/fragments/language/example-fragment/example-fragment.component';
 import {ExamplesFragmentComponent} from './components/fragments/language/examples-fragment/examples-fragment.component';
-import {LanguageFormComponent} from './components/fragments/language/language-form/language-form.component';
+import {VocabularyFormComponent} from './components/fragments/language/vocabulary-form/vocabulary-form.component';
 import {TensesFragmentComponent} from './components/fragments/language/tenses-fragment/tenses-fragment.component';
 import {TenseFragmentComponent} from './components/fragments/language/tense-fragment/tense-fragment.component';
+import {CardTypeFragmentComponent} from './components/fragments/card-type-fragment/card-type-fragment.component';
+import {SuggestedActionButtonModule} from '../../ui/suggested-action-button/suggested-action-button.module';
+import { QuizFragmentComponent } from './components/fragments/quiz/quiz-form/quiz-fragment.component';
+import {CheckableListModule} from '../../ui/checkable-list/checkable-list.module';
 
 @NgModule({
   imports: [
@@ -33,8 +37,10 @@ import {TenseFragmentComponent} from './components/fragments/language/tense-frag
     CardsRoutingModule,
 
     AboutDialogModule,
+    CheckableListModule,
     ConfirmationDialogModule,
     NewFeaturesDialogModule,
+    SuggestedActionButtonModule,
     TagChipsModule,
     TagsNamePipeModule
   ],
@@ -43,8 +49,9 @@ import {TenseFragmentComponent} from './components/fragments/language/tense-frag
     CardsComponent,
 
     // Fragments
+    CardTypeFragmentComponent,
     ExamplesFragmentComponent,
-    LanguageFormComponent,
+    VocabularyFormComponent,
     SideTitleFragmentComponent,
     TensesFragmentComponent,
 
@@ -66,6 +73,7 @@ import {TenseFragmentComponent} from './components/fragments/language/tense-frag
     TensesFragmentComponent,
     ExampleFragmentComponent,
     ExamplesFragmentComponent,
+    QuizFragmentComponent,
   ], entryComponents: [
     // Pages
     CardsComponent,

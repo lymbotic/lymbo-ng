@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Inject, OnDestroy, OnInit, Renderer} from '@angular/core';
+import {Component, EventEmitter, Inject, OnDestroy, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import {DialogMode} from '../../../../../core/entity/model/dialog-mode.enum';
 import {Card} from '../../../../../core/entity/model/card.model';
@@ -14,6 +14,7 @@ import {Subject} from 'rxjs';
 import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
 import {environment} from '../../../../../../environments/environment';
 import {Stack} from '../../../../../core/entity/model/stack.model';
+import {CardType} from '../../../../../core/entity/model/card-type.enum';
 
 /**
  * Displays card dialog
@@ -58,14 +59,12 @@ export class CardDialogComponent implements OnInit, OnDestroy {
    * Constructor
    * @param cardsService cards service
    * @param microsoftTranslateService Microsoft translate service
-   * @param renderer renderer
    * @param suggestionService suggestion service
    * @param dialogRef dialog reference
    * @param data dialog data
    */
   constructor(private cardsService: CardsService,
               private microsoftTranslateService: MicrosoftTranslateService,
-              private renderer: Renderer,
               private suggestionService: SuggestionService,
               public dialogRef: MatDialogRef<CardDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any) {
@@ -80,6 +79,7 @@ export class CardDialogComponent implements OnInit, OnDestroy {
    */
   ngOnInit() {
     this.initializeData();
+    this.initializeType();
     this.initializePlaceholders();
     this.initializeOptions();
     this.initializeFrontTitleChangedSubject();
@@ -108,10 +108,21 @@ export class CardDialogComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Initializes card type
+   */
+  private initializeType() {
+    if (this.card.type == null || this.card.type === CardType.UNSPECIFIED) {
+      if (this.stack.sourceLanguage != null) {
+        this.card.type = CardType.FREESTYLE;
+      }
+    }
+  }
+
+  /**
    * Initializes placeholders
    */
   private initializePlaceholders() {
-    if (this.isLanguageStack()) {
+    if (this.card.type === CardType.VOCABULARY) {
       this.placeholderFront = this.stack.sourceLanguage;
       this.placeholderBack = this.stack.targetLanguage;
     } else {
@@ -150,6 +161,14 @@ export class CardDialogComponent implements OnInit, OnDestroy {
   //
 
   /**
+   * Handles card type changes
+   * @param type card type
+   */
+  onCardTypeChanged(type: CardType) {
+    this.card.type = type;
+  }
+
+  /**
    * Handles front side title change
    * @param sideTitle side title
    */
@@ -165,6 +184,28 @@ export class CardDialogComponent implements OnInit, OnDestroy {
   onBackTitleChanged(sideTitle: string) {
     this.card.sides[1].title = sideTitle;
   }
+
+  // Vocabulary
+
+  /**
+   * Handles vocabulary changes
+   * @param card
+   */
+  onVocabularyChanged(card: Card) {
+    this.card = card;
+  }
+
+  // Quiz
+
+  /**
+   * Handles quiz changes
+   * @param card
+   */
+  onQuizChanged(card: Card) {
+    this.card = card;
+  }
+
+  // Tags
 
   /**
    * Handles tag changes
@@ -254,13 +295,6 @@ export class CardDialogComponent implements OnInit, OnDestroy {
   //
   // Helpers
   //
-
-  /**
-   * Determines if this card belongs to a language stack
-   */
-  isLanguageStack(): boolean {
-    return this.stack.sourceLanguage != null;
-  }
 
   // Translation
 

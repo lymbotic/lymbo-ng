@@ -1,0 +1,8 @@
+<app-checkable-list-item *ngFor="let item of items"
+                         [item]="item" [readonly]="readonly" (itemChangedEmitter)="onItemChanged($event)">
+</app-checkable-list-item>
+
+<div *ngIf="!readonly" (click)="onNewListEntryClicked()">
+  <mat-icon class="icon-add" svgIcon="add"></mat-icon>
+  <span class="label">{{ newEntryPlaceholder }}</span>
+</div>

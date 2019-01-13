@@ -1,0 +1,9 @@
+<input matInput class="question" title="question" type="text" autocomplete="off" placeholder="Question"
+       [ngModel]="card.question"
+       (ngModelChange)="onQuestionChanged($event)"
+       [disabled]="readonly">
+
+<div class="answers">
+  <app-checkable-list [items]="card.answers" newEntryPlaceholder="New answer"
+                      (itemsChangedEmitter)="onAnswersChanged($event)"></app-checkable-list>
+</div>

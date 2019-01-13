@@ -2,18 +2,23 @@
   <h2 mat-dialog-title>{{ dialogTitle }}</h2>
   <mat-dialog-content>
     <form #formCtrl="ngForm">
-      <div class="side-title">
-        <app-side-title-fragment
-          [sideTitle]="card.sides[0].title" [placeholder]=placeholderFront
-          (sideTitleChangedEmitter)="onFrontTitleChanged($event)">
-        </app-side-title-fragment>
-      </div>
-      <div class="side-title target">
-        <div class="flexcontainer">
+      <app-card-type-fragment [card]="card" (cardTypeEventEmitter)="onCardTypeChanged($event)">
+      </app-card-type-fragment>
+
+      <div *ngIf="containsDisplayAspect(displayAspectType.TITLES, card)">
+        <div class="side-title">
           <app-side-title-fragment
-            [sideTitle]="card.sides[1].title" [placeholder]=placeholderBack
-            (sideTitleChangedEmitter)="onBackTitleChanged($event)">
+            [sideTitle]="card.sides[0].title" [placeholder]=placeholderFront
+            (sideTitleChangedEmitter)="onFrontTitleChanged($event)">
           </app-side-title-fragment>
+        </div>
+        <div class="side-title target">
+          <div class="flexcontainer">
+            <app-side-title-fragment
+              [sideTitle]="card.sides[1].title" [placeholder]=placeholderBack
+              (sideTitleChangedEmitter)="onBackTitleChanged($event)">
+            </app-side-title-fragment>
+          </div>
         </div>
       </div>
 
@@ -21,8 +26,15 @@
         <mat-divider></mat-divider>
       </p>
 
-      <!-- Language -->
-      <app-language-form *ngIf="isLanguageStack()" [card]="card" [stack]="stack"></app-language-form>
+      <!-- Vocabulary -->
+      <app-vocabulary-form *ngIf="containsDisplayAspect(displayAspectType.VOCABULARY, card)"
+                           [card]="card" [stack]="stack"
+                           (cardEventEmitter)="onVocabularyChanged($event)"></app-vocabulary-form>
+
+      <!-- Quiz -->
+      <app-quiz-form *ngIf="containsDisplayAspect(displayAspectType.QUIZ, card)"
+                     [card]="card" [stack]="stack"
+                     (cardEventEmitter)="onQuizChanged($event)"></app-quiz-form>
 
       <app-tag-chips [tags]="tags | tagNames"
                      [tagOptions]="tagOptions"
