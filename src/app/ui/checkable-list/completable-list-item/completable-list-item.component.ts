@@ -37,7 +37,7 @@ export class CompletableListItemComponent implements OnInit {
    * Initializes style sheet
    */
   private initializeStyleSheet() {
-    this.itemClass = this.item.completed ? 'selected' : 'unselected';
+    this.itemClass = this.item.selected ? 'selected' : 'unselected';
   }
 
   //
@@ -49,7 +49,7 @@ export class CompletableListItemComponent implements OnInit {
    * @param event selection state
    */
   onItemSelected(event: any) {
-    this.item.completed = event.checked;
+    this.item.selected = event.checked;
     this.itemChangedEmitter.emit();
   }
 

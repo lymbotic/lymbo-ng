@@ -1,7 +1,7 @@
 <div *ngIf="item != null" [class]="itemClass">
   <div class="flexcontainer item">
-    <mat-checkbox [disabled]="readonly" [ngModel]="item.completed" (change)="onItemSelected($event)"></mat-checkbox>
-    <input [disabled]="readonly" matInput class="label" [ngModel]="item.text" (ngModelChange)="onTextChanged($event)"/>
+    <mat-checkbox [disabled]="readonly" [ngModel]="item.selected" (change)="onItemSelected($event)"></mat-checkbox>
+    <input [disabled]="readonly" matInput class="label" autocomplete="off" [ngModel]="item.text" (ngModelChange)="onTextChanged($event)"/>
     <div class="flexbox"></div>
     <mat-icon class="icon-delete" svgIcon="clear" (click)="onDeleteClicked()"></mat-icon>
   </div>

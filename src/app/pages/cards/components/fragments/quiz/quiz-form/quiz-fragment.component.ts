@@ -9,7 +9,7 @@ import {Answer} from '../../../../../../core/entity/model/quiz/answer.model';
   styleUrls: ['./quiz-fragment.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class QuizFragmentComponent implements OnInit {
+export class QuizFragmentComponent {
 
   /** Card to be displayed */
   @Input() card: Card;
@@ -19,12 +19,6 @@ export class QuizFragmentComponent implements OnInit {
   @Input() readonly = false;
   /** Event emitter indicating card changes */
   @Output() cardEventEmitter = new EventEmitter<Card>();
-
-  constructor() {
-  }
-
-  ngOnInit() {
-  }
 
   //
   // Actions

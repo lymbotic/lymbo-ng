@@ -57,7 +57,12 @@ export class CardDisplayService {
           && card.sides[1].title != null && card.sides[1].title.length > 0;
       }
       case CardType.QUIZ: {
-        return card.question != null && card.question !== '';
+        return card.question != null
+          && card.question !== ''
+          && card.answers != null
+          && card.answers.some(answer => {
+            return answer.selected;
+          });
       }
       default: {
         return false;

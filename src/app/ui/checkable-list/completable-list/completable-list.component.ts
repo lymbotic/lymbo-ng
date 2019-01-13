@@ -9,14 +9,14 @@ class Item implements SelectableItem {
   /** Text */
   text: string;
   /** Selected */
-  completed: boolean;
+  selected: boolean;
 
   /**
    * Constructor
    */
   constructor() {
     this.text = '';
-    this.completed = false;
+    this.selected = false;
   }
 }
 
@@ -69,10 +69,10 @@ export class CompletableListComponent implements OnInit {
     }) : [];
 
     this.unselectedItems = this.items.filter(item => {
-      return !item.completed;
+      return !item.selected;
     });
     this.selectedItems = this.items.filter(item => {
-      return item.completed;
+      return item.selected;
     });
   }
 

@@ -1,16 +1,17 @@
+import {SelectableItem} from '../../../../ui/checkable-list/selectable-item';
 
-export class Answer {
+export class Answer implements SelectableItem {
 
   /** Text */
   text: string;
   /** Correct */
-  correct: boolean;
+  selected: boolean;
 
   /**
    * Constructor
    */
   constructor() {
     this.text = '';
-    this.correct = false;
+    this.selected = false;
   }
 }

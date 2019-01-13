@@ -9,14 +9,14 @@ class Item implements SelectableItem {
   /** Text */
   text: string;
   /** Selected */
-  completed: boolean;
+  selected: boolean;
 
   /**
    * Constructor
    */
   constructor() {
     this.text = '';
-    this.completed = false;
+    this.selected = false;
   }
 }
 
