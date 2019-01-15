@@ -11,7 +11,7 @@ import {CardsRoutingModule} from './cards-routing.module';
 import {AboutDialogModule} from '../../ui/about-dialog/about-dialog.module';
 import {ConfirmationDialogModule} from '../../ui/confirmation-dialog/confirmation-dialog.module';
 import {NewFeaturesDialogModule} from '../../ui/new-features-dialog/new-features-dialog.module';
-import {SideTitleFragmentComponent} from './components/fragments/side-title-fragment/side-title-fragment.component';
+import {SideTitleFragmentComponent} from './components/fragments/side/side-title-fragment/side-title-fragment.component';
 import {CardsComponent} from './pages/cards/cards.component';
 import {TagChipsModule} from '../../ui/tag-chips/tag-chips.module';
 import {TagsNamePipeModule} from '../../ui/tags-name-pipe/tags-name-pipe.module';
@@ -24,8 +24,9 @@ import {TensesFragmentComponent} from './components/fragments/language/tenses-fr
 import {TenseFragmentComponent} from './components/fragments/language/tense-fragment/tense-fragment.component';
 import {CardTypeFragmentComponent} from './components/fragments/card-type-fragment/card-type-fragment.component';
 import {SuggestedActionButtonModule} from '../../ui/suggested-action-button/suggested-action-button.module';
-import { QuizFragmentComponent } from './components/fragments/quiz/quiz-form/quiz-fragment.component';
+import { QuizFormComponent } from './components/fragments/quiz/quiz-form/quiz-form.component';
 import {CheckableListModule} from '../../ui/checkable-list/checkable-list.module';
+import { SideFormComponent } from './components/fragments/side/side-form/side-form.component';
 
 @NgModule({
   imports: [
@@ -73,7 +74,8 @@ import {CheckableListModule} from '../../ui/checkable-list/checkable-list.module
     TensesFragmentComponent,
     ExampleFragmentComponent,
     ExamplesFragmentComponent,
-    QuizFragmentComponent,
+    QuizFormComponent,
+    SideFormComponent,
   ], entryComponents: [
     // Pages
     CardsComponent,

@@ -23,21 +23,21 @@
 
     <div class="flexcontainer">
       <div class="card-main-content" (click)="onCardClicked(actionType.NONE)">
-        <!-- Normal side -->
-        <mat-card-header>
-          <div *ngIf="activeSide != null">
+        <div [ngSwitch]="activeAspect.type">
+          <div *ngSwitchCase="aspectType.SIDE">
             <img *ngIf="activeSide.imageUrl !== ''" mat-card-image [attr.src]="activeSide.imageUrl">
             <mat-card-title class="side-title">{{ activeSide.title }}</mat-card-title>
           </div>
-        </mat-card-header>
-        <!-- Tense side -->
-        <app-tense-fragment *ngIf="activeTenseGroup != null"
-                            [tenseGroup]="activeTenseGroup" [readonly]="true">
-        </app-tense-fragment>
-        <!-- Examples -->
-        <app-example-fragment *ngIf="activeExample != null" class="side-example"
-                              [example]="activeExample" [readonly]="true">
-        </app-example-fragment>
+          <div *ngSwitchCase="aspectType.TENSE">
+            <app-tense-fragment [tenseGroup]="activeTenseGroup" [readonly]="true">
+            </app-tense-fragment>
+          </div>
+          <div *ngSwitchCase="aspectType.EXAMPLE">
+            <app-example-fragment [example]="activeExample" [readonly]="true">
+            </app-example-fragment>
+          </div>
+          <div *ngSwitchCase="aspectType.QUIZ"></div>
+        </div>
       </div>
       <div class="flexbox"></div>
       <button mat-icon-button [matMenuTriggerFor]="menu" id="more" class="hidden">
@@ -57,7 +57,7 @@
       </div>
     </mat-card-footer>
 
-    <mat-card-actions *ngIf="activeSide === null || activeSideIndex !== 0" align="right">
+    <mat-card-actions *ngIf="activeAspect.type != aspectType.SIDE || activePartIndex !== 0" align="right">
       <div class="flexcontainer">
         <button mat-button
                 matTooltip="Put card to end"
@@ -76,6 +76,7 @@
 
         <div class="flexbox"></div>
 
+        <!--
         <button *ngIf="(activeSide != null && activeSideIndex === card.sides.length - 1)
               && card.tenseGroups.length > 0"
                 mat-button
@@ -98,6 +99,7 @@
           <mat-icon svgIcon="keyboard_tab"></mat-icon>
           <mat-icon svgIcon="chat_bubble_outline"></mat-icon>
         </button>
+        -->
       </div>
     </mat-card-actions>
 

@@ -1,11 +1,11 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild} from '@angular/core';
-import {CardTypeGroup} from '../../../../../core/entity/model/card-type-group.enum';
-import {CardType} from '../../../../../core/entity/model/card-type.enum';
 import {ColorService} from '../../../../../core/ui/services/color.service';
 import {FeatureService} from '../../../../../core/settings/services/feature.service';
 import {CardsService} from '../../../../../core/entity/services/card/cards.service';
 import {MatSelect} from '@angular/material';
-import {Card} from '../../../../../core/entity/model/card.model';
+import {Card} from '../../../../../core/entity/model/card/card.model';
+import {CardType} from '../../../../../core/entity/model/card/card-type.enum';
+import {CardTypeGroup} from '../../../../../core/entity/model/card/card-type-group.enum';
 
 /**
  * Represents a card type group action button

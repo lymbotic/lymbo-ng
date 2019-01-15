@@ -7,7 +7,7 @@ import {Stack} from '../../entity/model/stack.model';
 import {Hash} from '../../entity/model/hash';
 import {FeatureType} from '../../settings/model/feature-type.enum';
 import {StackTypeGroup} from '../../entity/model/stack-type-group.enum';
-import {CardTypeGroup} from '../../entity/model/card-type-group.enum';
+import {CardTypeGroup} from '../../entity/model/card/card-type-group.enum';
 
 /**
  * Handles derived colors

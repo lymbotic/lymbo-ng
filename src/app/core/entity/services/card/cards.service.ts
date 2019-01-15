@@ -1,14 +1,14 @@
 import {Injectable} from '@angular/core';
 import {Subject} from 'rxjs/Subject';
 import {Stack} from '../../model/stack.model';
-import {Card} from '../../model/card.model';
 import {PouchDBService} from '../../../persistence/services/pouchdb.service';
 import {StacksService} from '../stack/stacks.service';
 import {TagService} from '../tag.service';
 import {CardDisplayService, DisplayAspect} from './card-display.service';
 import {CardTypeService} from './card-type.service';
-import {CardTypeGroup} from '../../model/card-type-group.enum';
-import {CardType} from '../../model/card-type.enum';
+import {Card} from '../../model/card/card.model';
+import {CardTypeGroup} from '../../model/card/card-type-group.enum';
+import {CardType} from '../../model/card/card-type.enum';
 
 /**
  * Handles cards

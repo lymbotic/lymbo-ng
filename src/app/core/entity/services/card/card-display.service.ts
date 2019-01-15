@@ -1,6 +1,9 @@
 import {Injectable} from '@angular/core';
-import {Card} from '../../model/card.model';
-import {CardType} from '../../model/card-type.enum';
+import {Card} from '../../model/card/card.model';
+import {CardType} from '../../model/card/card-type.enum';
+import {AspectType} from '../../model/card/aspect.type';
+import {SideAspect} from '../../model/card/side/side-aspect';
+import {QuizAspect} from '../../model/card/quiz/quiz-aspect.model';
 
 /**
  * Enum representing display aspects
@@ -39,28 +42,47 @@ export class CardDisplayService {
    * @param card card
    */
   static canBeUpdated(card: Card): boolean {
-    return card != null && CardDisplayService.isComplete(card);
+    return card !== null && CardDisplayService.isComplete(card);
   }
 
+  /**
+   * Deteermines if a card is complete
+   * @param card card
+   */
   static isComplete(card: Card) {
     switch (card.type) {
       case CardType.FREESTYLE: {
-        return card.sides != null
-          && card.sides.length > 0
-          && card.sides[0].title != null && card.sides[0].title.length > 0
-          && card.sides[1].title != null && card.sides[1].title.length > 0;
+        const sideAspect = card.aspects.filter(aspect => {
+          return aspect.type === AspectType.SIDE;
+        })[0] as SideAspect;
+
+        return sideAspect !== null
+          && sideAspect.sides !== null
+          && sideAspect.sides.length > 0
+          && sideAspect.sides[0].title !== null && sideAspect.sides[0].title.length > 0
+          && sideAspect.sides[1].title !== null && sideAspect.sides[1].title.length > 0;
       }
       case CardType.VOCABULARY: {
-        return card.sides != null
-          && card.sides.length > 0
-          && card.sides[0].title != null && card.sides[0].title.length > 0
-          && card.sides[1].title != null && card.sides[1].title.length > 0;
+        const sideAspect = card.aspects.filter(aspect => {
+          return aspect.type === AspectType.SIDE;
+        })[0] as SideAspect;
+
+        return sideAspect != null
+          && sideAspect.sides !== null
+          && sideAspect.sides.length > 0
+          && sideAspect.sides[0].title != null
+          && sideAspect.sides[0].title.length > 0;
       }
       case CardType.QUIZ: {
-        return card.question != null
-          && card.question !== ''
-          && card.answers != null
-          && card.answers.some(answer => {
+        const quizAspect = card.aspects.filter(aspect => {
+          return aspect.type === AspectType.QUIZ;
+        })[0] as QuizAspect;
+
+        return quizAspect != null
+          && quizAspect.question !== null
+          && quizAspect.question !== ''
+          && quizAspect.answers != null
+          && quizAspect.answers.some(answer => {
             return answer.selected;
           });
       }

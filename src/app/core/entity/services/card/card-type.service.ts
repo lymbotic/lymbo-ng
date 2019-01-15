@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {SettingsService} from '../../../settings/services/settings.service';
-import {CardType} from '../../model/card-type.enum';
-import {CardTypeGroup} from '../../model/card-type-group.enum';
+import {CardType} from '../../model/card/card-type.enum';
+import {CardTypeGroup} from '../../model/card/card-type-group.enum';
 
 /**
  * Handles card type hierarchy

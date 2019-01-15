@@ -1,8 +1,11 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {Card} from '../../../../../../core/entity/model/card.model';
 import {Stack} from '../../../../../../core/entity/model/stack.model';
-import {TenseGroup} from '../../../../../../core/entity/model/language/tense-group';
-import {Vocabel} from '../../../../../../core/entity/model/language/vocabel.model';
+import {AspectType} from '../../../../../../core/entity/model/card/aspect.type';
+import {TenseAspect} from '../../../../../../core/entity/model/card/tense/tense-aspect';
+import {ExampleAspect} from '../../../../../../core/entity/model/card/example/example-aspect';
+import {Card} from '../../../../../../core/entity/model/card/card.model';
+import {TenseGroup} from '../../../../../../core/entity/model/card/tense/tense-group';
+import {Vocabel} from '../../../../../../core/entity/model/card/example/vocabel.model';
 
 /**
  * Displays form to set vocabulary properties
@@ -24,6 +27,11 @@ export class VocabularyFormComponent implements OnInit {
   /** Event emitter indicating card changes */
   @Output() cardEventEmitter = new EventEmitter<Card>();
 
+  /** Tense aspect */
+  tenseAspect: TenseAspect;
+  /** Example aspect */
+  exampleAspect: ExampleAspect;
+
   //
   // Lifecycle hooks
   //
@@ -32,11 +40,47 @@ export class VocabularyFormComponent implements OnInit {
    * Handles on-init lifecycle phase
    */
   ngOnInit() {
+    this.initializeTenseAspect();
+    this.initializeExampleAspect();
   }
 
   //
   // Initialization
   //
+
+  /**
+   * Initializes tense aspect
+   */
+  private initializeTenseAspect() {
+    // Add aspect if not present
+    if (!this.card.aspects.some(aspect => {
+      return aspect.type === AspectType.TENSE;
+    })) {
+      this.card.aspects.push(new TenseAspect());
+    }
+
+    // Get aspect
+    this.tenseAspect = this.card.aspects.filter(aspect => {
+      return aspect.type === AspectType.TENSE;
+    })[0] as TenseAspect;
+  }
+
+  /**
+   * Initializes example aspect
+   */
+  private initializeExampleAspect() {
+    // Add aspect if not present
+    if (!this.card.aspects.some(aspect => {
+      return aspect.type === AspectType.EXAMPLE;
+    })) {
+      this.card.aspects.push(new ExampleAspect());
+    }
+
+    // Get aspect
+    this.exampleAspect = this.card.aspects.filter(aspect => {
+      return aspect.type === AspectType.EXAMPLE;
+    })[0] as ExampleAspect;
+  }
 
   //
   // Actions
@@ -47,7 +91,7 @@ export class VocabularyFormComponent implements OnInit {
    * @param tenseGroups tense groups
    */
   onTenseGroupsChanged(tenseGroups: TenseGroup[]) {
-    this.card.tenseGroups = tenseGroups;
+    this.tenseAspect.tenseGroups = tenseGroups;
     this.notify();
   }
 
@@ -56,7 +100,7 @@ export class VocabularyFormComponent implements OnInit {
    * @param examples examples
    */
   onExampleChanged(examples: Vocabel[]) {
-    this.card.examples = examples;
+    this.exampleAspect.examples = examples;
     this.notify();
   }
 

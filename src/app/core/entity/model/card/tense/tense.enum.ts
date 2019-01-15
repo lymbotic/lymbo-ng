@@ -1,3 +1,6 @@
+/**
+ * Enum containing tenses
+ */
 export enum Tense {
   UNDEFINED = '???',
 

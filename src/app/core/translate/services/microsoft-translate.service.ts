@@ -1,11 +1,11 @@
 import {EventEmitter, Injectable} from '@angular/core';
-import {Language} from '../../entity/model/language/language.enum';
 import {UUID} from '../../entity/model/uuid';
 import {HttpClient} from '@angular/common/http';
 import {SettingsService} from '../../settings/services/settings.service';
 import {el} from '@angular/platform-browser/testing/src/browser_util';
 import {SettingType} from '../../settings/model/setting-type.enum';
 import {ConnectionService} from '../../common/services/connection.service';
+import {Language} from '../../entity/model/card/language.enum';
 
 /**
  * Handles calls to Microsoft Text Translation API
@@ -16,8 +16,8 @@ import {ConnectionService} from '../../common/services/connection.service';
 export class MicrosoftTranslateService {
 
   /**
-   * Returns the code of a given language
-   * @param language language
+   * Returns the code of a given tense
+   * @param language tense
    */
   static getLanguageCode(language: Language): string {
     switch (language) {
@@ -166,9 +166,9 @@ export class MicrosoftTranslateService {
   }
 
   /**
-   * Translates a given word into a target language
+   * Translates a given word into a target tense
    * @param text source text
-   * @param target target language
+   * @param target target tense
    * @param translationEmitter translation emitter
    */
   translate(text: string, target: Language, translationEmitter: EventEmitter<string>) {

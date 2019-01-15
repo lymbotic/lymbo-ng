@@ -30,8 +30,8 @@ import {Setting} from '../../../../core/settings/model/setting.model';
 import {MatchService} from '../../../../core/entity/services/match.service';
 import {TagDialogComponent} from '../../components/dialogs/tag-dialog/tag-dialog.component';
 import {InformationDialogComponent} from '../../../../ui/information-dialog/information-dialog/information-dialog.component';
-import {Card} from '../../../../core/entity/model/card.model';
 import {CardsService} from '../../../../core/entity/services/card/cards.service';
+import {Card} from '../../../../core/entity/model/card/card.model';
 
 /**
  * Displays stacks page

@@ -1,8 +1,8 @@
-import {Card} from './card.model';
 import {Entity} from './entity.model';
 import {EntityType} from './entity-type.enum';
 import {StackType} from './stack-type.enum';
-import {Language} from './language/language.enum';
+import {Card} from './card/card.model';
+import {Language} from './card/language.enum';
 
 /**
  * Represents a stack
@@ -22,9 +22,9 @@ export class Stack extends Entity {
 
   // Language
 
-  /** Source language */
+  /** Source tense */
   sourceLanguage: Language;
-  /** Target language */
+  /** Target tense */
   targetLanguage: Language;
   /** Verb tenses */
   tenses: string[];

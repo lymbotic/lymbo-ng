@@ -1,5 +1,8 @@
-import {SelectableItem} from '../../../../ui/checkable-list/selectable-item';
+import {SelectableItem} from '../../../../../ui/checkable-list/selectable-item';
 
+/**
+ * Represents an answer
+ */
 export class Answer implements SelectableItem {
 
   /** Text */

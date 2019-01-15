@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {Vocabel} from '../../../../../../core/entity/model/language/vocabel.model';
+import {Vocabel} from '../../../../../../core/entity/model/card/example/vocabel.model';
 
 /**
  * Displays a single example

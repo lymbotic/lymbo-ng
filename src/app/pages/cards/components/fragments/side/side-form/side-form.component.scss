@@ -1,0 +1,15 @@
+@import '../../../../../../../theme';
+
+//
+// Custom
+//
+
+.side-title {
+  font-weight: 700;
+  font-size: 1.5em;
+  font-family: 'Roboto Slab', serif;
+}
+
+.target {
+  color: mat-color($mat-grey, 500);
+}

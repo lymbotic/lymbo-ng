@@ -1,7 +1,6 @@
 import {Component, EventEmitter, Inject, OnDestroy, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import {DialogMode} from '../../../../../core/entity/model/dialog-mode.enum';
-import {Card} from '../../../../../core/entity/model/card.model';
 import {Tag} from '../../../../../core/entity/model/tag.model';
 import {CloneService} from '../../../../../core/entity/services/clone.service';
 import {SuggestionService} from '../../../../../core/entity/services/suggestion.service';
@@ -9,12 +8,15 @@ import {DisplayAspect} from '../../../../../core/entity/services/card/card-displ
 import {Action} from '../../../../../core/entity/model/action.enum';
 import {CardsService} from '../../../../../core/entity/services/card/cards.service';
 import {MicrosoftTranslateService} from '../../../../../core/translate/services/microsoft-translate.service';
-import {Language} from '../../../../../core/entity/model/language/language.enum';
 import {Subject} from 'rxjs';
 import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
 import {environment} from '../../../../../../environments/environment';
 import {Stack} from '../../../../../core/entity/model/stack.model';
-import {CardType} from '../../../../../core/entity/model/card-type.enum';
+import {Card} from '../../../../../core/entity/model/card/card.model';
+import {CardType} from '../../../../../core/entity/model/card/card-type.enum';
+import {AspectType} from '../../../../../core/entity/model/card/aspect.type';
+import {SideAspect} from '../../../../../core/entity/model/card/side/side-aspect';
+import {Language} from '../../../../../core/entity/model/card/language.enum';
 
 /**
  * Displays card dialog
@@ -39,10 +41,6 @@ export class CardDialogComponent implements OnInit, OnDestroy {
   /** Stack the card is contained in */
   stack: Stack;
 
-  /** Placeholder front */
-  placeholderFront = '';
-  /** Placeholder back */
-  placeholderBack = '';
   /** Temporarily displayed tags */
   tags: Tag[] = [];
 
@@ -80,7 +78,6 @@ export class CardDialogComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.initializeData();
     this.initializeType();
-    this.initializePlaceholders();
     this.initializeOptions();
     this.initializeFrontTitleChangedSubject();
   }
@@ -119,19 +116,6 @@ export class CardDialogComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Initializes placeholders
-   */
-  private initializePlaceholders() {
-    if (this.card.type === CardType.VOCABULARY) {
-      this.placeholderFront = this.stack.sourceLanguage;
-      this.placeholderBack = this.stack.targetLanguage;
-    } else {
-      this.placeholderFront = 'Front';
-      this.placeholderBack = 'Back';
-    }
-  }
-
-  /**
    * Initializes options
    */
   private initializeOptions() {
@@ -151,7 +135,11 @@ export class CardDialogComponent implements OnInit, OnDestroy {
       distinctUntilChanged()
     ).subscribe(() => {
       if (this.stack.targetLanguage != null) {
-        this.translateText(this.card.sides[0].title, this.stack.targetLanguage);
+        this.translateText((this.card.aspects.filter(aspect => {
+            return aspect.type === AspectType.SIDE;
+          })[0] as SideAspect).sides[0].title, this.stack.targetLanguage
+        )
+        ;
       }
     });
   }
@@ -166,23 +154,6 @@ export class CardDialogComponent implements OnInit, OnDestroy {
    */
   onCardTypeChanged(type: CardType) {
     this.card.type = type;
-  }
-
-  /**
-   * Handles front side title change
-   * @param sideTitle side title
-   */
-  onFrontTitleChanged(sideTitle: string) {
-    this.card.sides[0].title = sideTitle;
-    this.frontTitleChangedSubject.next(sideTitle);
-  }
-
-  /**
-   * Handles back side title change
-   * @param sideTitle side title
-   */
-  onBackTitleChanged(sideTitle: string) {
-    this.card.sides[1].title = sideTitle;
   }
 
   // Vocabulary
@@ -301,12 +272,14 @@ export class CardDialogComponent implements OnInit, OnDestroy {
   /**
    * Translates a given text and uses it as the back title
    * @param text text
-   * @param targetLanguage target language
+   * @param targetLanguage target tense
    */
   private translateText(text: string, targetLanguage: Language) {
     const translationEmitter: EventEmitter<string> = new EventEmitter<string>();
     translationEmitter.subscribe(value => {
-      this.onBackTitleChanged(value);
+      (this.card.aspects.filter(aspect => {
+        return aspect.type === AspectType.SIDE;
+      })[0] as SideAspect).sides[0].title = value;
     });
 
     this.microsoftTranslateService.translate(text, targetLanguage, translationEmitter);
