@@ -46,7 +46,7 @@ export class CardDisplayService {
   }
 
   /**
-   * Deteermines if a card is complete
+   * Determines if a card is complete
    * @param card card
    */
   static isComplete(card: Card) {

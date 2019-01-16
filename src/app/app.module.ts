@@ -9,10 +9,12 @@ import {FormsModule} from '@angular/forms';
 import {HttpModule} from '@angular/http';
 import {HttpClientModule} from '@angular/common/http';
 import {NgModule} from '@angular/core';
+import { ContainsSelectedPipe } from './pages/pipes/contains-selected.pipe';
 
 @NgModule({
   declarations: [
     AppComponent,
+    ContainsSelectedPipe,
   ],
   imports: [
     AppRoutingModule,

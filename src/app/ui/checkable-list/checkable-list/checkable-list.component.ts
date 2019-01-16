@@ -37,6 +37,8 @@ export class CheckableListComponent implements OnInit {
   @Input() newEntryPlaceholder = 'List entry';
   /** Whether component is readonly or not */
   @Input() readonly = false;
+  /** Whether component's structure can be edited */
+  @Input() editable = true;
   /** Event emitter indicating items changes */
   @Output() itemsChangedEmitter = new EventEmitter<SelectableItem[]>();
 

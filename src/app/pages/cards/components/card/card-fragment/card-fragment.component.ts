@@ -14,6 +14,8 @@ import {Side} from '../../../../../core/entity/model/card/side/side.model';
 import {TenseGroup} from '../../../../../core/entity/model/card/tense/tense-group';
 import {Vocabel} from '../../../../../core/entity/model/card/example/vocabel.model';
 import {QuizAspect} from '../../../../../core/entity/model/card/quiz/quiz-aspect.model';
+import {Answer} from '../../../../../core/entity/model/card/quiz/answer.model';
+import {CloneService} from '../../../../../core/entity/services/clone.service';
 
 /**
  * Displays a card
@@ -54,6 +56,8 @@ export class CardFragmentComponent implements OnInit {
   activeTenseGroup: TenseGroup;
   /** Active example */
   activeExample: Vocabel;
+  /** Active answers */
+  activeAnswers: Answer[];
 
   /**
    * Constructor
@@ -95,6 +99,14 @@ export class CardFragmentComponent implements OnInit {
         this.cardEventEmitter.emit({action: action, card: this.card});
       }
     }
+  }
+
+  /**
+   * Handles selection of answers
+   * @param answers answers
+   */
+  onAnswersSelected(answers: Answer[]) {
+    this.activeAnswers = answers;
   }
 
   //
@@ -160,12 +172,43 @@ export class CardFragmentComponent implements OnInit {
       case AspectType.QUIZ: {
         const quizAspect = this.activeAspect as QuizAspect;
 
+        switch (this.activePartIndex) {
+          case 0: {
+            this.activeSide = new Side(quizAspect.question);
+            this.activeAnswers = CloneService.cloneAnswers(quizAspect.answers);
+            this.activeAnswers.forEach(answer => {
+              answer.selected = false;
+            });
+            break;
+          }
+          case 1: {
+            if (this.checkAnswers(quizAspect.answers, this.activeAnswers)) {
+              this.activeSide = new Side('CORRECT');
+              this.activeAnswers = quizAspect.answers;
+            } else {
+              this.activeSide = new Side('INCORRECT');
+              this.activeAnswers = quizAspect.answers;
+            }
+            break;
+          }
+        }
         break;
       }
       case AspectType.UNDEFINED: {
         break;
       }
     }
+  }
+
+  /**
+   * Deteermines whether a set of given answers matches the correct answers
+   * @param correctAnswers correct answers
+   * @param givenAnswers given answers
+   */
+  private checkAnswers(correctAnswers: Answer[], givenAnswers: Answer[]) {
+    return !correctAnswers.some((correctAnswer, index) => {
+      return correctAnswer.selected !== givenAnswers[index].selected;
+    });
   }
 
   /**

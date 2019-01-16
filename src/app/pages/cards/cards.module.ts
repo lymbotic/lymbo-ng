@@ -27,6 +27,7 @@ import {SuggestedActionButtonModule} from '../../ui/suggested-action-button/sugg
 import { QuizFormComponent } from './components/fragments/quiz/quiz-form/quiz-form.component';
 import {CheckableListModule} from '../../ui/checkable-list/checkable-list.module';
 import { SideFormComponent } from './components/fragments/side/side-form/side-form.component';
+import { ContainsSelectedPipe } from './pipes/contains-selected.pipe';
 
 @NgModule({
   imports: [
@@ -76,6 +77,7 @@ import { SideFormComponent } from './components/fragments/side/side-form/side-fo
     ExamplesFragmentComponent,
     QuizFormComponent,
     SideFormComponent,
+    ContainsSelectedPipe,
   ], entryComponents: [
     // Pages
     CardsComponent,

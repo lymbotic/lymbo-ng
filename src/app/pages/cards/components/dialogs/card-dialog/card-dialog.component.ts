@@ -17,6 +17,7 @@ import {CardType} from '../../../../../core/entity/model/card/card-type.enum';
 import {AspectType} from '../../../../../core/entity/model/card/aspect.type';
 import {SideAspect} from '../../../../../core/entity/model/card/side/side-aspect';
 import {Language} from '../../../../../core/entity/model/card/language.enum';
+import {Aspect} from '../../../../../core/entity/model/card/aspect.interface';
 
 /**
  * Displays card dialog
@@ -197,6 +198,7 @@ export class CardDialogComponent implements OnInit, OnDestroy {
    */
   addCard() {
     this.tags = this.aggregateTags(this.card);
+    this.card.aspects = this.filterUnusedAspects(this.card);
 
     this.dialogRef.close({
       action: Action.ADD,
@@ -210,6 +212,7 @@ export class CardDialogComponent implements OnInit, OnDestroy {
    */
   updateCard() {
     this.tags = this.aggregateTags(this.card);
+    this.card.aspects = this.filterUnusedAspects(this.card);
 
     this.dialogRef.close({
       action: Action.UPDATE,
@@ -301,6 +304,27 @@ export class CardDialogComponent implements OnInit, OnDestroy {
     });
 
     return Array.from(aggregatedTags.values());
+  }
+
+  /**
+   * Filters unused aspects
+   * @param card card
+   * @returns {Aspect[]}
+   */
+  private filterUnusedAspects(card: Card): Aspect[] {
+    return card.aspects.filter(aspect => {
+      switch (this.card.type) {
+        case CardType.FREESTYLE: {
+          return aspect.type === AspectType.SIDE;
+        }
+        case CardType.VOCABULARY: {
+          return aspect.type === AspectType.SIDE || aspect.type === AspectType.TENSE || aspect.type === AspectType.EXAMPLE
+        }
+        case CardType.QUIZ: {
+          return aspect.type === AspectType.QUIZ;
+        }
+      }
+    })
   }
 
   //

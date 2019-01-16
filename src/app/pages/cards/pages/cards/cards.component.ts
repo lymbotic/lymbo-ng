@@ -483,6 +483,8 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
     const card = CloneService.cloneCard(event.card as Card);
     const tags = CloneService.cloneTags(event.tags as Tag[]);
 
+    console.log(JSON.stringify(card));
+
     switch (event.action) {
       case Action.ADD: {
         // Create new entities if necessary
