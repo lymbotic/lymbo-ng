@@ -258,7 +258,7 @@ export class CardsService {
    * @param cardB seconds card
    */
   public sortCards(cardA: Card, cardB: Card) {
-    return new Date(cardA.creationDate).getTime() - new Date(cardB.creationDate).getTime();
+    return new Date(cardA.modificationDate).getTime() - new Date(cardB.modificationDate).getTime();
   }
 
   //
