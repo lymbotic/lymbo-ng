@@ -3,7 +3,8 @@ import {Stack} from '../../../../../../core/entity/model/stack.model';
 import {Card} from '../../../../../../core/entity/model/card/card.model';
 import {Answer} from '../../../../../../core/entity/model/card/quiz/answer.model';
 import {AspectType} from '../../../../../../core/entity/model/card/aspect.type';
-import {QuizAspect} from '../../../../../../core/entity/model/card/quiz/quiz-aspect.model';
+import {QuizAspect, QuizType} from '../../../../../../core/entity/model/card/quiz/quiz-aspect.model';
+import {MatSlideToggleChange} from '@angular/material';
 
 /**
  * Displays form to set quiz
@@ -28,6 +29,9 @@ export class QuizFormComponent implements OnInit {
   /** Quiz aspect */
   quizAspect: QuizAspect;
 
+  singleChoice = false;
+  singleChoiceImpossible = false;
+
   //
   // Lifecycle hooks
   //
@@ -37,6 +41,7 @@ export class QuizFormComponent implements OnInit {
    */
   ngOnInit() {
     this.initializeQuizAspect();
+    this.initializeSingleChoice();
   }
 
   //
@@ -60,6 +65,13 @@ export class QuizFormComponent implements OnInit {
     })[0] as QuizAspect;
   }
 
+  /**
+   * Initialize single choice
+   */
+  private initializeSingleChoice() {
+    this.singleChoice = this.quizAspect.quizType === QuizType.SINGLE_CHOICE;
+  }
+
   //
   // Actions
   //
@@ -74,11 +86,31 @@ export class QuizFormComponent implements OnInit {
   }
 
   /**
+   * Handles changes in single choice selection
+   * @param singleChoice
+   */
+  onSingleChoiceChanged(singleChoice: MatSlideToggleChange) {
+    this.singleChoice = singleChoice.checked;
+    this.quizAspect.quizType = singleChoice.checked ? QuizType.SINGLE_CHOICE : QuizType.MULTIPLE_CHOICE;
+    this.notify();
+
+  }
+
+  /**
    * Handles answer changes
    * @param answers answers
    */
   onAnswersChanged(answers: Answer[]) {
     this.quizAspect.answers = answers;
+
+    if (this.quizAspect.answers.filter(answer => {
+      return answer.selected;
+    }).length === 1) {
+      this.singleChoiceImpossible = false;
+    } else {
+      this.singleChoice = false;
+      this.singleChoiceImpossible = true;
+    }
     this.notify();
   }
 

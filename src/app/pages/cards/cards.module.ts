@@ -24,10 +24,10 @@ import {TensesFragmentComponent} from './components/fragments/language/tenses-fr
 import {TenseFragmentComponent} from './components/fragments/language/tense-fragment/tense-fragment.component';
 import {CardTypeFragmentComponent} from './components/fragments/card-type-fragment/card-type-fragment.component';
 import {SuggestedActionButtonModule} from '../../ui/suggested-action-button/suggested-action-button.module';
-import { QuizFormComponent } from './components/fragments/quiz/quiz-form/quiz-form.component';
+import {QuizFormComponent} from './components/fragments/quiz/quiz-form/quiz-form.component';
 import {CheckableListModule} from '../../ui/checkable-list/checkable-list.module';
-import { SideFormComponent } from './components/fragments/side/side-form/side-form.component';
-import { ContainsSelectedPipe } from './pipes/contains-selected.pipe';
+import {SideFormComponent} from './components/fragments/side/side-form/side-form.component';
+import {ContainsSelectedPipe} from './pipes/contains-selected.pipe';
 
 @NgModule({
   imports: [
@@ -77,6 +77,8 @@ import { ContainsSelectedPipe } from './pipes/contains-selected.pipe';
     ExamplesFragmentComponent,
     QuizFormComponent,
     SideFormComponent,
+
+    // Pipes
     ContainsSelectedPipe,
   ], entryComponents: [
     // Pages

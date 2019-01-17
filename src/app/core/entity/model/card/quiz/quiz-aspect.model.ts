@@ -3,12 +3,22 @@ import {AspectType} from '../aspect.type';
 import {Answer} from './answer.model';
 
 /**
+ * Enum containing quiz types
+ */
+export enum QuizType {
+  MULTIPLE_CHOICE,
+  SINGLE_CHOICE,
+}
+
+/**
  * Represents quiz aspect
  */
 export class QuizAspect implements Aspect {
 
   /** Type */
   type: AspectType;
+  /** Quiz type */
+  quizType: QuizType;
   /** Question */
   question: string;
   /** Answers */
@@ -19,6 +29,7 @@ export class QuizAspect implements Aspect {
    */
   constructor() {
     this.type = AspectType.QUIZ;
+    this.quizType = QuizType.MULTIPLE_CHOICE;
     this.question = '';
     this.answers = [];
   }
