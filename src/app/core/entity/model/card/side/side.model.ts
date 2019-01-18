@@ -1,5 +1,3 @@
-import {EntityType} from './entity-type.enum';
-
 /**
  * Represents a side
  */

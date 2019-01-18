@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { LanguageFormComponent } from './language-form.component';
+import { CheckableListItemComponent } from './checkable-list-item.component';
 
-describe('LanguageFormComponent', () => {
-  let component: LanguageFormComponent;
-  let fixture: ComponentFixture<LanguageFormComponent>;
+describe('CompletableListItemComponent', () => {
+  let component: CheckableListItemComponent;
+  let fixture: ComponentFixture<CheckableListItemComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ LanguageFormComponent ]
+      declarations: [ CheckableListItemComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(LanguageFormComponent);
+    fixture = TestBed.createComponent(CheckableListItemComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

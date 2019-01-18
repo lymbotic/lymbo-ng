@@ -2,7 +2,7 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {StackTypeFragmentComponent} from './stack-type-fragment.component';
 
-describe('StackTypeFragmentComponent', () => {
+describe('CardTypeFragmentComponent', () => {
   let component: StackTypeFragmentComponent;
   let fixture: ComponentFixture<StackTypeFragmentComponent>;
 

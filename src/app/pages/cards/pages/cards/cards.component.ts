@@ -1,8 +1,7 @@
-import {Card} from '../../../../core/entity/model/card.model';
 import {SnackbarService} from '../../../../core/ui/services/snackbar.service';
 import {AboutDialogComponent} from '../../../../ui/about-dialog/about-dialog/about-dialog.component';
 import {environment} from '../../../../../environments/environment';
-import {AfterViewInit, Component, Input, NgZone, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, NgZone, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {Subject} from 'rxjs';
 import {MatDialog, MatDialogConfig, MatIconRegistry, MatSidenav} from '@angular/material';
 import {Media} from '../../../../core/ui/model/media.enum';
@@ -30,6 +29,7 @@ import {DialogMode} from '../../../../core/entity/model/dialog-mode.enum';
 import {StacksService} from '../../../../core/entity/services/stack/stacks.service';
 import {CardDialogComponent} from '../../components/dialogs/card-dialog/card-dialog.component';
 import {TagDialogComponent} from '../../components/dialogs/tag-dialog/tag-dialog.component';
+import {Card} from '../../../../core/entity/model/card/card.model';
 
 /**
  * Displays cards page

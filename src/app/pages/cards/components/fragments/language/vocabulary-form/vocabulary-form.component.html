@@ -1,0 +1,48 @@
+<mat-accordion class="headers-align">
+
+  <!-- Tenses -->
+  <mat-expansion-panel [disabled]="readonly" (opened)="false" hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>Tenses</mat-panel-title>
+      <mat-panel-description
+        *ngIf="tenseAspect == null || tenseAspect.tenseGroups == null || tenseAspect.tenseGroups.length === 0">
+        Add tenses
+      </mat-panel-description>
+      <mat-panel-description
+        *ngIf="tenseAspect != null && tenseAspect.tenseGroups != null && tenseAspect.tenseGroups.length > 0"
+        class="value-set">
+        {{ tenseAspect.tenseGroups.length }} tenses are set
+      </mat-panel-description>
+      <mat-icon svgIcon="schedule"></mat-icon>
+    </mat-expansion-panel-header>
+    <app-tenses-fragment *ngIf="tenseAspect != null && tenseAspect.tenseGroups != null"
+                         [tenseGroups]="tenseAspect.tenseGroups"
+                         (tenseGroupsChangedEventEmitter)="onTenseGroupsChanged($event)">
+    </app-tenses-fragment>
+  </mat-expansion-panel>
+
+  <!-- Examples -->
+  <mat-expansion-panel [disabled]="readonly" (opened)="false" hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>Example</mat-panel-title>
+      <mat-panel-description
+        *ngIf="exampleAspect == null || exampleAspect.examples == null || exampleAspect.examples.length === 0">Add an
+        example
+      </mat-panel-description>
+      <mat-panel-description
+        *ngIf="exampleAspect != null && exampleAspect.examples != null && exampleAspect.examples.length > 0"
+        class="value-set">
+        {{ exampleAspect.examples.length }} examples are set
+      </mat-panel-description>
+      <mat-icon svgIcon="chat_bubble_outline"></mat-icon>
+    </mat-expansion-panel-header>
+    <app-examples-fragment *ngIf="exampleAspect != null && exampleAspect.examples != null"
+                           [examples]="exampleAspect.examples"
+                           [targetLanguage]="stack.targetLanguage"
+                           [placeholderFront]="stack.sourceLanguage"
+                           [placeholderBack]="stack.targetLanguage"
+                           (exampleChangedEventEmitter)="onExampleChanged($event)">
+    </app-examples-fragment>
+  </mat-expansion-panel>
+
+</mat-accordion>

@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {Vocabel} from '../../../../../../core/entity/model/language/vocabel.model';
-import {Language} from '../../../../../../core/entity/model/language/language.enum';
 import {MicrosoftTranslateService} from '../../../../../../core/translate/services/microsoft-translate.service';
+import {Vocabel} from '../../../../../../core/entity/model/card/example/vocabel.model';
+import {Language} from '../../../../../../core/entity/model/card/language.enum';
 
 /**
  * Displays an example
@@ -15,7 +15,7 @@ export class ExamplesFragmentComponent implements OnInit {
 
   /** Examples to be displayed */
   @Input() examples: Vocabel[];
-  /** Target language */
+  /** Target tense */
   @Input() targetLanguage: Language;
   /** Placeholder front */
   @Input() placeholderFront = '';
@@ -101,7 +101,7 @@ export class ExamplesFragmentComponent implements OnInit {
   /**
    * Translates a given example
    * @param example example
-   * @param targetLanguage target language
+   * @param targetLanguage target tense
    */
   private translateExample(example: Vocabel, targetLanguage: Language) {
     const translationEmitter: EventEmitter<string> = new EventEmitter<string>();

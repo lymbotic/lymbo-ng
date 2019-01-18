@@ -11,7 +11,7 @@ import {CardsRoutingModule} from './cards-routing.module';
 import {AboutDialogModule} from '../../ui/about-dialog/about-dialog.module';
 import {ConfirmationDialogModule} from '../../ui/confirmation-dialog/confirmation-dialog.module';
 import {NewFeaturesDialogModule} from '../../ui/new-features-dialog/new-features-dialog.module';
-import {SideTitleFragmentComponent} from './components/fragments/side-title-fragment/side-title-fragment.component';
+import {SideTitleFragmentComponent} from './components/fragments/side/side-title-fragment/side-title-fragment.component';
 import {CardsComponent} from './pages/cards/cards.component';
 import {TagChipsModule} from '../../ui/tag-chips/tag-chips.module';
 import {TagsNamePipeModule} from '../../ui/tags-name-pipe/tags-name-pipe.module';
@@ -19,9 +19,16 @@ import {TagListComponent} from './components/lists/tag-list/tag-list.component';
 import {TagListItemComponent} from './components/lists/tag-list-item/tag-list-item.component';
 import {ExampleFragmentComponent} from './components/fragments/language/example-fragment/example-fragment.component';
 import {ExamplesFragmentComponent} from './components/fragments/language/examples-fragment/examples-fragment.component';
-import {LanguageFormComponent} from './components/fragments/language/language-form/language-form.component';
+import {VocabularyFormComponent} from './components/fragments/language/vocabulary-form/vocabulary-form.component';
 import {TensesFragmentComponent} from './components/fragments/language/tenses-fragment/tenses-fragment.component';
 import {TenseFragmentComponent} from './components/fragments/language/tense-fragment/tense-fragment.component';
+import {CardTypeFragmentComponent} from './components/fragments/card-type-fragment/card-type-fragment.component';
+import {SuggestedActionButtonModule} from '../../ui/suggested-action-button/suggested-action-button.module';
+import {QuizFormComponent} from './components/fragments/quiz/quiz-form/quiz-form.component';
+import {CheckableListModule} from '../../ui/checkable-list/checkable-list.module';
+import {SideFormComponent} from './components/fragments/side/side-form/side-form.component';
+import {ContainsSelectedPipe} from './pipes/contains-selected.pipe';
+import {SingleChoiceFragmentComponent} from './components/fragments/quiz/single-choice-fragment/single-choice-fragment.component';
 
 @NgModule({
   imports: [
@@ -33,8 +40,10 @@ import {TenseFragmentComponent} from './components/fragments/language/tense-frag
     CardsRoutingModule,
 
     AboutDialogModule,
+    CheckableListModule,
     ConfirmationDialogModule,
     NewFeaturesDialogModule,
+    SuggestedActionButtonModule,
     TagChipsModule,
     TagsNamePipeModule
   ],
@@ -43,8 +52,9 @@ import {TenseFragmentComponent} from './components/fragments/language/tense-frag
     CardsComponent,
 
     // Fragments
+    CardTypeFragmentComponent,
     ExamplesFragmentComponent,
-    LanguageFormComponent,
+    VocabularyFormComponent,
     SideTitleFragmentComponent,
     TensesFragmentComponent,
 
@@ -66,6 +76,12 @@ import {TenseFragmentComponent} from './components/fragments/language/tense-frag
     TensesFragmentComponent,
     ExampleFragmentComponent,
     ExamplesFragmentComponent,
+    QuizFormComponent,
+    SideFormComponent,
+    SingleChoiceFragmentComponent,
+
+    // Pipes
+    ContainsSelectedPipe,
   ], entryComponents: [
     // Pages
     CardsComponent,

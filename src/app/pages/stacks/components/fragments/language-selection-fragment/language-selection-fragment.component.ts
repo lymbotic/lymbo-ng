@@ -1,8 +1,8 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {Language} from '../../../../../core/entity/model/language/language.enum';
+import {Language} from '../../../../../core/entity/model/card/language.enum';
 
 /**
- * Displays language selection fragment
+ * Displays tense selection fragment
  */
 @Component({
   selector: 'app-language-selection-fragment',
@@ -15,7 +15,7 @@ export class LanguageSelectionFragmentComponent {
   @Input() language: Language;
   /** Placeholder */
   @Input() placeholder: string;
-  /** Event emitter indicating changes in language */
+  /** Event emitter indicating changes in tense */
   @Output() languageChangedEmitter = new EventEmitter<Language>();
 
   /** Available languages */
@@ -25,8 +25,8 @@ export class LanguageSelectionFragmentComponent {
   selectIcon = LanguageSelectionFragmentComponent.selectIcon;
 
   /**
-   * Retrieves an icon by language
-   * @param language language
+   * Retrieves an icon by tense
+   * @param language tense
    */
   static selectIcon(language: Language) {
     switch (language) {

@@ -1,10 +1,11 @@
 import {Injectable} from '@angular/core';
 import {Tag} from '../model/tag.model';
 import {Stack} from '../model/stack.model';
-import {Card} from '../model/card.model';
-import {Language} from '../model/language/language.enum';
-import {Tense} from '../model/language/tense.enum';
-import {TenseGroup} from '../model/language/tense-group';
+import {Card} from '../model/card/card.model';
+import {Language} from '../model/card/language.enum';
+import {Tense} from '../model/card/tense/tense.enum';
+import {TenseGroup} from '../model/card/tense/tense-group';
+import {Answer} from '../model/card/quiz/answer.model';
 
 /**
  * Creates deep copies of objects
@@ -60,7 +61,7 @@ export class CloneService {
   }
 
   /**
-   * Clones a given language
+   * Clones a given tense
    * @param {Language} original
    * @returns {Language} cloned object
    */
@@ -83,6 +84,15 @@ export class CloneService {
    * @returns {TenseGroup[]} cloned object
    */
   static cloneTenseGroups(original: TenseGroup[]): TenseGroup[] {
+    return original != null ? JSON.parse(JSON.stringify(original)) : null;
+  }
+
+  /**
+   * Clones a given array of answerGroups
+   * @param {Answer[]} original
+   * @returns {Answer[]} cloned object
+   */
+  static cloneAnswers(original: Answer[]): Answer[] {
     return original != null ? JSON.parse(JSON.stringify(original)) : null;
   }
 }

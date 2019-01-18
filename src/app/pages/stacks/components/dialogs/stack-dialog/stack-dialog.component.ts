@@ -9,7 +9,7 @@ import {DisplayAspect} from '../../../../../core/entity/services/stack/stack-dis
 import {Action} from '../../../../../core/entity/model/action.enum';
 import {StacksService} from '../../../../../core/entity/services/stack/stacks.service';
 import {StackType} from '../../../../../core/entity/model/stack-type.enum';
-import {Language} from '../../../../../core/entity/model/language/language.enum';
+import {Language} from '../../../../../core/entity/model/card/language.enum';
 
 /**
  * Displays stack dialog
@@ -119,16 +119,16 @@ export class StackDialogComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Handles source language change
-   * @param language source language
+   * Handles source tense change
+   * @param language source tense
    */
   onSourceLanguageChanged(language: Language) {
     this.stack.sourceLanguage = language;
   }
 
   /**
-   * Handles target language change
-   * @param language target language
+   * Handles target tense change
+   * @param language target tense
    */
   onTargetLanguageChanged(language: Language) {
     this.stack.targetLanguage = language;

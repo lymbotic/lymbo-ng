@@ -1,13 +1,21 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {MatDialog} from '@angular/material';
-import {Card} from '../../../../../core/entity/model/card.model';
-import {Side} from '../../../../../core/entity/model/side.model';
 import {SnackbarService} from '../../../../../core/ui/services/snackbar.service';
 import {CardsService} from '../../../../../core/entity/services/card/cards.service';
 import {Tag} from '../../../../../core/entity/model/tag.model';
 import {Action} from '../../../../../core/entity/model/action.enum';
-import {TenseGroup} from '../../../../../core/entity/model/language/tense-group';
-import {Vocabel} from '../../../../../core/entity/model/language/vocabel.model';
+import {Card} from '../../../../../core/entity/model/card/card.model';
+import {Aspect} from '../../../../../core/entity/model/card/aspect.interface';
+import {AspectType} from '../../../../../core/entity/model/card/aspect.type';
+import {SideAspect} from '../../../../../core/entity/model/card/side/side-aspect';
+import {TenseAspect} from '../../../../../core/entity/model/card/tense/tense-aspect';
+import {ExampleAspect} from '../../../../../core/entity/model/card/example/example-aspect';
+import {Side} from '../../../../../core/entity/model/card/side/side.model';
+import {TenseGroup} from '../../../../../core/entity/model/card/tense/tense-group';
+import {Vocabel} from '../../../../../core/entity/model/card/example/vocabel.model';
+import {QuizAspect, QuizType} from '../../../../../core/entity/model/card/quiz/quiz-aspect.model';
+import {Answer} from '../../../../../core/entity/model/card/quiz/answer.model';
+import {CloneService} from '../../../../../core/entity/services/clone.service';
 
 /**
  * Displays a card
@@ -32,21 +40,26 @@ export class CardFragmentComponent implements OnInit {
 
   /** Enum of action types */
   public actionType = Action;
+  /** Enum of aspect types */
+  public aspectType = AspectType;
 
-  /** Index of active side */
-  activeSideIndex = 0;
+  /** Active aspect */
+  activeAspect: Aspect;
+  /** Index of active aspect */
+  activeAspectIndex = 0;
+  /** Index of active part of an aspect */
+  activePartIndex = 0;
+
   /** Active side */
   activeSide: Side;
-
-  /** Index of active side */
-  activeTenseGroupIndex = 0;
-  /** Active tense group */
+  /** Active tense */
   activeTenseGroup: TenseGroup;
-
-  /** Index of active side */
-  activeExampleIndex = 0;
   /** Active example */
   activeExample: Vocabel;
+  /** Active single choice*/
+  activeSingleChoice: boolean;
+  /** Active answers */
+  activeAnswers: Answer[];
 
   /**
    * Constructor
@@ -67,8 +80,8 @@ export class CardFragmentComponent implements OnInit {
    * Handles on-init lifecycle phase
    */
   ngOnInit() {
-    this.activeSide = this.card.sides[this.activeSideIndex];
-    this.activeTenseGroup = null;
+    this.activeAspect = this.card.aspects[0];
+    this.update();
   }
 
   //
@@ -91,77 +104,156 @@ export class CardFragmentComponent implements OnInit {
   }
 
   /**
+   * Handles selection of answers
+   * @param answers answers
+   */
+  onAnswersSelected(answers: Answer[]) {
+    this.activeAnswers = answers;
+  }
+
+  /**
+   * Handles selection of an answer
+   * @param answer answer
+   */
+  onAnswerSelected(answer: Answer) {
+    this.activeAnswers.forEach(a => {
+      a.selected = (a.text === answer.text);
+    });
+
+    this.onCardClicked(Action.NONE);
+  }
+
+  //
+  // Helpers
+  //
+
+  /**
    * Flips card to the next side
    */
   private flipCard() {
-    const totalSides = this.card.sides != null ? this.card.sides.length : 0;
-    const totalTenseGroups = this.card.tenseGroups != null ? this.card.tenseGroups.length : 0;
-    const totalExamples = this.card.examples != null ? this.card.examples.length : 0;
-
     // Increase index and loop if needed
-    if (this.activeSide != null) {
-      this.activeSideIndex++;
-      this.activeSide = this.card.sides[this.activeSideIndex];
+    if (this.activeAspect != null) {
+      const targetPartCount = this.getPartCount(this.activeAspect.type);
 
-      if (this.activeSideIndex >= totalSides) {
-        if (this.card.tenseGroups != null && this.card.tenseGroups.length > 0) {
-          this.switchToTenses();
-        } else if (this.card.examples != null && this.card.examples.length > 0) {
-          this.switchToExamples();
-        } else if (this.card.sides != null && this.card.sides.length > 0) {
-          this.switchToSides();
+      // Flip part
+      this.activePartIndex++;
+
+      if (this.activePartIndex >= targetPartCount) {
+        this.activePartIndex = 0;
+
+        this.activeAspectIndex++;
+        if (this.activeAspectIndex >= this.card.aspects.length) {
+          this.activeAspectIndex = 0;
         }
+
+        this.activeAspect = this.card.aspects[this.activeAspectIndex];
       }
-    } else if (this.activeTenseGroup != null) {
-      this.activeTenseGroupIndex++;
-      this.activeTenseGroup = this.card.tenseGroups[this.activeTenseGroupIndex];
 
-      if (this.activeTenseGroupIndex >= totalTenseGroups) {
-        if (this.card.examples != null && this.card.examples.length > 0) {
-          this.switchToExamples();
-        } else if (this.card.sides != null && this.card.sides.length > 0) {
-          this.switchToSides();
+      this.update();
+    }
+  }
+
+  /**
+   * Updates display side
+   */
+  private update() {
+    switch (this.activeAspect.type) {
+      case AspectType.SIDE: {
+        if ((this.activeAspect as SideAspect).sides.length > 0) {
+          this.activeSide = (this.activeAspect as SideAspect).sides[this.activePartIndex];
+        } else {
+          this.flipCard();
         }
+        break;
       }
-    } else if (this.activeExample != null) {
-      this.activeExampleIndex++;
-      this.activeExample = this.card.examples[this.activeExampleIndex];
-
-      if (this.activeExampleIndex >= totalExamples) {
-        if (this.card.sides != null && this.card.sides.length > 0) {
-          this.switchToSides();
+      case AspectType.TENSE: {
+        if ((this.activeAspect as TenseAspect).tenseGroups.length > 0) {
+          this.activeTenseGroup = (this.activeAspect as TenseAspect).tenseGroups[this.activePartIndex];
+        } else {
+          this.flipCard();
         }
+        break;
+      }
+      case AspectType.EXAMPLE: {
+        if ((this.activeAspect as ExampleAspect).examples.length > 0) {
+          this.activeExample = (this.activeAspect as ExampleAspect).examples[this.activePartIndex];
+        } else {
+          this.flipCard();
+        }
+
+        break;
+      }
+      case AspectType.QUIZ: {
+        const quizAspect = this.activeAspect as QuizAspect;
+
+        this.activeSingleChoice = quizAspect.quizType === QuizType.SINGLE_CHOICE;
+
+        switch (this.activePartIndex) {
+          case 0: {
+            this.activeSide = new Side(quizAspect.question);
+            this.activeAnswers = CloneService.cloneAnswers(quizAspect.answers);
+            this.activeAnswers.forEach(answer => {
+              answer.selected = false;
+            });
+            break;
+          }
+          case 1: {
+            if (this.checkAnswers(quizAspect.answers, this.activeAnswers)) {
+              this.activeSide = new Side('CORRECT');
+              this.activeAnswers = quizAspect.answers;
+            } else {
+              this.activeSide = new Side('INCORRECT');
+              this.activeAnswers = quizAspect.answers;
+            }
+            break;
+          }
+        }
+        break;
+      }
+      case AspectType.UNDEFINED: {
+        break;
       }
     }
   }
 
   /**
-   * Switches to tenses
+   * Deteermines whether a set of given answers matches the correct answers
+   * @param correctAnswers correct answers
+   * @param givenAnswers given answers
    */
-  private switchToTenses() {
-    this.activeTenseGroupIndex = 0;
-    this.activeSide = null;
-    this.activeTenseGroup = this.card.tenseGroups[this.activeTenseGroupIndex];
-    this.activeExample = null;
+  private checkAnswers(correctAnswers: Answer[], givenAnswers: Answer[]) {
+    return !correctAnswers.some((correctAnswer, index) => {
+      return correctAnswer.selected !== givenAnswers[index].selected;
+    });
   }
 
   /**
-   * Switches to examples
+   * Deteermines the total count of part of an aspect
+   * @param aspectType aspect type
    */
-  private switchToExamples() {
-    this.activeExampleIndex = 0;
-    this.activeSide = null;
-    this.activeTenseGroup = null;
-    this.activeExample = this.card.examples[this.activeExampleIndex];
-  }
-
-  /**
-   * Switches to sides
-   */
-  private switchToSides() {
-    this.activeSideIndex = 0;
-    this.activeSide = this.card.sides[this.activeSideIndex];
-    this.activeTenseGroup = null;
-    this.activeExample = null;
+  private getPartCount(aspectType: AspectType): number {
+    switch (aspectType) {
+      case AspectType.SIDE: {
+        return (this.card.aspects.filter(aspect => {
+          return aspect.type === AspectType.SIDE;
+        })[0] as SideAspect).sides.length;
+      }
+      case AspectType.TENSE: {
+        return (this.card.aspects.filter(aspect => {
+          return aspect.type === AspectType.TENSE;
+        })[0] as TenseAspect).tenseGroups.length;
+      }
+      case AspectType.EXAMPLE: {
+        return (this.card.aspects.filter(aspect => {
+          return aspect.type === AspectType.EXAMPLE;
+        })[0] as ExampleAspect).examples.length;
+      }
+      case AspectType.QUIZ: {
+        return 2;
+      }
+      case AspectType.UNDEFINED: {
+        break;
+      }
+    }
   }
 }

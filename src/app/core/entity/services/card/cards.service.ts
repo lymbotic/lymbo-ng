@@ -1,12 +1,14 @@
 import {Injectable} from '@angular/core';
 import {Subject} from 'rxjs/Subject';
 import {Stack} from '../../model/stack.model';
-import {Card} from '../../model/card.model';
 import {PouchDBService} from '../../../persistence/services/pouchdb.service';
 import {StacksService} from '../stack/stacks.service';
 import {TagService} from '../tag.service';
-import {DisplayAspect} from '../stack/stack-display.service';
-import {CardDisplayService} from './card-display.service';
+import {CardDisplayService, DisplayAspect} from './card-display.service';
+import {CardTypeService} from './card-type.service';
+import {Card} from '../../model/card/card.model';
+import {CardTypeGroup} from '../../model/card/card-type-group.enum';
+import {CardType} from '../../model/card/card-type.enum';
 
 /**
  * Handles cards
@@ -26,11 +28,13 @@ export class CardsService {
 
   /**
    * Constructor
+   * @param cardTypeService card type service
    * @param pouchDBService pouchDB service
    * @param stackService stack service
    * @param tagService tag service
    */
-  constructor(private pouchDBService: PouchDBService,
+  constructor(private cardTypeService: CardTypeService,
+              private pouchDBService: PouchDBService,
               private stackService: StacksService,
               private tagService: TagService) {
   }
@@ -244,13 +248,21 @@ export class CardsService {
       case DisplayAspect.CAN_BE_UPDATED: {
         return CardDisplayService.canBeUpdated(card);
       }
+      case DisplayAspect.TITLES: {
+        return CardDisplayService.containsTitles(card);
+      }
+      case DisplayAspect.VOCABULARY: {
+        return CardDisplayService.containsVocabulary(card);
+      }
+      case DisplayAspect.QUIZ: {
+        return CardDisplayService.containsQuiz(card);
+      }
     }
   }
 
   //
   // Sort
   //
-
 
   /**
    * Sorts cards based on their modification date
@@ -259,6 +271,51 @@ export class CardsService {
    */
   public sortCards(cardA: Card, cardB: Card) {
     return new Date(cardA.modificationDate).getTime() - new Date(cardB.modificationDate).getTime();
+  }
+
+  //
+  // Delegated: card types
+  //
+
+  /**
+   * Returns a list of card types contained in a given card type group
+   * @param group card type group
+   */
+  public getCardTypesByGroup(group: CardTypeGroup): CardType[] {
+    return this.cardTypeService.getCardTypesByGroup(group);
+  }
+
+  /**
+   * Returns the card type group of a given card type
+   * @param type card type
+   */
+  public getCardGroupByType(type: CardType): CardTypeGroup {
+    return this.cardTypeService.getCardGroupByType(type);
+  }
+
+  /**
+   * Determines if a card type group contains a given card type
+   * @param group card type group
+   * @param type card type
+   */
+  public groupContainsType(group: CardTypeGroup, type: CardType) {
+    return this.cardTypeService.groupContainsType(group, type);
+  }
+
+  /**
+   * Retrieves an icon by card type
+   * @param group card type group
+   */
+  public getIconByCardTypeGroup(group: CardTypeGroup): string {
+    return this.cardTypeService.getIconByCardTypeGroup(group);
+  }
+
+  /**
+   * Retrieves an icon by card type
+   * @param type card type
+   */
+  public getIconByCardType(type: CardType): string {
+    return this.cardTypeService.getIconByCardType(type);
   }
 
   //

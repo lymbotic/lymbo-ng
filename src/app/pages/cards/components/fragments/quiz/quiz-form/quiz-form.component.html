@@ -1,0 +1,21 @@
+<div class="flexcontainer">
+  <input matInput class="question" title="question" type="text" autocomplete="off" placeholder="Question"
+         [ngModel]="quizAspect.question"
+         (ngModelChange)="onQuestionChanged($event)"
+         [disabled]="readonly">
+  <div class="flexbox"></div>
+  <label class="mat-slide-toggle-label other-label">
+    <span class="mat-slide-toggle-content">Multiple Choice</span>
+  </label>
+  <mat-slide-toggle
+    color="accent"
+    [checked]="singleChoice"
+    [disabled]="singleChoiceImpossible"
+    (change)="onSingleChoiceChanged($event)">
+    Single Choice
+  </mat-slide-toggle>
+</div>
+<div class="answers">
+  <app-checkable-list [items]="quizAspect.answers" newEntryPlaceholder="New answer"
+                      (itemsChangedEmitter)="onAnswersChanged($event)"></app-checkable-list>
+</div>

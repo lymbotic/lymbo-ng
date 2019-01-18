@@ -5,8 +5,8 @@ import {EntityType} from '../model/entity-type.enum';
 import {environment} from '../../../../environments/environment';
 import {PouchDBService} from '../../persistence/services/pouchdb.service';
 import {SnackbarService} from '../../ui/services/snackbar.service';
-import {Card} from '../model/card.model';
 import {SuggestionService} from './suggestion.service';
+import {Card} from '../model/card/card.model';
 
 /**
  * Handles tags including

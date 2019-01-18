@@ -22,22 +22,52 @@
     </mat-menu>
 
     <div class="flexcontainer">
-      <div class="card-main-content" (click)="onCardClicked(actionType.NONE)">
-        <!-- Normal side -->
-        <mat-card-header>
-          <div *ngIf="activeSide != null">
+      <div class="card-main-content">
+        <div [ngSwitch]="activeAspect.type">
+          <div *ngSwitchCase="aspectType.SIDE" (click)="onCardClicked(actionType.NONE)">
             <img *ngIf="activeSide.imageUrl !== ''" mat-card-image [attr.src]="activeSide.imageUrl">
             <mat-card-title class="side-title">{{ activeSide.title }}</mat-card-title>
           </div>
-        </mat-card-header>
-        <!-- Tense side -->
-        <app-tense-fragment *ngIf="activeTenseGroup != null"
-                            [tenseGroup]="activeTenseGroup" [readonly]="true">
-        </app-tense-fragment>
-        <!-- Examples -->
-        <app-example-fragment *ngIf="activeExample != null" class="side-example"
-                              [example]="activeExample" [readonly]="true">
-        </app-example-fragment>
+          <div *ngSwitchCase="aspectType.TENSE" (click)="onCardClicked(actionType.NONE)">
+            <app-tense-fragment [tenseGroup]="activeTenseGroup" [readonly]="true">
+            </app-tense-fragment>
+          </div>
+          <div *ngSwitchCase="aspectType.EXAMPLE" (click)="onCardClicked(actionType.NONE)">
+            <app-example-fragment [example]="activeExample" [readonly]="true">
+            </app-example-fragment>
+          </div>
+          <div *ngSwitchCase="aspectType.QUIZ">
+            <div [ngSwitch]="activePartIndex">
+              <div *ngSwitchCase=0>
+                <mat-card-title class="side-title">{{ activeSide.title }}
+                </mat-card-title>
+                <div *ngIf="!activeSingleChoice">
+                  <app-checkable-list [items]="activeAnswers" [editable]=false
+                                      (itemsChangedEmitter)="onAnswersSelected($event)"></app-checkable-list>
+                  <div class="flexcontainer">
+                    <div class="flexbox"></div>
+                    <button mat-flat-button color="accent" [disabled]="!(activeAnswers | containsSelected)"
+                            (click)="onCardClicked(actionType.NONE)">RESOLVE
+                    </button>
+                  </div>
+                </div>
+                <app-single-choice-fragment *ngIf="activeSingleChoice"
+                                            [items]="activeAnswers"
+                                            (itemsChangedEmitter)="onAnswerSelected($event)"></app-single-choice-fragment>
+              </div>
+              <div *ngSwitchCase=1>
+                <mat-card-title class="side-title" (click)="onCardClicked(actionType.NONE)">{{ activeSide.title }}
+                </mat-card-title>
+                <app-checkable-list *ngIf="!activeSingleChoice"
+                                    [items]="activeAnswers" [readonly]="true" [editable]=false
+                                    (click)="onCardClicked(actionType.NONE)"></app-checkable-list>
+                <app-single-choice-fragment *ngIf="activeSingleChoice"
+                                            [items]="activeAnswers" [readonly]=true
+                                            (itemsChangedEmitter)="onAnswerSelected($event)"></app-single-choice-fragment>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="flexbox"></div>
       <button mat-icon-button [matMenuTriggerFor]="menu" id="more" class="hidden">
@@ -57,7 +87,9 @@
       </div>
     </mat-card-footer>
 
-    <mat-card-actions *ngIf="activeSide === null || activeSideIndex !== 0" align="right">
+    <mat-card-actions
+      *ngIf="(activeAspect.type != aspectType.SIDE && activeAspect.type != aspectType.QUIZ)|| activePartIndex !== 0"
+      align="right">
       <div class="flexcontainer">
         <button mat-button
                 matTooltip="Put card to end"
@@ -66,6 +98,7 @@
                 (click)="onCardClicked(actionType.PUT_TO_END)">
           <mat-icon svgIcon="undo"></mat-icon>
         </button>
+        <div class="flexbox"></div>
         <button mat-button
                 matTooltip="Put card aside"
                 matTooltipPosition="above"
@@ -74,8 +107,7 @@
           <mat-icon svgIcon="check"></mat-icon>
         </button>
 
-        <div class="flexbox"></div>
-
+        <!--
         <button *ngIf="(activeSide != null && activeSideIndex === card.sides.length - 1)
               && card.tenseGroups.length > 0"
                 mat-button
@@ -98,6 +130,7 @@
           <mat-icon svgIcon="keyboard_tab"></mat-icon>
           <mat-icon svgIcon="chat_bubble_outline"></mat-icon>
         </button>
+        -->
       </div>
     </mat-card-actions>
 

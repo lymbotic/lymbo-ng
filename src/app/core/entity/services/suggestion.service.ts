@@ -2,7 +2,9 @@ import {Injectable} from '@angular/core';
 import {Subject} from 'rxjs/Subject';
 import {Tag} from '../model/tag.model';
 import {Stack} from '../model/stack.model';
-import {Card} from '../model/card.model';
+import {Card} from '../model/card/card.model';
+import {AspectType} from '../model/card/aspect.type';
+import {SideAspect} from '../model/card/side/side-aspect';
 
 /**
  * Service handling suggestions
@@ -63,8 +65,12 @@ export class SuggestionService {
     cards.sort((cardA: Card, cardB: Card) => {
       return new Date(cardA.modificationDate).getTime() - new Date(cardB.modificationDate).getTime();
     }).forEach(c => {
-      if (c != null) {
-        c.sides.forEach(s => {
+      const sideAspect = c.aspects.filter(aspect => {
+        return aspect.type === AspectType.SIDE;
+      })[0] as SideAspect;
+
+      if (c != null && sideAspect != null) {
+        sideAspect.sides.forEach(s => {
           // Add title to search items
           if (s.title != null && c.creationDate) {
             const value = s.title.trim();

@@ -4,8 +4,10 @@ import {TagService} from './tag.service';
 import {StacksService} from './stack/stacks.service';
 import {CardsService} from './card/cards.service';
 import {Stack} from '../model/stack.model';
-import {Card} from '../model/card.model';
-import {Side} from '../model/side.model';
+import {Card} from '../model/card/card.model';
+import {Side} from '../model/card/side/side.model';
+import {AspectType} from '../model/card/aspect.type';
+import {SideAspect} from '../model/card/side/side-aspect';
 
 /**
  * Handles matching
@@ -115,7 +117,11 @@ export class MatchService {
    * @returns {boolean} true if project matches search item
    */
   static cardMatchesSingleItem(card: Card, item: string): boolean {
-    return (card != null) ? card.sides.some(side => {
+    const sideAspect = card.aspects.filter(aspect => {
+      return aspect.type === AspectType.SIDE;
+    })[0] as SideAspect;
+
+    return (card != null && sideAspect != null) ? sideAspect.sides.some(side => {
       return MatchService.sideMatchesSingleItem(side, item);
     }) : false;
   }

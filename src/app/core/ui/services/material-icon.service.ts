@@ -72,6 +72,7 @@ export class MaterialIconService {
     icons.push(new Icon(IconTopic.ACTION, 'favorite', 'ic_favorite_24px.svg'));
     icons.push(new Icon(IconTopic.ACTION, 'favorite_border', 'ic_favorite_border_24px.svg'));
     icons.push(new Icon(IconTopic.ACTION, 'label_outline', 'ic_label_outline_24px.svg'));
+    icons.push(new Icon(IconTopic.ACTION, 'question_answer', 'ic_question_answer_24px.svg'));
     icons.push(new Icon(IconTopic.ACTION, 'search', 'ic_search_24px.svg'));
     icons.push(new Icon(IconTopic.ACTION, 'settings', 'ic_settings_24px.svg'));
     icons.push(new Icon(IconTopic.ACTION, 'schedule', 'ic_schedule_24px.svg'));
@@ -79,6 +80,7 @@ export class MaterialIconService {
     icons.push(new Icon(IconTopic.AV, 'shuffle', 'ic_shuffle_24px.svg'));
     icons.push(new Icon(IconTopic.COMMUNICATION, 'vpn_key', 'ic_vpn_key_24px.svg'));
     icons.push(new Icon(IconTopic.CONTENT, 'add', 'ic_add_24px.svg'));
+    icons.push(new Icon(IconTopic.CONTENT, 'clear', 'ic_clear_24px.svg'));
     icons.push(new Icon(IconTopic.CONTENT, 'filter_list', 'ic_filter_list_24px.svg'));
     icons.push(new Icon(IconTopic.CONTENT, 'reply', 'ic_reply_24px.svg'));
     icons.push(new Icon(IconTopic.CONTENT, 'undo', 'ic_undo_24px.svg'));

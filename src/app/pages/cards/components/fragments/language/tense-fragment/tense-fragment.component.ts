@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {TenseGroup} from '../../../../../../core/entity/model/language/tense-group';
-import {Tense} from '../../../../../../core/entity/model/language/tense.enum';
-import {GrammaticalPerson} from '../../../../../../core/entity/model/language/grammatical-person.enum';
+import {TenseGroup} from '../../../../../../core/entity/model/card/tense/tense-group';
+import {Tense} from '../../../../../../core/entity/model/card/tense/tense.enum';
+import {GrammaticalPerson} from '../../../../../../core/entity/model/card/tense/grammatical-person.enum';
 
 /**
  * Displays a single tense
