@@ -28,6 +28,7 @@ import {QuizFormComponent} from './components/fragments/quiz/quiz-form/quiz-form
 import {CheckableListModule} from '../../ui/checkable-list/checkable-list.module';
 import {SideFormComponent} from './components/fragments/side/side-form/side-form.component';
 import {ContainsSelectedPipe} from './pipes/contains-selected.pipe';
+import {SingleChoiceFragmentComponent} from './components/fragments/quiz/single-choice-fragment/single-choice-fragment.component';
 
 @NgModule({
   imports: [
@@ -77,6 +78,7 @@ import {ContainsSelectedPipe} from './pipes/contains-selected.pipe';
     ExamplesFragmentComponent,
     QuizFormComponent,
     SideFormComponent,
+    SingleChoiceFragmentComponent,
 
     // Pipes
     ContainsSelectedPipe,

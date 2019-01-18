@@ -29,7 +29,9 @@ export class QuizFormComponent implements OnInit {
   /** Quiz aspect */
   quizAspect: QuizAspect;
 
+  /** Whether single choice is active */
   singleChoice = false;
+  /** Whether single choice is impossible */
   singleChoiceImpossible = false;
 
   //

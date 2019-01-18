@@ -1,0 +1,10 @@
+<span *ngFor="let item of items">
+  <button mat-button *ngIf="!item.selected" color="accent" class="answer-button" [disabled]=readonly
+          (click)="onAnswerClicked(item)">
+    {{ item.text }}
+  </button>
+  <button mat-flat-button *ngIf="item.selected" color="accent" class="answer-button"
+          (click)="onAnswerClicked(item)">
+    {{ item.text }}
+  </button>
+</span>
