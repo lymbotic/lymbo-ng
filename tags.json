@@ -23,5 +23,6 @@
 { "annotation":"refs/tags/v0.17.0", "message": "Language stacks"},
 { "annotation":"refs/tags/v0.18.0", "message": "Auto-translate cards"},
 { "annotation":"refs/tags/v0.19.0", "message": "Vocabulary cards"},
-{ "annotation":"refs/tags/v0.20.0", "message": "Favorite cards"}
+{ "annotation":"refs/tags/v0.20.0", "message": "Favorite cards"},
+{ "annotation":"refs/tags/v0.21.0", "message": "Quiz cards"}
 ]}
