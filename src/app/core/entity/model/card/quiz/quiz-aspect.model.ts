@@ -6,8 +6,8 @@ import {Answer} from './answer.model';
  * Enum containing quiz types
  */
 export enum QuizType {
-  MULTIPLE_CHOICE,
-  SINGLE_CHOICE,
+  MULTIPLE_CHOICE = 'multiple choice',
+  SINGLE_CHOICE = 'single choice',
 }
 
 /**

@@ -13,7 +13,7 @@ import {ExampleAspect} from '../../../../../core/entity/model/card/example/examp
 import {Side} from '../../../../../core/entity/model/card/side/side.model';
 import {TenseGroup} from '../../../../../core/entity/model/card/tense/tense-group';
 import {Vocabel} from '../../../../../core/entity/model/card/example/vocabel.model';
-import {QuizAspect} from '../../../../../core/entity/model/card/quiz/quiz-aspect.model';
+import {QuizAspect, QuizType} from '../../../../../core/entity/model/card/quiz/quiz-aspect.model';
 import {Answer} from '../../../../../core/entity/model/card/quiz/answer.model';
 import {CloneService} from '../../../../../core/entity/services/clone.service';
 
@@ -56,6 +56,8 @@ export class CardFragmentComponent implements OnInit {
   activeTenseGroup: TenseGroup;
   /** Active example */
   activeExample: Vocabel;
+  /** Active single choice*/
+  activeSingleChoice: boolean;
   /** Active answers */
   activeAnswers: Answer[];
 
@@ -107,6 +109,18 @@ export class CardFragmentComponent implements OnInit {
    */
   onAnswersSelected(answers: Answer[]) {
     this.activeAnswers = answers;
+  }
+
+  /**
+   * Handles selection of an answer
+   * @param answer answer
+   */
+  onAnswerSelected(answer: Answer) {
+    this.activeAnswers.forEach(a => {
+      a.selected = (a.text === answer.text);
+    });
+
+    this.onCardClicked(Action.NONE);
   }
 
   //
@@ -171,6 +185,8 @@ export class CardFragmentComponent implements OnInit {
       }
       case AspectType.QUIZ: {
         const quizAspect = this.activeAspect as QuizAspect;
+
+        this.activeSingleChoice = quizAspect.quizType === QuizType.SINGLE_CHOICE;
 
         switch (this.activePartIndex) {
           case 0: {
