@@ -5,9 +5,10 @@
       <app-card-type-fragment [card]="card" (cardTypeEventEmitter)="onCardTypeChanged($event)">
       </app-card-type-fragment>
 
+      <!-- Sides -->
       <app-side-form *ngIf="containsDisplayAspect(displayAspectType.TITLES, card)"
                      [card]="card" [stack]="stack"
-                     (cardEventEmitter)="onVocabularyChanged($event)"></app-side-form>
+                     (cardEventEmitter)="onSidesChanged($event)"></app-side-form>
 
       <p>
         <mat-divider></mat-divider>

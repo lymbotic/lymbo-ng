@@ -1,12 +1,12 @@
 <div class="example">
   <input matInput title="example-source" class="source" autocomplete="off"
-         [(ngModel)]="example.source"
+         [ngModel]="example.source"
          [placeholder]="placeholderFront"
          [disabled]="readonly"
-         (ngModelChange)="onExampleSourceChanged(example)">
+         (ngModelChange)="onExampleSourceChanged($event)">
   <input matInput title="example-target" class="target" autocomplete="off"
-         [(ngModel)]="example.target"
+         [ngModel]="example.target"
          [placeholder]="placeholderBack"
          [disabled]="readonly"
-         (ngModelChange)="onExampleTargetChanged()">
+         (ngModelChange)="onExampleTargetChanged($event)">
 </div>

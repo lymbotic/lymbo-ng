@@ -6,6 +6,7 @@ import {Language} from '../model/card/language.enum';
 import {Tense} from '../model/card/tense/tense.enum';
 import {TenseGroup} from '../model/card/tense/tense-group';
 import {Answer} from '../model/card/quiz/answer.model';
+import {Vocabel} from '../model/card/example/vocabel.model';
 
 /**
  * Creates deep copies of objects
@@ -93,6 +94,24 @@ export class CloneService {
    * @returns {Answer[]} cloned object
    */
   static cloneAnswers(original: Answer[]): Answer[] {
+    return original != null ? JSON.parse(JSON.stringify(original)) : null;
+  }
+
+  /**
+   * Clones a given vocabel
+   * @param {Vocabel} original
+   * @returns {Vocabel} cloned object
+   */
+  static cloneVocabel(original: Vocabel): Vocabel {
+    return original != null ? JSON.parse(JSON.stringify(original)) : null;
+  }
+
+  /**
+   * Clones a given array of vocabels
+   * @param {Vocabel} original
+   * @returns {Vocabel} cloned object
+   */
+  static cloneVocabels(original: Vocabel[]): Vocabel[] {
     return original != null ? JSON.parse(JSON.stringify(original)) : null;
   }
 }

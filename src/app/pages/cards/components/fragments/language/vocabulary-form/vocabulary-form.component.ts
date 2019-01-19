@@ -13,8 +13,7 @@ import {Vocabel} from '../../../../../../core/entity/model/card/example/vocabel.
 @Component({
   selector: 'app-vocabulary-form',
   templateUrl: './vocabulary-form.component.html',
-  styleUrls: ['./vocabulary-form.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ['./vocabulary-form.component.scss']
 })
 export class VocabularyFormComponent implements OnInit {
 

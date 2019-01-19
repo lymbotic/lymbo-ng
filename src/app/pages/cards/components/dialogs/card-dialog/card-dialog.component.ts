@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Inject, OnDestroy, OnInit} from '@angular/core';
+import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import {DialogMode} from '../../../../../core/entity/model/dialog-mode.enum';
 import {Tag} from '../../../../../core/entity/model/tag.model';
@@ -7,16 +7,10 @@ import {SuggestionService} from '../../../../../core/entity/services/suggestion.
 import {DisplayAspect} from '../../../../../core/entity/services/card/card-display.service';
 import {Action} from '../../../../../core/entity/model/action.enum';
 import {CardsService} from '../../../../../core/entity/services/card/cards.service';
-import {MicrosoftTranslateService} from '../../../../../core/translate/services/microsoft-translate.service';
-import {Subject} from 'rxjs';
-import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
-import {environment} from '../../../../../../environments/environment';
 import {Stack} from '../../../../../core/entity/model/stack.model';
 import {Card} from '../../../../../core/entity/model/card/card.model';
 import {CardType} from '../../../../../core/entity/model/card/card-type.enum';
 import {AspectType} from '../../../../../core/entity/model/card/aspect.type';
-import {SideAspect} from '../../../../../core/entity/model/card/side/side-aspect';
-import {Language} from '../../../../../core/entity/model/card/language.enum';
 import {Aspect} from '../../../../../core/entity/model/card/aspect.interface';
 
 /**
@@ -51,19 +45,14 @@ export class CardDialogComponent implements OnInit, OnDestroy {
   /** Enum of display aspects */
   displayAspectType = DisplayAspect;
 
-  /** Subject of front title changes */
-  private frontTitleChangedSubject = new Subject<string>();
-
   /**
    * Constructor
    * @param cardsService cards service
-   * @param microsoftTranslateService Microsoft translate service
    * @param suggestionService suggestion service
    * @param dialogRef dialog reference
    * @param data dialog data
    */
   constructor(private cardsService: CardsService,
-              private microsoftTranslateService: MicrosoftTranslateService,
               private suggestionService: SuggestionService,
               public dialogRef: MatDialogRef<CardDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any) {
@@ -80,7 +69,6 @@ export class CardDialogComponent implements OnInit, OnDestroy {
     this.initializeData();
     this.initializeType();
     this.initializeOptions();
-    this.initializeFrontTitleChangedSubject();
   }
 
   /**
@@ -127,24 +115,6 @@ export class CardDialogComponent implements OnInit, OnDestroy {
     });
   }
 
-  /**
-   * Initializes front title subject
-   */
-  private initializeFrontTitleChangedSubject() {
-    this.frontTitleChangedSubject.pipe(
-      debounceTime(environment.TRANSLATE_DEBOUNCE_TIME),
-      distinctUntilChanged()
-    ).subscribe(() => {
-      if (this.stack.targetLanguage != null) {
-        this.translateText((this.card.aspects.filter(aspect => {
-            return aspect.type === AspectType.SIDE;
-          })[0] as SideAspect).sides[0].title, this.stack.targetLanguage
-        )
-        ;
-      }
-    });
-  }
-
   //
   // Actions
   //
@@ -155,6 +125,16 @@ export class CardDialogComponent implements OnInit, OnDestroy {
    */
   onCardTypeChanged(type: CardType) {
     this.card.type = type;
+  }
+
+  // Side
+
+  /**
+   * Handles sides changes
+   * @param card
+   */
+  onSidesChanged(card: Card) {
+    this.card = card;
   }
 
   // Vocabulary
@@ -266,28 +246,6 @@ export class CardDialogComponent implements OnInit, OnDestroy {
     }
   }
 
-  //
-  // Helpers
-  //
-
-  // Translation
-
-  /**
-   * Translates a given text and uses it as the back title
-   * @param text text
-   * @param targetLanguage target tense
-   */
-  private translateText(text: string, targetLanguage: Language) {
-    const translationEmitter: EventEmitter<string> = new EventEmitter<string>();
-    translationEmitter.subscribe(value => {
-      (this.card.aspects.filter(aspect => {
-        return aspect.type === AspectType.SIDE;
-      })[0] as SideAspect).sides[0].title = value;
-    });
-
-    this.microsoftTranslateService.translate(text, targetLanguage, translationEmitter);
-  }
-
   // Tags
 
   /**
@@ -318,13 +276,13 @@ export class CardDialogComponent implements OnInit, OnDestroy {
           return aspect.type === AspectType.SIDE;
         }
         case CardType.VOCABULARY: {
-          return aspect.type === AspectType.SIDE || aspect.type === AspectType.TENSE || aspect.type === AspectType.EXAMPLE
+          return aspect.type === AspectType.SIDE || aspect.type === AspectType.TENSE || aspect.type === AspectType.EXAMPLE;
         }
         case CardType.QUIZ: {
           return aspect.type === AspectType.QUIZ;
         }
       }
-    })
+    });
   }
 
   //
