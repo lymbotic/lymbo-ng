@@ -5,12 +5,14 @@ import {EntityModule} from './entity/entity.module';
 import {UiModule} from './ui/ui.module';
 import {TranslateModule} from './translate/translate.module';
 import {UtilModule} from './common/util.module';
+import {ImageModule} from './image/image.module';
 
 @NgModule({
   imports: [
     CommonModule,
 
     EntityModule,
+    ImageModule,
     SettingsModule,
     TranslateModule,
     UiModule,
