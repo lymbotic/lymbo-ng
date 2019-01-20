@@ -14,6 +14,7 @@ export enum SettingType {
   //
 
   API_KEY_MICROSOFT_TEXT_TRANSLATE = 'api-key-microsoft-text-translate',
+  API_KEY_PEXELS_IMAGE = 'api-key-pexels-image',
 
   //
   // Preferences

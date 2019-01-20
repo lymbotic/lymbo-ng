@@ -20,5 +20,16 @@
         </div>
       </div>
     </div>
+    <div class="details-box">
+      <div class="flexcontainer">
+        <mat-icon svgIcon="vpn_key" class="icon"></mat-icon>
+        <span>Pexels API key</span>
+        <div class="flexbox"></div>
+        <div class="text-input">
+          <input matInput type="text" placeholder="API key" [ngModel]="apiKeyPexelsImages"
+                 (ngModelChange)="onValueChanged(settingsType.API_KEY_PEXELS_IMAGE, $event)"/>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

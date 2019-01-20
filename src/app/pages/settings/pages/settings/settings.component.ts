@@ -36,6 +36,8 @@ export class SettingsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   /** Setting API key Microsoft text translate */
   apiKeyMicrosoftTextTranslate: number;
+  /** Setting API key pexels image */
+  apiKeyPexelsImages: number;
 
   /** Search items options for auto-complete */
   public searchOptions = [];
@@ -131,6 +133,7 @@ export class SettingsComponent implements OnInit, AfterViewInit, OnDestroy {
       if (value != null) {
         this.settings = value;
         this.apiKeyMicrosoftTextTranslate = this.settings.get(SettingType.API_KEY_MICROSOFT_TEXT_TRANSLATE).value;
+        this.apiKeyPexelsImages = this.settings.get(SettingType.API_KEY_PEXELS_IMAGE).value;
       }
     });
   }

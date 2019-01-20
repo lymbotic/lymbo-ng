@@ -1,15 +1,17 @@
-import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
+import {Component, EventEmitter, Inject, OnDestroy, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import {DialogMode} from '../../../../../core/entity/model/dialog-mode.enum';
-import {Stack} from '../../../../../core/entity/model/stack.model';
+import {Stack} from '../../../../../core/entity/model/stack/stack.model';
 import {Tag} from '../../../../../core/entity/model/tag.model';
 import {CloneService} from '../../../../../core/entity/services/clone.service';
 import {SuggestionService} from '../../../../../core/entity/services/suggestion.service';
 import {DisplayAspect} from '../../../../../core/entity/services/stack/stack-display.service';
 import {Action} from '../../../../../core/entity/model/action.enum';
 import {StacksService} from '../../../../../core/entity/services/stack/stacks.service';
-import {StackType} from '../../../../../core/entity/model/stack-type.enum';
+import {StackType} from '../../../../../core/entity/model/stack/stack-type.enum';
 import {Language} from '../../../../../core/entity/model/card/language.enum';
+import {PexelsService} from '../../../../../core/image/services/pexels.service';
+import {Photo} from '../../../../../core/image/model/photo.model';
 
 /**
  * Displays stack dialog
@@ -43,12 +45,14 @@ export class StackDialogComponent implements OnInit, OnDestroy {
 
   /**
    * Constructor
+   * @param pexelsService pexels service
    * @param stacksService cards service
    * @param suggestionService suggestion service
    * @param dialogRef dialog reference
    * @param data dialog data
    */
-  constructor(private stacksService: StacksService,
+  constructor(private pexelsService: PexelsService,
+              private stacksService: StacksService,
               private suggestionService: SuggestionService,
               public dialogRef: MatDialogRef<StackDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any) {
@@ -142,6 +146,8 @@ export class StackDialogComponent implements OnInit, OnDestroy {
     this.tags = tags.map(t => {
       return new Tag(t, true);
     });
+
+    this.fetchPhoto(tags);
   }
 
   //
@@ -239,6 +245,23 @@ export class StackDialogComponent implements OnInit, OnDestroy {
     });
 
     return Array.from(aggregatedTags.values());
+  }
+
+  // Image
+
+  /**
+   * Fetches photos and uses it as stack image
+   * @param searchItems
+   */
+  private fetchPhoto(searchItems: string[]) {
+    const photosEmitter: EventEmitter<Photo[]> = new EventEmitter<Photo[]>();
+    photosEmitter.subscribe(photos => {
+      if (photos.length > 0) {
+        this.stack.imageUrl = (photos[0] as Photo).url;
+      }
+    });
+
+    this.pexelsService.search(searchItems, photosEmitter);
   }
 
   //
