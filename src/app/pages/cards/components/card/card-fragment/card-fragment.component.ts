@@ -186,7 +186,7 @@ export class CardFragmentComponent implements OnInit {
       case AspectType.QUIZ: {
         const quizAspect = this.activeAspect as QuizAspect;
 
-        this.activeSingleChoice = quizAspect.quizType === QuizType.SINGLE_CHOICE;
+        this.activeSingleChoice = quizAspect.quizType === QuizType.CHOOSE;
 
         switch (this.activePartIndex) {
           case 0: {

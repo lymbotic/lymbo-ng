@@ -12,6 +12,10 @@ import {Card} from '../../../../../core/entity/model/card/card.model';
 import {CardType} from '../../../../../core/entity/model/card/card-type.enum';
 import {AspectType} from '../../../../../core/entity/model/card/aspect.type';
 import {Aspect} from '../../../../../core/entity/model/card/aspect.interface';
+import {Media} from '../../../../../core/ui/model/media.enum';
+import {MediaService} from '../../../../../core/ui/services/media.service';
+import {takeUntil} from 'rxjs/operators';
+import {Subject} from 'rxjs';
 
 /**
  * Displays card dialog
@@ -38,21 +42,30 @@ export class CardDialogComponent implements OnInit, OnDestroy {
 
   /** Temporarily displayed tags */
   tags: Tag[] = [];
-
   /** Tag options */
   tagOptions: string[];
 
   /** Enum of display aspects */
   displayAspectType = DisplayAspect;
 
+  /** Enum of media types */
+  public mediaType = Media;
+  /** Current media */
+  public media: Media = Media.UNDEFINED;
+
+  /** Helper subject used to finish other subscriptions */
+  private unsubscribeSubject = new Subject();
+
   /**
    * Constructor
    * @param cardsService cards service
+   * @param mediaService media service
    * @param suggestionService suggestion service
    * @param dialogRef dialog reference
    * @param data dialog data
    */
   constructor(private cardsService: CardsService,
+              private mediaService: MediaService,
               private suggestionService: SuggestionService,
               public dialogRef: MatDialogRef<CardDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any) {
@@ -69,12 +82,17 @@ export class CardDialogComponent implements OnInit, OnDestroy {
     this.initializeData();
     this.initializeType();
     this.initializeOptions();
+
+    this.initializeMediaSubscription();
   }
 
   /**
    * Handles on-destroy lifecycle phase
    */
   ngOnDestroy() {
+    this.unsubscribeSubject.next();
+    this.unsubscribeSubject.complete();
+
     this.handleCardChanges();
   }
 
@@ -112,6 +130,18 @@ export class CardDialogComponent implements OnInit, OnDestroy {
       return new Date(t2.modificationDate).getTime() > new Date(t1.modificationDate).getTime() ? 1 : -1;
     }).map(t => {
       return t.name;
+    });
+  }
+
+  /**
+   * Initializes media subscription
+   */
+  private initializeMediaSubscription() {
+    this.media = this.mediaService.media;
+    this.mediaService.mediaSubject.pipe(
+      takeUntil(this.unsubscribeSubject)
+    ).subscribe((value) => {
+      this.media = value as Media;
     });
   }
 

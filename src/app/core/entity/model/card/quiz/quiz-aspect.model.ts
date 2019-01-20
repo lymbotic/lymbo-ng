@@ -6,8 +6,8 @@ import {Answer} from './answer.model';
  * Enum containing quiz types
  */
 export enum QuizType {
-  MULTIPLE_CHOICE = 'multiple choice',
-  SINGLE_CHOICE = 'single choice',
+  SELECT = 'Select',
+  CHOOSE = 'Choose',
 }
 
 /**
@@ -29,7 +29,7 @@ export class QuizAspect implements Aspect {
    */
   constructor() {
     this.type = AspectType.QUIZ;
-    this.quizType = QuizType.MULTIPLE_CHOICE;
+    this.quizType = QuizType.SELECT;
     this.question = '';
     this.answers = [];
   }

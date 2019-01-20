@@ -5,6 +5,7 @@ import {Answer} from '../../../../../../core/entity/model/card/quiz/answer.model
 import {AspectType} from '../../../../../../core/entity/model/card/aspect.type';
 import {QuizAspect, QuizType} from '../../../../../../core/entity/model/card/quiz/quiz-aspect.model';
 import {MatSlideToggleChange} from '@angular/material';
+import {Media} from '../../../../../../core/ui/model/media.enum';
 
 /**
  * Displays form to set quiz
@@ -21,6 +22,8 @@ export class QuizFormComponent implements OnInit {
   @Input() card: Card;
   /** Stack the card is contained in */
   @Input() stack: Stack;
+  /** Current media */
+  @Input() media: Media = Media.UNDEFINED;
   /** Readonly dialog if true */
   @Input() readonly = false;
   /** Event emitter indicating card changes */
@@ -33,6 +36,12 @@ export class QuizFormComponent implements OnInit {
   singleChoice = false;
   /** Whether single choice is impossible */
   singleChoiceImpossible = false;
+
+  /** Enum of media types */
+  mediaType = Media;
+  /** Current media */
+  /** Enum of quiz types */
+  quizType = QuizType;
 
   //
   // Lifecycle hooks
@@ -71,7 +80,7 @@ export class QuizFormComponent implements OnInit {
    * Initialize single choice
    */
   private initializeSingleChoice() {
-    this.singleChoice = this.quizAspect.quizType === QuizType.SINGLE_CHOICE;
+    this.singleChoice = this.quizAspect.quizType === QuizType.CHOOSE;
   }
 
   //
@@ -93,7 +102,7 @@ export class QuizFormComponent implements OnInit {
    */
   onSingleChoiceChanged(singleChoice: MatSlideToggleChange) {
     this.singleChoice = singleChoice.checked;
-    this.quizAspect.quizType = singleChoice.checked ? QuizType.SINGLE_CHOICE : QuizType.MULTIPLE_CHOICE;
+    this.quizAspect.quizType = singleChoice.checked ? QuizType.CHOOSE : QuizType.SELECT;
     this.notify();
 
   }

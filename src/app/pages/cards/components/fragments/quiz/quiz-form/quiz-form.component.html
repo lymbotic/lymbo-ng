@@ -4,15 +4,28 @@
          (ngModelChange)="onQuestionChanged($event)"
          [disabled]="readonly">
   <div class="flexbox"></div>
+  <label *ngIf="media > mediaType.MEDIUM" class="mat-slide-toggle-label other-label">
+    <span class="mat-slide-toggle-content">{{ quizType.SELECT }}</span>
+  </label>
+  <mat-slide-toggle *ngIf="media > mediaType.MEDIUM"
+                    color="accent"
+                    [checked]="singleChoice"
+                    [disabled]="singleChoiceImpossible"
+                    (change)="onSingleChoiceChanged($event)">
+    {{ quizType.CHOOSE }}
+  </mat-slide-toggle>
+</div>
+<div *ngIf="media < mediaType.LARGE" class="flexcontainer">
+  <div class="flexbox"></div>
   <label class="mat-slide-toggle-label other-label">
-    <span class="mat-slide-toggle-content">Multiple Choice</span>
+    <span class="mat-slide-toggle-content">{{ quizType.SELECT }}</span>
   </label>
   <mat-slide-toggle
     color="accent"
     [checked]="singleChoice"
     [disabled]="singleChoiceImpossible"
     (change)="onSingleChoiceChanged($event)">
-    Single Choice
+    {{ quizType.CHOOSE }}
   </mat-slide-toggle>
 </div>
 <div class="answers">

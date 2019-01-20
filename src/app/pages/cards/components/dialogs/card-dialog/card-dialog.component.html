@@ -21,7 +21,7 @@
 
       <!-- Quiz -->
       <app-quiz-form *ngIf="containsDisplayAspect(displayAspectType.QUIZ, card)"
-                     [card]="card" [stack]="stack"
+                     [card]="card" [stack]="stack" [media]="media"
                      (cardEventEmitter)="onQuizChanged($event)"></app-quiz-form>
 
       <app-tag-chips [tags]="tags | tagNames"
