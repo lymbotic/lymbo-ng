@@ -3,10 +3,10 @@ import {MaterialColorService} from './material-color.service';
 import {HueType} from '../model/hue-type.enum';
 import {PaletteType} from '../model/palette-type.enum';
 import {Hue} from '../model/hue.model';
-import {Stack} from '../../entity/model/stack.model';
+import {Stack} from '../../entity/model/stack/stack.model';
 import {Hash} from '../../entity/model/hash';
 import {FeatureType} from '../../settings/model/feature-type.enum';
-import {StackTypeGroup} from '../../entity/model/stack-type-group.enum';
+import {StackTypeGroup} from '../../entity/model/stack/stack-type-group.enum';
 import {CardTypeGroup} from '../../entity/model/card/card-type-group.enum';
 
 /**

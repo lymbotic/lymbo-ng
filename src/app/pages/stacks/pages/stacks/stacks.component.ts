@@ -1,4 +1,4 @@
-import {Stack} from '../../../../core/entity/model/stack.model';
+import {Stack} from '../../../../core/entity/model/stack/stack.model';
 import {SnackbarService} from '../../../../core/ui/services/snackbar.service';
 import {environment} from '../../../../../environments/environment';
 import {AfterViewInit, Component, NgZone, OnDestroy, OnInit, ViewChild} from '@angular/core';

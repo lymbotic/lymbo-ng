@@ -1,11 +1,11 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild} from '@angular/core';
-import {StackTypeGroup} from '../../../../../core/entity/model/stack-type-group.enum';
-import {StackType} from '../../../../../core/entity/model/stack-type.enum';
+import {StackTypeGroup} from '../../../../../core/entity/model/stack/stack-type-group.enum';
+import {StackType} from '../../../../../core/entity/model/stack/stack-type.enum';
 import {ColorService} from '../../../../../core/ui/services/color.service';
 import {FeatureService} from '../../../../../core/settings/services/feature.service';
 import {StacksService} from '../../../../../core/entity/services/stack/stacks.service';
 import {MatSelect} from '@angular/material';
-import {Stack} from '../../../../../core/entity/model/stack.model';
+import {Stack} from '../../../../../core/entity/model/stack/stack.model';
 
 /**
  * Represents a stack type group action button

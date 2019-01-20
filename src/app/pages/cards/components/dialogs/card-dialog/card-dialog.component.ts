@@ -7,7 +7,7 @@ import {SuggestionService} from '../../../../../core/entity/services/suggestion.
 import {DisplayAspect} from '../../../../../core/entity/services/card/card-display.service';
 import {Action} from '../../../../../core/entity/model/action.enum';
 import {CardsService} from '../../../../../core/entity/services/card/cards.service';
-import {Stack} from '../../../../../core/entity/model/stack.model';
+import {Stack} from '../../../../../core/entity/model/stack/stack.model';
 import {Card} from '../../../../../core/entity/model/card/card.model';
 import {CardType} from '../../../../../core/entity/model/card/card-type.enum';
 import {AspectType} from '../../../../../core/entity/model/card/aspect.type';

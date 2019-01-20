@@ -1,8 +1,8 @@
-import {Entity} from './entity.model';
-import {EntityType} from './entity-type.enum';
+import {Entity} from '../entity.model';
+import {EntityType} from '../entity-type.enum';
 import {StackType} from './stack-type.enum';
-import {Card} from './card/card.model';
-import {Language} from './card/language.enum';
+import {Card} from '../card/card.model';
+import {Language} from '../card/language.enum';
 
 /**
  * Represents a stack

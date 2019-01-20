@@ -5,7 +5,7 @@ import {SnackbarService} from 'app/core/ui/services/snackbar.service';
 import {PouchDBService} from 'app/core/persistence/services/pouchdb.service';
 import {StacksService} from '../../../../../core/entity/services/stack/stacks.service';
 import {DropResult, SUCCESS} from '../../fragments/file-drop-fragment/file-drop-fragment.component';
-import {Stack} from '../../../../../core/entity/model/stack.model';
+import {Stack} from '../../../../../core/entity/model/stack/stack.model';
 
 /**
  * Displays upload dialog

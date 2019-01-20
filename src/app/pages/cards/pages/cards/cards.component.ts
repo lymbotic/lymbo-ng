@@ -17,7 +17,7 @@ import {DomSanitizer} from '@angular/platform-browser';
 import {SettingsService} from '../../../../core/settings/services/settings.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {CardsService} from '../../../../core/entity/services/card/cards.service';
-import {Stack} from '../../../../core/entity/model/stack.model';
+import {Stack} from '../../../../core/entity/model/stack/stack.model';
 import {Tag} from '../../../../core/entity/model/tag.model';
 import {MatchService} from '../../../../core/entity/services/match.service';
 import {TagService} from '../../../../core/entity/services/tag.service';

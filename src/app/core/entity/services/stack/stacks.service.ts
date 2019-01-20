@@ -1,12 +1,12 @@
 import {Injectable, isDevMode} from '@angular/core';
 import {Subject} from 'rxjs/Subject';
 import {DisplayAspect, StackDisplayService} from './stack-display.service';
-import {Stack} from '../../model/stack.model';
+import {Stack} from '../../model/stack/stack.model';
 import {PouchDBService} from '../../../persistence/services/pouchdb.service';
 import {TagService} from '../tag.service';
 import {EntityType} from '../../model/entity-type.enum';
-import {StackTypeGroup} from '../../model/stack-type-group.enum';
-import {StackType} from '../../model/stack-type.enum';
+import {StackTypeGroup} from '../../model/stack/stack-type-group.enum';
+import {StackType} from '../../model/stack/stack-type.enum';
 import {StackTypeService} from './stack-type.service';
 
 /**

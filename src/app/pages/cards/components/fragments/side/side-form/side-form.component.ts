@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {Stack} from '../../../../../../core/entity/model/stack.model';
+import {Stack} from '../../../../../../core/entity/model/stack/stack.model';
 import {Card} from '../../../../../../core/entity/model/card/card.model';
 import {SideAspect} from '../../../../../../core/entity/model/card/side/side-aspect';
 import {AspectType} from '../../../../../../core/entity/model/card/aspect.type';

@@ -3,7 +3,7 @@ import {Tag} from '../model/tag.model';
 import {TagService} from './tag.service';
 import {StacksService} from './stack/stacks.service';
 import {CardsService} from './card/cards.service';
-import {Stack} from '../model/stack.model';
+import {Stack} from '../model/stack/stack.model';
 import {Card} from '../model/card/card.model';
 import {Side} from '../model/card/side/side.model';
 import {AspectType} from '../model/card/aspect.type';

@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot} from '@angular/router';
 import {Observable} from 'rxjs';
-import {Stack} from '../../../core/entity/model/stack.model';
+import {Stack} from '../../../core/entity/model/stack/stack.model';
 import {StacksService} from '../../../core/entity/services/stack/stacks.service';
 
 /**

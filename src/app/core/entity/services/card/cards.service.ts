@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Subject} from 'rxjs/Subject';
-import {Stack} from '../../model/stack.model';
+import {Stack} from '../../model/stack/stack.model';
 import {PouchDBService} from '../../../persistence/services/pouchdb.service';
 import {StacksService} from '../stack/stacks.service';
 import {TagService} from '../tag.service';

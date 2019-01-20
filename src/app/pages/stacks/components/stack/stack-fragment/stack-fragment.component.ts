@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {MatDialog} from '@angular/material';
 import {SnackbarService} from '../../../../../core/ui/services/snackbar.service';
-import {Stack} from '../../../../../core/entity/model/stack.model';
+import {Stack} from '../../../../../core/entity/model/stack/stack.model';
 import {StacksService} from '../../../../../core/entity/services/stack/stacks.service';
 import {Action} from '../../../../../core/entity/model/action.enum';
 import {Tag} from '../../../../../core/entity/model/tag.model';

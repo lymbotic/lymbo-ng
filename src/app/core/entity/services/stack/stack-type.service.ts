@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {SettingsService} from '../../../settings/services/settings.service';
-import {StackType} from '../../model/stack-type.enum';
-import {StackTypeGroup} from '../../model/stack-type-group.enum';
+import {StackType} from '../../model/stack/stack-type.enum';
+import {StackTypeGroup} from '../../model/stack/stack-type-group.enum';
 
 /**
  * Handles stack type hierarchy

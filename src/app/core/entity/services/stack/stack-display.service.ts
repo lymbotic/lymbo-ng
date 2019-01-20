@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
-import {Stack} from '../../model/stack.model';
-import {StackType} from '../../model/stack-type.enum';
+import {Stack} from '../../model/stack/stack.model';
+import {StackType} from '../../model/stack/stack-type.enum';
 
 /**
  * Enum representing display aspects
