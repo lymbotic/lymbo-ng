@@ -46,14 +46,12 @@ export class StackDialogComponent implements OnInit, OnDestroy {
 
   /**
    * Constructor
-   * @param pexelsService pexels service
    * @param stacksService cards service
    * @param suggestionService suggestion service
    * @param dialogRef dialog reference
    * @param data dialog data
    */
-  constructor(private pexelsService: PexelsService,
-              private stacksService: StacksService,
+  constructor(private stacksService: StacksService,
               private suggestionService: SuggestionService,
               public dialogRef: MatDialogRef<StackDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any) {
@@ -147,8 +145,6 @@ export class StackDialogComponent implements OnInit, OnDestroy {
     this.tags = tags.map(t => {
       return new Tag(t, true);
     });
-
-    this.fetchPhoto(tags);
   }
 
   //
@@ -246,21 +242,6 @@ export class StackDialogComponent implements OnInit, OnDestroy {
     });
 
     return Array.from(aggregatedTags.values());
-  }
-
-  // Image
-
-  /**
-   * Fetches photos and uses it as stack image
-   * @param searchItems
-   */
-  private fetchPhoto(searchItems: string[]) {
-    const resultEmitter: EventEmitter<SearchResult> = new EventEmitter<SearchResult>();
-    resultEmitter.subscribe(result => {
-      this.stack.imageUrl = (result.photos.length > 0) ? (result.photos[0] as Photo).src.landscape : '';
-    });
-
-    this.pexelsService.search(searchItems, 1, 1, resultEmitter);
   }
 
   //

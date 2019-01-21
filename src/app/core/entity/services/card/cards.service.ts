@@ -9,7 +9,6 @@ import {CardTypeService} from './card-type.service';
 import {Card} from '../../model/card/card.model';
 import {CardTypeGroup} from '../../model/card/card-type-group.enum';
 import {CardType} from '../../model/card/card-type.enum';
-import {SideAspect} from '../../model/card/side/side-aspect';
 
 /**
  * Handles cards

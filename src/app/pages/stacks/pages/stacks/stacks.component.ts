@@ -1,7 +1,7 @@
 import {Stack} from '../../../../core/entity/model/stack/stack.model';
 import {SnackbarService} from '../../../../core/ui/services/snackbar.service';
 import {environment} from '../../../../../environments/environment';
-import {AfterViewInit, Component, NgZone, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, EventEmitter, NgZone, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {Subject} from 'rxjs';
 import {MatDialog, MatDialogConfig, MatIconRegistry, MatSidenav} from '@angular/material';
 import {Media} from '../../../../core/ui/model/media.enum';
@@ -32,6 +32,11 @@ import {TagDialogComponent} from '../../components/dialogs/tag-dialog/tag-dialog
 import {InformationDialogComponent} from '../../../../ui/information-dialog/information-dialog/information-dialog.component';
 import {CardsService} from '../../../../core/entity/services/card/cards.service';
 import {Card} from '../../../../core/entity/model/card/card.model';
+import {SearchResult} from '../../../../core/image/model/search-result';
+import {PexelsService} from '../../../../core/image/services/pexels.service';
+import {MicrosoftTranslateService} from '../../../../core/translate/services/microsoft-translate.service';
+import {Language} from '../../../../core/entity/model/card/language.enum';
+import {Photo} from '../../../../core/image/model/photo.model';
 
 /**
  * Displays stacks page
@@ -102,7 +107,9 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
    * @param matchService match service
    * @param materialColorService material color service
    * @param materialIconService material icon service
+   * @param pexelsService pexels service
    * @param mediaService media service
+   * @param microsoftTranslateService Microsoft translate service
    * @param router router
    * @param sanitizer sanitizer
    * @param scroll scroll
@@ -121,6 +128,8 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
               private materialColorService: MaterialColorService,
               private materialIconService: MaterialIconService,
               private mediaService: MediaService,
+              private microsoftTranslateService: MicrosoftTranslateService,
+              private pexelsService: PexelsService,
               private router: Router,
               private sanitizer: DomSanitizer,
               private scroll: ScrollDispatcher,
@@ -422,9 +431,18 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
         // Create new entities if necessary
         this.evaluateStackTags(stack, tags);
 
-        // Create stack itself
-        this.stacksService.createStack(stack).then(() => {
-          this.snackbarService.showSnackbar('Added stack');
+        // Fetch photo
+        this.fetchPhoto(stack, tags.map(t => {
+          return t.name;
+        })).then((result) => {
+          stack.imageUrl = result;
+          this.stacksService.updateStack(stack).then(() => {
+            this.snackbarService.showSnackbar('Added stack');
+          });
+        }, () => {
+          this.stacksService.updateStack(stack).then(() => {
+            this.snackbarService.showSnackbar('Added stack');
+          });
         });
         break;
       }
@@ -432,9 +450,18 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
         // Create new entities if necessary
         this.evaluateStackTags(stack, tags);
 
-        // Update stack itself
-        this.stacksService.updateStack(stack).then(() => {
-          this.snackbarService.showSnackbar('Updated stack');
+        // Fetch photo
+        this.fetchPhoto(stack, tags.map(t => {
+          return t.name;
+        })).then((result) => {
+          stack.imageUrl = result;
+          this.stacksService.updateStack(stack).then(() => {
+            this.snackbarService.showSnackbar('Updated stack');
+          });
+        }, () => {
+          this.stacksService.updateStack(stack).then(() => {
+            this.snackbarService.showSnackbar('Updated stack');
+          });
         });
         break;
       }
@@ -722,6 +749,10 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
     this.filterService.updateSearchItem(searchItem);
   }
 
+  //
+  // Helpers
+  //
+
   /**
    * Determines whether the tags assigned to a given stack already exist, otherwise creates new ones
    * @param {stack} stack task assign tags to
@@ -750,5 +781,45 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
       // Unassign tags
       stack.tagIds = [];
     }
+  }
+
+  // Image
+
+  /**
+   * Fetches photos and uses it as stack image
+   * @param stack stack
+   * @param searchItems search items
+   */
+  private fetchPhoto(stack: Stack, searchItems: string[]): Promise<any> {
+    return new Promise((resolve, reject) => {
+      const apiKeyPexels = this.settingsService.settings.get(SettingType.API_KEY_PEXELS_IMAGE);
+      const apiKeyMicrosoftTextTranslate = this.settingsService.settings.get(SettingType.API_KEY_MICROSOFT_TEXT_TRANSLATE);
+
+      // Reject if no API key is specified
+      if (apiKeyPexels === null) {
+        reject();
+      }
+
+      const resultEmitter: EventEmitter<SearchResult> = new EventEmitter<SearchResult>();
+      resultEmitter.subscribe(result => {
+        if (result != null && result.photos != null && result.photos.length > 0) {
+          resolve((result.photos[0] as Photo).src.landscape);
+        } else {
+          reject();
+        }
+      });
+
+      if (apiKeyMicrosoftTextTranslate !== null) {
+        // Translate into English, then call Pexels service
+        const translationEmitter: EventEmitter<string> = new EventEmitter<string>();
+        translationEmitter.subscribe(translatedText => {
+          this.pexelsService.search(translatedText.split(', '), 1, 1, resultEmitter);
+        });
+        this.microsoftTranslateService.translate(searchItems.join(', '), Language.ENGLISH, translationEmitter);
+      } else {
+        // Call Pexels service without translating
+        this.pexelsService.search(searchItems, 1, 1, resultEmitter);
+      }
+    });
   }
 }
