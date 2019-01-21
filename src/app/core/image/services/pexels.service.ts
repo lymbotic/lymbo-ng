@@ -3,7 +3,6 @@ import {ConnectionService} from '../../common/services/connection.service';
 import {SettingsService} from '../../settings/services/settings.service';
 import {SettingType} from '../../settings/model/setting-type.enum';
 import {HttpClient} from '@angular/common/http';
-import {Photo} from '../model/photo.model';
 import {SearchResult} from '../model/search-result';
 
 /**
@@ -28,9 +27,11 @@ export class PexelsService {
   /**
    * Translates a given word into a target tense
    * @param searchItems search items
-   * @param photosEmitter photos emitter
+   * @param perPage results per page
+   * @param page page index
+   * @param resultEmitter result emitter
    */
-  search(searchItems: string[], photosEmitter: EventEmitter<Photo[]>) {
+  search(searchItems: string[], perPage: number, page: number, resultEmitter: EventEmitter<SearchResult>) {
     if (ConnectionService.isOnline()) {
       const apiKey = this.settingsService.settings.get(SettingType.API_KEY_PEXELS_IMAGE);
 
@@ -43,9 +44,9 @@ export class PexelsService {
           json: true,
         };
 
-        const ob = this.httpClient.post(`https://api.pexels.com/v1/search?query=${searchItems.join('+')}&per_page=15&page=1`, [{}], options);
+        const ob = this.httpClient.get(`https://api.pexels.com/v1/search?query=${searchItems.join('+')}&per_page=${perPage}&page=${page}`, options);
         ob.subscribe(value => {
-          photosEmitter.emit((value as SearchResult).photos);
+          resultEmitter.emit(value as SearchResult);
         });
       }
     } else {

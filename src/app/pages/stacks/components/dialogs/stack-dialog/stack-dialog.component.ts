@@ -12,6 +12,7 @@ import {StackType} from '../../../../../core/entity/model/stack/stack-type.enum'
 import {Language} from '../../../../../core/entity/model/card/language.enum';
 import {PexelsService} from '../../../../../core/image/services/pexels.service';
 import {Photo} from '../../../../../core/image/model/photo.model';
+import {SearchResult} from '../../../../../core/image/model/search-result';
 
 /**
  * Displays stack dialog
@@ -254,14 +255,12 @@ export class StackDialogComponent implements OnInit, OnDestroy {
    * @param searchItems
    */
   private fetchPhoto(searchItems: string[]) {
-    const photosEmitter: EventEmitter<Photo[]> = new EventEmitter<Photo[]>();
-    photosEmitter.subscribe(photos => {
-      if (photos.length > 0) {
-        this.stack.imageUrl = (photos[0] as Photo).url;
-      }
+    const resultEmitter: EventEmitter<SearchResult> = new EventEmitter<SearchResult>();
+    resultEmitter.subscribe(result => {
+      this.stack.imageUrl = (result.photos.length > 0) ? (result.photos[0] as Photo).src.landscape : '';
     });
 
-    this.pexelsService.search(searchItems, photosEmitter);
+    this.pexelsService.search(searchItems, 1, 1, resultEmitter);
   }
 
   //
