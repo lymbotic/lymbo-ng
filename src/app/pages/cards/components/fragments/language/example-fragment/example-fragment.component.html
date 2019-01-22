@@ -3,10 +3,12 @@
          [ngModel]="example.source"
          [placeholder]="placeholderFront"
          [disabled]="readonly"
-         (ngModelChange)="onExampleSourceChanged($event)">
+         (ngModelChange)="onExampleSourceChanged($event)"
+         (click)="onExampleSourceClicked()">
   <input matInput title="example-target" class="target" autocomplete="off"
          [ngModel]="example.target"
          [placeholder]="placeholderBack"
          [disabled]="readonly"
-         (ngModelChange)="onExampleTargetChanged($event)">
+         (ngModelChange)="onExampleTargetChanged($event)"
+          (click)="onExampleTargetClicked()">
 </div>

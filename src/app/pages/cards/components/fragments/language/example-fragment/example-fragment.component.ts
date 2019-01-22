@@ -98,8 +98,17 @@ export class ExampleFragmentComponent implements OnInit {
    */
   onExampleSourceChanged(source: string) {
     this.example.source = source;
-    this.exampleSourceChangedSubject.next(this.example.source);
     this.notify();
+  }
+
+  /**
+   * Handles click on example source
+   */
+  onExampleSourceClicked() {
+    // Check if source is empty
+    if (this.example.source === null || this.example.source.trim() === '') {
+      this.exampleTargetChangedSubject.next(this.example.target);
+    }
   }
 
   /**
@@ -108,12 +117,17 @@ export class ExampleFragmentComponent implements OnInit {
    */
   onExampleTargetChanged(target: string) {
     this.example.target = target;
-
-    if (this.example.source === null || this.example.source.trim() === '') {
-      this.exampleTargetChangedSubject.next(this.example.target);
-    }
-
     this.notify();
+  }
+
+  /**
+   * Handles click on target source
+   */
+  onExampleTargetClicked() {
+    // Check if target is empty
+    if (this.example.target === null || this.example.target.trim() === '') {
+      this.exampleSourceChangedSubject.next(this.example.source);
+    }
   }
 
   //

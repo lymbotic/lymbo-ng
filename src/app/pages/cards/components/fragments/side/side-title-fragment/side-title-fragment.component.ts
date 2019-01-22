@@ -1,6 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {Subject} from 'rxjs/Subject';
-import {debounceTime} from 'rxjs/operators';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 
 /**
  * Displays side title
@@ -20,6 +18,8 @@ export class SideTitleFragmentComponent {
   @Input() readonly: false;
   /** Event emitter indicating changes in side title */
   @Output() sideTitleChangedEmitter = new EventEmitter<string>();
+  /** Event emitter indicating a click */
+  @Output() sideClickedEmitter = new EventEmitter<any>();
 
   //
   // Actions
@@ -32,5 +32,12 @@ export class SideTitleFragmentComponent {
   onSideTitleChanged(sideTitle: string) {
     this.sideTitle = sideTitle;
     this.sideTitleChangedEmitter.emit(this.sideTitle);
+  }
+
+  /**
+   * Handles click on side title
+   */
+  onSideTitleClicked() {
+    this.sideClickedEmitter.emit();
   }
 }

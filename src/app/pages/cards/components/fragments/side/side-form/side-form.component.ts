@@ -3,12 +3,13 @@ import {Stack} from '../../../../../../core/entity/model/stack/stack.model';
 import {Card} from '../../../../../../core/entity/model/card/card.model';
 import {SideAspect} from '../../../../../../core/entity/model/card/side/side-aspect';
 import {AspectType} from '../../../../../../core/entity/model/card/aspect.type';
-import {CardType} from '../../../../../../core/entity/model/card/card-type.enum';
 import {Subject} from 'rxjs';
 import {MicrosoftTranslateService} from '../../../../../../core/translate/services/microsoft-translate.service';
 import {Language} from '../../../../../../core/entity/model/card/language.enum';
 import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
 import {environment} from '../../../../../../../environments/environment';
+import {Side} from '../../../../../../core/entity/model/card/side/side.model';
+import {StackType} from '../../../../../../core/entity/model/stack/stack-type.enum';
 
 /**
  * Displays form to set side
@@ -28,6 +29,11 @@ export class SideFormComponent implements OnInit {
   @Input() readonly = false;
   /** Event emitter indicating card changes */
   @Output() cardEventEmitter = new EventEmitter<Card>();
+
+  /** Index of front side */
+  indexFront = 0;
+  /** Index of back side */
+  indexBack = 1;
 
   /** Placeholder front */
   placeholderFront = '';
@@ -60,8 +66,8 @@ export class SideFormComponent implements OnInit {
     this.initializeSideAspect();
     this.initializePlaceholders();
 
-    this.initializeTitleChangedSubject(this.frontTitleChangedSubject, this.stack.targetLanguage, 0, 1);
-    this.initializeTitleChangedSubject(this.backTitleChangedSubject, this.stack.sourceLanguage, 1, 0);
+    this.initializeTitleChangedSubject(this.frontTitleChangedSubject, this.stack.targetLanguage, this.indexFront, 1);
+    this.initializeTitleChangedSubject(this.backTitleChangedSubject, this.stack.sourceLanguage, 1, this.indexFront);
   }
 
   //
@@ -89,7 +95,7 @@ export class SideFormComponent implements OnInit {
    * Initializes placeholders
    */
   private initializePlaceholders() {
-    if (this.card.type === CardType.VOCABULARY) {
+    if (this.stack.type === StackType.LANGUAGE) {
       this.placeholderFront = this.stack.sourceLanguage;
       this.placeholderBack = this.stack.targetLanguage;
     } else {
@@ -133,9 +139,18 @@ export class SideFormComponent implements OnInit {
    * @param sideTitle side title
    */
   onFrontTitleChanged(sideTitle: string) {
-    this.sideAspect.sides[0].title = sideTitle;
-    this.frontTitleChangedSubject.next(sideTitle);
+    this.getFrontSide().title = sideTitle;
     this.notify();
+  }
+
+  /**
+   * Handles click on front title
+   */
+  onFrontTitleClicked() {
+    // Check if front title is empty
+    if (this.getFrontSide().title === null || this.getFrontSide().title.trim() === '') {
+      this.backTitleChangedSubject.next(this.getBackSide().title);
+    }
   }
 
   /**
@@ -143,18 +158,37 @@ export class SideFormComponent implements OnInit {
    * @param sideTitle side title
    */
   onBackTitleChanged(sideTitle: string) {
-    this.sideAspect.sides[1].title = sideTitle;
-
-    if (this.sideAspect.sides[1].title === null || this.sideAspect.sides[1].title.trim() === '') {
-      this.backTitleChangedSubject.next(sideTitle);
-    }
-
+    this.getBackSide().title = sideTitle;
     this.notify();
+  }
+
+  /**
+   * Handles click on back side
+   */
+  onBackTitleClicked() {
+    // Check if back title is empty
+    if (this.getBackSide().title === null || this.getBackSide().title.trim() === '') {
+      this.frontTitleChangedSubject.next(this.getFrontSide().title);
+    }
   }
 
   //
   // Helpers
   //
+
+  /**
+   * Returns front side
+   */
+  getFrontSide(): Side {
+    return this.sideAspect.sides[this.indexFront];
+  }
+
+  /**
+   * Returns back side
+   */
+  getBackSide(): Side {
+    return this.sideAspect.sides[this.indexBack];
+  }
 
   // Translation
 

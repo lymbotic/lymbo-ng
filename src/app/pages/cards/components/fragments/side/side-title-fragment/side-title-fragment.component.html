@@ -1,4 +1,5 @@
-<input matInput title="search" type="text" [placeholder]="placeholder"
+<input matInput title="side" type="text" autocomplete="off" [placeholder]="placeholder"
        [ngModel]="sideTitle"
        (ngModelChange)="onSideTitleChanged($event)"
+       (click)="onSideTitleClicked()"
        [disabled]="readonly">
