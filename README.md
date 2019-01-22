@@ -41,6 +41,7 @@ Share the cards you created with friends.
 | 0.19 | Vocabulary cards |
 | 0.20 | Favorite cards |
 | 0.21 | Quiz cards |
+| 0.22 | Stack image |
 
 ### Planned features
 
