@@ -81,6 +81,8 @@ export class ExampleFragmentComponent implements OnInit {
           } else {
             this.example.target = translatedText;
           }
+
+          this.notify();
         });
       }
     });
@@ -106,7 +108,11 @@ export class ExampleFragmentComponent implements OnInit {
    */
   onExampleTargetChanged(target: string) {
     this.example.target = target;
-    this.exampleTargetChangedSubject.next(this.example.target);
+
+    if (this.example.source === null || this.example.source.trim() === '') {
+      this.exampleTargetChangedSubject.next(this.example.target);
+    }
+
     this.notify();
   }
 

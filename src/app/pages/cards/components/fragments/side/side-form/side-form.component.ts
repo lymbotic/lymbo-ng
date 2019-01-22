@@ -116,6 +116,8 @@ export class SideFormComponent implements OnInit {
 
           this.translateText(originalText, targetLanguage).subscribe(translatedText => {
             this.sideAspect.sides[targetIndex].title = translatedText;
+
+            this.notify();
           });
         }
       }
@@ -142,7 +144,11 @@ export class SideFormComponent implements OnInit {
    */
   onBackTitleChanged(sideTitle: string) {
     this.sideAspect.sides[1].title = sideTitle;
-    this.backTitleChangedSubject.next(sideTitle);
+
+    if (this.sideAspect.sides[1].title === null || this.sideAspect.sides[1].title.trim() === '') {
+      this.backTitleChangedSubject.next(sideTitle);
+    }
+
     this.notify();
   }
 
