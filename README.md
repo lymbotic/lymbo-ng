@@ -42,6 +42,7 @@ Share the cards you created with friends.
 | 0.20 | Favorite cards |
 | 0.21 | Quiz cards |
 | 0.22 | Stack image |
+| 0.23 | Stack color |
 
 ### Planned features
 
