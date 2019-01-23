@@ -37,6 +37,8 @@ import {PexelsService} from '../../../../core/image/services/pexels.service';
 import {MicrosoftTranslateService} from '../../../../core/translate/services/microsoft-translate.service';
 import {Language} from '../../../../core/entity/model/card/language.enum';
 import {Photo} from '../../../../core/image/model/photo.model';
+import {VibrantPalette} from '../../../../core/entity/model/vibrant-palette';
+import Vibrant = require('node-vibrant');
 
 /**
  * Displays stacks page
@@ -98,6 +100,22 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('sidenavEnd') sidenavEnd: MatSidenav;
   /** Scrollable directive */
   @ViewChild(CdkScrollable) scrollable: CdkScrollable;
+
+  /**
+   * Converts palette into a vibrant palette object
+   * @param palette palette
+   */
+  static convertToVibrantPalette(palette: any): VibrantPalette {
+    const vibrantPalette = new VibrantPalette();
+    vibrantPalette.vibrant.rgb = palette['Vibrant']['rgb'];
+    vibrantPalette.darkVibrant.rgb = palette['DarkVibrant']['rgb'];
+    vibrantPalette.lightVibrant.rgb = palette['LightVibrant']['rgb'];
+    vibrantPalette.muted.rgb = palette['Muted']['rgb'];
+    vibrantPalette.darkMuted.rgb = palette['DarkMuted']['rgb'];
+    vibrantPalette.lightMuted.rgb = palette['LightMuted']['rgb'];
+
+    return vibrantPalette;
+  }
 
   /**
    * Constructor
@@ -436,13 +454,23 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
           return t.name;
         })).then((result) => {
           stack.imageUrl = result;
-          this.stacksService.updateStack(stack).then(() => {
-            this.snackbarService.showSnackbar('Added stack');
+
+          // Fetch palette
+          this.getPalette(result).then(resolve => {
+            stack.imagePalette = resolve;
+
+            // Add stack
+            this.addStack(stack);
+          }, reject => {
+
+            // Add stack
+            this.addStack(stack);
           });
+
         }, () => {
-          this.stacksService.updateStack(stack).then(() => {
-            this.snackbarService.showSnackbar('Added stack');
-          });
+
+          // Add stack
+          this.addStack(stack);
         });
         break;
       }
@@ -455,13 +483,23 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
           return t.name;
         })).then((result) => {
           stack.imageUrl = result;
-          this.stacksService.updateStack(stack).then(() => {
-            this.snackbarService.showSnackbar('Updated stack');
+
+          // Fetch palette
+          this.getPalette(result).then(resolve => {
+            stack.imagePalette = resolve;
+
+            // Update stack
+            this.updateStack(stack);
+          }, reject => {
+
+            // Update stack
+            this.updateStack(stack);
           });
+
         }, () => {
-          this.stacksService.updateStack(stack).then(() => {
-            this.snackbarService.showSnackbar('Updated stack');
-          });
+
+          // Update stack
+          this.updateStack(stack);
         });
         break;
       }
@@ -754,6 +792,26 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
   //
 
   /**
+   * Adds a stack
+   * @param stack stack
+   */
+  private addStack(stack: Stack) {
+    this.stacksService.createStack(stack).then(() => {
+      this.snackbarService.showSnackbar('Added stack');
+    });
+  }
+
+  /**
+   * Updates a stack
+   * @param stack stack
+   */
+  private updateStack(stack: Stack) {
+    this.stacksService.updateStack(stack).then(() => {
+      this.snackbarService.showSnackbar('Updated stack');
+    });
+  }
+
+  /**
    * Determines whether the tags assigned to a given stack already exist, otherwise creates new ones
    * @param {stack} stack task assign tags to
    * @param {Tag[]} tags array of tags to be checked
@@ -819,6 +877,20 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
       } else {
         // Call Pexels service without translating
         this.pexelsService.search(searchItems, 1, 1, resultEmitter);
+      }
+    });
+  }
+
+  // Palette
+
+  private getPalette(imageUrl: string): Promise<VibrantPalette> {
+    return new Promise((resolve, reject) => {
+      if (imageUrl != null) {
+        Vibrant.from(imageUrl).getPalette((err, result) => {
+          resolve(StacksComponent.convertToVibrantPalette(result));
+        });
+      } else {
+        reject();
       }
     });
   }

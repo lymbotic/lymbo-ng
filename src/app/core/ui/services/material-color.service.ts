@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Palette} from '../model/palette.model';
+import {MaterialPalette} from '../model/palette.model';
 import {PaletteType} from '../model/palette-type.enum';
 import {HueType} from '../model/hue-type.enum';
 import {Hue} from '../model/hue.model';
@@ -16,7 +16,7 @@ export class MaterialColorService {
   static DARK_PRIMARY_TEXT = 'rgba(black, 0.87)';
 
   /** List of palettes */
-  palettes: Palette[] = [];
+  palettes: MaterialPalette[] = [];
 
   /**
    * Constructor
@@ -34,7 +34,7 @@ export class MaterialColorService {
    */
   public initializeColors() {
     // Red
-    const red = new Palette(PaletteType.RED);
+    const red = new MaterialPalette(PaletteType.RED);
     red.hues.push(new Hue(HueType._50, '#ffcdd2', '#000000'));
     red.hues.push(new Hue(HueType._100, '#ef9a9a', '#000000'));
     red.hues.push(new Hue(HueType._200, '#e57373', '#000000'));
@@ -52,7 +52,7 @@ export class MaterialColorService {
     this.palettes.push(red);
 
     // Pink
-    const pink = new Palette(PaletteType.PINK);
+    const pink = new MaterialPalette(PaletteType.PINK);
     pink.hues.push(new Hue(HueType._50, '#fce4ec', '#000000'));
     pink.hues.push(new Hue(HueType._100, '#f8bbd0', '#000000'));
     pink.hues.push(new Hue(HueType._200, '#f48fb1', '#000000'));
@@ -70,7 +70,7 @@ export class MaterialColorService {
     this.palettes.push(pink);
 
     // Purple
-    const purple = new Palette(PaletteType.PURPLE);
+    const purple = new MaterialPalette(PaletteType.PURPLE);
     purple.hues.push(new Hue(HueType._50, '#f3e5f5', '#000000'));
     purple.hues.push(new Hue(HueType._100, '#e1bee7', '#000000'));
     purple.hues.push(new Hue(HueType._200, '#ce93d8', '#000000'));
@@ -88,7 +88,7 @@ export class MaterialColorService {
     this.palettes.push(purple);
 
     // Deeppurple
-    const deeppurple = new Palette(PaletteType.DEEP_PURPLE);
+    const deeppurple = new MaterialPalette(PaletteType.DEEP_PURPLE);
     deeppurple.hues.push(new Hue(HueType._50, '#ede7f6', '#000000'));
     deeppurple.hues.push(new Hue(HueType._100, '#d1c4e9', '#000000'));
     deeppurple.hues.push(new Hue(HueType._200, '#b39ddb', '#FFFFFF'));
@@ -106,7 +106,7 @@ export class MaterialColorService {
     this.palettes.push(deeppurple);
 
     // Indigo
-    const indigo = new Palette(PaletteType.INDIGO);
+    const indigo = new MaterialPalette(PaletteType.INDIGO);
     indigo.hues.push(new Hue(HueType._50, '#e8eaf6', '#000000'));
     indigo.hues.push(new Hue(HueType._100, '#c5cae9', '#000000'));
     indigo.hues.push(new Hue(HueType._200, '#9fa8da', '#000000'));
@@ -124,7 +124,7 @@ export class MaterialColorService {
     this.palettes.push(indigo);
 
     // Blue
-    const blue = new Palette(PaletteType.BLUE);
+    const blue = new MaterialPalette(PaletteType.BLUE);
     blue.hues.push(new Hue(HueType._50, '#e3f2fd', '#000000'));
     blue.hues.push(new Hue(HueType._100, '#bbdefb', '#000000'));
     blue.hues.push(new Hue(HueType._200, '#90caf9', '#000000'));
@@ -142,7 +142,7 @@ export class MaterialColorService {
     this.palettes.push(blue);
 
     // Lightblue
-    const lightblue = new Palette(PaletteType.LIGHT_BLUE);
+    const lightblue = new MaterialPalette(PaletteType.LIGHT_BLUE);
     lightblue.hues.push(new Hue(HueType._50, '#e3f2fd', '#000000'));
     lightblue.hues.push(new Hue(HueType._100, '#bbdefb', '#000000'));
     lightblue.hues.push(new Hue(HueType._200, '#90caf9', '#000000'));
@@ -160,7 +160,7 @@ export class MaterialColorService {
     this.palettes.push(lightblue);
 
     // Cyan
-    const cyan = new Palette(PaletteType.CYAN);
+    const cyan = new MaterialPalette(PaletteType.CYAN);
     cyan.hues.push(new Hue(HueType._50, '#e0f7fa', '#000000'));
     cyan.hues.push(new Hue(HueType._100, '#b2ebf2', '#000000'));
     cyan.hues.push(new Hue(HueType._200, '#80deea', '#000000'));
@@ -178,7 +178,7 @@ export class MaterialColorService {
     this.palettes.push(cyan);
 
     // Teal
-    const teal = new Palette(PaletteType.TEAL);
+    const teal = new MaterialPalette(PaletteType.TEAL);
     teal.hues.push(new Hue(HueType._50, '#e0f2f1', '#000000'));
     teal.hues.push(new Hue(HueType._100, '#b2dfdb', '#000000'));
     teal.hues.push(new Hue(HueType._200, '#80cbc4', '#000000'));
@@ -196,7 +196,7 @@ export class MaterialColorService {
     this.palettes.push(teal);
 
     // Green
-    const green = new Palette(PaletteType.GREEN);
+    const green = new MaterialPalette(PaletteType.GREEN);
     green.hues.push(new Hue(HueType._50, '#e8f5e9', '#000000'));
     green.hues.push(new Hue(HueType._100, '#c8e6c9', '#000000'));
     green.hues.push(new Hue(HueType._200, '#a5d6a7', '#000000'));
@@ -214,7 +214,7 @@ export class MaterialColorService {
     this.palettes.push(green);
 
     // Light Green
-    const lightgreen = new Palette(PaletteType.LIGHT_GREEN);
+    const lightgreen = new MaterialPalette(PaletteType.LIGHT_GREEN);
     lightgreen.hues.push(new Hue(HueType._50, '#f1f8e9', '#000000'));
     lightgreen.hues.push(new Hue(HueType._100, '#dcedc8', '#000000'));
     lightgreen.hues.push(new Hue(HueType._200, '#c5e1a5', '#000000'));
@@ -232,7 +232,7 @@ export class MaterialColorService {
     this.palettes.push(lightgreen);
 
     // Lime
-    const lime = new Palette(PaletteType.LIME);
+    const lime = new MaterialPalette(PaletteType.LIME);
     lime.hues.push(new Hue(HueType._50, '#f9fbe7', '#000000'));
     lime.hues.push(new Hue(HueType._100, '#f0f4c3', '#000000'));
     lime.hues.push(new Hue(HueType._200, '#e6ee9c', '#000000'));
@@ -250,7 +250,7 @@ export class MaterialColorService {
     this.palettes.push(lime);
 
     // Yellow
-    const yellow = new Palette(PaletteType.YELLOW);
+    const yellow = new MaterialPalette(PaletteType.YELLOW);
     yellow.hues.push(new Hue(HueType._50, '#fffde7', '#000000'));
     yellow.hues.push(new Hue(HueType._100, '#fff9c4', '#000000'));
     yellow.hues.push(new Hue(HueType._200, '#fff59d', '#000000'));
@@ -269,7 +269,7 @@ export class MaterialColorService {
 
 
     // Amber
-    const amber = new Palette(PaletteType.AMBER);
+    const amber = new MaterialPalette(PaletteType.AMBER);
     amber.hues.push(new Hue(HueType._50, '#fff8e1', '#000000'));
     amber.hues.push(new Hue(HueType._100, '#ffecb3', '#000000'));
     amber.hues.push(new Hue(HueType._200, '#ffe082', '#000000'));
@@ -287,7 +287,7 @@ export class MaterialColorService {
     this.palettes.push(amber);
 
     // Orange
-    const orange = new Palette(PaletteType.ORANGE);
+    const orange = new MaterialPalette(PaletteType.ORANGE);
     orange.hues.push(new Hue(HueType._50, '#fff3e0', '#000000'));
     orange.hues.push(new Hue(HueType._100, '#ffe0b2', '#000000'));
     orange.hues.push(new Hue(HueType._200, '#ffcc80', '#000000'));
@@ -305,7 +305,7 @@ export class MaterialColorService {
     this.palettes.push(orange);
 
     // Deep Orange
-    const deeporange = new Palette(PaletteType.DEEP_ORANGE);
+    const deeporange = new MaterialPalette(PaletteType.DEEP_ORANGE);
     deeporange.hues.push(new Hue(HueType._50, '#fbe9e7', '#000000'));
     deeporange.hues.push(new Hue(HueType._100, '#ffccbc', '#000000'));
     deeporange.hues.push(new Hue(HueType._200, '#ffab91', '#000000'));
@@ -323,7 +323,7 @@ export class MaterialColorService {
     this.palettes.push(deeporange);
 
     // Brown
-    const brown = new Palette(PaletteType.BROWN);
+    const brown = new MaterialPalette(PaletteType.BROWN);
     brown.hues.push(new Hue(HueType._50, '#efebe9', '#000000'));
     brown.hues.push(new Hue(HueType._100, '#d7ccc8', '#000000'));
     brown.hues.push(new Hue(HueType._200, '#bcaaa4', '#FFFFFF'));
@@ -341,7 +341,7 @@ export class MaterialColorService {
     this.palettes.push(brown);
 
     // Grey
-    const grey = new Palette(PaletteType.GREY);
+    const grey = new MaterialPalette(PaletteType.GREY);
     grey.hues.push(new Hue(HueType._50, '#fafafa', '#000000'));
     grey.hues.push(new Hue(HueType._100, '#f5f5f5', '#000000'));
     grey.hues.push(new Hue(HueType._200, '#eeeeee', '#000000'));

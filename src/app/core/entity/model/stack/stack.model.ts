@@ -3,6 +3,7 @@ import {EntityType} from '../entity-type.enum';
 import {StackType} from './stack-type.enum';
 import {Card} from '../card/card.model';
 import {Language} from '../card/language.enum';
+import {VibrantPalette} from '../vibrant-palette';
 
 /**
  * Represents a stack
@@ -15,6 +16,8 @@ export class Stack extends Entity {
   title: string;
   /** Image URL */
   imageUrl: string;
+  /** Image MaterialPalette */
+  imagePalette: VibrantPalette;
   /** Cards */
   cards: Card[];
   /** References to tags */

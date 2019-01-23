@@ -75,6 +75,7 @@
     "ng-in-viewport": "^6.0.2",
     "ng2-file-upload": "^1.2.1",
     "node-sass": "^4.9.0",
+    "node-vibrant": "^3.2.0-alpha",
     "path": "^0.12.7",
     "pouchdb": "^6.4.0",
     "pouchdb-find": "^7.0.0",
