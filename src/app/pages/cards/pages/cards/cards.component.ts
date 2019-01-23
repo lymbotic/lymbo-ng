@@ -82,6 +82,11 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
   /** Current media */
   public media: Media = Media.UNDEFINED;
 
+  /** Title color */
+  titleColor = 'black';
+  /** FAB color */
+  fabColor = 'black';
+
   /** Helper subject used to finish other subscriptions */
   private unsubscribeSubject = new Subject();
 
@@ -249,6 +254,7 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
 
     if (stack != null) {
       this.initializeTitle(stack);
+      this.initializeColors(stack);
       this.cardsService.initializeStack(stack);
       this.cardsService.initializeCards(stack.cards);
     }
@@ -382,10 +388,28 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   /**
+   * Initializes colors
+   *
+   * @param stack
+   */
+  private initializeColors(stack: Stack) {
+    if (stack.imagePalette != null) {
+      const muted = stack.imagePalette.muted;
+      const vibrant = stack.imagePalette.vibrant;
+      this.titleColor = `rgb(${muted.rgb[0]},${muted.rgb[1]},${muted.rgb[2]})`;
+      this.fabColor = `rgb(${vibrant.rgb[0]},${vibrant.rgb[1]},${vibrant.rgb[2]})`;
+    } else {
+      const primary = this.materialColorService.primary;
+      const accent = this.materialColorService.accent;
+      this.titleColor = primary;
+      this.fabColor = accent;
+    }
+  }
+
+  /**
    * Initializes material colors and icons
    */
   private initializeMaterial() {
-    this.materialColorService.initializeColors();
     this.materialIconService.initializeIcons(this.iconRegistry, this.sanitizer);
   }
 

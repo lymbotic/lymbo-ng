@@ -16,6 +16,8 @@ export class CardsToolbarComponent implements OnInit {
 
   /** Title displayed in the toolbar */
   @Input() title;
+  /** Title color */
+  @Input() titleColor = 'black';
   /** Current media */
   @Input() media: Media;
   /** Search items options for auto-complete */

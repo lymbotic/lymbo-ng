@@ -27,6 +27,7 @@ export class StackFragmentComponent implements OnInit {
   /** Event emitter indicating click on stack */
   @Output() stackEventEmitter = new EventEmitter<{ action: Action, stack: Stack, tags?: Tag[] }>();
 
+  /** Title color */
   titleColor = 'black';
 
   /** Enum of display aspects */
@@ -51,7 +52,7 @@ export class StackFragmentComponent implements OnInit {
    * Handles on-init lifecycle phase
    */
   ngOnInit() {
-    this.initializeTitleColor();
+    this.initializeColors();
   }
 
   //
@@ -59,9 +60,9 @@ export class StackFragmentComponent implements OnInit {
   //
 
   /**
-   * Initializes title color
+   * Initializes colors
    */
-  private initializeTitleColor() {
+  private initializeColors() {
     if (this.stack.imagePalette != null) {
       const swatch = this.stack.imagePalette.muted;
       this.titleColor = `rgb(${swatch.rgb[0]},${swatch.rgb[1]},${swatch.rgb[2]})`;

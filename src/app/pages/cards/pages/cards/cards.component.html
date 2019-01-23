@@ -2,6 +2,7 @@
   [@toolbarAnimation]="scrollDirection"
   class="fixed"
   [title]="title"
+  [titleColor]="titleColor"
   [media]="media"
   [filterFavorites]="filterFavorites"
   [filterActive]="filterActive"
@@ -35,6 +36,6 @@
 
 </mat-sidenav-container>
 
-<button mat-fab class="fab" (click)="onAddCardClicked()">
+<button mat-fab class="fab" (click)="onAddCardClicked()" [style.background]="fabColor">
   <mat-icon svgIcon="add" class="icon-accent-contrast"></mat-icon>
 </button>

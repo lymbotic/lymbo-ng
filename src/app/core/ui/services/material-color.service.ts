@@ -14,6 +14,19 @@ export class MaterialColorService {
 
   /** Dark primary text personColor */
   static DARK_PRIMARY_TEXT = 'rgba(black, 0.87)';
+  /** Primary palette */
+  static PRIMARY_PALETTE = PaletteType.LIME;
+  /** Primary hue */
+  static PRIMARY_HUE = HueType._600;
+  /** Accent palette */
+  static ACCENT_PALETTE = PaletteType.AMBER;
+  /** Accent hue */
+  static ACCENT_HUE = HueType._600;
+
+  /** Primary */
+  primary: any;
+  /** Accent */
+  accent: any;
 
   /** List of palettes */
   palettes: MaterialPalette[] = [];
@@ -23,6 +36,7 @@ export class MaterialColorService {
    */
   constructor() {
     this.initializeColors();
+    this.initializeThemeColors();
   }
 
   //
@@ -32,7 +46,7 @@ export class MaterialColorService {
   /**
    * Initializes colors
    */
-  public initializeColors() {
+  private initializeColors() {
     // Red
     const red = new MaterialPalette(PaletteType.RED);
     red.hues.push(new Hue(HueType._50, '#ffcdd2', '#000000'));
@@ -357,6 +371,14 @@ export class MaterialColorService {
     grey.hues.push(new Hue(HueType.A400, '#bdbdbd', '#000000'));
     grey.hues.push(new Hue(HueType.A700, '#616161', '#FFFFFF'));
     this.palettes.push(grey);
+  }
+
+  /**
+   * Initialize theme colors
+   */
+  private initializeThemeColors() {
+    this.primary = this.color(MaterialColorService.PRIMARY_PALETTE, MaterialColorService.PRIMARY_HUE);
+    this.accent = this.color(MaterialColorService.ACCENT_PALETTE, MaterialColorService.ACCENT_HUE);
   }
 
   /**

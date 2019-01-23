@@ -349,7 +349,6 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
    * Initializes material colors and icons
    */
   private initializeMaterial() {
-    this.materialColorService.initializeColors();
     this.materialIconService.initializeIcons(this.iconRegistry, this.sanitizer);
   }
 
