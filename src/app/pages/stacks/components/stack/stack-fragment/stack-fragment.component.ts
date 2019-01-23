@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {MatDialog} from '@angular/material';
 import {SnackbarService} from '../../../../../core/ui/services/snackbar.service';
 import {Stack} from '../../../../../core/entity/model/stack/stack.model';
@@ -15,10 +15,10 @@ import {DisplayAspect} from '../../../../../core/entity/services/stack/stack-dis
   templateUrl: './stack-fragment.component.html',
   styleUrls: ['./stack-fragment.component.scss']
 })
-export class StackFragmentComponent {
+export class StackFragmentComponent implements OnInit {
 
   /** Stack to be displayed */
-  @Input() stack;
+  @Input() stack: Stack;
   /** Map of tags */
   @Input() tags = new Map<string, Tag>();
   /** Default theme to be used */
@@ -26,6 +26,8 @@ export class StackFragmentComponent {
 
   /** Event emitter indicating click on stack */
   @Output() stackEventEmitter = new EventEmitter<{ action: Action, stack: Stack, tags?: Tag[] }>();
+
+  titleColor = 'black';
 
   /** Enum of display aspects */
   displayAspectType = DisplayAspect;
@@ -39,6 +41,31 @@ export class StackFragmentComponent {
   constructor(private stacksService: StacksService,
               private snackbarService: SnackbarService,
               public dialog: MatDialog) {
+  }
+
+  //
+  // Lifecycle hooks
+  //
+
+  /**
+   * Handles on-init lifecycle phase
+   */
+  ngOnInit() {
+    this.initializeTitleColor();
+  }
+
+  //
+  // Initialization
+  //
+
+  /**
+   * Initializes title color
+   */
+  private initializeTitleColor() {
+    if (this.stack.imagePalette != null) {
+      const swatch = this.stack.imagePalette.muted;
+      this.titleColor = `rgb(${swatch.rgb[0]},${swatch.rgb[1]},${swatch.rgb[2]})`;
+    }
   }
 
   //
