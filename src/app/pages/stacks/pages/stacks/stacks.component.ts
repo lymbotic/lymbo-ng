@@ -38,6 +38,7 @@ import {MicrosoftTranslateService} from '../../../../core/translate/services/mic
 import {Language} from '../../../../core/entity/model/card/language.enum';
 import {Photo} from '../../../../core/image/model/photo.model';
 import {VibrantPalette} from '../../../../core/entity/model/vibrant-palette';
+// @ts-ignore
 import Vibrant = require('node-vibrant');
 
 /**
