@@ -13,8 +13,8 @@
       "type": "image/png"
     }
   ],
-  "theme_color": "#8bc34a",
-  "background_color": "#ffffff",
+  "theme_color": "#fafafa",
+  "background_color": "#fafafa",
   "display": "standalone",
   "orientation": "portrait",
   "start_url": "./?utm_source=web_app_manifest"
