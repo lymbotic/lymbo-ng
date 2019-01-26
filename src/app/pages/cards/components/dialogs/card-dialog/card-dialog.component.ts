@@ -126,7 +126,9 @@ export class CardDialogComponent implements OnInit, OnDestroy {
    * Initializes options
    */
   private initializeOptions() {
-    this.tagOptions = Array.from(this.suggestionService.tagOptions.values()).sort((t1, t2) => {
+    this.tagOptions = Array.from(this.suggestionService.tagOptions.values()).filter(tag => {
+      return this.cardsService.tagIsContainedInCards(this.stack.cards, tag);
+    }).sort((t1, t2) => {
       return new Date(t2.modificationDate).getTime() > new Date(t1.modificationDate).getTime() ? 1 : -1;
     }).map(t => {
       return t.name;

@@ -34,6 +34,8 @@ export class StackDialogComponent implements OnInit, OnDestroy {
 
   /** Stack to be displayed */
   stack: Stack;
+  /** All stack */
+  stacks: Stack[];
 
   /** Temporarily displayed tags */
   tags: Tag[] = [];
@@ -87,6 +89,7 @@ export class StackDialogComponent implements OnInit, OnDestroy {
     this.mode = this.data.mode;
     this.dialogTitle = this.data.dialogTitle;
     this.stack = this.data.stack != null ? CloneService.cloneStack(this.data.stack) : new Stack();
+    this.stacks = this.data.stacks != null ? CloneService.cloneStacks(this.data.stacks) : [];
     this.tags = this.data.tags != null ? CloneService.cloneTags(this.data.tags) : [];
   }
 
@@ -94,7 +97,9 @@ export class StackDialogComponent implements OnInit, OnDestroy {
    * Initializes options
    */
   private initializeOptions() {
-    this.tagOptions = Array.from(this.suggestionService.tagOptions.values()).sort((t1, t2) => {
+    this.tagOptions = Array.from(this.suggestionService.tagOptions.values()).filter(tag => {
+      return this.stacksService.tagIsContainedInStacks(this.stacks, tag);
+    }).sort((t1, t2) => {
       return new Date(t2.modificationDate).getTime() > new Date(t1.modificationDate).getTime() ? 1 : -1;
     }).map(t => {
       return t.name;

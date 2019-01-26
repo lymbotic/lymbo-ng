@@ -527,6 +527,7 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
           mode: DialogMode.ADD,
           dialogTitle: 'Add stack',
           stack: new Stack(),
+          stacks: this.stacks,
           tags: []
         };
 
@@ -558,6 +559,7 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
           mode: DialogMode.UPDATE,
           dialogTitle: 'Update stack',
           stack: stack,
+          stacks: this.stacks,
           tags: stack.tagIds.map(id => {
             return this.tagService.tags.get(id);
           }).filter(tag => {

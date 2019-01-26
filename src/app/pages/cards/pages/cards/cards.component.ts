@@ -311,37 +311,10 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
    */
   private initializeTags(tags: Tag[]) {
     this.tags = tags.filter(tag => {
-      return this.tagIsContainedInCards(tag, this.cards);
+      return this.cardsService.tagIsContainedInCards(this.cards, tag);
     }).filter(tag => {
       return this.filterTag(tag);
     });
-  }
-
-  /**
-   * Determines whether a tag is contained in a list of cards
-   * @param tag tag
-   * @param cards cards
-   */
-  private tagIsContainedInCards(tag: Tag, cards: Card[]) {
-    return this.getTagIdsByCards(cards).some(id => {
-      return id === tag.id;
-    });
-  }
-
-  /**
-   * Aggregates all tag IDs of a list of given cards
-   * @param cards cards
-   */
-  private getTagIdsByCards(cards: Card[]): string[] {
-    const tagIds = new Map<string, string>();
-
-    cards.forEach(card => {
-      card.tagIds.forEach(tagId => {
-        tagIds.set(tagId, tagId);
-      });
-    });
-
-    return Array.from(tagIds.values());
   }
 
   /**

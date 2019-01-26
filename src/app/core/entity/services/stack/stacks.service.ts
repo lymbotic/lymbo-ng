@@ -8,6 +8,8 @@ import {EntityType} from '../../model/entity-type.enum';
 import {StackTypeGroup} from '../../model/stack/stack-type-group.enum';
 import {StackType} from '../../model/stack/stack-type.enum';
 import {StackTypeService} from './stack-type.service';
+import {Card} from '../../model/card/card.model';
+import {Tag} from '../../model/tag.model';
 
 /**
  * Handles cards
@@ -222,6 +224,37 @@ export class StacksService {
       this.tagService.updateTag(tag, false).then(() => {
       });
     });
+  }
+
+  //
+  // Lookup
+  //
+
+  /**
+   * Determines whether a tag is contained in a list of stacks
+   * @param stacks stacks
+   * @param tag tag
+   */
+  public tagIsContainedInStacks(stacks: Stack[], tag: Tag) {
+    return this.getTagIdsByStacks(stacks).some(id => {
+      return id === tag.id;
+    });
+  }
+
+  /**
+   * Aggregates all tag IDs of a list of given stacks
+   * @param stacks stacks
+   */
+  private getTagIdsByStacks(stacks: Stack[]): string[] {
+    const tagIds = new Map<string, string>();
+
+    stacks.forEach(stack => {
+      stack.tagIds.forEach(tagId => {
+        tagIds.set(tagId, tagId);
+      });
+    });
+
+    return Array.from(tagIds.values());
   }
 
   //

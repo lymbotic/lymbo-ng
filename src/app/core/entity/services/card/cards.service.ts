@@ -9,6 +9,7 @@ import {CardTypeService} from './card-type.service';
 import {Card} from '../../model/card/card.model';
 import {CardTypeGroup} from '../../model/card/card-type-group.enum';
 import {CardType} from '../../model/card/card-type.enum';
+import {Tag} from '../../model/tag.model';
 
 /**
  * Handles cards
@@ -271,6 +272,37 @@ export class CardsService {
    */
   public sortCards(cardA: Card, cardB: Card) {
     return new Date(cardA.modificationDate).getTime() - new Date(cardB.modificationDate).getTime();
+  }
+
+  //
+  // Lookup
+  //
+
+  /**
+   * Determines whether a tag is contained in a list of cards
+   * @param cards cards
+   * @param tag tag
+   */
+  public tagIsContainedInCards(cards: Card[], tag: Tag) {
+    return this.getTagIdsByCards(cards).some(id => {
+      return id === tag.id;
+    });
+  }
+
+  /**
+   * Aggregates all tag IDs of a list of given cards
+   * @param cards cards
+   */
+  private getTagIdsByCards(cards: Card[]): string[] {
+    const tagIds = new Map<string, string>();
+
+    cards.forEach(card => {
+      card.tagIds.forEach(tagId => {
+        tagIds.set(tagId, tagId);
+      });
+    });
+
+    return Array.from(tagIds.values());
   }
 
   //

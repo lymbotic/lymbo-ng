@@ -26,6 +26,15 @@ export class CloneService {
   }
 
   /**
+   * Clones a given array of stacks
+   * @param {Stack[]} original
+   * @returns {Stack[]} cloned object
+   */
+  static cloneStacks(original: Stack[]): Stack[] {
+    return original != null ? JSON.parse(JSON.stringify(original)) : null;
+  }
+
+  /**
    * Clones a given card
    * @param {Card} original
    * @returns {Card} cloned object
