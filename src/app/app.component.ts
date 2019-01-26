@@ -1,6 +1,6 @@
 import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {MatSnackBar, MatSnackBarConfig} from '@angular/material';
-import {environment} from '../environments/environment.prod';
+import {environment} from '../environments/environment';
 import {SnackbarService} from './core/ui/services/snackbar.service';
 import {SettingsService} from './core/settings/services/settings.service';
 import {OverlayContainer} from '@angular/cdk/overlay';

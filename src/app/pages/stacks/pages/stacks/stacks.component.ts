@@ -737,8 +737,8 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
         this.sidenavStart.toggle().then(() => {
           this.settingsService.updateSetting(new Setting(SettingType.STACKS_SIDENAV_OPENED, this.sidenavStart.opened));
         });
-        this.sidenavEnd.toggle().then(() => {
-        });
+        // this.sidenavEnd.toggle().then(() => {
+        // });
         break;
       }
       case 'clear-filters': {
