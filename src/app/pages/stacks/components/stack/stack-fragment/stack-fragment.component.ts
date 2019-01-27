@@ -29,6 +29,8 @@ export class StackFragmentComponent implements OnInit {
 
   /** Title color */
   titleColor = 'black';
+  /** Tag color */
+  tagColor = 'white';
 
   /** Enum of display aspects */
   displayAspectType = DisplayAspect;
@@ -64,8 +66,11 @@ export class StackFragmentComponent implements OnInit {
    */
   private initializeColors() {
     if (this.stack.imagePalette != null) {
-      const swatch = this.stack.imagePalette.muted;
-      this.titleColor = `rgb(${swatch.rgb[0]},${swatch.rgb[1]},${swatch.rgb[2]})`;
+      const swatchMuted = this.stack.imagePalette.muted;
+      this.titleColor = `rgb(${swatchMuted.rgb[0]},${swatchMuted.rgb[1]},${swatchMuted.rgb[2]})`;
+
+      const swatchLightMuted = this.stack.imagePalette.lightMuted;
+      this.tagColor = `rgb(${swatchLightMuted.rgb[0]},${swatchLightMuted.rgb[1]},${swatchLightMuted.rgb[2]})`;
     }
   }
 
