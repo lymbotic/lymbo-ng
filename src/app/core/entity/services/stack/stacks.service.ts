@@ -8,7 +8,6 @@ import {EntityType} from '../../model/entity-type.enum';
 import {StackTypeGroup} from '../../model/stack/stack-type-group.enum';
 import {StackType} from '../../model/stack/stack-type.enum';
 import {StackTypeService} from './stack-type.service';
-import {Card} from '../../model/card/card.model';
 import {Tag} from '../../model/tag.model';
 
 /**
@@ -224,6 +223,18 @@ export class StacksService {
       this.tagService.updateTag(tag, false).then(() => {
       });
     });
+  }
+
+  /**
+   * Uploads stack
+   * @param stack stack
+   */
+  public uploadStack(stack: Stack) {
+    stack['_rev'] = null;
+    stack['_id'] = null;
+
+    this.pouchDBService.put(stack.id, stack);
+    this.findStacks();
   }
 
   //

@@ -40,6 +40,7 @@ import {Photo} from '../../../../core/image/model/photo.model';
 import {VibrantPalette} from '../../../../core/entity/model/vibrant-palette';
 // @ts-ignore
 import Vibrant = require('node-vibrant');
+import {UploadDialogComponent} from '../../components/dialogs/upload-dialog/upload-dialog.component';
 
 /**
  * Displays stacks page
@@ -746,6 +747,15 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
         this.snackbarService.showSnackbar('Filters cleared');
         break;
       }
+      case 'upload': {
+        this.dialog.open(UploadDialogComponent, <MatDialogConfig>{
+          disableClose: false,
+          data: {
+            title: 'Upload'
+          }
+        });
+        break;
+      }
       case 'settings': {
         this.router.navigate(['/settings']);
         break;
@@ -885,6 +895,10 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // Palette
 
+  /**
+   * Determines palette by a given image URL
+   * @param imageUrl image URL
+   */
   private getPalette(imageUrl: string): Promise<VibrantPalette> {
     return new Promise((resolve, reject) => {
       if (imageUrl != null) {

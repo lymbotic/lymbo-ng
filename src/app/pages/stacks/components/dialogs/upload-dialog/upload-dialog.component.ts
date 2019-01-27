@@ -1,11 +1,11 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import {Subject} from 'rxjs';
-import {SnackbarService} from 'app/core/ui/services/snackbar.service';
-import {PouchDBService} from 'app/core/persistence/services/pouchdb.service';
 import {StacksService} from '../../../../../core/entity/services/stack/stacks.service';
 import {DropResult, SUCCESS} from '../../fragments/file-drop-fragment/file-drop-fragment.component';
 import {Stack} from '../../../../../core/entity/model/stack/stack.model';
+import {PouchDBService} from '../../../../../core/persistence/services/pouchdb.service';
+import {SnackbarService} from '../../../../../core/ui/services/snackbar.service';
 
 /**
  * Displays upload dialog
@@ -49,11 +49,7 @@ export class UploadDialogComponent implements OnInit {
     this.dialogTitle = this.data.title;
 
     this.dropContent.asObservable().subscribe((result) => {
-      const stack = (result as Stack);
-      stack['_rev'] = null;
-      stack['_id'] = null;
-
-      this.pouchDBService.put(stack.id, stack);
+      this.stacksService.uploadStack(result as Stack);
     });
   }
 
@@ -66,7 +62,7 @@ export class UploadDialogComponent implements OnInit {
    * @param {DropResult} result drop result
    */
   public onFilesUploaded(result: DropResult) {
-    if (result.result.toString().toUpperCase() === SUCCESS) {
+    if (result.result.toString().toLowerCase() === SUCCESS) {
       this.dropContent.next(result.payload);
     } else {
       this.snackbarService.showSnackbar('ERROR: Failed to parse dropped file.');

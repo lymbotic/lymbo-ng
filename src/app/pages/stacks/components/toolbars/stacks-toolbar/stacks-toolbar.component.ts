@@ -1,7 +1,9 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {Media} from '../../../../../core/ui/model/media.enum';
 import {Subject} from 'rxjs';
 import {debounceTime} from 'rxjs/operators';
+import {Stack} from '../../../../../core/entity/model/stack/stack.model';
+import {StacksService} from '../../../../../core/entity/services/stack/stacks.service';
 
 /**
  * Displays stacks toolbar
@@ -26,6 +28,9 @@ export class StacksToolbarComponent implements OnInit {
   /** Event emitter indicating menu items being clicked */
   @Output() menuItemEventEmitter = new EventEmitter<string>();
 
+  /** File change input */
+  @ViewChild('fileChange') fileChange: ElementRef;
+
   /** Enum for media types */
   mediaType = Media;
 
@@ -35,6 +40,13 @@ export class StacksToolbarComponent implements OnInit {
   searchItemDebouncer = new Subject();
   /** Filtered search items options for auto-complete */
   searchOptionsFiltered: string[];
+
+  /**
+   * Constructor
+   * @param stacksService stacks service
+   */
+  constructor(private stacksService: StacksService) {
+  }
 
   //
   // Lifecycle hooks
@@ -79,6 +91,29 @@ export class StacksToolbarComponent implements OnInit {
    */
   onMenuItemClicked(menuItem: string): void {
     this.menuItemEventEmitter.emit(menuItem);
+  }
+
+  /**
+   * Handles click on import button
+   */
+  onFileInputClicked() {
+    this.fileChange.nativeElement.click();
+  }
+
+  /**
+   * Handles uploaded files
+   * @param event event
+   */
+  onFileChange(event) {
+    const reader = new FileReader();
+
+    if (event.target.files && event.target.files.length) {
+      const [file] = event.target.files;
+      reader.readAsText(file);
+      reader.onload = () => {
+        this.stacksService.uploadStack(JSON.parse(reader.result) as Stack);
+      };
+    }
   }
 
   /**
