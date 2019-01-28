@@ -23,7 +23,7 @@
 
     <div class="flexcontainer">
       <div class="card-main-content">
-        <div [ngSwitch]="activeAspect.type">
+        <div *ngIf="activeAspect != null" [ngSwitch]="activeAspect.type">
           <div *ngSwitchCase="aspectType.SIDE" (click)="onCardClicked(actionType.NONE)">
             <img *ngIf="activeSide.imageUrl !== ''" mat-card-image [attr.src]="activeSide.imageUrl">
             <mat-card-title class="side-title">{{ activeSide.title }}</mat-card-title>
@@ -88,7 +88,7 @@
     </mat-card-footer>
 
     <mat-card-actions
-      *ngIf="(activeAspect.type != aspectType.SIDE && activeAspect.type != aspectType.QUIZ)|| activePartIndex !== 0"
+      *ngIf="(activeAspect != null && activeAspect.type != aspectType.SIDE && activeAspect.type != aspectType.QUIZ)|| activePartIndex !== 0"
       align="right">
       <div class="flexcontainer">
         <button mat-button

@@ -9,6 +9,7 @@ import {StackTypeGroup} from '../../model/stack/stack-type-group.enum';
 import {StackType} from '../../model/stack/stack-type.enum';
 import {StackTypeService} from './stack-type.service';
 import {Tag} from '../../model/tag.model';
+import {SideAspect} from '../../model/card/side/side-aspect';
 
 /**
  * Handles cards

@@ -2,7 +2,6 @@ import {CardType} from './card-type.enum';
 import {Aspect} from './aspect.interface';
 import {Entity} from '../entity.model';
 import {EntityType} from '../entity-type.enum';
-import {Side} from './side/side.model';
 
 /**
  * Represents a card

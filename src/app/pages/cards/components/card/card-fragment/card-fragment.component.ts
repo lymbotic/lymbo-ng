@@ -80,8 +80,10 @@ export class CardFragmentComponent implements OnInit {
    * Handles on-init lifecycle phase
    */
   ngOnInit() {
-    this.activeAspect = this.card.aspects[0];
-    this.update();
+    if (this.card.aspects != null && this.card.aspects.length > 0) {
+      this.activeAspect = this.card.aspects[0];
+      this.update();
+    }
   }
 
   //
