@@ -16,7 +16,7 @@ export class Stack extends Entity {
   title: string;
   /** Image URL */
   imageUrl: string;
-  /** Image MaterialPalette */
+  /** Image palette */
   imagePalette: VibrantPalette;
   /** Cards */
   cards: Card[];

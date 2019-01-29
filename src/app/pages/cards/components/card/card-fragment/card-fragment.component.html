@@ -77,7 +77,7 @@
     <mat-card-footer>
       <div class="flexcontainer holder">
         <div class="group">
-          <mat-icon *ngIf="card.favorite" svgIcon="favorite" class="favorite-icon"></mat-icon>
+          <mat-icon *ngIf="card.favorite" svgIcon="favorite" class="favorite-icon" [style.fill]="favoriteColor"></mat-icon>
         </div>
         <div (click)="onCardClicked(actionType.NONE)">
           <span *ngFor="let t of card.tagIds">

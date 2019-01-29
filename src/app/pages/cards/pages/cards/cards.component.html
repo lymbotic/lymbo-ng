@@ -28,7 +28,7 @@
 
   <mat-sidenav-content cdkScrollable>
     <div class="card-main-content">
-      <app-card-fragment *ngFor="let s of cards" [card]="s" [tags]="tagsMap"
+      <app-card-fragment *ngFor="let s of cards" [card]="s" [tags]="tagsMap" [imagePalette]="stack.imagePalette"
                          (cardEventEmitter)="onCardEvent($event)">
       </app-card-fragment>
     </div>

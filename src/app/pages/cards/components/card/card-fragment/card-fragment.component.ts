@@ -16,6 +16,8 @@ import {Vocabel} from '../../../../../core/entity/model/card/example/vocabel.mod
 import {QuizAspect, QuizType} from '../../../../../core/entity/model/card/quiz/quiz-aspect.model';
 import {Answer} from '../../../../../core/entity/model/card/quiz/answer.model';
 import {CloneService} from '../../../../../core/entity/services/clone.service';
+import {VibrantPalette} from '../../../../../core/entity/model/vibrant-palette';
+import {MaterialColorService} from '../../../../../core/ui/services/material-color.service';
 
 /**
  * Displays a card
@@ -30,6 +32,8 @@ export class CardFragmentComponent implements OnInit {
 
   /** Card to be displayed */
   @Input() card = new Card();
+  /** Image palette to be used */
+  @Input() imagePalette: VibrantPalette;
   /** Map of tags */
   @Input() tags = new Map<string, Tag>();
   /** Default theme to be used */
@@ -61,13 +65,18 @@ export class CardFragmentComponent implements OnInit {
   /** Active answers */
   activeAnswers: Answer[];
 
+  /** Favorite color */
+  favoriteColor = 'black';
+
   /**
    * Constructor
    * @param cardsService card service
+   * @param materialColorService material color service
    * @param snackbarService snack bar service
    * @param dialog dialog
    */
   constructor(private cardsService: CardsService,
+              private materialColorService: MaterialColorService,
               private snackbarService: SnackbarService,
               public dialog: MatDialog) {
   }
@@ -80,9 +89,23 @@ export class CardFragmentComponent implements OnInit {
    * Handles on-init lifecycle phase
    */
   ngOnInit() {
+    this.initializeColors();
     if (this.card.aspects != null && this.card.aspects.length > 0) {
       this.activeAspect = this.card.aspects[0];
       this.update();
+    }
+  }
+
+  /**
+   * Initializes colors
+   */
+  private initializeColors() {
+    if (this.imagePalette != null) {
+      const vibrant = this.imagePalette.vibrant;
+      this.favoriteColor = `rgb(${vibrant.rgb[0]},${vibrant.rgb[1]},${vibrant.rgb[2]})`;
+    } else {
+      console.log('BAR');
+      this.favoriteColor = this.materialColorService.accent;
     }
   }
 
