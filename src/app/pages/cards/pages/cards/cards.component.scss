@@ -1,3 +1,4 @@
+@import '../../../../../flex';
 @import '../../../../../sizes';
 
 .fixed {
@@ -49,6 +50,10 @@
   }
 }
 
+.box-icon {
+  margin-right: 5px;
+}
+
 .fab {
   top: auto !important;
   z-index: 2;
@@ -67,4 +72,12 @@
   }
   left: auto !important;
   position: fixed !important;
+}
+
+//
+// Material
+//
+
+::ng-deep .mat-tab-labels {
+  justify-content: center !important;
 }

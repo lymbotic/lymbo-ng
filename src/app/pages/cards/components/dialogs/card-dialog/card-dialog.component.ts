@@ -258,13 +258,13 @@ export class CardDialogComponent implements OnInit, OnDestroy {
   private handleCardChanges() {
     switch (this.mode) {
       case DialogMode.ADD: {
-        if (this.cardsService.containsDisplayAspect(DisplayAspect.CAN_BE_CREATED, this.card)) {
+        if (CardsService.containsDisplayAspect(DisplayAspect.CAN_BE_CREATED, this.card)) {
           this.addCard();
         }
         break;
       }
       case DialogMode.UPDATE: {
-        if (this.cardsService.containsDisplayAspect(DisplayAspect.CAN_BE_UPDATED, this.card)) {
+        if (CardsService.containsDisplayAspect(DisplayAspect.CAN_BE_UPDATED, this.card)) {
           this.updateCard();
         }
         break;
@@ -327,6 +327,6 @@ export class CardDialogComponent implements OnInit, OnDestroy {
    * @param card card
    */
   public containsDisplayAspect(displayAspect: DisplayAspect, card: Card): boolean {
-    return this.cardsService.containsDisplayAspect(displayAspect, card);
+    return CardsService.containsDisplayAspect(displayAspect, card);
   }
 }

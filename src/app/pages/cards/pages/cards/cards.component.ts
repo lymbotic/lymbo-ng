@@ -30,6 +30,7 @@ import {StacksService} from '../../../../core/entity/services/stack/stacks.servi
 import {CardDialogComponent} from '../../components/dialogs/card-dialog/card-dialog.component';
 import {TagDialogComponent} from '../../components/dialogs/tag-dialog/tag-dialog.component';
 import {Card} from '../../../../core/entity/model/card/card.model';
+import {FormControl} from '@angular/forms';
 
 /**
  * Displays cards page
@@ -59,13 +60,15 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
   cardsPutAside: Card[] = [];
   /** Indicates whether cards are put aside */
   public cardsPutAsideNotEmpty = false;
+  /** Number of boxes */
+  boxesCount = 0;
+  /** Boxes */
+  boxes = [];
 
   /** Map of tags */
   public tagsMap = new Map<string, Tag>();
   /** Array of tags */
   public tags: Tag[] = [];
-  /** Array of tags with filter values */
-  public tagsFilter: Tag[] = [];
 
   /** Array of tags that are currently filtered */
   public tagsFiltered: Tag[] = [];
@@ -106,6 +109,8 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('sidenavEnd') sidenavEnd: MatSidenav;
   /** Scrollable directive */
   @ViewChild(CdkScrollable) scrollable: CdkScrollable;
+
+  selected = new FormControl(0);
 
   /**
    * Constructor
@@ -158,6 +163,7 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit() {
     this.initializeParameters();
     this.initializeResolvedData();
+
     this.initializeStackSubscription();
     this.initializeCardSubscription();
 
@@ -255,6 +261,7 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
     if (stack != null) {
       this.initializeTitle(stack);
       this.initializeColors(stack);
+      this.initializeBoxes(stack);
       this.cardsService.initializeStack(stack);
       this.cardsService.initializeCards(stack.cards);
     }
@@ -342,7 +349,7 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
       // Filter cards
       this.cards = Array.from(this.cardsService.cards.values()).filter((card: Card) => {
         return this.filterCard(card);
-      }).sort(this.cardsService.sortCards);
+      }).sort(CardsService.sortCards);
     });
   }
 
@@ -376,6 +383,19 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
       const accent = this.materialColorService.accent;
       this.titleColor = primary;
       this.fabColor = accent;
+    }
+  }
+
+  /**
+   * Initializes boxes
+   */
+  private initializeBoxes(stack: Stack) {
+    this.boxes = [];
+    this.boxesCount = this.cardsService.getBoxCount(stack.cards);
+
+    for (let i = 0; i < this.boxesCount; i++) {
+      this.boxes.push(i);
+
     }
   }
 
@@ -443,7 +463,7 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
    * Clears all filters
    */
   private clearFilters() {
-    this.filterService.clearAllFilters();
+    this.filterService.clearAllFilters().then();
   }
 
   /**
@@ -760,7 +780,7 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
     switch (menuItem) {
       case 'back': {
         this.cardsService.clearCards();
-        this.router.navigate([`/stacks`]);
+        this.router.navigate([`/stacks`]).then();
         break;
       }
       case 'restore-cards': {
@@ -794,19 +814,7 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
         break;
       }
       case 'settings': {
-        this.router.navigate(['/settings']);
-        break;
-      }
-      case 'upload': {
-        /*
-        this.dialog.open(UploadDialogComponent, <MatDialogConfig>{
-          disableClose: false,
-          data: {
-            title: 'Upload'
-          }
-        });
-                */
-
+        this.router.navigate(['/settings']).then();
         break;
       }
       case 'download': {
@@ -850,6 +858,20 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
    */
   onSearchItemChanged(searchItem: string) {
     this.filterService.updateSearchItem(searchItem);
+  }
+
+  //
+  // Helpers
+  //
+
+  /**
+   * Returns cards of the box with a given index
+   * @param index box index
+   */
+  getCardsOfBox(index: number) {
+    return this.cards.filter(card => {
+      return (card.box == null && index === 0) || card.box === index;
+    });
   }
 
   /**
@@ -899,7 +921,7 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
    */
   private restoreCards(): Promise<any> {
     return new Promise((resolve) => {
-      const cardsAll = this.cards.concat(this.cardsPutAside).sort(this.cardsService.sortCards);
+      const cardsAll = this.cards.concat(this.cardsPutAside).sort(CardsService.sortCards);
       this.cardsPutAside = [];
       this.initializeCards(cardsAll);
       resolve();

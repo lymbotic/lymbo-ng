@@ -28,9 +28,24 @@
 
   <mat-sidenav-content cdkScrollable>
     <div class="card-main-content">
-      <app-card-fragment *ngFor="let s of cards" [card]="s" [tags]="tagsMap" [imagePalette]="stack.imagePalette"
-                         (cardEventEmitter)="onCardEvent($event)">
-      </app-card-fragment>
+      <mat-tab-group mat-align-tabs="end"
+                     [color]="fabColor"
+                     [selectedIndex]="selected.value"
+                     (selectedIndexChange)="selected.setValue($event)">
+        <mat-tab *ngFor="let box of boxes; let index = index;">
+          <ng-template mat-tab-label *ngIf="index === selected.value">
+            <mat-icon svgIcon="inbox" class="box-icon" [style.fill]="titleColor"></mat-icon>
+            <span [style.color]="titleColor">Box {{ index + 1 }}</span>
+          </ng-template>
+          <ng-template mat-tab-label *ngIf="index !== selected.value">
+            <mat-icon svgIcon="inbox" class="box-icon"></mat-icon>
+            <span>Box {{ index + 1 }}</span>
+          </ng-template>
+          <app-card-fragment *ngFor="let card of getCardsOfBox(index)" [card]="card" [tags]="tagsMap" [imagePalette]="stack.imagePalette"
+                             (cardEventEmitter)="onCardEvent($event)">
+          </app-card-fragment>
+        </mat-tab>
+      </mat-tab-group>
     </div>
   </mat-sidenav-content>
 

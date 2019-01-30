@@ -82,6 +82,7 @@ export class MaterialIconService {
     icons.push(new Icon(IconTopic.CONTENT, 'add', 'ic_add_24px.svg'));
     icons.push(new Icon(IconTopic.CONTENT, 'clear', 'ic_clear_24px.svg'));
     icons.push(new Icon(IconTopic.CONTENT, 'filter_list', 'ic_filter_list_24px.svg'));
+    icons.push(new Icon(IconTopic.CONTENT, 'inbox', 'ic_inbox_24px.svg'));
     icons.push(new Icon(IconTopic.CONTENT, 'reply', 'ic_reply_24px.svg'));
     icons.push(new Icon(IconTopic.CONTENT, 'undo', 'ic_undo_24px.svg'));
     icons.push(new Icon(IconTopic.COMMUNICATION, 'chat_bubble_outline', 'ic_chat_bubble_outline_24px.svg'));

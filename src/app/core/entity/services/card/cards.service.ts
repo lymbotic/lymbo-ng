@@ -27,6 +27,48 @@ export class CardsService {
   /** Subject that publishes cards */
   cardsSubject = new Subject<Card[]>();
 
+  //
+  // Delegated: Display aspects
+  //
+
+  /**
+   * Determines if a given cardlet contains a display aspect
+   * @param displayAspect display aspect
+   * @param card card
+   */
+  static containsDisplayAspect(displayAspect: DisplayAspect, card: Card): boolean {
+    switch (displayAspect) {
+      case DisplayAspect.CAN_BE_CREATED: {
+        return CardDisplayService.canBeCreated(card);
+      }
+      case DisplayAspect.CAN_BE_UPDATED: {
+        return CardDisplayService.canBeUpdated(card);
+      }
+      case DisplayAspect.TITLES: {
+        return CardDisplayService.containsTitles(card);
+      }
+      case DisplayAspect.VOCABULARY: {
+        return CardDisplayService.containsVocabulary(card);
+      }
+      case DisplayAspect.QUIZ: {
+        return CardDisplayService.containsQuiz(card);
+      }
+    }
+  }
+
+  //
+  // Sort
+  //
+
+  /**
+   * Sorts cards based on their modification date
+   * @param cardA first card
+   * @param cardB seconds card
+   */
+  static sortCards(cardA: Card, cardB: Card) {
+    return new Date(cardA.modificationDate).getTime() - new Date(cardB.modificationDate).getTime();
+  }
+
   /**
    * Constructor
    * @param cardTypeService card type service
@@ -233,50 +275,23 @@ export class CardsService {
   }
 
   //
-  // Delegated: Display aspects
-  //
-
-  /**
-   * Determines if a given cardlet contains a display aspect
-   * @param displayAspect display aspect
-   * @param card card
-   */
-  public containsDisplayAspect(displayAspect: DisplayAspect, card: Card): boolean {
-    switch (displayAspect) {
-      case DisplayAspect.CAN_BE_CREATED: {
-        return CardDisplayService.canBeCreated(card);
-      }
-      case DisplayAspect.CAN_BE_UPDATED: {
-        return CardDisplayService.canBeUpdated(card);
-      }
-      case DisplayAspect.TITLES: {
-        return CardDisplayService.containsTitles(card);
-      }
-      case DisplayAspect.VOCABULARY: {
-        return CardDisplayService.containsVocabulary(card);
-      }
-      case DisplayAspect.QUIZ: {
-        return CardDisplayService.containsQuiz(card);
-      }
-    }
-  }
-
-  //
-  // Sort
-  //
-
-  /**
-   * Sorts cards based on their modification date
-   * @param cardA first card
-   * @param cardB seconds card
-   */
-  public sortCards(cardA: Card, cardB: Card) {
-    return new Date(cardA.modificationDate).getTime() - new Date(cardB.modificationDate).getTime();
-  }
-
-  //
   // Lookup
   //
+
+  /**
+   * Returns the needed number of boxes
+   * @param cards cards
+   */
+  public getBoxCount(cards: Card[]): number {
+    let boxCount = 0;
+    cards.forEach(card => {
+      if (card.box != null && card.box > boxCount) {
+        boxCount = card.box;
+      }
+    });
+
+    return boxCount + 1;
+  }
 
   /**
    * Determines whether a tag is contained in a list of cards
@@ -358,6 +373,6 @@ export class CardsService {
    * Informs subscribers that something has changed
    */
   public notify() {
-    this.cardsSubject.next(Array.from(this.cards.values()).sort(this.sortCards));
+    this.cardsSubject.next(Array.from(this.cards.values()).sort(CardsService.sortCards));
   }
 }
