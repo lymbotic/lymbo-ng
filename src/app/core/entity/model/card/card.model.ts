@@ -19,6 +19,9 @@ export class Card extends Entity {
   /** Favorite */
   favorite: boolean;
 
+  /** Box this card is in */
+  box: number;
+
   /**
    * Constructor
    */
@@ -27,7 +30,8 @@ export class Card extends Entity {
     this.entityType = EntityType.CARD;
     this.type = CardType.UNSPECIFIED;
     this.tagIds = [];
-    this.favorite = false;
     this.aspects = [];
+    this.favorite = false;
+    this.box = 0;
   }
 }
