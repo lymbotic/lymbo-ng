@@ -248,6 +248,20 @@ export class CardsService {
   }
 
   /**
+   * Moves card to next stack
+   * @param stack stack
+   * @param card card
+   */
+  public moveCardToNextBox(stack: Stack, card: Card): Promise<any> {
+    return new Promise((resolve) => {
+      card.box != null ? card.box++ : card.box = 1;
+      this.updateCard(card).then(() => {
+        resolve();
+      });
+    });
+  }
+
+  /**
    * Toggles favorite
    * @param stack stack
    * @param card card

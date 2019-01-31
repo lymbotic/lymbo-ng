@@ -540,6 +540,12 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
         });
         break;
       }
+      case Action.MOVE_TO_NEXT_BOX: {
+        this.cardsService.moveCardToNextBox(this.stack, card).then(() => {
+          this.snackbarService.showSnackbar('Moved card to next box');
+        });
+        break;
+      }
       case Action.SET_FAVORITE: {
         this.cardsService.setFavorite(this.stack, card, true).then(() => {
           this.snackbarService.showSnackbar('Set favorite');

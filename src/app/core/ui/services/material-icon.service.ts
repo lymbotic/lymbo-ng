@@ -78,6 +78,7 @@ export class MaterialIconService {
     icons.push(new Icon(IconTopic.ACTION, 'schedule', 'ic_schedule_24px.svg'));
     icons.push(new Icon(IconTopic.ACTION, 'translate', 'ic_translate_24px.svg'));
     icons.push(new Icon(IconTopic.AV, 'shuffle', 'ic_shuffle_24px.svg'));
+    icons.push(new Icon(IconTopic.AV, 'skip_next', 'ic_skip_next_24px.svg'));
     icons.push(new Icon(IconTopic.COMMUNICATION, 'vpn_key', 'ic_vpn_key_24px.svg'));
     icons.push(new Icon(IconTopic.CONTENT, 'add', 'ic_add_24px.svg'));
     icons.push(new Icon(IconTopic.CONTENT, 'clear', 'ic_clear_24px.svg'));
@@ -91,6 +92,7 @@ export class MaterialIconService {
     icons.push(new Icon(IconTopic.FILE, 'file_upload', 'ic_file_upload_24px.svg'));
     icons.push(new Icon(IconTopic.HARDWARE, 'keyboard_tab', 'ic_keyboard_tab_24px.svg'));
     icons.push(new Icon(IconTopic.IMAGE, 'crop_free', 'ic_crop_free_24px.svg'));
+    icons.push(new Icon(IconTopic.IMAGE, 'rotate_left', 'ic_rotate_left_24px.svg'));
     icons.push(new Icon(IconTopic.MAPS, 'layers_clear', 'ic_layers_clear_24px.svg'));
     icons.push(new Icon(IconTopic.NAVIGATION, 'arrow_back', 'ic_arrow_back_24px.svg'));
     icons.push(new Icon(IconTopic.NAVIGATION, 'check', 'ic_check_24px.svg'));

@@ -96,41 +96,16 @@
                 matTooltipPosition="above"
                 matTooltipShowDelay="250"
                 (click)="onCardClicked(actionType.PUT_TO_END)">
-          <mat-icon svgIcon="undo"></mat-icon>
+          <mat-icon svgIcon="rotate_left"></mat-icon>
         </button>
         <div class="flexbox"></div>
         <button mat-button
-                matTooltip="Put card aside"
+                matTooltip="Move to next vox"
                 matTooltipPosition="above"
                 matTooltipShowDelay="250"
-                (click)="onCardClicked(actionType.PUT_ASIDE)">
-          <mat-icon svgIcon="check"></mat-icon>
+                (click)="onCardClicked(actionType.MOVE_TO_NEXT_BOX)">
+          <mat-icon svgIcon="skip_next"></mat-icon>
         </button>
-
-        <!--
-        <button *ngIf="(activeSide != null && activeSideIndex === card.sides.length - 1)
-              && card.tenseGroups.length > 0"
-                mat-button
-                matTooltip="Tenses"
-                matTooltipPosition="above"
-                matTooltipShowDelay="250"
-                (click)="onCardClicked(actionType.NONE)">
-          <mat-icon svgIcon="keyboard_tab"></mat-icon>
-          <mat-icon svgIcon="schedule"></mat-icon>
-        </button>
-
-        <button *ngIf="((activeTenseGroup != null && activeTenseGroupIndex === card.tenseGroups.length - 1)
-              || (activeSide != null && activeSideIndex === card.sides.length - 1 && card.tenseGroups.length === 0))
-              && card.examples.length > 0"
-                mat-button
-                matTooltip="Examples"
-                matTooltipPosition="above"
-                matTooltipShowDelay="250"
-                (click)="onCardClicked(actionType.NONE)">
-          <mat-icon svgIcon="keyboard_tab"></mat-icon>
-          <mat-icon svgIcon="chat_bubble_outline"></mat-icon>
-        </button>
-        -->
       </div>
     </mat-card-actions>
 
