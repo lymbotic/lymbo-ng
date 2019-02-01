@@ -98,21 +98,20 @@
                 matTooltipShowDelay="250"
                 (click)="onCardClicked(actionType.PUT_TO_END)">
           <mat-icon svgIcon="rotate_left"></mat-icon>
-        </button>
-        <button mat-button *ngIf="media < mediaType.LARGE"
-                (click)="onCardClicked(actionType.PUT_TO_END)">
-          PUT TO END
+          <span mat-button *ngIf="media < mediaType.MEDIUM">
+                PUT TO END
+          </span>
         </button>
         <div class="flexbox"></div>
-        <button mat-button *ngIf="media < mediaType.LARGE"
-                (click)="onCardClicked(actionType.MOVE_TO_NEXT_BOX)">
-          MOVE TO NEXT BOOK
-        </button>
+
         <button mat-button
                 matTooltip="Move to next box"
                 matTooltipPosition="above"
                 matTooltipShowDelay="250"
                 (click)="onCardClicked(actionType.MOVE_TO_NEXT_BOX)">
+          <span mat-button *ngIf="media < mediaType.MEDIUM">
+                MOVE TO NEXT BOOK
+          </span>
           <mat-icon svgIcon="skip_next"></mat-icon>
         </button>
       </div>
