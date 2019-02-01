@@ -44,6 +44,7 @@ Share the cards you created with friends.
 | 0.22 | Stack image |
 | 0.23 | Stack color |
 | 0.24 | Card boxes |
+| 0.25 | Vice versa |
 
 ### Planned features
 
