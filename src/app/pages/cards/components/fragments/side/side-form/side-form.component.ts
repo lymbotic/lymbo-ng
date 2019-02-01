@@ -66,8 +66,8 @@ export class SideFormComponent implements OnInit {
     this.initializeSideAspect();
     this.initializePlaceholders();
 
-    this.initializeTitleChangedSubject(this.frontTitleChangedSubject, this.stack.targetLanguage, this.indexFront, 1);
-    this.initializeTitleChangedSubject(this.backTitleChangedSubject, this.stack.sourceLanguage, 1, this.indexFront);
+    this.initializeTitleChangedSubject(this.frontTitleChangedSubject, this.stack.targetLanguage, this.indexFront, this.indexBack);
+    this.initializeTitleChangedSubject(this.backTitleChangedSubject, this.stack.sourceLanguage, this.indexBack, this.indexFront);
   }
 
   //
@@ -122,7 +122,6 @@ export class SideFormComponent implements OnInit {
 
           this.translateText(originalText, targetLanguage).subscribe(translatedText => {
             this.sideAspect.sides[targetIndex].title = translatedText;
-
             this.notify();
           });
         }
@@ -148,7 +147,8 @@ export class SideFormComponent implements OnInit {
    */
   onFrontTitleClicked() {
     // Check if front title is empty
-    if (this.getFrontSide().title === null || this.getFrontSide().title.trim() === '') {
+    if (this.getBackSide().title.trim() !== ''
+      && (this.getFrontSide().title === null || this.getFrontSide().title.trim() === '')) {
       this.backTitleChangedSubject.next(this.getBackSide().title);
     }
   }
@@ -167,7 +167,8 @@ export class SideFormComponent implements OnInit {
    */
   onBackTitleClicked() {
     // Check if back title is empty
-    if (this.getBackSide().title === null || this.getBackSide().title.trim() === '') {
+    if (this.getFrontSide().title.trim() !== ''
+      && (this.getBackSide().title === null || this.getBackSide().title.trim() === '')) {
       this.frontTitleChangedSubject.next(this.getFrontSide().title);
     }
   }
