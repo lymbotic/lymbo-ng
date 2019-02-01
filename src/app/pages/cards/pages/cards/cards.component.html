@@ -35,11 +35,11 @@
         <mat-tab *ngFor="let box of boxes; let index = index;">
           <ng-template mat-tab-label *ngIf="index === selected.value">
             <mat-icon svgIcon="inbox" class="box-icon" [style.fill]="titleColor"></mat-icon>
-            <span [style.color]="titleColor">Box {{ index + 1 }}</span>
+            <span [style.color]="titleColor">Box {{ index + 1 }} ({{ getCardsOfBox(index).length }})</span>
           </ng-template>
           <ng-template mat-tab-label *ngIf="index !== selected.value">
             <mat-icon svgIcon="inbox" class="box-icon"></mat-icon>
-            <span>Box {{ index + 1 }}</span>
+            <span>Box {{ index + 1 }} ({{ getCardsOfBox(index).length }})</span>
           </ng-template>
           <app-card-fragment *ngFor="let card of getCardsOfBox(index)" [card]="card" [tags]="tagsMap" [imagePalette]="stack.imagePalette"
                              (cardEventEmitter)="onCardEvent($event)">
