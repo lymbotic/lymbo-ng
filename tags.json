@@ -26,5 +26,6 @@
 { "annotation":"refs/tags/v0.20.0", "message": "Favorite cards"},
 { "annotation":"refs/tags/v0.21.0", "message": "Quiz cards"},
 { "annotation":"refs/tags/v0.22.0", "message": "Stack image"},
-{ "annotation":"refs/tags/v0.23.0", "message": "Stack color"}
+{ "annotation":"refs/tags/v0.23.0", "message": "Stack color"},
+{ "annotation":"refs/tags/v0.24.0", "message": "Card boxes"}
 ]}
