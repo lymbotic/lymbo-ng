@@ -119,6 +119,19 @@ export class CardsService {
   //
 
   /**
+   * Updates existing stack
+   * @param stack stack
+   */
+  public updateStack(stack): Promise<any> {
+    return new Promise((resolve) => {
+      this.updateRelatedStack(stack).then(() => {
+        this.notify();
+        resolve();
+      });
+    });
+  }
+
+  /**
    * Creates a new card
    * @param card card to be created
    */

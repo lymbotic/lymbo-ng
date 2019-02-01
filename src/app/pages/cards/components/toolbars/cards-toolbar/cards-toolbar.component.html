@@ -39,8 +39,8 @@
     <button *ngIf="media > mediaType.MEDIUM"
             mat-button
             class="toolbar-menu-item"
-            [disabled]="!cardsPutAsideNotEmpty"
-            [matTooltip]="'Restore cards being put aside'"
+            [disabled]="!cardsAreInMultipleBoxes"
+            [matTooltip]="'Move all cards to first box'"
             [matTooltipPosition]="'left'"
             (click)="onMenuItemClicked('restore-cards')">
       <mat-icon svgIcon="refresh"></mat-icon>
@@ -71,9 +71,9 @@
 
       <!-- Optional buttons mobile -->
       <div *ngIf="media < mediaType.LARGE">
-        <button mat-menu-item [disabled]="!cardsPutAsideNotEmpty" (click)="onMenuItemClicked('restore-cards')">
+        <button mat-menu-item [disabled]="!cardsAreInMultipleBoxes" (click)="onMenuItemClicked('restore-cards')">
           <mat-icon svgIcon="refresh"></mat-icon>
-          <span>Restore cards</span>
+          <span>Move all cards to first box</span>
         </button>
         <button mat-menu-item [disabled]="!stackNotEmpty" (click)="onMenuItemClicked('shuffle-cards')">
           <mat-icon svgIcon="shuffle"></mat-icon>

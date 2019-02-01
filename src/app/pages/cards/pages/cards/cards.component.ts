@@ -56,10 +56,8 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
   stack: Stack;
   /** Array of cards */
   cards: Card[] = [];
-  /** Array of cards that are put aside */
-  cardsPutAside: Card[] = [];
-  /** Indicates whether cards are put aside */
-  public cardsPutAsideNotEmpty = false;
+  /** Indicates whether cards in multiple boxes */
+  public cardsAreInMultipleBoxes = false;
   /** Number of boxes */
   boxesCount = 0;
   /** Boxes */
@@ -245,6 +243,7 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
     ).subscribe((value) => {
       if (value != null) {
         this.initializeCards(value as Card[]);
+        this.initializeCardsAreInMultipleBoxes();
       }
     });
   }
@@ -280,6 +279,13 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   /**
+   * Initializes whether cards are in multiple boxes
+   */
+  private initializeCardsAreInMultipleBoxes() {
+    this.cardsAreInMultipleBoxes = this.cardsService.getBoxCount(this.cards) > 1;
+  }
+
+  /**
    * Checks if a card matches current filter criteria
    * @param card card
    */
@@ -287,11 +293,8 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
     const matchesSearchItem = this.matchService.cardMatchesEveryItem(card, this.filterService.searchItem);
     const matchesTags = this.matchService.cardMatchesTags(card, Array.from(this.filterService.tags.values()));
     const matchesFavorites = this.matchService.cardMatchesFavorites(card, this.filterService.favorites);
-    const isNotPutAside = !this.cardsPutAside.some(cardPutAside => {
-      return cardPutAside.id === card.id;
-    });
 
-    return matchesSearchItem && matchesTags && matchesFavorites && isNotPutAside;
+    return matchesSearchItem && matchesTags && matchesFavorites;
   }
 
   // Tags
@@ -527,13 +530,6 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
         });
         break;
       }
-      case Action.PUT_ASIDE: {
-        this.putCardAside(card).then(() => {
-          this.snackbarService.showSnackbar('Put card aside');
-        });
-        this.initializeCards(this.cards);
-        break;
-      }
       case Action.PUT_TO_END: {
         this.cardsService.putCardToEnd(this.stack, card).then(() => {
           this.snackbarService.showSnackbar('Put card to end');
@@ -542,6 +538,7 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
       }
       case Action.MOVE_TO_NEXT_BOX: {
         this.cardsService.moveCardToNextBox(this.stack, card).then(() => {
+          this.initializeCardsAreInMultipleBoxes();
           this.snackbarService.showSnackbar('Moved card to next box');
         });
         break;
@@ -790,8 +787,9 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
         break;
       }
       case 'restore-cards': {
-        this.restoreCards().then(() => {
-          this.snackbarService.showSnackbar('Restored cards that have been put aside');
+        this.moveAllCardsToFirstBox().then(() => {
+          this.initializeCardsAreInMultipleBoxes();
+          this.snackbarService.showSnackbar('Moved all cards to first box');
         });
         break;
       }
@@ -911,26 +909,18 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   /**
-   * Puts a card aside
-   * @param card card
-   */
-  private putCardAside(card: Card): Promise<any> {
-    return new Promise((resolve) => {
-      this.cardsPutAside.push(card);
-      this.cardsPutAsideNotEmpty = this.cardsPutAside.length > 0;
-      resolve();
-    });
-  }
-
-  /**
    * Restores all cards that have been put aside
    */
-  private restoreCards(): Promise<any> {
+  private moveAllCardsToFirstBox(): Promise<any> {
     return new Promise((resolve) => {
-      const cardsAll = this.cards.concat(this.cardsPutAside).sort(CardsService.sortCards);
-      this.cardsPutAside = [];
-      this.initializeCards(cardsAll);
-      resolve();
+      this.cards.forEach(card => {
+        card.box = 0;
+      });
+      this.stack.cards = this.cards;
+      this.cardsService.updateStack(this.stack).then((() => {
+        this.initializeBoxes(this.stack);
+        resolve();
+      }));
     });
   }
 

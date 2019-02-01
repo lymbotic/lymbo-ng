@@ -26,8 +26,8 @@ export class CardsToolbarComponent implements OnInit {
   @Input() filterFavorites = false;
   /** Indicates whether a filter is active */
   @Input() filterActive = false;
-  /** Indicates whether cards are put aside */
-  @Input() cardsPutAsideNotEmpty = false;
+  /** Indicates whether cards are in multiple boxes */
+  @Input() cardsAreInMultipleBoxes = false;
   /** Indicates that stack is not empty */
   @Input() stackNotEmpty = false;
   /** Event emitter indicating changes in search bar */
