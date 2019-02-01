@@ -848,7 +848,7 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
       case 'android-release': {
         const filename = 'basalt-release.apk';
         const element = document.createElement('a');
-        element.setAttribute('href', 'assets/basalt.apk');
+        element.setAttribute('href', `assets/${filename}`);
         element.setAttribute('download', filename);
 
         element.style.display = 'none';
@@ -933,11 +933,7 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
    */
   private moveAllCardsToFirstBox(): Promise<any> {
     return new Promise((resolve) => {
-      this.cards.forEach(card => {
-        card.box = 0;
-      });
-      this.stack.cards = this.cards;
-      this.cardsService.updateStack(this.stack).then((() => {
+      this.cardsService.moveAllCardsToFirstBox(this.stack).then((() => {
         this.initializeBoxes(this.stack);
         resolve();
       }));
@@ -949,25 +945,10 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
    */
   private shuffleCards(): Promise<any> {
     return new Promise((resolve) => {
-      const cards = CloneService.cloneCards(this.cards);
-
-      let currentIndex = cards.length, temporaryValue, randomIndex;
-
-      // While there remain elements to shuffle...
-      while (0 !== currentIndex) {
-
-        // Pick a remaining element...
-        randomIndex = Math.floor(Math.random() * currentIndex);
-        currentIndex -= 1;
-
-        // And swap it with the current element.
-        temporaryValue = cards[currentIndex];
-        cards[currentIndex] = cards[randomIndex];
-        cards[randomIndex] = temporaryValue;
-      }
-
-      this.initializeCards(cards);
-      resolve();
+      this.cardsService.shuffleStack(this.stack).then((() => {
+        this.initializeBoxes(this.stack);
+        resolve();
+      }));
     });
   }
 

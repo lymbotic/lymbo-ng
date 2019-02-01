@@ -69,7 +69,58 @@ export class CardsService {
    * @param cardB seconds card
    */
   static sortCards(cardA: Card, cardB: Card) {
-    return new Date(cardA.modificationDate).getTime() - new Date(cardB.modificationDate).getTime();
+    return (!isNaN(cardA.index) && !isNaN(cardB.index)) ? cardB.index - cardA.index : 0;
+  }
+
+  /**
+   * Shuffles cards
+   * @param cards cards
+   */
+  static shuffleCards(cards: Card[]): Card[] {
+    let currentIndex = cards.length, temporaryValue, randomIndex;
+
+    while (0 !== currentIndex) {
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex -= 1;
+
+      temporaryValue = cards[currentIndex];
+      cards[currentIndex] = cards[randomIndex];
+      cards[randomIndex] = temporaryValue;
+    }
+
+    return cards;
+  }
+
+  //
+  // Lookup
+  //
+
+  /**
+   * Get minimum index of a given list of cards
+   * @param cards cards
+   */
+  static getMinIndex(cards: Card[]): number {
+    const min = Math.min(...cards.map(card => {
+      return card.index;
+    }).filter(index => {
+      return !isNaN(index);
+    }));
+
+    return !isNaN(min) ? min : 0;
+  }
+
+  /**
+   * Get maximum index of a given list of cards
+   * @param cards cards
+   */
+  static getMaxIndex(cards: Card[]): number {
+    const max = Math.max(...cards.map(card => {
+      return card.index;
+    }).filter(index => {
+      return !isNaN(index);
+    }));
+
+    return !isNaN(max) ? max : 0;
   }
 
   /**
@@ -143,6 +194,8 @@ export class CardsService {
       if (card == null) {
         reject();
       }
+
+      card.index = CardsService.getMaxIndex(Array.from(this.cards.values())) + 1;
 
       this.addCardToStack(this.stack, card);
       resolve();
@@ -256,7 +309,7 @@ export class CardsService {
    */
   public putCardToEnd(stack: Stack, card: Card): Promise<any> {
     return new Promise((resolve) => {
-      card.modificationDate = new Date();
+      card.index = CardsService.getMinIndex(Array.from(this.cards.values())) - 1;
       this.updateCard(card).then(() => {
         resolve();
       });
@@ -272,6 +325,56 @@ export class CardsService {
     return new Promise((resolve) => {
       card.box != null ? card.box++ : card.box = 1;
       this.updateCard(card).then(() => {
+        resolve();
+      });
+    });
+  }
+
+  /**
+   * Moves all cards to the first box
+   * @param stack stack
+   */
+  public moveAllCardsToFirstBox(stack) {
+    return new Promise((resolve) => {
+      stack.cards.forEach(card => {
+        card.box = 0;
+      });
+      this.updateStack(stack).then(() => {
+        resolve();
+      });
+    });
+  }
+
+  /**
+   * Normalizes card indices of a stack starting with zero
+   * @param stack stack
+   */
+  public normalizesStackIndices(stack: Stack): Promise<any> {
+    return new Promise((resolve) => {
+      let index = 0;
+
+      // Assign new indices to cards
+      stack.cards.forEach(card => {
+        card.index = index++;
+      });
+      resolve();
+    });
+  }
+
+  /**
+   * Shuffles cards of a given stack
+   * @param stack stack
+   */
+  public shuffleStack(stack: Stack): Promise<any> {
+    return new Promise((resolve) => {
+      let index = 0;
+
+      // Assign new indices to shuffled cards
+      CardsService.shuffleCards(stack.cards).forEach(card => {
+        card.index = index++;
+      });
+
+      this.updateStack(stack).then(() => {
         resolve();
       });
     });
@@ -310,6 +413,7 @@ export class CardsService {
   public toggleViceVersa() {
     this.viceVersa = !this.viceVersa;
   }
+
   //
   // Lookup
   //
