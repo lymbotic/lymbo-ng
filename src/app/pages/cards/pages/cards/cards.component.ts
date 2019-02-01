@@ -111,7 +111,8 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
   /** Scrollable directive */
   @ViewChild(CdkScrollable) scrollable: CdkScrollable;
 
-  selected = new FormControl(0);
+  /** Selected tab */
+  selectedTab = new FormControl(0);
 
   /**
    * Constructor

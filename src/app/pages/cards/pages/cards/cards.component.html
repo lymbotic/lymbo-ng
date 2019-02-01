@@ -30,14 +30,14 @@
     <div class="card-main-content">
       <mat-tab-group mat-align-tabs="end"
                      [color]="fabColor"
-                     [selectedIndex]="selected.value"
-                     (selectedIndexChange)="selected.setValue($event)">
+                     [selectedIndex]="selectedTab.value"
+                     (selectedIndexChange)="selectedTab.setValue($event)">
         <mat-tab *ngFor="let box of boxes; let index = index;">
-          <ng-template mat-tab-label *ngIf="index === selected.value">
+          <ng-template mat-tab-label *ngIf="index === selectedTab.value">
             <mat-icon svgIcon="inbox" class="box-icon" [style.fill]="titleColor"></mat-icon>
             <span [style.color]="titleColor">Box {{ index + 1 }} ({{ getCardsOfBox(index).length }})</span>
           </ng-template>
-          <ng-template mat-tab-label *ngIf="index !== selected.value">
+          <ng-template mat-tab-label *ngIf="index !== selectedTab.value">
             <mat-icon svgIcon="inbox" class="box-icon"></mat-icon>
             <span>Box {{ index + 1 }} ({{ getCardsOfBox(index).length }})</span>
           </ng-template>
