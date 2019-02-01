@@ -57,31 +57,34 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
   /** Array of cards */
   cards: Card[] = [];
   /** Indicates whether cards in multiple boxes */
-  public cardsAreInMultipleBoxes = false;
+  cardsAreInMultipleBoxes = false;
   /** Number of boxes */
   boxesCount = 0;
   /** Boxes */
   boxes = [];
 
   /** Map of tags */
-  public tagsMap = new Map<string, Tag>();
+  tagsMap = new Map<string, Tag>();
   /** Array of tags */
-  public tags: Tag[] = [];
+  tags: Tag[] = [];
+
+  /** Whether all cards are flipped */
+  viceVersa = false;
 
   /** Array of tags that are currently filtered */
-  public tagsFiltered: Tag[] = [];
+  tagsFiltered: Tag[] = [];
   /** Indicates whether a filter for favorite cards is active */
-  public filterFavorites = false;
+  filterFavorites = false;
   /** Indicates whether a filter is active */
-  public filterActive = false;
+  filterActive = false;
 
   /** Search items options for auto-complete */
-  public searchOptions = [];
+  searchOptions = [];
 
   /** Enum of media types */
-  public mediaType = Media;
+  mediaType = Media;
   /** Current media */
-  public media: Media = Media.UNDEFINED;
+  media: Media = Media.UNDEFINED;
 
   /** Title color */
   titleColor = 'black';
@@ -168,6 +171,8 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.initializeFilterSubscription();
     this.initializeTagSubscription();
     this.initializeSuggestionSubscription();
+
+    this.initializeViceVersa();
 
     this.initializeMaterial();
     this.initializeMediaSubscription();
@@ -400,6 +405,13 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
       this.boxes.push(i);
 
     }
+  }
+
+  /**
+   * Initializes vice versa
+   */
+  private initializeViceVersa() {
+    this.viceVersa = this.cardsService.viceVersa;
   }
 
   /**
@@ -799,6 +811,13 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
         });
         break;
       }
+      case 'vice-versa': {
+        this.toggleViceVersa().then(() => {
+          this.initializeViceVersa();
+          this.snackbarService.showSnackbar('Flipped all cards');
+        });
+        break;
+      }
       case 'filter-favorites': {
         this.filterService.updateFavorites(true).then(() => {
           this.snackbarService.showSnackbar('Filtered favorites');
@@ -947,6 +966,16 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
       }
 
       this.initializeCards(cards);
+      resolve();
+    });
+  }
+
+  /**
+   * Toggles vice versa
+   */
+  private toggleViceVersa(): Promise<any> {
+    return new Promise((resolve) => {
+      this.cardsService.toggleViceVersa();
       resolve();
     });
   }

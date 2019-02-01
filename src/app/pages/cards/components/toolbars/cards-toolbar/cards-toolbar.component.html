@@ -81,6 +81,12 @@
         </button>
       </div>
 
+      <button mat-menu-item (click)="onMenuItemClicked('vice-versa')">
+        <mat-icon svgIcon="flip"></mat-icon>
+        <span>Flip all cards</span>
+      </button>
+      <mat-divider></mat-divider>
+
       <div>
         <button *ngIf="!filterFavorites" mat-menu-item (click)="onMenuItemClicked('filter-favorites')">
           <mat-icon svgIcon="favorite"></mat-icon>
@@ -91,7 +97,6 @@
           <span>Unfilter favorites</span>
         </button>
       </div>
-
       <div *ngIf="media < mediaType.LARGE">
         <button mat-menu-item [disabled]="!filterActive" (click)="onMenuItemClicked('clear-filters')">
           <mat-icon svgIcon="layers_clear"></mat-icon>

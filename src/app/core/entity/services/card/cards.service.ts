@@ -27,6 +27,9 @@ export class CardsService {
   /** Subject that publishes cards */
   cardsSubject = new Subject<Card[]>();
 
+  /** Whether all cards are flipped */
+  viceVersa = false;
+
   //
   // Delegated: Display aspects
   //
@@ -301,6 +304,12 @@ export class CardsService {
     });
   }
 
+  /**
+   * Toggles vice versa
+   */
+  public toggleViceVersa() {
+    this.viceVersa = !this.viceVersa;
+  }
   //
   // Lookup
   //

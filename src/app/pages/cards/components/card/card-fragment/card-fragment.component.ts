@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {MatDialog} from '@angular/material';
 import {SnackbarService} from '../../../../../core/ui/services/snackbar.service';
 import {CardsService} from '../../../../../core/entity/services/card/cards.service';
@@ -28,14 +28,16 @@ import {MaterialColorService} from '../../../../../core/ui/services/material-col
   styleUrls: ['./card-fragment.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CardFragmentComponent implements OnInit {
+export class CardFragmentComponent implements OnInit, OnChanges {
 
   /** Card to be displayed */
   @Input() card = new Card();
-  /** Image palette to be used */
-  @Input() imagePalette: VibrantPalette;
   /** Map of tags */
   @Input() tags = new Map<string, Tag>();
+  /** Whether all cards are flipped */
+  @Input() viceVersa = false;
+  /** Image palette to be used */
+  @Input() imagePalette: VibrantPalette;
   /** Default theme to be used */
   @Input() themeClass = 'light-theme';
 
@@ -97,6 +99,13 @@ export class CardFragmentComponent implements OnInit {
   }
 
   /**
+   * Handles on-changes lifecycle phase
+   */
+  ngOnChanges(changes: SimpleChanges) {
+    this.update();
+  }
+
+  /**
    * Initializes colors
    */
   private initializeColors() {
@@ -104,7 +113,6 @@ export class CardFragmentComponent implements OnInit {
       const vibrant = this.imagePalette.vibrant;
       this.favoriteColor = `rgb(${vibrant.rgb[0]},${vibrant.rgb[1]},${vibrant.rgb[2]})`;
     } else {
-      console.log('BAR');
       this.favoriteColor = this.materialColorService.accent;
     }
   }
@@ -185,7 +193,19 @@ export class CardFragmentComponent implements OnInit {
     switch (this.activeAspect.type) {
       case AspectType.SIDE: {
         if ((this.activeAspect as SideAspect).sides.length > 0) {
-          this.activeSide = (this.activeAspect as SideAspect).sides[this.activePartIndex];
+          let activeSideIndex;
+
+          if (!this.viceVersa) {
+            activeSideIndex = this.activePartIndex;
+          } else {
+            if (this.activePartIndex === 0) {
+              activeSideIndex = 1;
+            } else if (this.activePartIndex === 1) {
+              activeSideIndex = 0;
+            }
+          }
+
+          this.activeSide = (this.activeAspect as SideAspect).sides[activeSideIndex];
         } else {
           this.flipCard();
         }

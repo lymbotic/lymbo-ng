@@ -41,7 +41,8 @@
             <mat-icon svgIcon="inbox" class="box-icon"></mat-icon>
             <span>Box {{ index + 1 }} ({{ getCardsOfBox(index).length }})</span>
           </ng-template>
-          <app-card-fragment *ngFor="let card of getCardsOfBox(index)" [card]="card" [tags]="tagsMap" [imagePalette]="stack.imagePalette"
+          <app-card-fragment *ngFor="let card of getCardsOfBox(index)"
+                             [card]="card" [tags]="tagsMap" [viceVersa]="viceVersa" [imagePalette]="stack.imagePalette"
                              (cardEventEmitter)="onCardEvent($event)">
           </app-card-fragment>
         </mat-tab>
