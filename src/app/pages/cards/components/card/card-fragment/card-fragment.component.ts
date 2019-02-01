@@ -102,7 +102,10 @@ export class CardFragmentComponent implements OnInit, OnChanges {
    * Handles on-changes lifecycle phase
    */
   ngOnChanges(changes: SimpleChanges) {
-    this.update();
+    if (this.card.aspects != null && this.card.aspects.length > 0) {
+      this.activeAspect = this.card.aspects[0];
+      this.update();
+    }
   }
 
   /**
