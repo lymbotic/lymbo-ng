@@ -28,7 +28,8 @@
 
   <mat-sidenav-content cdkScrollable>
     <div class="card-main-content">
-      <mat-tab-group mat-align-tabs="end"
+      <mat-tab-group *ngIf="cardsAreInMultipleBoxes"
+                     mat-align-tabs="end"
                      [color]="fabColor"
                      [selectedIndex]="selectedTab.value"
                      (selectedIndexChange)="selectedTab.setValue($event)">
@@ -47,6 +48,13 @@
           </app-card-fragment>
         </mat-tab>
       </mat-tab-group>
+
+      <div *ngIf="!cardsAreInMultipleBoxes">
+        <app-card-fragment *ngFor="let card of cards"
+                           [card]="card" [tags]="tagsMap" [viceVersa]="viceVersa" [imagePalette]="stack.imagePalette"
+                           (cardEventEmitter)="onCardEvent($event)">
+        </app-card-fragment>
+      </div>
     </div>
   </mat-sidenav-content>
 
