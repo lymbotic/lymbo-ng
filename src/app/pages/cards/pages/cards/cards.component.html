@@ -44,6 +44,7 @@
           </ng-template>
           <app-card-fragment *ngFor="let card of getCardsOfBox(index)"
                              [card]="card" [tags]="tagsMap" [viceVersa]="viceVersa" [imagePalette]="stack.imagePalette"
+                             [media]="media"
                              (cardEventEmitter)="onCardEvent($event)">
           </app-card-fragment>
         </mat-tab>
@@ -52,6 +53,7 @@
       <div *ngIf="!cardsAreInMultipleBoxes">
         <app-card-fragment *ngFor="let card of cards"
                            [card]="card" [tags]="tagsMap" [viceVersa]="viceVersa" [imagePalette]="stack.imagePalette"
+                           [media]="media"
                            (cardEventEmitter)="onCardEvent($event)">
         </app-card-fragment>
       </div>

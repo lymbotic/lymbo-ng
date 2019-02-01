@@ -18,6 +18,7 @@ import {Answer} from '../../../../../core/entity/model/card/quiz/answer.model';
 import {CloneService} from '../../../../../core/entity/services/clone.service';
 import {VibrantPalette} from '../../../../../core/entity/model/vibrant-palette';
 import {MaterialColorService} from '../../../../../core/ui/services/material-color.service';
+import {Media} from '../../../../../core/ui/model/media.enum';
 
 /**
  * Displays a card
@@ -38,12 +39,16 @@ export class CardFragmentComponent implements OnInit, OnChanges {
   @Input() viceVersa = false;
   /** Image palette to be used */
   @Input() imagePalette: VibrantPalette;
+  /** Current media */
+  @Input() media: Media;
   /** Default theme to be used */
   @Input() themeClass = 'light-theme';
 
   /** Event emitter indicating click on card */
   @Output() cardEventEmitter = new EventEmitter<{ action: Action, card: Card }>();
 
+  /** Enum for media types */
+  mediaType = Media;
   /** Enum of action types */
   public actionType = Action;
   /** Enum of aspect types */
