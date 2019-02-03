@@ -106,7 +106,8 @@ export class ExampleFragmentComponent implements OnInit {
    */
   onExampleSourceClicked() {
     // Check if source is empty
-    if (this.example.source === null || this.example.source.trim() === '') {
+    if (this.example.target.trim() !== ''
+      && (this.example.source === null || this.example.source.trim() === '')) {
       this.exampleTargetChangedSubject.next(this.example.target);
     }
   }
@@ -125,7 +126,8 @@ export class ExampleFragmentComponent implements OnInit {
    */
   onExampleTargetClicked() {
     // Check if target is empty
-    if (this.example.target === null || this.example.target.trim() === '') {
+    if (this.example.source.trim() !== ''
+      && (this.example.target === null || this.example.target.trim() === '')) {
       this.exampleSourceChangedSubject.next(this.example.source);
     }
   }
