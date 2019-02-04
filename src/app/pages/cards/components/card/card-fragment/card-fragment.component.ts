@@ -19,6 +19,7 @@ import {CloneService} from '../../../../../core/entity/services/clone.service';
 import {VibrantPalette} from '../../../../../core/entity/model/vibrant-palette';
 import {MaterialColorService} from '../../../../../core/ui/services/material-color.service';
 import {Media} from '../../../../../core/ui/model/media.enum';
+import {InformationAspect} from '../../../../../core/entity/model/card/information/information-aspect.model';
 
 /**
  * Displays a card
@@ -67,6 +68,8 @@ export class CardFragmentComponent implements OnInit, OnChanges {
   activeTenseGroup: TenseGroup;
   /** Active example */
   activeExample: Vocabel;
+  /** Active information */
+  activeInformation: string;
   /** Active single choice*/
   activeSingleChoice: boolean;
   /** Active answers */
@@ -233,7 +236,10 @@ export class CardFragmentComponent implements OnInit, OnChanges {
         } else {
           this.flipCard();
         }
-
+        break;
+      }
+      case AspectType.INFORMATION: {
+        this.activeInformation = (this.activeAspect as InformationAspect).text;
         break;
       }
       case AspectType.QUIZ: {

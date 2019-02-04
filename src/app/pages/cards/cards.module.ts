@@ -29,6 +29,8 @@ import {CheckableListModule} from '../../ui/checkable-list/checkable-list.module
 import {SideFormComponent} from './components/fragments/side/side-form/side-form.component';
 import {ContainsSelectedPipe} from './pipes/contains-selected.pipe';
 import {SingleChoiceFragmentComponent} from './components/fragments/quiz/single-choice-fragment/single-choice-fragment.component';
+import {MarkdownFragmentModule} from '../../ui/markdown-fragment/markdown-fragment.module';
+import { InformationFragmentComponent } from './components/fragments/language/information-fragment/information-fragment.component';
 
 @NgModule({
   imports: [
@@ -42,6 +44,7 @@ import {SingleChoiceFragmentComponent} from './components/fragments/quiz/single-
     AboutDialogModule,
     CheckableListModule,
     ConfirmationDialogModule,
+    MarkdownFragmentModule,
     NewFeaturesDialogModule,
     SuggestedActionButtonModule,
     TagChipsModule,
@@ -76,12 +79,15 @@ import {SingleChoiceFragmentComponent} from './components/fragments/quiz/single-
     TensesFragmentComponent,
     ExampleFragmentComponent,
     ExamplesFragmentComponent,
+    InformationFragmentComponent,
     QuizFormComponent,
     SideFormComponent,
     SingleChoiceFragmentComponent,
 
     // Pipes
     ContainsSelectedPipe,
+
+    InformationFragmentComponent,
   ], entryComponents: [
     // Pages
     CardsComponent,

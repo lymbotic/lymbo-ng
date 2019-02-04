@@ -6,5 +6,6 @@ export enum CardTypeGroup {
   UNSPECIFIED = '???',
   FREESTYLE = 'Freestyle',
   VOCABULARY = 'Vocabulary',
+  INFORMATION = 'Information',
   QUIZ = 'Quiz'
 }

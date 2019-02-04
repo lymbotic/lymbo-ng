@@ -46,6 +46,10 @@ export class CardTypeService {
           this.cardTypeGroups.set(CardType.VOCABULARY, group);
           break;
         }
+        case CardTypeGroup.INFORMATION: {
+          this.cardTypeGroups.set(CardType.INFORMATION, group);
+          break;
+        }
         case CardTypeGroup.QUIZ: {
           this.cardTypeGroups.set(CardType.QUIZ, group);
           break;
@@ -106,6 +110,9 @@ export class CardTypeService {
       case CardTypeGroup.VOCABULARY: {
         return 'chat_bubble_outline';
       }
+      case CardTypeGroup.INFORMATION: {
+        return 'school';
+      }
       case CardTypeGroup.QUIZ: {
         return 'question_answer';
       }
@@ -126,6 +133,9 @@ export class CardTypeService {
       }
       case CardType.VOCABULARY: {
         return 'chat_bubble_outline';
+      }
+      case CardType.INFORMATION: {
+        return 'school';
       }
       case CardType.QUIZ: {
         return 'question_answer';

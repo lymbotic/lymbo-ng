@@ -19,6 +19,12 @@
                            [card]="card" [stack]="stack"
                            (cardEventEmitter)="onVocabularyChanged($event)"></app-vocabulary-form>
 
+      <!-- Information -->
+      <app-information-fragment *ngIf="containsDisplayAspect(displayAspectType.INFORMATION, card)"
+                                [card]="card" [stack]="stack"
+                                (cardEventEmitter)="onInformationChanged($event)">
+      </app-information-fragment>
+
       <!-- Quiz -->
       <app-quiz-form *ngIf="containsDisplayAspect(displayAspectType.QUIZ, card)"
                      [card]="card" [stack]="stack" [media]="media"

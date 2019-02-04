@@ -8,4 +8,5 @@ export enum AspectType {
   TENSE = 'tense',
   EXAMPLE = 'example',
   QUIZ = 'quiz',
+  INFORMATION = 'information'
 }

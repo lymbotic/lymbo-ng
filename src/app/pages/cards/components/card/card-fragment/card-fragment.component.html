@@ -36,6 +36,9 @@
             <app-example-fragment [example]="activeExample" [readonly]="true">
             </app-example-fragment>
           </div>
+          <div *ngSwitchCase="aspectType.INFORMATION">
+            <app-markdown-preview [markdownText]="activeInformation"></app-markdown-preview>
+          </div>
           <div *ngSwitchCase="aspectType.QUIZ">
             <div [ngSwitch]="activePartIndex">
               <div *ngSwitchCase=0>
@@ -110,7 +113,7 @@
                 matTooltipShowDelay="250"
                 (click)="onCardClicked(actionType.MOVE_TO_NEXT_BOX)">
           <span mat-button *ngIf="media < mediaType.MEDIUM">
-                MOVE TO NEXT BOOK
+                MOVE TO NEXT BOX
           </span>
           <mat-icon svgIcon="skip_next"></mat-icon>
         </button>

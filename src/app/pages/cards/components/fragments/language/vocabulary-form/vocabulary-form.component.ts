@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Stack} from '../../../../../../core/entity/model/stack/stack.model';
 import {AspectType} from '../../../../../../core/entity/model/card/aspect.type';
 import {TenseAspect} from '../../../../../../core/entity/model/card/tense/tense-aspect';

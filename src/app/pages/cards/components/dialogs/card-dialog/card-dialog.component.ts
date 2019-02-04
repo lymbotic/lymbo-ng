@@ -179,6 +179,12 @@ export class CardDialogComponent implements OnInit, OnDestroy {
     this.card = card;
   }
 
+  // Information
+
+  onInformationChanged(card: Card) {
+    this.card = card;
+  }
+
   // Quiz
 
   /**
@@ -309,6 +315,9 @@ export class CardDialogComponent implements OnInit, OnDestroy {
         }
         case CardType.VOCABULARY: {
           return aspect.type === AspectType.SIDE || aspect.type === AspectType.TENSE || aspect.type === AspectType.EXAMPLE;
+        }
+        case CardType.INFORMATION: {
+          return aspect.type === AspectType.INFORMATION;
         }
         case CardType.QUIZ: {
           return aspect.type === AspectType.QUIZ;

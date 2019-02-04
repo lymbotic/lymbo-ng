@@ -7,6 +7,8 @@ export enum CardType {
   FREESTYLE = 'Freestyle',
   // Vocabulary
   VOCABULARY = 'Vocabulary',
+  // Information
+  INFORMATION = 'Information',
   // Quiz
   QUIZ = 'Quiz'
 }
