@@ -101,6 +101,7 @@ export class MaterialIconService {
     icons.push(new Icon(IconTopic.NAVIGATION, 'menu', 'ic_menu_24px.svg'));
     icons.push(new Icon(IconTopic.NAVIGATION, 'more_vert', 'ic_more_vert_24px.svg'));
     icons.push(new Icon(IconTopic.NAVIGATION, 'refresh', 'ic_refresh_24px.svg'));
+    icons.push(new Icon(IconTopic.SOCIAL, 'school', 'ic_school_24px.svg'));
 
     // Aliases
     icons.push(new Icon(IconTopic.ACTION, 'alias_tag', 'ic_label_outline_24px.svg'));
@@ -112,5 +113,7 @@ export class MaterialIconService {
 
     iconRegistry.addSvgIcon('blank', sanitizer.bypassSecurityTrustResourceUrl('assets/icons/ic_blank_24px.svg'));
     iconRegistry.addSvgIcon('auto_fix', sanitizer.bypassSecurityTrustResourceUrl('assets/icons/ic_auto_fix_24px.svg'));
+    iconRegistry.addSvgIcon('text', sanitizer.bypassSecurityTrustResourceUrl('assets/icons/ic_text_24px.svg'));
+    iconRegistry.addSvgIcon('markdown', sanitizer.bypassSecurityTrustResourceUrl('assets/icons/ic_markdown_24px.svg'));
   }
 }

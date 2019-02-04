@@ -130,6 +130,9 @@ export class ColorService {
       case CardTypeGroup.VOCABULARY: {
         return this.materialColorService.hue(PaletteType.AMBER, HueType._600);
       }
+      case CardTypeGroup.INFORMATION: {
+        return this.materialColorService.hue(PaletteType.ORANGE, HueType._600);
+      }
       case CardTypeGroup.QUIZ: {
         return this.materialColorService.hue(PaletteType.LIGHT_BLUE, HueType._600);
       }

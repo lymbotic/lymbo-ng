@@ -4,6 +4,7 @@ import {CardType} from '../../model/card/card-type.enum';
 import {AspectType} from '../../model/card/aspect.type';
 import {SideAspect} from '../../model/card/side/side-aspect';
 import {QuizAspect} from '../../model/card/quiz/quiz-aspect.model';
+import {InformationAspect} from '../../model/card/information/information-aspect.model';
 
 /**
  * Enum representing display aspects
@@ -13,6 +14,7 @@ export enum DisplayAspect {
   CAN_BE_UPDATED,
 
   TITLES,
+  INFORMATION,
   VOCABULARY,
   QUIZ
 }
@@ -73,6 +75,16 @@ export class CardDisplayService {
           && sideAspect.sides[0].title != null
           && sideAspect.sides[0].title.length > 0;
       }
+      case CardType.INFORMATION: {
+        const informationAspect = card.aspects.filter(aspect => {
+          return aspect.type === AspectType.INFORMATION;
+        })[0] as InformationAspect;
+
+        return informationAspect != null
+          && informationAspect.text != null
+          && informationAspect.text.trim() != null
+          && informationAspect.text.trim() !== '';
+      }
       case CardType.QUIZ: {
         const quizAspect = card.aspects.filter(aspect => {
           return aspect.type === AspectType.QUIZ;
@@ -109,6 +121,15 @@ export class CardDisplayService {
   static containsVocabulary(card: Card): boolean {
     return card != null
       && card.type === CardType.VOCABULARY;
+  }
+
+  /**
+   * Determines whether a given card contains information aspect
+   * @param card card
+   */
+  static containsInformation(card: Card): boolean {
+    return card != null
+      && card.type === CardType.INFORMATION;
   }
 
   /**

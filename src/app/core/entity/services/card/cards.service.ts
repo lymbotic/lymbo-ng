@@ -53,6 +53,9 @@ export class CardsService {
       case DisplayAspect.VOCABULARY: {
         return CardDisplayService.containsVocabulary(card);
       }
+      case DisplayAspect.INFORMATION: {
+        return CardDisplayService.containsInformation(card);
+      }
       case DisplayAspect.QUIZ: {
         return CardDisplayService.containsQuiz(card);
       }

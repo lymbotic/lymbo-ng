@@ -163,7 +163,7 @@ export class CardDialogComponent implements OnInit, OnDestroy {
 
   /**
    * Handles sides changes
-   * @param card
+   * @param card card
    */
   onSidesChanged(card: Card) {
     this.card = card;
@@ -173,9 +173,19 @@ export class CardDialogComponent implements OnInit, OnDestroy {
 
   /**
    * Handles vocabulary changes
-   * @param card
+   * @param card card
    */
   onVocabularyChanged(card: Card) {
+    this.card = card;
+  }
+
+  // Information
+
+  /**
+   * Handles information changes
+   * @param card card
+   */
+  onInformationChanged(card: Card) {
     this.card = card;
   }
 
@@ -183,7 +193,7 @@ export class CardDialogComponent implements OnInit, OnDestroy {
 
   /**
    * Handles quiz changes
-   * @param card
+   * @param card card
    */
   onQuizChanged(card: Card) {
     this.card = card;
@@ -309,6 +319,9 @@ export class CardDialogComponent implements OnInit, OnDestroy {
         }
         case CardType.VOCABULARY: {
           return aspect.type === AspectType.SIDE || aspect.type === AspectType.TENSE || aspect.type === AspectType.EXAMPLE;
+        }
+        case CardType.INFORMATION: {
+          return aspect.type === AspectType.INFORMATION;
         }
         case CardType.QUIZ: {
           return aspect.type === AspectType.QUIZ;

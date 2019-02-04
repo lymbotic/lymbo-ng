@@ -36,6 +36,9 @@
             <app-example-fragment [example]="activeExample" [readonly]="true">
             </app-example-fragment>
           </div>
+          <div *ngSwitchCase="aspectType.INFORMATION">
+            <app-markdown-preview [markdownText]="activeInformation"></app-markdown-preview>
+          </div>
           <div *ngSwitchCase="aspectType.QUIZ">
             <div [ngSwitch]="activePartIndex">
               <div *ngSwitchCase=0>
