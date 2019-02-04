@@ -28,5 +28,6 @@
 { "annotation":"refs/tags/v0.22.0", "message": "Stack image"},
 { "annotation":"refs/tags/v0.23.0", "message": "Stack color"},
 { "annotation":"refs/tags/v0.24.0", "message": "Card boxes"},
-{ "annotation":"refs/tags/v0.25.0", "message": "Vice versa"}
+{ "annotation":"refs/tags/v0.25.0", "message": "Vice versa"},
+{ "annotation":"refs/tags/v0.26.0", "message": "Information cards"}
 ]}
