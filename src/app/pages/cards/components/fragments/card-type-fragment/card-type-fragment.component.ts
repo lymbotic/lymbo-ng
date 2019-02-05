@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {ColorService} from '../../../../../core/ui/services/color.service';
 import {FeatureService} from '../../../../../core/settings/services/feature.service';
 import {CardsService} from '../../../../../core/entity/services/card/cards.service';
@@ -41,9 +41,6 @@ export class CardTypeFragmentComponent implements OnInit, OnChanges {
   @Input() card: Card;
   /** Event emitter indicating card type selection */
   @Output() cardTypeEventEmitter = new EventEmitter<CardType>();
-
-  /** Tasklet type selection */
-  @ViewChild('select') select: MatSelect;
 
   /** Available card types */
   cardTypes = Object.keys(CardType).map(key => CardType[key]);
@@ -118,11 +115,12 @@ export class CardTypeFragmentComponent implements OnInit, OnChanges {
 
   /**
    * Handles click on selected action button
+   * @param select material select component
    * @param action action
    */
-  onSuggestedActionButtonClicked(action: CardTypeGroupAction) {
+  onSuggestedActionButtonClicked(select: MatSelect, action: CardTypeGroupAction) {
     if (action.cardTypes.length > 1) {
-      this.select.open();
+      select.open();
     } else {
       this.onCardTypeSelected(action.cardTypes[0], action);
     }

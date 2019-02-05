@@ -14,9 +14,11 @@ export enum DisplayAspect {
   CAN_BE_UPDATED,
 
   TITLES,
+  TENSES,
+  EXAMPLES,
   INFORMATION,
-  VOCABULARY,
-  QUIZ
+  SINGLE_CHOICE_QUIZ,
+  MULTIPLE_CHOICE_QUIZ
 }
 
 /**
@@ -53,7 +55,9 @@ export class CardDisplayService {
    */
   static isComplete(card: Card) {
     switch (card.type) {
-      case CardType.FREESTYLE: {
+      case CardType.FREESTYLE:
+      case CardType.TENSES:
+      case CardType.EXAMPLES: {
         const sideAspect = card.aspects.filter(aspect => {
           return aspect.type === AspectType.SIDE;
         })[0] as SideAspect;
@@ -63,17 +67,6 @@ export class CardDisplayService {
           && sideAspect.sides.length > 0
           && sideAspect.sides[0].title !== null && sideAspect.sides[0].title.length > 0
           && sideAspect.sides[1].title !== null && sideAspect.sides[1].title.length > 0;
-      }
-      case CardType.VOCABULARY: {
-        const sideAspect = card.aspects.filter(aspect => {
-          return aspect.type === AspectType.SIDE;
-        })[0] as SideAspect;
-
-        return sideAspect != null
-          && sideAspect.sides !== null
-          && sideAspect.sides.length > 0
-          && sideAspect.sides[0].title != null
-          && sideAspect.sides[0].title.length > 0;
       }
       case CardType.INFORMATION: {
         const informationAspect = card.aspects.filter(aspect => {
@@ -85,7 +78,20 @@ export class CardDisplayService {
           && informationAspect.text.trim() != null
           && informationAspect.text.trim() !== '';
       }
-      case CardType.QUIZ: {
+      case CardType.SINGLE_CHOICE_QUIZ: {
+        const quizAspect = card.aspects.filter(aspect => {
+          return aspect.type === AspectType.QUIZ;
+        })[0] as QuizAspect;
+
+        return quizAspect != null
+          && quizAspect.question !== null
+          && quizAspect.question !== ''
+          && quizAspect.answers != null
+          && quizAspect.answers.filter(answer => {
+            return answer.selected;
+          }).length === 1;
+      }
+      case CardType.MULTIPLE_CHOICE_QUIZ: {
         const quizAspect = card.aspects.filter(aspect => {
           return aspect.type === AspectType.QUIZ;
         })[0] as QuizAspect;
@@ -111,16 +117,26 @@ export class CardDisplayService {
   static containsTitles(card: Card): boolean {
     return card != null
       && (card.type === CardType.FREESTYLE
-        || card.type === CardType.VOCABULARY);
+        || card.type === CardType.TENSES
+        || card.type === CardType.EXAMPLES);
   }
 
   /**
-   * Determines whether a given card contains vocabulary
+   * Determines whether a given card contains tenses
    * @param card card
    */
-  static containsVocabulary(card: Card): boolean {
+  static containsTenses(card: Card): boolean {
     return card != null
-      && card.type === CardType.VOCABULARY;
+      && card.type === CardType.TENSES;
+  }
+
+  /**
+   * Determines whether a given card contains examples
+   * @param card card
+   */
+  static containsExamples(card: Card): boolean {
+    return card != null
+      && card.type === CardType.EXAMPLES;
   }
 
   /**
@@ -133,11 +149,20 @@ export class CardDisplayService {
   }
 
   /**
-   * Determines whether a given card contains a quiz
+   * Determines whether a given card contains a single choice quiz
    * @param card card
    */
-  static containsQuiz(card: Card): boolean {
+  static containsSingleChoiceQuiz(card: Card): boolean {
     return card != null
-      && card.type === CardType.QUIZ;
+      && card.type === CardType.SINGLE_CHOICE_QUIZ;
+  }
+
+  /**
+   * Determines whether a given card contains a multiple choice quiz
+   * @param card card
+   */
+  static containsMultipleChoiceQuiz(card: Card): boolean {
+    return card != null
+      && card.type === CardType.MULTIPLE_CHOICE_QUIZ;
   }
 }

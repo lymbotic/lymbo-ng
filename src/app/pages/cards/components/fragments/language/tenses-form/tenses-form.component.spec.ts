@@ -1,8 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { VocabularyFormComponent } from './vocabulary-form.component';
+import { VocabularyFormComponent } from './examples-form.component';
 
-describe('VocabularyFormComponent', () => {
+describe('ExamplesFormComponent', () => {
   let component: VocabularyFormComponent;
   let fixture: ComponentFixture<VocabularyFormComponent>;
 

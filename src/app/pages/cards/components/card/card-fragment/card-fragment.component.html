@@ -1,6 +1,5 @@
 <div [class]="themeClass">
   <mat-card class="container">
-
     <!-- Menu -->
     <mat-menu #menu="matMenu">
       <button mat-menu-item *ngIf="!card.favorite" (click)="onCardClicked(actionType.SET_FAVORITE)">
@@ -45,8 +44,9 @@
                 <mat-card-title class="side-title">{{ activeSide.title }}
                 </mat-card-title>
                 <div *ngIf="!activeSingleChoice">
-                  <app-checkable-list [items]="activeAnswers" [editable]=false
-                                      (itemsChangedEmitter)="onAnswersSelected($event)"></app-checkable-list>
+                  <app-multiple-choice-fragment *ngIf="!activeSingleChoice"
+                                                [items]="activeAnswers" [readonly]="false" [editable]="false"
+                                                (itemsChangedEmitter)="onAnswersSelected($event)"></app-multiple-choice-fragment>
                   <div class="flexcontainer">
                     <div class="flexbox"></div>
                     <button mat-flat-button color="accent" [disabled]="!(activeAnswers | containsSelected)"
@@ -61,9 +61,9 @@
               <div *ngSwitchCase=1>
                 <mat-card-title class="side-title" (click)="onCardClicked(actionType.NONE)">{{ activeSide.title }}
                 </mat-card-title>
-                <app-checkable-list *ngIf="!activeSingleChoice"
+                <app-multiple-choice-fragment *ngIf="!activeSingleChoice"
                                     [items]="activeAnswers" [readonly]="true" [editable]=false
-                                    (click)="onCardClicked(actionType.NONE)"></app-checkable-list>
+                                    (click)="onCardClicked(actionType.NONE)"></app-multiple-choice-fragment>
                 <app-single-choice-fragment *ngIf="activeSingleChoice"
                                             [items]="activeAnswers" [readonly]=true
                                             (itemsChangedEmitter)="onAnswerSelected($event)"></app-single-choice-fragment>

@@ -1,0 +1,8 @@
+<app-examples-fragment *ngIf="exampleAspect != null && exampleAspect.examples != null"
+                       [examples]="exampleAspect.examples"
+                       [sourceLanguage]="stack.sourceLanguage"
+                       [targetLanguage]="stack.targetLanguage"
+                       [placeholderFront]="stack.sourceLanguage"
+                       [placeholderBack]="stack.targetLanguage"
+                       (exampleChangedEventEmitter)="onExampleChanged($event)">
+</app-examples-fragment>

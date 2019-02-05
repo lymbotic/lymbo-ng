@@ -50,14 +50,20 @@ export class CardsService {
       case DisplayAspect.TITLES: {
         return CardDisplayService.containsTitles(card);
       }
-      case DisplayAspect.VOCABULARY: {
-        return CardDisplayService.containsVocabulary(card);
+      case DisplayAspect.TENSES: {
+        return CardDisplayService.containsTenses(card);
+      }
+      case DisplayAspect.EXAMPLES: {
+        return CardDisplayService.containsExamples(card);
       }
       case DisplayAspect.INFORMATION: {
         return CardDisplayService.containsInformation(card);
       }
-      case DisplayAspect.QUIZ: {
-        return CardDisplayService.containsQuiz(card);
+      case DisplayAspect.SINGLE_CHOICE_QUIZ: {
+        return CardDisplayService.containsSingleChoiceQuiz(card);
+      }
+      case DisplayAspect.MULTIPLE_CHOICE_QUIZ: {
+        return CardDisplayService.containsMultipleChoiceQuiz(card);
       }
     }
   }

@@ -43,7 +43,8 @@ export class CardTypeService {
           break;
         }
         case CardTypeGroup.VOCABULARY: {
-          this.cardTypeGroups.set(CardType.VOCABULARY, group);
+          this.cardTypeGroups.set(CardType.TENSES, group);
+          this.cardTypeGroups.set(CardType.EXAMPLES, group);
           break;
         }
         case CardTypeGroup.INFORMATION: {
@@ -51,7 +52,8 @@ export class CardTypeService {
           break;
         }
         case CardTypeGroup.QUIZ: {
-          this.cardTypeGroups.set(CardType.QUIZ, group);
+          this.cardTypeGroups.set(CardType.SINGLE_CHOICE_QUIZ, group);
+          this.cardTypeGroups.set(CardType.MULTIPLE_CHOICE_QUIZ, group);
           break;
         }
       }
@@ -131,14 +133,20 @@ export class CardTypeService {
       case CardType.FREESTYLE: {
         return 'crop_free';
       }
-      case CardType.VOCABULARY: {
+      case CardType.TENSES: {
+        return 'schedule';
+      }
+      case CardType.EXAMPLES: {
         return 'chat_bubble_outline';
       }
       case CardType.INFORMATION: {
         return 'school';
       }
-      case CardType.QUIZ: {
-        return 'question_answer';
+      case CardType.SINGLE_CHOICE_QUIZ: {
+        return 'checkbox_outline';
+      }
+      case CardType.MULTIPLE_CHOICE_QUIZ: {
+        return 'checkbox_multiple_marked_outline';
       }
     }
   }

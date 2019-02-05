@@ -8,14 +8,14 @@ import {TenseGroup} from '../../../../../../core/entity/model/card/tense/tense-g
 import {Vocabel} from '../../../../../../core/entity/model/card/example/vocabel.model';
 
 /**
- * Displays form to set vocabulary properties
+ * Displays form to set tenses
  */
 @Component({
-  selector: 'app-vocabulary-form',
-  templateUrl: './vocabulary-form.component.html',
-  styleUrls: ['./vocabulary-form.component.scss']
+  selector: 'app-tenses-form',
+  templateUrl: './tenses-form.component.html',
+  styleUrls: ['./tenses-form.component.scss']
 })
-export class VocabularyFormComponent implements OnInit {
+export class TensesFormComponent implements OnInit {
 
   /** Card to be displayed */
   @Input() card: Card;
@@ -40,7 +40,6 @@ export class VocabularyFormComponent implements OnInit {
    */
   ngOnInit() {
     this.initializeTenseAspect();
-    this.initializeExampleAspect();
   }
 
   //
@@ -64,23 +63,6 @@ export class VocabularyFormComponent implements OnInit {
     })[0] as TenseAspect;
   }
 
-  /**
-   * Initializes example aspect
-   */
-  private initializeExampleAspect() {
-    // Add aspect if not present
-    if (!this.card.aspects.some(aspect => {
-      return aspect.type === AspectType.EXAMPLE;
-    })) {
-      this.card.aspects.push(new ExampleAspect());
-    }
-
-    // Get aspect
-    this.exampleAspect = this.card.aspects.filter(aspect => {
-      return aspect.type === AspectType.EXAMPLE;
-    })[0] as ExampleAspect;
-  }
-
   //
   // Actions
   //
@@ -91,15 +73,6 @@ export class VocabularyFormComponent implements OnInit {
    */
   onTenseGroupsChanged(tenseGroups: TenseGroup[]) {
     this.tenseAspect.tenseGroups = tenseGroups;
-    this.notify();
-  }
-
-  /**
-   * Handles example changes
-   * @param examples examples
-   */
-  onExampleChanged(examples: Vocabel[]) {
-    this.exampleAspect.examples = examples;
     this.notify();
   }
 

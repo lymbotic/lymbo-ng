@@ -13,13 +13,14 @@ import {ExampleAspect} from '../../../../../core/entity/model/card/example/examp
 import {Side} from '../../../../../core/entity/model/card/side/side.model';
 import {TenseGroup} from '../../../../../core/entity/model/card/tense/tense-group';
 import {Vocabel} from '../../../../../core/entity/model/card/example/vocabel.model';
-import {QuizAspect, QuizType} from '../../../../../core/entity/model/card/quiz/quiz-aspect.model';
+import {QuizAspect} from '../../../../../core/entity/model/card/quiz/quiz-aspect.model';
 import {Answer} from '../../../../../core/entity/model/card/quiz/answer.model';
 import {CloneService} from '../../../../../core/entity/services/clone.service';
 import {VibrantPalette} from '../../../../../core/entity/model/vibrant-palette';
 import {MaterialColorService} from '../../../../../core/ui/services/material-color.service';
 import {Media} from '../../../../../core/ui/model/media.enum';
 import {InformationAspect} from '../../../../../core/entity/model/card/information/information-aspect.model';
+import {CardType} from '../../../../../core/entity/model/card/card-type.enum';
 
 /**
  * Displays a card
@@ -245,7 +246,7 @@ export class CardFragmentComponent implements OnInit, OnChanges {
       case AspectType.QUIZ: {
         const quizAspect = this.activeAspect as QuizAspect;
 
-        this.activeSingleChoice = quizAspect.quizType === QuizType.CHOOSE;
+        this.activeSingleChoice = this.card.type === CardType.SINGLE_CHOICE_QUIZ;
 
         switch (this.activePartIndex) {
           case 0: {

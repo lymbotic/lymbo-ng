@@ -6,7 +6,7 @@
       [iconColor]="action.iconColor"
       [icon]="action.icon"
       [label]="action.label"
-      (buttonClickedEmitter)="onSuggestedActionButtonClicked(action)">
+      (buttonClickedEmitter)="onSuggestedActionButtonClicked(select, action)">
     </app-suggested-action-button>
     <mat-select #select class="typeSelect">
       <mat-option *ngFor="let type of action.cardTypes" [value]="type" (click)="onCardTypeSelected(type, action)">

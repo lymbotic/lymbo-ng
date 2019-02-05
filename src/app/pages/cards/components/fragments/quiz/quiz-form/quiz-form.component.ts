@@ -1,20 +1,15 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {Stack} from '../../../../../../core/entity/model/stack/stack.model';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Card} from '../../../../../../core/entity/model/card/card.model';
-import {Answer} from '../../../../../../core/entity/model/card/quiz/answer.model';
-import {AspectType} from '../../../../../../core/entity/model/card/aspect.type';
-import {QuizAspect, QuizType} from '../../../../../../core/entity/model/card/quiz/quiz-aspect.model';
-import {MatSlideToggleChange} from '@angular/material';
+import {Stack} from '../../../../../../core/entity/model/stack/stack.model';
 import {Media} from '../../../../../../core/ui/model/media.enum';
+import {QuizAspect} from '../../../../../../core/entity/model/card/quiz/quiz-aspect.model';
+import {AspectType} from '../../../../../../core/entity/model/card/aspect.type';
+import {Answer} from '../../../../../../core/entity/model/card/quiz/answer.model';
 
-/**
- * Displays form to set quiz
- */
 @Component({
   selector: 'app-quiz-form',
   templateUrl: './quiz-form.component.html',
-  styleUrls: ['./quiz-form.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ['./quiz-form.component.scss']
 })
 export class QuizFormComponent implements OnInit {
 
@@ -39,9 +34,6 @@ export class QuizFormComponent implements OnInit {
 
   /** Enum of media types */
   mediaType = Media;
-  /** Current media */
-  /** Enum of quiz types */
-  quizType = QuizType;
 
   //
   // Lifecycle hooks
@@ -52,7 +44,6 @@ export class QuizFormComponent implements OnInit {
    */
   ngOnInit() {
     this.initializeQuizAspect();
-    this.initializeSingleChoice();
   }
 
   //
@@ -76,13 +67,6 @@ export class QuizFormComponent implements OnInit {
     })[0] as QuizAspect;
   }
 
-  /**
-   * Initialize single choice
-   */
-  private initializeSingleChoice() {
-    this.singleChoice = this.quizAspect.quizType === QuizType.CHOOSE;
-  }
-
   //
   // Actions
   //
@@ -94,17 +78,6 @@ export class QuizFormComponent implements OnInit {
   onQuestionChanged(question: string) {
     this.quizAspect.question = question;
     this.notify();
-  }
-
-  /**
-   * Handles changes in single choice selection
-   * @param singleChoice
-   */
-  onSingleChoiceChanged(singleChoice: MatSlideToggleChange) {
-    this.singleChoice = singleChoice.checked;
-    this.quizAspect.quizType = singleChoice.checked ? QuizType.CHOOSE : QuizType.SELECT;
-    this.notify();
-
   }
 
   /**

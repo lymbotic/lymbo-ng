@@ -172,10 +172,18 @@ export class CardDialogComponent implements OnInit, OnDestroy {
   // Vocabulary
 
   /**
-   * Handles vocabulary changes
+   * Handles tenses changes
    * @param card card
    */
-  onVocabularyChanged(card: Card) {
+  onTensesChanged(card: Card) {
+    this.card = card;
+  }
+
+  /**
+   * Handles examples changes
+   * @param card card
+   */
+  onExamplesChanged(card: Card) {
     this.card = card;
   }
 
@@ -317,13 +325,17 @@ export class CardDialogComponent implements OnInit, OnDestroy {
         case CardType.FREESTYLE: {
           return aspect.type === AspectType.SIDE;
         }
-        case CardType.VOCABULARY: {
-          return aspect.type === AspectType.SIDE || aspect.type === AspectType.TENSE || aspect.type === AspectType.EXAMPLE;
+        case CardType.TENSES: {
+          return aspect.type === AspectType.SIDE || aspect.type === AspectType.TENSE;
+        }
+        case CardType.EXAMPLES: {
+          return aspect.type === AspectType.SIDE || aspect.type === AspectType.EXAMPLE;
         }
         case CardType.INFORMATION: {
           return aspect.type === AspectType.INFORMATION;
         }
-        case CardType.QUIZ: {
+        case CardType.SINGLE_CHOICE_QUIZ:
+        case CardType.MULTIPLE_CHOICE_QUIZ: {
           return aspect.type === AspectType.QUIZ;
         }
       }

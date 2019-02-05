@@ -1,0 +1,4 @@
+<app-tenses-fragment *ngIf="tenseAspect != null && tenseAspect.tenseGroups != null"
+                     [tenseGroups]="tenseAspect.tenseGroups"
+                     (tenseGroupsChangedEventEmitter)="onTenseGroupsChanged($event)">
+</app-tenses-fragment>

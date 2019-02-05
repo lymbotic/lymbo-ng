@@ -19,7 +19,7 @@ import {TagListComponent} from './components/lists/tag-list/tag-list.component';
 import {TagListItemComponent} from './components/lists/tag-list-item/tag-list-item.component';
 import {ExampleFragmentComponent} from './components/fragments/language/example-fragment/example-fragment.component';
 import {ExamplesFragmentComponent} from './components/fragments/language/examples-fragment/examples-fragment.component';
-import {VocabularyFormComponent} from './components/fragments/language/vocabulary-form/vocabulary-form.component';
+import {ExamplesFormComponent} from './components/fragments/language/examples-form/examples-form.component';
 import {TensesFragmentComponent} from './components/fragments/language/tenses-fragment/tenses-fragment.component';
 import {TenseFragmentComponent} from './components/fragments/language/tense-fragment/tense-fragment.component';
 import {CardTypeFragmentComponent} from './components/fragments/card-type-fragment/card-type-fragment.component';
@@ -30,7 +30,9 @@ import {SideFormComponent} from './components/fragments/side/side-form/side-form
 import {ContainsSelectedPipe} from './pipes/contains-selected.pipe';
 import {SingleChoiceFragmentComponent} from './components/fragments/quiz/single-choice-fragment/single-choice-fragment.component';
 import {MarkdownFragmentModule} from '../../ui/markdown-fragment/markdown-fragment.module';
-import { InformationFragmentComponent } from './components/fragments/language/information-fragment/information-fragment.component';
+import {InformationFragmentComponent} from './components/fragments/language/information-fragment/information-fragment.component';
+import {MultipleChoiceFragmentComponent} from './components/fragments/quiz/multiple-choice-fragment/multiple-choice-fragment.component';
+import {TensesFormComponent} from './components/fragments/language/tenses-form/tenses-form.component';
 
 @NgModule({
   imports: [
@@ -57,7 +59,7 @@ import { InformationFragmentComponent } from './components/fragments/language/in
     // Fragments
     CardTypeFragmentComponent,
     ExamplesFragmentComponent,
-    VocabularyFormComponent,
+    ExamplesFormComponent,
     SideTitleFragmentComponent,
     TensesFragmentComponent,
 
@@ -75,19 +77,30 @@ import { InformationFragmentComponent } from './components/fragments/language/in
     // Cards
     CardFragmentComponent,
 
-    TenseFragmentComponent,
-    TensesFragmentComponent,
-    ExampleFragmentComponent,
-    ExamplesFragmentComponent,
-    InformationFragmentComponent,
-    QuizFormComponent,
     SideFormComponent,
+
+    TensesFormComponent,
+    TensesFragmentComponent,
+    TenseFragmentComponent,
+
+    ExamplesFormComponent,
+    ExamplesFragmentComponent,
+    ExampleFragmentComponent,
+
+    InformationFragmentComponent,
+
+    QuizFormComponent,
     SingleChoiceFragmentComponent,
+    MultipleChoiceFragmentComponent,
 
     // Pipes
     ContainsSelectedPipe,
 
     InformationFragmentComponent,
+
+    QuizFormComponent,
+
+    MultipleChoiceFragmentComponent,
   ], entryComponents: [
     // Pages
     CardsComponent,

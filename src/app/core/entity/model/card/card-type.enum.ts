@@ -6,9 +6,11 @@ export enum CardType {
   UNSPECIFIED = '???',
   FREESTYLE = 'Freestyle',
   // Vocabulary
-  VOCABULARY = 'Vocabulary',
+  TENSES = 'Tenses',
+  EXAMPLES = 'Examples',
   // Information
   INFORMATION = 'Information',
   // Quiz
-  QUIZ = 'Quiz'
+  SINGLE_CHOICE_QUIZ = 'Single Answer',
+  MULTIPLE_CHOICE_QUIZ = 'Multiple Answers'
 }

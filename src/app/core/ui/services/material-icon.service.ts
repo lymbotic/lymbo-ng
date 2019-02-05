@@ -67,6 +67,7 @@ export class MaterialIconService {
    */
   public initializeIcons(iconRegistry: MatIconRegistry, sanitizer: DomSanitizer) {
     const icons: Icon[] = [];
+    icons.push(new Icon(IconTopic.ACTION, 'alarm', 'ic_alarm_24px.svg'));
     icons.push(new Icon(IconTopic.ACTION, 'android', 'ic_android_24px.svg'));
     icons.push(new Icon(IconTopic.ACTION, 'delete', 'ic_delete_24px.svg'));
     icons.push(new Icon(IconTopic.ACTION, 'favorite', 'ic_favorite_24px.svg'));
@@ -115,5 +116,7 @@ export class MaterialIconService {
     iconRegistry.addSvgIcon('auto_fix', sanitizer.bypassSecurityTrustResourceUrl('assets/icons/ic_auto_fix_24px.svg'));
     iconRegistry.addSvgIcon('text', sanitizer.bypassSecurityTrustResourceUrl('assets/icons/ic_text_24px.svg'));
     iconRegistry.addSvgIcon('markdown', sanitizer.bypassSecurityTrustResourceUrl('assets/icons/ic_markdown_24px.svg'));
+    iconRegistry.addSvgIcon('checkbox_outline', sanitizer.bypassSecurityTrustResourceUrl('assets/icons/ic_checkbox_outline_24px.svg'));
+    iconRegistry.addSvgIcon('checkbox_multiple_marked_outline', sanitizer.bypassSecurityTrustResourceUrl('assets/icons/ic_checkbox_multiple_marked_outline_24px.svg'));
   }
 }

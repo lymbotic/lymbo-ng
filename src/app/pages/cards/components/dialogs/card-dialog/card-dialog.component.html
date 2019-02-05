@@ -14,10 +14,14 @@
         <mat-divider></mat-divider>
       </p>
 
-      <!-- Vocabulary -->
-      <app-vocabulary-form *ngIf="containsDisplayAspect(displayAspectType.VOCABULARY, card)"
-                           [card]="card" [stack]="stack"
-                           (cardEventEmitter)="onVocabularyChanged($event)"></app-vocabulary-form>
+      <!-- Tenses -->
+      <app-tenses-form *ngIf="containsDisplayAspect(displayAspectType.TENSES, card)"
+                       [card]="card" [stack]="stack"
+                       (cardEventEmitter)="onTensesChanged($event)"></app-tenses-form>
+      <!-- Examples -->
+      <app-examples-form *ngIf="containsDisplayAspect(displayAspectType.EXAMPLES, card)"
+                       [card]="card" [stack]="stack"
+                       (cardEventEmitter)="onExamplesChanged($event)"></app-examples-form>
 
       <!-- Information -->
       <app-information-fragment *ngIf="containsDisplayAspect(displayAspectType.INFORMATION, card)"
@@ -25,10 +29,16 @@
                                 (cardEventEmitter)="onInformationChanged($event)">
       </app-information-fragment>
 
-      <!-- Quiz -->
-      <app-quiz-form *ngIf="containsDisplayAspect(displayAspectType.QUIZ, card)"
+      <!-- Single Choice Quiz -->
+      <app-quiz-form *ngIf="containsDisplayAspect(displayAspectType.SINGLE_CHOICE_QUIZ, card)"
                      [card]="card" [stack]="stack" [media]="media"
-                     (cardEventEmitter)="onQuizChanged($event)"></app-quiz-form>
+                     (cardEventEmitter)="onQuizChanged($event)">
+      </app-quiz-form>
+      <!-- Multiple Choice Quiz -->
+      <app-quiz-form *ngIf="containsDisplayAspect(displayAspectType.MULTIPLE_CHOICE_QUIZ, card)"
+                     [card]="card" [stack]="stack" [media]="media"
+                     (cardEventEmitter)="onQuizChanged($event)">
+      </app-quiz-form>
 
       <app-tag-chips [tags]="tags | tagNames"
                      [tagOptions]="tagOptions"
