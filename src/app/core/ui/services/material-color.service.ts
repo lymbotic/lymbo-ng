@@ -12,7 +12,7 @@ import {Hue} from '../model/hue.model';
 })
 export class MaterialColorService {
 
-  /** Dark primary text personColor */
+  /** Dark primary text color */
   static DARK_PRIMARY_TEXT = 'rgba(black, 0.87)';
   /** Primary palette */
   static PRIMARY_PALETTE = PaletteType.LIME;

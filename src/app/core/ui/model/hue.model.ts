@@ -1,7 +1,7 @@
 import {HueType} from './hue-type.enum';
 
 /**
- * Specific hue of a palette containing a personColor and a corresponding contrast value
+ * Specific hue of a palette containing a color and a corresponding contrast value
  */
 export class Hue {
 
