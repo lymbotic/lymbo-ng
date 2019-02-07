@@ -15,4 +15,13 @@ export const environment = {
   LICENSE: require('../../package.json').license,
   HOMEPAGE: require('../../package.json').homepage,
   TAGS: require('../../tags.json').tags,
+
+  firebase: {
+    apiKey: 'AIzaSyDAu6wK98_4WovhHMISLnWChED47kj9hpY',
+    authDomain: 'lymbo-975a9.firebaseapp.com',
+    databaseURL: 'https://lymbo-975a9.firebaseio.com',
+    projectId: 'lymbo-975a9',
+    storageBucket: 'lymbo-975a9.appspot.com',
+    messagingSenderId: '597937213109'
+  }
 };
