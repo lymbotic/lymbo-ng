@@ -6,12 +6,14 @@ import {UiModule} from './ui/ui.module';
 import {TranslateModule} from './translate/translate.module';
 import {UtilModule} from './common/util.module';
 import {ImageModule} from './image/image.module';
+import {FirebaseModule} from './firebase/firebase.module';
 
 @NgModule({
   imports: [
     CommonModule,
 
     EntityModule,
+    FirebaseModule,
     ImageModule,
     SettingsModule,
     TranslateModule,
