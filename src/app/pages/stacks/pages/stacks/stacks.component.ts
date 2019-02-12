@@ -362,6 +362,11 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
   private initializeFirebaseUserSubscription() {
     this.firebaseAuthenticationService.userSubject.subscribe(user => {
       this.user = user;
+
+      if (user != null) {
+        // Show welcome message
+        this.snackbarService.showSnackbar(`Welcome back ${user.displayName}!`);
+      }
     });
   }
 
