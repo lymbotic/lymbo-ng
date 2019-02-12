@@ -4,6 +4,7 @@ import {Subject} from 'rxjs';
 import {debounceTime} from 'rxjs/operators';
 import {Stack} from '../../../../../core/entity/model/stack/stack.model';
 import {StacksService} from '../../../../../core/entity/services/stack/stacks.service';
+import {User} from 'firebase';
 
 /**
  * Displays stacks toolbar
@@ -23,6 +24,8 @@ export class StacksToolbarComponent implements OnInit {
   @Input() searchOptions = [];
   /** Indicates whether a filter is active */
   @Input() filterActive = false;
+  /** Current user */
+  @Input() user: User;
   /** Event emitter indicating changes in search bar */
   @Output() searchItemEventEmitter = new EventEmitter<string>();
   /** Event emitter indicating menu items being clicked */

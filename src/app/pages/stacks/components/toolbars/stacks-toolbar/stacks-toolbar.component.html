@@ -44,7 +44,21 @@
             (click)="onMenuItemClicked('clear-filters')">
       <mat-icon svgIcon="layers_clear"></mat-icon>
     </button>
-
+    <button *ngIf="media > mediaType.MEDIUM && user == null"
+            mat-button
+            class="toolbar-menu-item"
+            (click)="onMenuItemClicked('login')">
+      <mat-icon svgIcon="person"></mat-icon>
+    </button>
+    <button *ngIf="media > mediaType.MEDIUM && user != null"
+            mat-button
+            disableRipple="true"
+            class="toolbar-menu-item"
+            (click)="onMenuItemClicked('logout')">
+      <div mat-card-avatar
+           [style.background-image]="'url(' + user.photoURL + ')'"
+           [style.background-size]="'cover'"></div>
+    </button>
     <button mat-button class="toolbar-menu-item right" [matMenuTriggerFor]="menu">
       <mat-icon svgIcon="more_vert"></mat-icon>
     </button>
@@ -52,6 +66,11 @@
 
       <!-- Optional buttons mobile -->
       <div *ngIf="media < mediaType.LARGE">
+        <button mat-menu-item *ngIf="user == null" (click)="onMenuItemClicked('login')">
+          <mat-icon svgIcon="person"></mat-icon>
+          <span>Login</span>
+        </button>
+        <mat-divider></mat-divider>
         <button mat-menu-item [disabled]="!filterActive" (click)="onMenuItemClicked('clear-filters')">
           <mat-icon svgIcon="layers_clear"></mat-icon>
           <span>Clear filters</span>

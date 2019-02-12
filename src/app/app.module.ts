@@ -8,6 +8,7 @@ import {BrowserModule} from '@angular/platform-browser';
 import {FormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
 import {NgModule} from '@angular/core';
+import {FirebaseAuthenticationService} from './core/firebase/services/firebase-authentication.service';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,7 @@ import {NgModule} from '@angular/core';
     // SettingsModule,
   ],
   entryComponents: [],
-  providers: [],
+  providers: [FirebaseAuthenticationService],
   bootstrap: [AppComponent]
 })
 

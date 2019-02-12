@@ -102,6 +102,7 @@ export class MaterialIconService {
     icons.push(new Icon(IconTopic.NAVIGATION, 'menu', 'ic_menu_24px.svg'));
     icons.push(new Icon(IconTopic.NAVIGATION, 'more_vert', 'ic_more_vert_24px.svg'));
     icons.push(new Icon(IconTopic.NAVIGATION, 'refresh', 'ic_refresh_24px.svg'));
+    icons.push(new Icon(IconTopic.SOCIAL, 'person', 'ic_person_24px.svg'));
     icons.push(new Icon(IconTopic.SOCIAL, 'school', 'ic_school_24px.svg'));
 
     // Aliases

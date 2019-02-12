@@ -38,9 +38,11 @@ import {MicrosoftTranslateService} from '../../../../core/translate/services/mic
 import {Language} from '../../../../core/entity/model/card/language.enum';
 import {Photo} from '../../../../core/image/model/photo.model';
 import {VibrantPalette} from '../../../../core/entity/model/vibrant-palette';
+import {UploadDialogComponent} from '../../components/dialogs/upload-dialog/upload-dialog.component';
+import {FirebaseAuthenticationService} from '../../../../core/firebase/services/firebase-authentication.service';
+import {User} from 'firebase';
 // @ts-ignore
 import Vibrant = require('node-vibrant');
-import {UploadDialogComponent} from '../../components/dialogs/upload-dialog/upload-dialog.component';
 
 /**
  * Displays stacks page
@@ -77,6 +79,9 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
 
   /** Search items options for auto-complete */
   public searchOptions = [];
+
+  /** Current user */
+  public user: User;
 
   /** Enum of media types */
   public mediaType = Media;
@@ -123,6 +128,7 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
    * Constructor
    * @param cardsService cards service
    * @param filterService filter service
+   * @param firebaseAuthenticationService firebase authentication service
    * @param iconRegistry icon registry
    * @param matchService match service
    * @param materialColorService material color service
@@ -143,6 +149,7 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
    */
   constructor(private cardsService: CardsService,
               private filterService: FilterService,
+              private firebaseAuthenticationService: FirebaseAuthenticationService,
               private iconRegistry: MatIconRegistry,
               private matchService: MatchService,
               private materialColorService: MaterialColorService,
@@ -179,6 +186,8 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
     this.initializeFilterSubscription();
     this.initializeTagSubscription();
     this.initializeSuggestionSubscription();
+
+    this.initializeFirebaseUserSubscription();
 
     this.initializeMaterial();
     this.initializeMediaSubscription();
@@ -344,6 +353,15 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
       if (value != null) {
         this.searchOptions = (value as string[]).reverse();
       }
+    });
+  }
+
+  /**
+   * Initialize firebase user subscription
+   */
+  private initializeFirebaseUserSubscription() {
+    this.firebaseAuthenticationService.userSubject.subscribe(user => {
+      this.user = user;
     });
   }
 
@@ -740,6 +758,14 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
         });
         // this.sidenavEnd.toggle().then(() => {
         // });
+        break;
+      }
+      case 'login': {
+        this.firebaseAuthenticationService.loginWithGoogle();
+        break;
+      }
+      case 'logout': {
+        this.firebaseAuthenticationService.logout();
         break;
       }
       case 'clear-filters': {
