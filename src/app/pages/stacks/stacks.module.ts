@@ -22,7 +22,8 @@ import {InformationDialogModule} from '../../ui/information-dialog/information-d
 import {UploadDialogComponent} from './components/dialogs/upload-dialog/upload-dialog.component';
 import {StackTypeFragmentComponent} from './components/fragments/stack-type-fragment/stack-type-fragment.component';
 import {SuggestedActionButtonModule} from '../../ui/suggested-action-button/suggested-action-button.module';
-import { LanguageSelectionFragmentComponent } from './components/fragments/language-selection-fragment/language-selection-fragment.component';
+import {LanguageSelectionFragmentComponent} from './components/fragments/language-selection-fragment/language-selection-fragment.component';
+import {UserPopoverComponent} from './components/popovers/user-popover/user-popover.component';
 
 @NgModule({
   imports: [
@@ -68,6 +69,8 @@ import { LanguageSelectionFragmentComponent } from './components/fragments/langu
     StackFragmentComponent,
 
     LanguageSelectionFragmentComponent,
+
+    UserPopoverComponent,
   ], entryComponents: [
     // Pages
     StacksComponent,

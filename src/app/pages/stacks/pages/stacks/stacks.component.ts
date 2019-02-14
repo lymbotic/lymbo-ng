@@ -366,6 +366,9 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
       if (user != null) {
         // Show welcome message
         this.snackbarService.showSnackbar(`Welcome back ${user.displayName}!`);
+      } else {
+        // Show goodbye message
+        this.snackbarService.showSnackbar(`Goodbye.`);
       }
     });
   }

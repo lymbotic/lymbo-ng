@@ -1,0 +1,17 @@
+<div class="userPopover">
+  <div *ngIf="user != null" class="userPopoverHeader flexcontainer">
+    <img mat-card-avatar
+         class="photo"
+         [style.background-image]="'url(' + user.photoURL + ')'"
+         [style.background-size]="'cover'"/>
+    <div>
+      <div class="displayName">{{ user.displayName }}</div>
+      <div class="email">{{ user.email }}</div>
+    </div>
+  </div>
+  <mat-divider></mat-divider>
+  <div class="flexcontainer userPopoverFooter">
+    <div class="flexbox"></div>
+    <button mat-button (click)="onLogoutClicked()">Logout</button>
+  </div>
+</div>

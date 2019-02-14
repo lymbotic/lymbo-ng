@@ -52,13 +52,18 @@
     </button>
     <button *ngIf="media > mediaType.MEDIUM && user != null"
             mat-button
-            disableRipple="true"
-            class="toolbar-menu-item"
-            (click)="onMenuItemClicked('logout')">
-      <div mat-card-avatar
+            class="toolbar-menu-item no-hover-effect"
+            [matMenuTriggerFor]="userPopover">
+      <img mat-card-avatar
+           [matMenuTriggerFor]="userPopover"
            [style.background-image]="'url(' + user.photoURL + ')'"
-           [style.background-size]="'cover'"></div>
+           [style.background-size]="'cover'">
     </button>
+    <mat-menu #userPopover="matMenu" overlapTrigger="false">
+      <div class="userPopover">
+        <app-user-popover [user]="user" (logoutEventEmitter)="onMenuItemClicked('logout')"></app-user-popover>
+      </div>
+    </mat-menu>
     <button mat-button class="toolbar-menu-item right" [matMenuTriggerFor]="menu">
       <mat-icon svgIcon="more_vert"></mat-icon>
     </button>
@@ -69,6 +74,13 @@
         <button mat-menu-item *ngIf="user == null" (click)="onMenuItemClicked('login')">
           <mat-icon svgIcon="person"></mat-icon>
           <span>Login</span>
+        </button>
+        <button mat-menu-item *ngIf="user != null" (click)="onMenuItemClicked('logout')">
+          <img mat-card-avatar
+               class="photo-small"
+               [style.background-image]="'url(' + user.photoURL + ')'"
+               [style.background-size]="'cover'">
+          <span>Logout</span>
         </button>
         <mat-divider></mat-divider>
         <button mat-menu-item [disabled]="!filterActive" (click)="onMenuItemClicked('clear-filters')">

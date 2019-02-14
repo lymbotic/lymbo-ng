@@ -1,4 +1,4 @@
-import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild, ViewEncapsulation} from '@angular/core';
 import {Media} from '../../../../../core/ui/model/media.enum';
 import {Subject} from 'rxjs';
 import {debounceTime} from 'rxjs/operators';

@@ -113,6 +113,13 @@
   }
 }
 
+.photo-small {
+  height: 24px;
+  width: 24px;
+  margin-right: 16px;
+  vertical-align: middle;
+}
+
 //
 // Material
 //
@@ -128,4 +135,20 @@ mat-toolbar {
   flex: auto;
   min-width: 0;
   width: 100% !important;
+}
+
+::ng-deep .mat-menu-panel {
+  max-width: 300px !important;
+  transform: translateY(10px) !important;
+}
+
+::ng-deep .mat-menu-content:not(:empty) {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+.no-hover-effect.mat-button.mat-primary .mat-button-focus-overlay,
+.no-hover-effect.mat-button.mat-accent .mat-button-focus-overlay,
+.no-hover-effect.mat-button.mat-warn .mat-button-focus-overlay {
+  background-color: transparent !important;
 }
