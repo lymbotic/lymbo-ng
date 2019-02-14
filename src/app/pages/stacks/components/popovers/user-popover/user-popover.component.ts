@@ -9,18 +9,12 @@ import {User} from 'firebase';
   templateUrl: './user-popover.component.html',
   styleUrls: ['./user-popover.component.scss']
 })
-export class UserPopoverComponent implements OnInit {
+export class UserPopoverComponent {
 
   /** User to display */
   @Input() user: User;
   /** Event emitter indicating a logout event */
   @Output() logoutEventEmitter = new EventEmitter<any>();
-
-  constructor() {
-  }
-
-  ngOnInit() {
-  }
 
   //
   // Actions

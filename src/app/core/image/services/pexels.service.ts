@@ -35,7 +35,9 @@ export class PexelsService {
     if (ConnectionService.isOnline()) {
       const apiKey = this.settingsService.settings.get(SettingType.API_KEY_PEXELS_IMAGE);
 
-      if (searchItems != null && searchItems.length > 0 && apiKey != null) {
+      if (searchItems != null && searchItems.filter(item => {
+        return item != null && item.trim().length > 0;
+      }).length > 0 && apiKey != null) {
         const options = {
           method: 'GET',
           headers: {
@@ -48,6 +50,8 @@ export class PexelsService {
         ob.subscribe(value => {
           resultEmitter.emit(value as SearchResult);
         });
+      } else {
+        resultEmitter.emit(null);
       }
     } else {
       console.error('Client is offline');

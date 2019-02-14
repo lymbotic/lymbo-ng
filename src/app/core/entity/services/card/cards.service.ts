@@ -410,6 +410,7 @@ export class CardsService {
    */
   private updateRelatedStack(stack: Stack): Promise<any> {
     return new Promise((resolve) => {
+      this.stackService.clearStacks();
       this.stackService.updateStack(stack).then(() => {
         resolve();
       });

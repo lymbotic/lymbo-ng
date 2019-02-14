@@ -44,17 +44,18 @@
             (click)="onMenuItemClicked('clear-filters')">
       <mat-icon svgIcon="layers_clear"></mat-icon>
     </button>
-    <button *ngIf="media > mediaType.MEDIUM && user == null"
+    <button *ngIf="media > mediaType.MEDIUM && (user == null || user.isAnonymous)"
             mat-button
             class="toolbar-menu-item"
             (click)="onMenuItemClicked('login')">
       <mat-icon svgIcon="person"></mat-icon>
     </button>
-    <button *ngIf="media > mediaType.MEDIUM && user != null"
+    <button *ngIf="media > mediaType.MEDIUM && user != null && !user.isAnonymous"
             mat-button
             class="toolbar-menu-item no-hover-effect"
             [matMenuTriggerFor]="userPopover">
       <img mat-card-avatar
+           class="photo-small avatar"
            [matMenuTriggerFor]="userPopover"
            [style.background-image]="'url(' + user.photoURL + ')'"
            [style.background-size]="'cover'">
@@ -71,13 +72,13 @@
 
       <!-- Optional buttons mobile -->
       <div *ngIf="media < mediaType.LARGE">
-        <button mat-menu-item *ngIf="user == null" (click)="onMenuItemClicked('login')">
+        <button mat-menu-item *ngIf="user == null || user.isAnonymous" (click)="onMenuItemClicked('login')">
           <mat-icon svgIcon="person"></mat-icon>
           <span>Login</span>
         </button>
-        <button mat-menu-item *ngIf="user != null" (click)="onMenuItemClicked('logout')">
+        <button mat-menu-item *ngIf="user != null && !user.isAnonymous" (click)="onMenuItemClicked('logout')">
           <img mat-card-avatar
-               class="photo-small"
+               class="photo-small avatar"
                [style.background-image]="'url(' + user.photoURL + ')'"
                [style.background-size]="'cover'">
           <span>Logout</span>

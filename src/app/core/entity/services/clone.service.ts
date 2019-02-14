@@ -7,6 +7,7 @@ import {Tense} from '../model/card/tense/tense.enum';
 import {TenseGroup} from '../model/card/tense/tense-group';
 import {Answer} from '../model/card/quiz/answer.model';
 import {Vocabel} from '../model/card/example/vocabel.model';
+import {User} from 'firebase';
 
 /**
  * Creates deep copies of objects
@@ -15,6 +16,15 @@ import {Vocabel} from '../model/card/example/vocabel.model';
   providedIn: 'root'
 })
 export class CloneService {
+
+  /**
+   * Clones a given user
+   * @param {User} original
+   * @returns {User} cloned object
+   */
+  static cloneUser(original: User): User {
+    return original != null ? JSON.parse(JSON.stringify(original)) : null;
+  }
 
   /**
    * Clones a given stack

@@ -9,7 +9,8 @@ import {StackTypeGroup} from '../../model/stack/stack-type-group.enum';
 import {StackType} from '../../model/stack/stack-type.enum';
 import {StackTypeService} from './stack-type.service';
 import {Tag} from '../../model/tag.model';
-import {SideAspect} from '../../model/card/side/side-aspect';
+import {FirebaseCloudFirestoreService} from '../../../firebase/services/firebase-cloud-firestore.service';
+import {User} from 'firebase';
 
 /**
  * Handles cards
@@ -19,9 +20,9 @@ import {SideAspect} from '../../model/card/side/side-aspect';
 })
 export class StacksService {
 
-  /** Map of all cards */
+  /** Map of all stacks */
   stacks = new Map<String, Stack>();
-  /** Subject that publishes cards */
+  /** Subject that publishes stacks */
   stacksSubject = new Subject<Stack[]>();
 
   /** Stack in focus */
@@ -31,17 +32,22 @@ export class StacksService {
 
   /**
    * Constructor
+   * @param firebaseCloudFirestoreService Firebase Cloud Firestore service
    * @param pouchDBService pouchDB service
    * @param stackDisplayService stack display service
    * @param stackTypeService stack type service
    * @param tagService tag service
    */
-  constructor(private pouchDBService: PouchDBService,
+  constructor(private firebaseCloudFirestoreService: FirebaseCloudFirestoreService,
+              private pouchDBService: PouchDBService,
               private stackDisplayService: StackDisplayService,
               private stackTypeService: StackTypeService,
               private tagService: TagService) {
-    this.initializeStackSubscription();
-    this.findStacks();
+    // this.initializeStackSubscription();
+    // this.findStacksInPouchDB();
+
+    this.initializeStackSubscriptionFirestore();
+    this.notify();
   }
 
   //
@@ -61,9 +67,26 @@ export class StacksService {
   }
 
   /**
-   * Loads cards
+   * Initializes stack subscription from Firestore
    */
-  public findStacks() {
+  private initializeStackSubscriptionFirestore() {
+    this.firebaseCloudFirestoreService.stacksSubject.subscribe(stacks => {
+      stacks.forEach(element => {
+        const stack = element as Stack;
+        this.stacks.set(stack.id, stack);
+      });
+      this.notify();
+    });
+  }
+
+  //
+  //
+  //
+
+  /**
+   * Loads stacks from PouchDB
+   */
+  public findStacksInPouchDB() {
     const index = {fields: ['entityType']};
     const options = {
       selector: {
@@ -75,6 +98,13 @@ export class StacksService {
 
     this.clearStacks();
     this.findStacksInternal(index, options);
+  }
+
+  /**
+   * Loads stacks from Firestore
+   */
+  public findStacksInFirestore(user: User) {
+    this.firebaseCloudFirestoreService.readStacks(user);
   }
 
   /**
@@ -98,7 +128,7 @@ export class StacksService {
   /**
    * Clears cards
    */
-  private clearStacks() {
+  public clearStacks() {
     this.stacks.clear();
   }
 
@@ -159,16 +189,35 @@ export class StacksService {
       // Update related objects
       this.updateRelatedTags(stack.tagIds);
 
-
       // Update related objects
       this.updateRelatedTags(stack.tagIds);
 
-      // Create stack
-      return this.pouchDBService.upsert(stack.id, stack).then(() => {
-        this.stacks.set(stack.id, stack);
+      // Define follow-up
+      const followUp = () => {
         this.notify();
         resolve();
-      });
+      };
+
+      // Create stack
+      // return this.pouchDBService.upsert(stack.id, stack).then(followUp);
+      return this.firebaseCloudFirestoreService.addStack(stack).then(followUp);
+    });
+  }
+
+  /**
+   * Creates new stacks
+   * @param stacks stacks to be created
+   */
+  public createStacks(stacks: Stack[]): Promise<any> {
+    return new Promise((resolve) => {
+      // Define follow-up
+      const followUp = () => {
+        this.notify();
+        resolve();
+      };
+
+      // Create stacks
+      return this.firebaseCloudFirestoreService.addStacks(stacks).then(followUp);
     });
   }
 
@@ -185,14 +234,18 @@ export class StacksService {
       // Update related objects
       this.updateRelatedTags(stack.tagIds);
 
+      // Set modification date
       stack.modificationDate = new Date();
 
-      // Update stack
-      return this.pouchDBService.upsert(stack.id, stack).then(() => {
-        this.stacks.set(stack.id, stack);
+      // Define follow-up
+      const followUp = () => {
         this.notify();
         resolve();
-      });
+      };
+
+      // Update stack
+      // return this.pouchDBService.upsert(stack.id, stack).then(followUp);
+      return this.firebaseCloudFirestoreService.updateStack(stack).then(followUp);
     });
   }
 
@@ -206,13 +259,33 @@ export class StacksService {
         reject();
       }
 
-      return this.pouchDBService.remove(stack.id, stack).then(() => {
-        this.stacks.delete(stack.id);
+      // Define follow-up
+      const followUp = () => {
         this.notify();
         resolve();
+      };
+
+      // Delete stack
+      // return this.pouchDBService.remove(stack.id, stack).then(followUp);
+      return this.firebaseCloudFirestoreService.deleteStack(stack).then(followUp);
+    });
+  }
+
+  /**
+   * Deletes an array of stacks
+   * @param stacks stacks
+   */
+  public deleteStacks(stacks: Stack[]): Promise<any> {
+    return new Promise((resolve, reject) => {
+      // Delete stacks
+      return this.firebaseCloudFirestoreService.deleteStacks(stacks).then(() => {
       });
     });
   }
+
+  //
+  // Import / export
+  //
 
   /**
    * Updates related tags
@@ -234,8 +307,8 @@ export class StacksService {
     stack['_rev'] = null;
     stack['_id'] = null;
 
-    this.pouchDBService.put(stack.id, stack);
-    this.findStacks();
+    // this.pouchDBService.upsert(stack.id, stack);
+    this.firebaseCloudFirestoreService.addStack(stack);
   }
 
   //
@@ -291,7 +364,6 @@ export class StacksService {
       }
     }
   }
-
 
   //
   // Import/Export

@@ -197,6 +197,7 @@ export class MicrosoftTranslateService {
       }
     } else {
       console.error('Client is offline');
+      translationEmitter.emit(null);
     }
   }
 }

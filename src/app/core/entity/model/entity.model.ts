@@ -15,6 +15,9 @@ export abstract class Entity {
   /** Modification date */
   modificationDate: Date;
 
+  /** UUID of the owner */
+  owner: string;
+
   /**
    * Constructor
    */

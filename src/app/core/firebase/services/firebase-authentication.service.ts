@@ -46,9 +46,24 @@ export class FirebaseAuthenticationService {
   }
 
   /**
+   * Handles anonymous login
+   */
+  loginAnonymously() {
+    this.angularFireAuth.auth.signInAnonymously();
+  }
+
+  /**
    * Handles logout
    */
   logout() {
     this.angularFireAuth.auth.signOut();
+  }
+
+  /**
+   * Deletes a given user
+   * @param user user
+   */
+  deleteUser(user: User) {
+    user.delete();
   }
 }

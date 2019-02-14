@@ -5,6 +5,7 @@ import {AngularFirestoreModule, FirestoreSettingsToken} from '@angular/fire/fire
 import {AngularFireAuthModule, AngularFireAuth} from '@angular/fire/auth';
 import {AngularFireModule} from '@angular/fire';
 import {environment} from '../../../environments/environment';
+import {FirebaseCloudFirestoreService} from './services/firebase-cloud-firestore.service';
 
 @NgModule({
   imports: [
@@ -15,7 +16,8 @@ import {environment} from '../../../environments/environment';
   ], providers: [
     {provide: FirestoreSettingsToken, useValue: {}},
     AngularFireAuth,
-    FirebaseAuthenticationService
+    FirebaseAuthenticationService,
+    FirebaseCloudFirestoreService
   ]
 })
 export class FirebaseModule {

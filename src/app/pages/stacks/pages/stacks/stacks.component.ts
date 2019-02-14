@@ -41,6 +41,8 @@ import {VibrantPalette} from '../../../../core/entity/model/vibrant-palette';
 import {UploadDialogComponent} from '../../components/dialogs/upload-dialog/upload-dialog.component';
 import {FirebaseAuthenticationService} from '../../../../core/firebase/services/firebase-authentication.service';
 import {User} from 'firebase';
+import {FirebaseCloudFirestoreService} from '../../../../core/firebase/services/firebase-cloud-firestore.service';
+import {UUID} from '../../../../core/entity/model/uuid';
 // @ts-ignore
 import Vibrant = require('node-vibrant');
 
@@ -69,8 +71,6 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
   public tagsMap = new Map<string, Tag>();
   /** Array of tags */
   public tags: Tag[] = [];
-  /** Array of tags with filter values */
-  public tagsFilter: Tag[] = [];
 
   /** Array of tags that are currently filtered */
   public tagsFiltered: Tag[] = [];
@@ -80,13 +80,13 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
   /** Search items options for auto-complete */
   public searchOptions = [];
 
-  /** Current user */
-  public user: User;
-
   /** Enum of media types */
   public mediaType = Media;
   /** Current media */
   public media: Media = Media.UNDEFINED;
+
+  /** Current user */
+  public user: User;
 
   /** Helper subject used to finish other subscriptions */
   private unsubscribeSubject = new Subject();
@@ -128,7 +128,8 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
    * Constructor
    * @param cardsService cards service
    * @param filterService filter service
-   * @param firebaseAuthenticationService firebase authentication service
+   * @param firebaseAuthenticationService Firebase authentication service
+   * @param firebaseCloudFirestoreService Firebase Cloud Firestore service
    * @param iconRegistry icon registry
    * @param matchService match service
    * @param materialColorService material color service
@@ -150,6 +151,7 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(private cardsService: CardsService,
               private filterService: FilterService,
               private firebaseAuthenticationService: FirebaseAuthenticationService,
+              private firebaseCloudFirestoreService: FirebaseCloudFirestoreService,
               private iconRegistry: MatIconRegistry,
               private matchService: MatchService,
               private materialColorService: MaterialColorService,
@@ -195,7 +197,6 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
     this.initializeSettings();
 
     this.clearFilters();
-    this.findEntities();
   }
 
   /**
@@ -361,15 +362,49 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
    */
   private initializeFirebaseUserSubscription() {
     this.firebaseAuthenticationService.userSubject.subscribe(user => {
-      this.user = user;
 
       if (user != null) {
-        // Show welcome message
-        this.snackbarService.showSnackbar(`Welcome back ${user.displayName}!`);
+        const previousStacks = CloneService.cloneStacks(this.stacks);
+
+        if (user.isAnonymous) {
+
+          // Clear stacks
+          this.stacksService.stacks.clear();
+
+          // Find users entities
+          this.stacksService.findStacksInFirestore(user);
+        } else {
+          // Show welcome message
+          this.snackbarService.showSnackbar(`Welcome back ${user.displayName}!`);
+
+          // Clear stacks
+          this.stacksService.stacks.clear();
+
+          // Find users entities
+          this.stacksService.findStacksInFirestore(user);
+
+          // Take stacks from anonymous user
+          this.stacksService.clearStacks();
+          this.stacksService.createStacks(previousStacks.map(stack => {
+            stack.id = new UUID().toString();
+            stack.owner = user.uid;
+            return stack;
+          }));
+
+          // Delete stacks of anonymous user
+          // this.stacksService.deleteStacks(previousStacks);
+
+          // Delete anonymous user
+          // this.firebaseAuthenticationService.deleteUser(this.user);
+        }
       } else {
         // Show goodbye message
         this.snackbarService.showSnackbar(`Goodbye.`);
+
+        this.firebaseAuthenticationService.loginAnonymously();
       }
+
+      this.user = user;
     });
   }
 
@@ -446,10 +481,10 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   /**
-   * Triggers entity retrieval from database
+   * Finds entities in PouchDB
    */
-  private findEntities() {
-    this.stacksService.findStacks();
+  private findEntitiesInPouchDB() {
+    this.stacksService.findStacksInPouchDB();
   }
 
   //
@@ -473,6 +508,9 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
 
     switch (event.action) {
       case Action.ADD: {
+        // Set owner
+        stack.owner = this.firebaseAuthenticationService.user.uid;
+
         // Create new entities if necessary
         this.evaluateStackTags(stack, tags);
 
@@ -495,7 +533,6 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
           });
 
         }, () => {
-
           // Add stack
           this.addStack(stack);
         });
@@ -542,6 +579,7 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
         });
         confirmationDialogRef.afterClosed().subscribe(confirmationResult => {
           if (confirmationResult != null) {
+            this.stacksService.clearStacks();
             this.stacksService.deleteStack(confirmationResult as Stack).then(() => {
             });
           }
@@ -842,6 +880,7 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
    * @param stack stack
    */
   private addStack(stack: Stack) {
+    this.stacksService.clearStacks();
     this.stacksService.createStack(stack).then(() => {
       this.snackbarService.showSnackbar('Added stack');
     });
@@ -852,6 +891,7 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
    * @param stack stack
    */
   private updateStack(stack: Stack) {
+    this.stacksService.clearStacks();
     this.stacksService.updateStack(stack).then(() => {
       this.snackbarService.showSnackbar('Updated stack');
     });
@@ -914,10 +954,16 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
       });
 
       if (apiKeyMicrosoftTextTranslate !== null) {
-        // Translate into English, then call Pexels service
+        // Try to translate into English, then call Pexels service
         const translationEmitter: EventEmitter<string> = new EventEmitter<string>();
-        translationEmitter.subscribe(translatedText => {
-          this.pexelsService.search(translatedText.split(', '), 1, 1, resultEmitter);
+        translationEmitter.subscribe(result => {
+          if (result != null) {
+            // Search for images with translated tags
+            this.pexelsService.search(result.split(', '), 1, 1, resultEmitter);
+          } else {
+            // Search for images with original tags
+            this.pexelsService.search(searchItems, 1, 1, resultEmitter);
+          }
         });
         this.microsoftTranslateService.translate(searchItems.join(', '), Language.ENGLISH, translationEmitter);
       } else {
