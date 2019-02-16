@@ -63,6 +63,10 @@ app-root {
   flex: 1;
 }
 
+.debug {
+  color: mat-color($mat-grey, 400);
+}
+
 .mat-content {
   display: flex;
   flex: 1;

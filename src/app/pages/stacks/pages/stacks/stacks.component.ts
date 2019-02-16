@@ -1,7 +1,7 @@
 import {Stack} from '../../../../core/entity/model/stack/stack.model';
 import {SnackbarService} from '../../../../core/ui/services/snackbar.service';
 import {environment} from '../../../../../environments/environment';
-import {AfterViewInit, Component, EventEmitter, NgZone, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, EventEmitter, Inject, NgZone, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {Subject} from 'rxjs';
 import {MatDialog, MatDialogConfig, MatIconRegistry, MatSidenav} from '@angular/material';
 import {Media} from '../../../../core/ui/model/media.enum';
@@ -43,6 +43,8 @@ import {FirebaseAuthenticationService} from '../../../../core/firebase/services/
 import {User} from 'firebase';
 import {FirebaseCloudFirestoreService} from '../../../../core/firebase/services/firebase-cloud-firestore.service';
 import {UUID} from '../../../../core/entity/model/uuid';
+import {StacksPersistenceService} from '../../../../core/entity/services/stack/persistence/stacks-persistence.interface';
+import {STACK_PERSISTENCE} from '../../../../core/entity/entity.module';
 // @ts-ignore
 import Vibrant = require('node-vibrant');
 
@@ -142,6 +144,7 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
    * @param scroll scroll
    * @param settingsService settings service
    * @param stacksService stacks service
+   * @param stacksPersistenceService stacks persistence service
    * @param snackbarService snackbar service
    * @param suggestionService suggestion service
    * @param tagService tag service
@@ -164,6 +167,7 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
               private scroll: ScrollDispatcher,
               private settingsService: SettingsService,
               private stacksService: StacksService,
+              @Inject(STACK_PERSISTENCE) private stacksPersistenceService: StacksPersistenceService,
               private snackbarService: SnackbarService,
               private suggestionService: SuggestionService,
               private tagService: TagService,
@@ -182,7 +186,7 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit() {
     this.tagsMap = new Map(this.tagService.tags);
 
-    this.initializeStacks(Array.from(this.stacksService.stacks.values()));
+    this.initializeStacks(Array.from(this.stacksPersistenceService.stacks.values()));
     this.initializeStackSubscription();
 
     this.initializeFilterSubscription();
@@ -224,9 +228,12 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
    * Initializes stack subscription
    */
   private initializeStackSubscription() {
-    this.stacksService.stacksSubject.pipe(
+    console.log(`initializeStackSubscription`);
+
+    this.stacksPersistenceService.stacksSubject.pipe(
       takeUntil(this.unsubscribeSubject)
     ).subscribe((value) => {
+      console.log(JSON.stringify(value));
       if (value != null) {
         this.initializeStacks(value as Stack[]);
 
@@ -240,6 +247,8 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
    * @param stacks cards
    */
   private initializeStacks(stacks: Stack[]) {
+    console.log(`initializeStacks ${stacks.length}`);
+
     this.stacks = stacks.filter(stack => {
       return this.filterStack(stack);
     });
@@ -335,7 +344,7 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
         || this.tagsFiltered.length > 0;
 
       // Filter stacks
-      this.stacks = Array.from(this.stacksService.stacks.values()).filter((stack: Stack) => {
+      this.stacks = Array.from(this.stacksPersistenceService.stacks.values()).filter((stack: Stack) => {
         return this.filterStack(stack);
       }).sort((s1, s2) => {
         return new Date(s2.modificationDate).getTime() > new Date(s1.modificationDate).getTime() ? 1 : -1;
@@ -369,23 +378,23 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
         if (user.isAnonymous) {
 
           // Clear stacks
-          this.stacksService.stacks.clear();
+          this.stacksPersistenceService.clearStacks();
 
           // Find users entities
-          this.stacksService.findStacksInFirestore(user);
+          this.stacksPersistenceService.findStacks(user);
         } else {
           // Show welcome message
           this.snackbarService.showSnackbar(`Welcome back ${user.displayName}!`);
 
           // Clear stacks
-          this.stacksService.stacks.clear();
+          this.stacksPersistenceService.clearStacks();
 
           // Find users entities
-          this.stacksService.findStacksInFirestore(user);
+          this.stacksPersistenceService.findStacks(user);
 
           // Take stacks from anonymous user
-          this.stacksService.clearStacks();
-          this.stacksService.createStacks(previousStacks.map(stack => {
+          this.stacksPersistenceService.clearStacks();
+          this.stacksPersistenceService.createStacks(previousStacks.map(stack => {
             stack.id = new UUID().toString();
             stack.owner = user.uid;
             return stack;
@@ -480,13 +489,6 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
     this.filterService.clearAllFilters();
   }
 
-  /**
-   * Finds entities in PouchDB
-   */
-  private findEntitiesInPouchDB() {
-    this.stacksService.findStacksInPouchDB();
-  }
-
   //
   // Actions
   //
@@ -579,8 +581,8 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
         });
         confirmationDialogRef.afterClosed().subscribe(confirmationResult => {
           if (confirmationResult != null) {
-            this.stacksService.clearStacks();
-            this.stacksService.deleteStack(confirmationResult as Stack).then(() => {
+            this.stacksPersistenceService.clearStacks();
+            this.stacksPersistenceService.deleteStack(confirmationResult as Stack).then(() => {
             });
           }
         });
@@ -683,7 +685,7 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
         break;
       }
       case Action.DELETE: {
-        const referencesStacks = Array.from(this.stacksService.stacks.values()).some((stack: Stack) => {
+        const referencesStacks = Array.from(this.stacksPersistenceService.stacks.values()).some((stack: Stack) => {
           return stack.tagIds != null && stack.tagIds.some(tagId => {
             return tagId === tag.id;
           });
@@ -880,8 +882,8 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
    * @param stack stack
    */
   private addStack(stack: Stack) {
-    this.stacksService.clearStacks();
-    this.stacksService.createStack(stack).then(() => {
+    this.stacksPersistenceService.clearStacks();
+    this.stacksPersistenceService.createStack(stack).then(() => {
       this.snackbarService.showSnackbar('Added stack');
     });
   }
@@ -891,8 +893,8 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
    * @param stack stack
    */
   private updateStack(stack: Stack) {
-    this.stacksService.clearStacks();
-    this.stacksService.updateStack(stack).then(() => {
+    this.stacksPersistenceService.clearStacks();
+    this.stacksPersistenceService.updateStack(stack).then(() => {
       this.snackbarService.showSnackbar('Updated stack');
     });
   }

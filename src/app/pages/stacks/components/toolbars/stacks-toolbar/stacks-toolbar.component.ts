@@ -1,10 +1,12 @@
-import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild, ViewEncapsulation} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Inject, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {Media} from '../../../../../core/ui/model/media.enum';
 import {Subject} from 'rxjs';
 import {debounceTime} from 'rxjs/operators';
 import {Stack} from '../../../../../core/entity/model/stack/stack.model';
 import {StacksService} from '../../../../../core/entity/services/stack/stacks.service';
 import {User} from 'firebase';
+import {STACK_PERSISTENCE} from '../../../../../core/entity/entity.module';
+import {StacksPersistenceService} from '../../../../../core/entity/services/stack/persistence/stacks-persistence.interface';
 
 /**
  * Displays stacks toolbar
@@ -47,8 +49,10 @@ export class StacksToolbarComponent implements OnInit {
   /**
    * Constructor
    * @param stacksService stacks service
+   * @param stacksPersistenceService stacks persistence service
    */
-  constructor(private stacksService: StacksService) {
+  constructor(private stacksService: StacksService,
+              @Inject(STACK_PERSISTENCE) private stacksPersistenceService: StacksPersistenceService) {
   }
 
   //
@@ -114,7 +118,7 @@ export class StacksToolbarComponent implements OnInit {
       const [file] = event.target.files;
       reader.readAsText(file);
       reader.onload = () => {
-        this.stacksService.uploadStack(JSON.parse(reader.result) as Stack);
+        this.stacksPersistenceService.uploadStack(JSON.parse(reader.result) as Stack);
       };
     }
   }

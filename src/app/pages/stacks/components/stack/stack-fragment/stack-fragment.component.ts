@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, isDevMode, OnInit, Output} from '@angular/core';
 import {MatDialog} from '@angular/material';
 import {SnackbarService} from '../../../../../core/ui/services/snackbar.service';
 import {Stack} from '../../../../../core/entity/model/stack/stack.model';
@@ -35,6 +35,9 @@ export class StackFragmentComponent implements OnInit {
   /** Enum of display aspects */
   displayAspectType = DisplayAspect;
 
+  /** Dev mode */
+  devMode = false;
+
   /**
    * Constructor
    * @param stacksService stacks service
@@ -44,6 +47,7 @@ export class StackFragmentComponent implements OnInit {
   constructor(private stacksService: StacksService,
               private snackbarService: SnackbarService,
               public dialog: MatDialog) {
+    this.devMode = isDevMode();
   }
 
   //
@@ -103,7 +107,7 @@ export class StackFragmentComponent implements OnInit {
    * Handles click on export button
    */
   onExportClicked() {
-    this.stacksService.downloadStack(this.stack);
+    StacksService.downloadStack(this.stack);
   }
 
   //
@@ -116,6 +120,6 @@ export class StackFragmentComponent implements OnInit {
    * @param stack stack
    */
   public containsDisplayAspect(displayAspect: DisplayAspect, stack: Stack): boolean {
-    return this.stacksService.containsDisplayAspect(displayAspect, stack);
+    return StacksService.containsDisplayAspect(displayAspect, stack);
   }
 }

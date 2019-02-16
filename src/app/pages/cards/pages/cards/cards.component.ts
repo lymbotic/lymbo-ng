@@ -1,7 +1,7 @@
 import {SnackbarService} from '../../../../core/ui/services/snackbar.service';
 import {AboutDialogComponent} from '../../../../ui/about-dialog/about-dialog/about-dialog.component';
 import {environment} from '../../../../../environments/environment';
-import {AfterViewInit, Component, NgZone, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, Inject, NgZone, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {Subject} from 'rxjs';
 import {MatDialog, MatDialogConfig, MatIconRegistry, MatSidenav} from '@angular/material';
 import {Media} from '../../../../core/ui/model/media.enum';
@@ -31,6 +31,8 @@ import {CardDialogComponent} from '../../components/dialogs/card-dialog/card-dia
 import {TagDialogComponent} from '../../components/dialogs/tag-dialog/tag-dialog.component';
 import {Card} from '../../../../core/entity/model/card/card.model';
 import {FormControl} from '@angular/forms';
+import {STACK_PERSISTENCE} from '../../../../core/entity/entity.module';
+import {StacksPersistenceService} from '../../../../core/entity/services/stack/persistence/stacks-persistence.interface';
 
 /**
  * Displays cards page
@@ -128,7 +130,7 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
    * @param sanitizer sanitizer
    * @param scroll scroll
    * @param settingsService settings service
-   * @param stacksService stacks service
+   * @param stacksPersistenceService stacks persistence service
    * @param snackbarService snackbar service
    * @param suggestionService suggestion service
    * @param tagService tag service
@@ -147,7 +149,7 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
               private sanitizer: DomSanitizer,
               private scroll: ScrollDispatcher,
               private settingsService: SettingsService,
-              private stacksService: StacksService,
+              @Inject(STACK_PERSISTENCE) private stacksPersistenceService: StacksPersistenceService,
               private snackbarService: SnackbarService,
               private suggestionService: SuggestionService,
               private tagService: TagService,
@@ -229,7 +231,7 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
    * Initializes stack subscription
    */
   private initializeStackSubscription() {
-    this.stacksService.stackSubject.pipe(
+    this.stacksPersistenceService.stackSubject.pipe(
       takeUntil(this.unsubscribeSubject)
     ).subscribe((value) => {
       if (value != null) {
@@ -486,7 +488,7 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
    * Triggers entity retrieval from database
    */
   private findEntities() {
-    this.stacksService.findStackByID(this.id);
+    this.stacksPersistenceService.findStackByID(this.id);
   }
 
   /**
@@ -679,7 +681,7 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
         break;
       }
       case Action.DELETE: {
-        const referencesStacks = Array.from(this.stacksService.stacks.values()).some((stack: Stack) => {
+        const referencesStacks = Array.from(this.stacksPersistenceService.stacks.values()).some((stack: Stack) => {
           return stack.tagIds != null && stack.tagIds.some(tagId => {
             return tagId === tag.id;
           });
@@ -842,7 +844,7 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
         break;
       }
       case 'download': {
-        this.stacksService.downloadStack(this.stack);
+        StacksService.downloadStack(this.stack);
         break;
       }
       case 'android-release': {

@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Inject, OnDestroy, OnInit} from '@angular/core';
+import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import {DialogMode} from '../../../../../core/entity/model/dialog-mode.enum';
 import {Stack} from '../../../../../core/entity/model/stack/stack.model';
@@ -10,9 +10,6 @@ import {Action} from '../../../../../core/entity/model/action.enum';
 import {StacksService} from '../../../../../core/entity/services/stack/stacks.service';
 import {StackType} from '../../../../../core/entity/model/stack/stack-type.enum';
 import {Language} from '../../../../../core/entity/model/card/language.enum';
-import {PexelsService} from '../../../../../core/image/services/pexels.service';
-import {Photo} from '../../../../../core/image/model/photo.model';
-import {SearchResult} from '../../../../../core/image/model/search-result';
 
 /**
  * Displays stack dialog
@@ -207,13 +204,13 @@ export class StackDialogComponent implements OnInit, OnDestroy {
   private handleStackChanges() {
     switch (this.mode) {
       case DialogMode.ADD: {
-        if (this.stacksService.containsDisplayAspect(DisplayAspect.CAN_BE_CREATED, this.stack)) {
+        if (StacksService.containsDisplayAspect(DisplayAspect.CAN_BE_CREATED, this.stack)) {
           this.addStack();
         }
         break;
       }
       case DialogMode.UPDATE: {
-        if (this.stacksService.containsDisplayAspect(DisplayAspect.CAN_BE_UPDATED, this.stack)) {
+        if (StacksService.containsDisplayAspect(DisplayAspect.CAN_BE_UPDATED, this.stack)) {
           this.updateStack();
         }
         break;
@@ -259,6 +256,6 @@ export class StackDialogComponent implements OnInit, OnDestroy {
    * @param stack stack
    */
   public containsDisplayAspect(displayAspect: DisplayAspect, stack: Stack): boolean {
-    return this.stacksService.containsDisplayAspect(displayAspect, stack);
+    return StacksService.containsDisplayAspect(displayAspect, stack);
   }
 }

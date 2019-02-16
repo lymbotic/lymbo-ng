@@ -1,5 +1,7 @@
 <div [class]="themeClass">
   <mat-card>
+    <div *ngIf="devMode" class="debug">{{ stack.id }}</div>
+
     <img *ngIf="stack.imageUrl !== ''" mat-card-image [attr.src]="stack.imageUrl" (click)="onStackClicked()">
     <mat-menu #menu="matMenu">
       <button mat-menu-item (click)="onUpdateClicked()">

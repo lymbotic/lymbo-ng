@@ -2,7 +2,7 @@ import {inject, TestBed} from '@angular/core/testing';
 
 import {StacksService} from './stacks.service';
 
-describe('StacksService', () => {
+describe('StacksPersistenceService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [StacksService]
