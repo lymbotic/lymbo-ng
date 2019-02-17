@@ -2,7 +2,7 @@ import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import {DialogMode} from '../../../../../core/entity/model/dialog-mode.enum';
 import {Stack} from '../../../../../core/entity/model/stack/stack.model';
-import {Tag} from '../../../../../core/entity/model/tag.model';
+import {Tag} from '../../../../../core/entity/model/tag/tag.model';
 import {CloneService} from '../../../../../core/entity/services/clone.service';
 import {SuggestionService} from '../../../../../core/entity/services/suggestion.service';
 import {DisplayAspect} from '../../../../../core/entity/services/stack/stack-display.service';

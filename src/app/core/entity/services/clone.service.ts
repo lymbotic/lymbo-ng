@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Tag} from '../model/tag.model';
+import {Tag} from '../model/tag/tag.model';
 import {Stack} from '../model/stack/stack.model';
 import {Card} from '../model/card/card.model';
 import {Language} from '../model/card/language.enum';

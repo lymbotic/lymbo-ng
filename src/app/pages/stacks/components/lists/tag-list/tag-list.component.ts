@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
-import {Action} from 'app/core/entity/model/action.enum';
-import {Tag} from '../../../../../core/entity/model/tag.model';
+import {Tag} from '../../../../../core/entity/model/tag/tag.model';
 import {Media} from '../../../../../core/ui/model/media.enum';
+import {Action} from '../../../../../core/entity/model/action.enum';
 
 /**
  * Displays tag list

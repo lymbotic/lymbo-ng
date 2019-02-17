@@ -1,6 +1,6 @@
-import { TestBed } from '@angular/core/testing';
+import {TestBed} from '@angular/core/testing';
 
-import { StacksFirestoreService } from './stacks-firestore.service';
+import {StacksFirestoreService} from './stacks-firestore.service';
 
 describe('StacksFirestoreService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));

@@ -1,5 +1,5 @@
-import {Entity} from './entity.model';
-import {EntityType} from './entity-type.enum';
+import {Entity} from '../entity.model';
+import {EntityType} from '../entity-type.enum';
 
 /**
  * Represents a tag which can be used to label other entities

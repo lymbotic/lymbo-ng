@@ -4,6 +4,7 @@ import {Stack} from '../../entity/model/stack/stack.model';
 import {User} from 'firebase';
 import {Observable, Subject} from 'rxjs';
 import {map} from 'rxjs/operators';
+import {CloneService} from '../../entity/services/clone.service';
 
 /**
  * Handles Cloud Firestore access
@@ -15,10 +16,16 @@ export class FirebaseCloudFirestoreService {
 
   /** Stacks collection */
   stacksCollection: AngularFirestoreCollection<Stack>;
+
   /** Stacks observable */
   stacksObservable: Observable<Stack[]>;
   /** Stack subject */
   stacksSubject: Subject<Stack[]>;
+
+  /** Stack observable */
+  stackObservable: Observable<Stack[]>;
+  /** Stack subject */
+  stackSubject: Subject<Stack>;
 
   /**
    * Constructor
@@ -27,6 +34,8 @@ export class FirebaseCloudFirestoreService {
   constructor(private angularFirestore: AngularFirestore) {
     this.stacksObservable = new Observable<Stack[]>();
     this.stacksSubject = new Subject<Stack[]>();
+    this.stackObservable = new Observable<Stack[]>();
+    this.stackSubject = new Subject<Stack>();
   }
 
   /**
@@ -38,10 +47,10 @@ export class FirebaseCloudFirestoreService {
       ref => ref.where('owner', '==', user.uid));
     this.stacksObservable = this.stacksCollection.snapshotChanges().pipe(
       map(actions => actions.map(a => {
-        const data = a.payload.doc.data() as Stack;
-        data.id = a.payload.doc.id;
+        const stack = a.payload.doc.data() as Stack;
+        // data.uid = a.payload.doc.id;
 
-        return data;
+        return stack;
       }))
     );
     this.stacksObservable.subscribe(stacks => {
@@ -51,12 +60,40 @@ export class FirebaseCloudFirestoreService {
   }
 
   /**
+   * Reads a stack of a given user having a given ID
+   * @param user user
+   * @param id stack ID
+   */
+  readStacksByID(user: User, id: string) {
+    this.stacksCollection = this.angularFirestore.collection<Stack>('stacks',
+      ref => ref
+        .where('owner', '==', user.uid)
+        .where('id', '==', id)
+        .limit(1));
+    this.stackObservable = this.stacksCollection.snapshotChanges().pipe(
+      map(actions => actions.map(a => {
+        const stack = a.payload.doc.data() as Stack;
+        // data.id = a.payload.doc.id;
+
+        return stack;
+      }))
+    );
+    this.stackObservable.subscribe(stacks => {
+        const stack = (stacks as Stack[])[0];
+        this.stackSubject.next(stack);
+      }
+    );
+  }
+
+  /**
    * Adds a stack
    * @param stack stack
    */
   addStack(stack: Stack): Promise<any> {
+    const s = CloneService.cloneStack(stack);
+
     return new Promise((resolve) => {
-      this.stacksCollection.add(stack);
+      this.stacksCollection.doc(s.id).set(s);
       resolve();
     });
   }
@@ -69,10 +106,12 @@ export class FirebaseCloudFirestoreService {
     const batch = this.angularFirestore.firestore.batch();
 
     stacks.forEach(stack => {
-      const id = this.angularFirestore.createId();
+      const s = CloneService.cloneStack(stack);
+
+      const id = s.id;
       const ref = this.angularFirestore.firestore.collection('stacks').doc(id);
 
-      batch.set(ref, stack);
+      batch.set(ref, s);
     });
 
     return batch.commit();
@@ -83,8 +122,10 @@ export class FirebaseCloudFirestoreService {
    * @param stack stack
    */
   updateStack(stack: Stack): Promise<any> {
+    const s = CloneService.cloneStack(stack);
+
     return new Promise((resolve) => {
-      this.stacksCollection.doc(stack.id).update(stack);
+      this.stacksCollection.doc(stack.id).update(s);
       resolve();
     });
   }
@@ -94,8 +135,10 @@ export class FirebaseCloudFirestoreService {
    * @param stack stack
    */
   deleteStack(stack: Stack): Promise<any> {
+    const s = CloneService.cloneStack(stack);
+
     return new Promise((resolve) => {
-      this.stacksCollection.doc(stack.id).delete();
+      this.stacksCollection.doc(s.id).delete();
       resolve();
     });
   }
@@ -108,7 +151,9 @@ export class FirebaseCloudFirestoreService {
     const batch = this.angularFirestore.firestore.batch();
 
     stacks.forEach(stack => {
-      const ref = this.angularFirestore.firestore.collection('stacks').doc(stack.id);
+      const s = CloneService.cloneStack(stack);
+
+      const ref = this.angularFirestore.firestore.collection('stacks').doc(s.id);
 
       batch.delete(ref);
     });

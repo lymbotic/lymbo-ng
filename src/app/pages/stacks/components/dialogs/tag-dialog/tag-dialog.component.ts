@@ -1,9 +1,8 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {ConfirmationDialogComponent} from 'app/ui/confirmation-dialog/confirmation-dialog/confirmation-dialog.component';
-import {Tag} from 'app/core/entity/model/tag.model';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
-import {DialogMode} from 'app/core/entity/model/dialog-mode.enum';
-import {Action} from 'app/core/entity/model/action.enum';
+import {DialogMode} from '../../../../../core/entity/model/dialog-mode.enum';
+import {Tag} from '../../../../../core/entity/model/tag/tag.model';
+import {Action} from '../../../../../core/entity/model/action.enum';
 
 /**
  * Displays tag dialog

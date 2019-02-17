@@ -4,6 +4,7 @@ import {StackType} from './stack-type.enum';
 import {Card} from '../card/card.model';
 import {Language} from '../card/language.enum';
 import {VibrantPalette} from '../vibrant-palette';
+import {Tag} from '../tag/tag.model';
 
 /**
  * Represents a stack
@@ -20,6 +21,8 @@ export class Stack extends Entity {
   imagePalette: VibrantPalette;
   /** Cards */
   cards: Card[];
+  /** Tags */
+  tags: Tag[];
   /** References to tags */
   tagIds: string[];
 
@@ -41,6 +44,7 @@ export class Stack extends Entity {
     this.type = StackType.UNSPECIFIED;
     this.title = '';
     this.cards = [];
+    this.tags = [];
     this.tagIds = [];
 
     this.sourceLanguage = Language.UNSPECIFIED;

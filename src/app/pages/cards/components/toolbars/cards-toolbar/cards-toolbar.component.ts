@@ -2,6 +2,7 @@ import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output}
 import {Media} from '../../../../../core/ui/model/media.enum';
 import {Subject} from 'rxjs';
 import {debounceTime} from 'rxjs/operators';
+import {User} from 'firebase';
 
 /**
  * Displays cards toolbar
@@ -30,6 +31,8 @@ export class CardsToolbarComponent implements OnInit {
   @Input() cardsAreInMultipleBoxes = false;
   /** Indicates that stack is not empty */
   @Input() stackNotEmpty = false;
+  /** Current user */
+  @Input() user: User;
   /** Event emitter indicating changes in search bar */
   @Output() searchItemEventEmitter = new EventEmitter<string>();
   /** Event emitter indicating menu items being clicked */

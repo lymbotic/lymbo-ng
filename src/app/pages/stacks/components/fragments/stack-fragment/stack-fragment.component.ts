@@ -4,7 +4,7 @@ import {SnackbarService} from '../../../../../core/ui/services/snackbar.service'
 import {Stack} from '../../../../../core/entity/model/stack/stack.model';
 import {StacksService} from '../../../../../core/entity/services/stack/stacks.service';
 import {Action} from '../../../../../core/entity/model/action.enum';
-import {Tag} from '../../../../../core/entity/model/tag.model';
+import {Tag} from '../../../../../core/entity/model/tag/tag.model';
 import {DisplayAspect} from '../../../../../core/entity/services/stack/stack-display.service';
 
 /**
@@ -19,14 +19,16 @@ export class StackFragmentComponent implements OnInit {
 
   /** Stack to be displayed */
   @Input() stack: Stack;
-  /** Map of tags */
-  @Input() tags = new Map<string, Tag>();
+  /** Array of tags */
+  @Input() tags: Tag[] = [];
   /** Default theme to be used */
   @Input() themeClass = 'light-theme';
 
   /** Event emitter indicating click on stack */
   @Output() stackEventEmitter = new EventEmitter<{ action: Action, stack: Stack, tags?: Tag[] }>();
 
+  /** Map of tags */
+  tagsMap = new Map<string, Tag>();
   /** Title color */
   titleColor = 'black';
   /** Tag color */
@@ -58,12 +60,22 @@ export class StackFragmentComponent implements OnInit {
    * Handles on-init lifecycle phase
    */
   ngOnInit() {
+    this.initializeTagsMap();
     this.initializeColors();
   }
 
   //
   // Initialization
   //
+
+  /**
+   * Initializes tags map
+   */
+  private initializeTagsMap() {
+    this.tags.forEach(tag => {
+      this.tagsMap.set(tag.id, tag);
+    });
+  }
 
   /**
    * Initializes colors

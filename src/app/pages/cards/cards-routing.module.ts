@@ -5,7 +5,7 @@ import {CardsComponent} from './pages/cards/cards.component';
 
 const routes: Routes = [
   {path: '', component: CardsComponent},
-  {path: 'cards/:id', component: CardsComponent, resolve: {stack: StackResolver}},
+  {path: 'cards/:uid', component: CardsComponent, resolve: {stack: StackResolver}},
 ];
 
 @NgModule({

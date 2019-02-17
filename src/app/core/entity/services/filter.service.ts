@@ -1,8 +1,7 @@
 import {Injectable} from '@angular/core';
-import {Tag} from '../model/tag.model';
+import {Tag} from '../model/tag/tag.model';
 import {CloneService} from './clone.service';
 import {Subject} from 'rxjs';
-import {TagService} from './tag.service';
 
 /**
  * Handles filter values
@@ -27,11 +26,9 @@ export class FilterService {
 
   /**
    * Constructor
-   * @param {CloneService} cloneService
-   * @param {TagService} tagService
+   * @param cloneService clone service
    */
-  constructor(private cloneService: CloneService,
-              private tagService: TagService) {
+  constructor(private cloneService: CloneService) {
     this.clearAllFilters();
   }
 

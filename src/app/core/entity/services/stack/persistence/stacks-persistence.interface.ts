@@ -29,9 +29,10 @@ export interface StacksPersistenceService {
 
   /**
    * Finds stack by a given ID
+   * @param user user (optional)
    * @param {number} id ID of filter by
    */
-  findStackByID(id: string);
+  findStackByID(id: string, user?: User);
 
   //
   // Create
@@ -93,5 +94,10 @@ export interface StacksPersistenceService {
   /**
    * Informs subscribers that something has changed
    */
-  notify();
+  notifyMultipleStacks();
+
+  /**
+   * Informs subscribers that something has changed
+   */
+  notifySingleStack();
 }

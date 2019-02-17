@@ -1,7 +1,7 @@
 import {SnackbarService} from '../../../../core/ui/services/snackbar.service';
 import {AboutDialogComponent} from '../../../../ui/about-dialog/about-dialog/about-dialog.component';
 import {environment} from '../../../../../environments/environment';
-import {AfterViewInit, Component, Inject, NgZone, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, Inject, NgZone, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {Subject} from 'rxjs';
 import {MatDialog, MatDialogConfig, MatIconRegistry, MatSidenav} from '@angular/material';
 import {Media} from '../../../../core/ui/model/media.enum';
@@ -18,9 +18,8 @@ import {SettingsService} from '../../../../core/settings/services/settings.servi
 import {ActivatedRoute, Router} from '@angular/router';
 import {CardsService} from '../../../../core/entity/services/card/cards.service';
 import {Stack} from '../../../../core/entity/model/stack/stack.model';
-import {Tag} from '../../../../core/entity/model/tag.model';
+import {Tag} from '../../../../core/entity/model/tag/tag.model';
 import {MatchService} from '../../../../core/entity/services/match.service';
-import {TagService} from '../../../../core/entity/services/tag.service';
 import {Action} from '../../../../core/entity/model/action.enum';
 import {CloneService} from '../../../../core/entity/services/clone.service';
 import {InformationDialogComponent} from '../../../../ui/information-dialog/information-dialog/information-dialog.component';
@@ -33,6 +32,10 @@ import {Card} from '../../../../core/entity/model/card/card.model';
 import {FormControl} from '@angular/forms';
 import {STACK_PERSISTENCE} from '../../../../core/entity/entity.module';
 import {StacksPersistenceService} from '../../../../core/entity/services/stack/persistence/stacks-persistence.interface';
+import {TagsService} from '../../../../core/entity/services/tag/tags.service';
+import {FirebaseAuthenticationService} from '../../../../core/firebase/services/firebase-authentication.service';
+import {FirebaseCloudFirestoreService} from '../../../../core/firebase/services/firebase-cloud-firestore.service';
+import {User} from 'firebase';
 
 /**
  * Displays cards page
@@ -47,51 +50,54 @@ import {StacksPersistenceService} from '../../../../core/entity/services/stack/p
     Animations.dateIndicatorAnimation,
   ]
 })
-export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
+export class CardsComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
 
   /** App title */
-  title = environment.APP_NAME;
+  public title = environment.APP_NAME;
 
   /** ID passed as an argument */
-  id: string;
+  public id: string;
   /** Stack */
-  stack: Stack;
+  public stack: Stack;
   /** Array of cards */
-  cards: Card[] = [];
+  public cards: Card[] = [];
   /** Indicates whether cards in multiple boxes */
-  cardsAreInMultipleBoxes = false;
+  public cardsAreInMultipleBoxes = false;
   /** Number of boxes */
-  boxesCount = 0;
+  public boxesCount = 0;
   /** Boxes */
-  boxes = [];
+  public boxes = [];
 
-  /** Map of tags */
-  tagsMap = new Map<string, Tag>();
+  /** Array of cards */
+  public stacks: Stack[] = [];
   /** Array of tags */
-  tags: Tag[] = [];
+  public tags: Tag[] = [];
 
   /** Whether all cards are flipped */
-  viceVersa = false;
+  public viceVersa = false;
 
   /** Array of tags that are currently filtered */
-  tagsFiltered: Tag[] = [];
+  public tagsFiltered: Tag[] = [];
   /** Indicates whether a filter for favorite cards is active */
-  filterFavorites = false;
+  public filterFavorites = false;
   /** Indicates whether a filter is active */
-  filterActive = false;
+  public filterActive = false;
 
   /** Search items options for auto-complete */
-  searchOptions = [];
+  public searchOptions = [];
 
   /** Enum of media types */
-  mediaType = Media;
+  public mediaType = Media;
   /** Current media */
-  media: Media = Media.UNDEFINED;
+  public media: Media = Media.UNDEFINED;
+
+  /** Current user */
+  public user: User;
 
   /** Title color */
-  titleColor = 'black';
+  public titleColor = 'black';
   /** FAB color */
-  fabColor = 'black';
+  public fabColor = 'black';
 
   /** Helper subject used to finish other subscriptions */
   private unsubscribeSubject = new Subject();
@@ -120,6 +126,8 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
    * Constructor
    * @param cardsService cards service
    * @param filterService filter service
+   * @param firebaseAuthenticationService Firebase authentication service
+   * @param firebaseCloudFirestoreService Firebase Cloud Firestore service
    * @param iconRegistry icon registry
    * @param matchService match service
    * @param materialColorService material color service
@@ -133,12 +141,14 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
    * @param stacksPersistenceService stacks persistence service
    * @param snackbarService snackbar service
    * @param suggestionService suggestion service
-   * @param tagService tag service
+   * @param tagsService tag service
    * @param dialog dialog
    * @param zone zone
    */
   constructor(private cardsService: CardsService,
               private filterService: FilterService,
+              private firebaseAuthenticationService: FirebaseAuthenticationService,
+              private firebaseCloudFirestoreService: FirebaseCloudFirestoreService,
               private iconRegistry: MatIconRegistry,
               private matchService: MatchService,
               private materialColorService: MaterialColorService,
@@ -152,7 +162,7 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
               @Inject(STACK_PERSISTENCE) private stacksPersistenceService: StacksPersistenceService,
               private snackbarService: SnackbarService,
               private suggestionService: SuggestionService,
-              private tagService: TagService,
+              private tagsService: TagsService,
               public dialog: MatDialog,
               public zone: NgZone) {
   }
@@ -165,16 +175,17 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
    * Handles on-init lifecycle phase
    */
   ngOnInit() {
-    this.initializeParameters();
-    this.initializeResolvedData();
-
     this.initializeStackSubscription();
-    this.initializeCardSubscription();
-
     this.initializeFilterSubscription();
-    this.initializeTagSubscription();
     this.initializeSuggestionSubscription();
 
+    this.initializeFirebaseUser();
+    this.initializeFirebaseUserSubscription();
+
+    this.initializeParameters();
+    // this.initializeResolvedData();
+
+    this.initializeCardSubscription();
     this.initializeViceVersa();
 
     this.initializeMaterial();
@@ -183,12 +194,17 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.initializeSettings();
 
     this.clearFilters();
-    this.findEntities();
 
     this.route.params.subscribe(() => {
       this.id = this.route.snapshot.paramMap.get('id');
-      this.findEntities();
+      this.findEntities(this.id, this.user);
     });
+  }
+
+  /**
+   * Handles on-changes lifecycle phase
+   */
+  ngOnChanges() {
   }
 
   /**
@@ -223,7 +239,11 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
   private initializeResolvedData() {
     const resolved = this.route.snapshot.data['stack'];
     if (resolved != null) {
-      this.initializeStack(resolved as Stack);
+      const stack = resolved as Stack;
+      this.assembleTags(stack);
+
+      this.initializeStack(stack);
+      this.initializeTags(Array.from(this.tagsService.tags.values()));
     }
   }
 
@@ -235,9 +255,11 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
       takeUntil(this.unsubscribeSubject)
     ).subscribe((value) => {
       if (value != null) {
-        this.initializeStack(value as Stack);
+        const stack = value as Stack;
+        this.assembleTags(stack);
 
-        this.tagService.findTags();
+        this.initializeStack(stack);
+        this.initializeTags(Array.from(this.tagsService.tags.values()));
       }
     });
   }
@@ -269,7 +291,6 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
       this.initializeTitle(stack);
       this.initializeColors(stack);
       this.initializeBoxes(stack);
-      this.cardsService.initializeStack(stack);
       this.cardsService.initializeCards(stack.cards);
     }
   }
@@ -308,18 +329,19 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
   // Tags
 
   /**
-   * Initializes tag subscription
+   * Aggregates all tags a given stack contains
+   * @param stack stack
    */
-  private initializeTagSubscription() {
-    this.tagService.tagsSubject.pipe(
-      takeUntil(this.unsubscribeSubject)
-    ).subscribe((value) => {
-      // Create new instance to trigger change detection of child components
-      this.tagsMap = new Map(this.tagService.tags);
-
-      if (value != null) {
-        this.initializeTags(value as Tag[]);
-      }
+  private assembleTags(stack: Stack) {
+    this.tagsService.tags.clear();
+    stack.tags.filter(tag => {
+      return stack.cards.some(card => {
+        return card.tagIds.some(id => {
+          return id === tag.id;
+        });
+      });
+    }).forEach(tag => {
+      this.tagsService.tags.set(tag.id, tag);
     });
   }
 
@@ -376,6 +398,56 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
         this.searchOptions = (value as string[]).reverse();
       }
     });
+  }
+
+  /**
+   * Initializes existing user after navigation
+   */
+  private initializeFirebaseUser() {
+    const user = this.firebaseAuthenticationService.user;
+
+    if (user != null) {
+      this.handleUser(user);
+    }
+  }
+
+  /**
+   * Initialize firebase user subscription
+   */
+  private initializeFirebaseUserSubscription() {
+    this.firebaseAuthenticationService.userSubject.pipe(
+      takeUntil(this.unsubscribeSubject)
+    ).subscribe(user => {
+      this.handleUser(user);
+    });
+  }
+
+  /**
+   * Handles user by after he/she has been recognized
+   * @param user user
+   */
+  private handleUser(user: User) {
+    if (user != null) {
+      this.findEntities(this.id, user);
+    } else {
+      // Show goodbye message
+      this.snackbarService.showSnackbar(`Goodbye.`);
+
+      this.firebaseAuthenticationService.loginAnonymously();
+    }
+
+    this.user = user;
+  }
+
+  /**
+   * Finds entities by a given ID and a given user
+   * @param id ID
+   * @param user user
+   */
+  private findEntities(id: string, user: User) {
+    if (id != null && user != null) {
+      this.stacksPersistenceService.findStackByID(this.id, user);
+    }
   }
 
   /**
@@ -485,13 +557,6 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   /**
-   * Triggers entity retrieval from database
-   */
-  private findEntities() {
-    this.stacksPersistenceService.findStackByID(this.id);
-  }
-
-  /**
    * Initializes title
    * @param stack stack
    */
@@ -507,66 +572,85 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
    * Handles click on add card button
    */
   onAddCardClicked() {
-    this.onCardEvent({action: Action.OPEN_DIALOG_ADD, card: null});
+    this.onCardEvent({action: Action.OPEN_DIALOG_ADD, stack: this.stack, card: null});
   }
 
   /**
    * Handles events targeting a card
    * @param {any} event event parameters
    */
-  onCardEvent(event: { action: Action, card: Card, tags?: Tag[] }) {
+  onCardEvent(event: { action: Action, stack: Stack, card: Card, tags?: Tag[] }) {
+    const stack = CloneService.cloneStack(event.stack as Stack);
     const card = CloneService.cloneCard(event.card as Card);
     const tags = CloneService.cloneTags(event.tags as Tag[]);
 
     switch (event.action) {
       case Action.ADD: {
         // Create new entities if necessary
-        this.evaluateCardTags(card, tags);
+        this.evaluateCardTags(stack, card, tags);
 
-        // Create card itself
-        this.cardsService.createCard(card).then(() => {
-          this.snackbarService.showSnackbar('Added card');
-          this.cardsService.updateRelatedTags(card).then(() => {
-            this.snackbarService.showSnackbar('Updated tags');
-          });
-        });
+        // Add card
+        this.addCard(stack, card);
         break;
       }
       case Action.UPDATE: {
         // Create new entities if necessary
-        this.evaluateCardTags(card, tags);
+        this.evaluateCardTags(stack, card, tags);
 
-        // Update card itself
-        this.cardsService.updateCard(card).then(() => {
+        // Update card
+        this.updateCard(stack, card).then(() => {
           this.snackbarService.showSnackbar('Updated card');
-          this.cardsService.updateRelatedTags(card).then(() => {
-            this.snackbarService.showSnackbar('Updated tags');
-          });
+        }, () => {
+          this.snackbarService.showSnackbar('Failed to update card');
         });
         break;
       }
       case Action.PUT_TO_END: {
         this.cardsService.putCardToEnd(this.stack, card).then(() => {
-          this.snackbarService.showSnackbar('Put card to end');
+
+          // Update card
+          this.updateCard(stack, card).then(() => {
+            this.snackbarService.showSnackbar('Put card to end');
+          }, () => {
+            this.snackbarService.showSnackbar('Failed to put card to end');
+          });
         });
         break;
       }
       case Action.MOVE_TO_NEXT_BOX: {
         this.cardsService.moveCardToNextBox(this.stack, card).then(() => {
           this.initializeCardsAreInMultipleBoxes();
-          this.snackbarService.showSnackbar('Moved card to next box');
+
+          // Update card
+          this.updateCard(stack, card).then(() => {
+            this.snackbarService.showSnackbar('Moved card to next box');
+          }, () => {
+            this.snackbarService.showSnackbar('Failed to move card to next box');
+          });
         });
         break;
       }
       case Action.SET_FAVORITE: {
         this.cardsService.setFavorite(this.stack, card, true).then(() => {
-          this.snackbarService.showSnackbar('Set favorite');
+
+          // Update card
+          this.updateCard(stack, card).then(() => {
+            this.snackbarService.showSnackbar('Added card to favorites');
+          }, () => {
+            this.snackbarService.showSnackbar('Failed to add card to favorites');
+          });
         });
         break;
       }
       case Action.UNSET_FAVORITE: {
         this.cardsService.setFavorite(this.stack, card, false).then(() => {
-          this.snackbarService.showSnackbar('Unset favorite');
+
+          // Update card
+          this.updateCard(stack, card).then(() => {
+            this.snackbarService.showSnackbar('Removed card from favorites');
+          }, () => {
+            this.snackbarService.showSnackbar('Failed to remove card from favorites');
+          });
         });
         break;
       }
@@ -582,7 +666,10 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
         });
         confirmationDialogRef.afterClosed().subscribe(confirmationResult => {
           if (confirmationResult != null) {
-            this.cardsService.deleteCard(confirmationResult as Card).then(() => {
+            this.cardsService.deleteCard(stack, confirmationResult as Card).then(() => {
+              this.snackbarService.showSnackbar('Deleted card');
+            }, () => {
+              this.snackbarService.showSnackbar('Failed to deleted card');
             });
           }
         });
@@ -594,7 +681,7 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
           mode: DialogMode.ADD,
           dialogTitle: 'Add card',
           card: new Card(),
-          stack: this.stack,
+          stack: stack,
           tags: []
         };
 
@@ -608,11 +695,13 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
         dialogRef.afterClosed().subscribe(result => {
           if (result != null) {
             const resultingAction = result.action as Action;
+            const resultingStack = result.stack as Stack;
             const resultingCard = result.card as Card;
             const resultingTags = result.tags as Tag[];
 
             this.onCardEvent({
               action: resultingAction,
+              stack: resultingStack,
               card: resultingCard,
               tags: resultingTags
             });
@@ -628,7 +717,7 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
           card: card,
           stack: this.stack,
           tags: card.tagIds.map(id => {
-            return this.tagService.tags.get(id);
+            return this.tagsService.tags.get(id);
           }).filter(tag => {
             return tag != null;
           })
@@ -644,11 +733,13 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
         dialogRef.afterClosed().subscribe(result => {
           if (result != null) {
             const resultingAction = result.action as Action;
+            const resultingStack = result.stack as Stack;
             const resultingCard = result.card as Card;
             const resultingTags = result.tags as Tag[];
 
             this.onCardEvent({
               action: resultingAction,
+              stack: resultingStack,
               card: resultingCard,
               tags: resultingTags
             });
@@ -663,26 +754,27 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
    * Handles events targeting a tag
    * @param {any} event event parameters
    */
-  onTagEvent(event: { action: Action, tag?: Tag, tags?: Tag[] }) {
+  onTagEvent(event: { action: Action, stack?: Stack, tag?: Tag, tags?: Tag[] }) {
+    const stack = CloneService.cloneStack(event.stack as Stack);
     const tag = CloneService.cloneTag(event.tag as Tag);
     const tags = CloneService.cloneTags(event.tags as Tag[]);
 
     switch (event.action) {
       case Action.ADD: {
         this.filterService.updateTagsListIfNotEmpty([tag]);
-        this.tagService.createTag(tag).then(() => {
+        this.tagsService.createTag(stack, tag).then(() => {
         });
         break;
       }
       case Action.UPDATE: {
         this.filterService.updateTagsListIfNotEmpty([tag]);
-        this.tagService.updateTag(tag).then(() => {
+        this.tagsService.updateTag(stack, tag).then(() => {
         });
         break;
       }
       case Action.DELETE: {
-        const referencesStacks = Array.from(this.stacksPersistenceService.stacks.values()).some((stack: Stack) => {
-          return stack.tagIds != null && stack.tagIds.some(tagId => {
+        const referencesStacks = Array.from(this.stacksPersistenceService.stacks.values()).some((s: Stack) => {
+          return s.tagIds != null && s.tagIds.some(tagId => {
             return tagId === tag.id;
           });
         });
@@ -714,7 +806,7 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
           });
           confirmationDialogRef.afterClosed().subscribe(confirmationResult => {
             if (confirmationResult != null) {
-              this.tagService.deleteTag(confirmationResult as Tag).then(() => {
+              this.tagsService.deleteTag(stack, confirmationResult as Tag).then(() => {
               });
               this.filterService.tags.delete((confirmationResult as Tag).id);
             }
@@ -891,6 +983,46 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
   //
 
   /**
+   * Adds a card
+   * @param stack stack
+   * @param card card
+   */
+  private addCard(stack: Stack, card: Card) {
+    this.cardsService.createCard(stack, card).then(() => {
+      this.stacksPersistenceService.clearStacks();
+      this.stacksPersistenceService.updateStack(stack).then(() => {
+        this.snackbarService.showSnackbar('Added card');
+      }).catch(err => {
+        console.error(err);
+      });
+    }).catch(err => {
+      console.error(err);
+    });
+  }
+
+  /**
+   * Updates a card
+   * @param stack stack
+   * @param card card
+   */
+  private updateCard(stack: Stack, card: Card): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.cardsService.updateCard(stack, card).then(() => {
+        this.stacksPersistenceService.clearStacks();
+        this.stacksPersistenceService.updateStack(stack).then(() => {
+          resolve();
+        }).catch(err => {
+          console.error(err);
+          reject();
+        });
+      }).catch(err => {
+        console.error(err);
+        reject();
+      });
+    });
+  }
+
+  /**
    * Returns cards of the box with a given index
    * @param index box index
    */
@@ -902,20 +1034,21 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   /**
    * Determines whether the tags assigned to a given card already exist, otherwise creates new ones
-   * @param {card} card task assign tags to
-   * @param {Tag[]} tags array of tags to be checked
+   * @param stack stack to save tag in
+   * @param card card to assign tags to
+   * @param tags array of tags to be checked
    */
-  private evaluateCardTags(card: Card, tags: Tag[]) {
+  private evaluateCardTags(stack: Stack, card: Card, tags: Tag[]) {
     if (tags != null) {
       const aggregatedTagIds = new Map<string, string>();
 
       // New tag
       tags.forEach(t => {
-        let tag = this.tagService.getTagByName(t.name);
+        let tag = this.tagsService.getTagByName(t.name);
 
         if (tag == null) {
           tag = new Tag(t.name, true);
-          this.tagService.createTag(tag).then(() => {
+          this.tagsService.createTag(stack, tag).then(() => {
           });
         }
 
@@ -936,8 +1069,12 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
   private moveAllCardsToFirstBox(): Promise<any> {
     return new Promise((resolve) => {
       this.cardsService.moveAllCardsToFirstBox(this.stack).then((() => {
-        this.initializeBoxes(this.stack);
-        resolve();
+        this.stacksPersistenceService.updateStack(this.stack).then(() => {
+          this.initializeBoxes(this.stack);
+          this.snackbarService.showSnackbar('Moved all cards to first box');
+        }).catch(err => {
+          this.snackbarService.showSnackbar('Failed to move all cards to first box');
+        });
       }));
     });
   }
@@ -948,8 +1085,12 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
   private shuffleCards(): Promise<any> {
     return new Promise((resolve) => {
       this.cardsService.shuffleStack(this.stack).then((() => {
-        this.initializeBoxes(this.stack);
-        resolve();
+        this.stacksPersistenceService.updateStack(this.stack).then(() => {
+          this.initializeBoxes(this.stack);
+          this.snackbarService.showSnackbar('Shuffled cards');
+        }).catch(err => {
+          this.snackbarService.showSnackbar('Failed to shuffle cards');
+        });
       }));
     });
   }

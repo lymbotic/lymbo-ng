@@ -1,7 +1,7 @@
 import {Stack} from '../../../../core/entity/model/stack/stack.model';
 import {SnackbarService} from '../../../../core/ui/services/snackbar.service';
 import {environment} from '../../../../../environments/environment';
-import {AfterViewInit, Component, EventEmitter, Inject, NgZone, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, EventEmitter, Inject, NgZone, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {Subject} from 'rxjs';
 import {MatDialog, MatDialogConfig, MatIconRegistry, MatSidenav} from '@angular/material';
 import {Media} from '../../../../core/ui/model/media.enum';
@@ -18,11 +18,9 @@ import {SettingsService} from '../../../../core/settings/services/settings.servi
 import {SettingType} from '../../../../core/settings/model/setting-type.enum';
 import {Router} from '@angular/router';
 import {StacksService} from '../../../../core/entity/services/stack/stacks.service';
-import {Tag} from '../../../../core/entity/model/tag.model';
 import {CloneService} from '../../../../core/entity/services/clone.service';
 import {Action} from '../../../../core/entity/model/action.enum';
 import {ConfirmationDialogComponent} from '../../../../ui/confirmation-dialog/confirmation-dialog/confirmation-dialog.component';
-import {TagService} from '../../../../core/entity/services/tag.service';
 import {DialogMode} from '../../../../core/entity/model/dialog-mode.enum';
 import {StackDialogComponent} from '../../components/dialogs/stack-dialog/stack-dialog.component';
 import {AboutDialogComponent} from '../../../../ui/about-dialog/about-dialog/about-dialog.component';
@@ -45,6 +43,8 @@ import {FirebaseCloudFirestoreService} from '../../../../core/firebase/services/
 import {UUID} from '../../../../core/entity/model/uuid';
 import {StacksPersistenceService} from '../../../../core/entity/services/stack/persistence/stacks-persistence.interface';
 import {STACK_PERSISTENCE} from '../../../../core/entity/entity.module';
+import {Tag} from '../../../../core/entity/model/tag/tag.model';
+import {TagsService} from '../../../../core/entity/services/tag/tags.service';
 // @ts-ignore
 import Vibrant = require('node-vibrant');
 
@@ -61,16 +61,13 @@ import Vibrant = require('node-vibrant');
     Animations.dateIndicatorAnimation,
   ]
 })
-export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
+export class StacksComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
 
   /** App title */
-  title = environment.APP_NAME;
+  public title = environment.APP_NAME;
 
   /** Array of cards */
-  stacks: Stack[] = [];
-
-  /** Map of tags */
-  public tagsMap = new Map<string, Tag>();
+  public stacks: Stack[] = [];
   /** Array of tags */
   public tags: Tag[] = [];
 
@@ -147,7 +144,7 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
    * @param stacksPersistenceService stacks persistence service
    * @param snackbarService snackbar service
    * @param suggestionService suggestion service
-   * @param tagService tag service
+   * @param tagsService tags service
    * @param dialog dialog
    * @param zone zone
    */
@@ -170,7 +167,7 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
               @Inject(STACK_PERSISTENCE) private stacksPersistenceService: StacksPersistenceService,
               private snackbarService: SnackbarService,
               private suggestionService: SuggestionService,
-              private tagService: TagService,
+              private tagsService: TagsService,
               public dialog: MatDialog,
               public zone: NgZone) {
   }
@@ -179,20 +176,15 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
   // Lifecycle hooks
   //
 
-
   /**
    * Handles on-init lifecycle phase
    */
   ngOnInit() {
-    this.tagsMap = new Map(this.tagService.tags);
-
-    this.initializeStacks(Array.from(this.stacksPersistenceService.stacks.values()));
     this.initializeStackSubscription();
-
     this.initializeFilterSubscription();
-    this.initializeTagSubscription();
     this.initializeSuggestionSubscription();
 
+    this.initializeFirebaseUser();
     this.initializeFirebaseUserSubscription();
 
     this.initializeMaterial();
@@ -201,6 +193,12 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
     this.initializeSettings();
 
     this.clearFilters();
+  }
+
+  /**
+   * Handles on-changes lifecycle phase
+   */
+  ngOnChanges() {
   }
 
   /**
@@ -228,16 +226,15 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
    * Initializes stack subscription
    */
   private initializeStackSubscription() {
-    console.log(`initializeStackSubscription`);
-
     this.stacksPersistenceService.stacksSubject.pipe(
       takeUntil(this.unsubscribeSubject)
     ).subscribe((value) => {
-      console.log(JSON.stringify(value));
       if (value != null) {
-        this.initializeStacks(value as Stack[]);
+        const stacks = value as Stack[];
+        this.assembleTags(stacks);
 
-        this.tagService.findTags();
+        this.initializeStacks(stacks);
+        this.initializeTags(Array.from(this.tagsService.tags.values()));
       }
     });
   }
@@ -247,8 +244,6 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
    * @param stacks cards
    */
   private initializeStacks(stacks: Stack[]) {
-    console.log(`initializeStacks ${stacks.length}`);
-
     this.stacks = stacks.filter(stack => {
       return this.filterStack(stack);
     });
@@ -268,18 +263,19 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
   // Tags
 
   /**
-   * Initializes tag subscription
+   * Aggregates all tags a list of given stacks contain
+   * @param stacks stacks
    */
-  private initializeTagSubscription() {
-    this.tagService.tagsSubject.pipe(
-      takeUntil(this.unsubscribeSubject)
-    ).subscribe((value) => {
-      // Create new instance to trigger change detection of child components
-      this.tagsMap = new Map(this.tagService.tags);
-
-      if (value != null) {
-        this.initializeTags(value as Tag[]);
-      }
+  private assembleTags(stacks: Stack[]) {
+    this.tagsService.tags.clear();
+    stacks.forEach(stack => {
+      stack.tags.filter(tag => {
+        return stack.tagIds.some(id => {
+          return id === tag.id;
+        });
+      }).forEach(tag => {
+        this.tagsService.tags.set(tag.id, tag);
+      });
     });
   }
 
@@ -353,6 +349,17 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   /**
+   * Initializes existing user after navigation
+   */
+  private initializeFirebaseUser() {
+    const user = this.firebaseAuthenticationService.user;
+
+    if (user != null) {
+      this.handleUser(user);
+    }
+  }
+
+  /**
    * Initializes suggestion subscription
    */
   private initializeSuggestionSubscription() {
@@ -370,51 +377,61 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
    * Initialize firebase user subscription
    */
   private initializeFirebaseUserSubscription() {
-    this.firebaseAuthenticationService.userSubject.subscribe(user => {
-
-      if (user != null) {
-        const previousStacks = CloneService.cloneStacks(this.stacks);
-
-        if (user.isAnonymous) {
-
-          // Clear stacks
-          this.stacksPersistenceService.clearStacks();
-
-          // Find users entities
-          this.stacksPersistenceService.findStacks(user);
-        } else {
-          // Show welcome message
-          this.snackbarService.showSnackbar(`Welcome back ${user.displayName}!`);
-
-          // Clear stacks
-          this.stacksPersistenceService.clearStacks();
-
-          // Find users entities
-          this.stacksPersistenceService.findStacks(user);
-
-          // Take stacks from anonymous user
-          this.stacksPersistenceService.clearStacks();
-          this.stacksPersistenceService.createStacks(previousStacks.map(stack => {
-            stack.id = new UUID().toString();
-            stack.owner = user.uid;
-            return stack;
-          }));
-
-          // Delete stacks of anonymous user
-          // this.stacksService.deleteStacks(previousStacks);
-
-          // Delete anonymous user
-          // this.firebaseAuthenticationService.deleteUser(this.user);
-        }
-      } else {
-        // Show goodbye message
-        this.snackbarService.showSnackbar(`Goodbye.`);
-
-        this.firebaseAuthenticationService.loginAnonymously();
-      }
-
-      this.user = user;
+    this.firebaseAuthenticationService.userSubject.pipe(
+      takeUntil(this.unsubscribeSubject)
+    ).subscribe(user => {
+      this.handleUser(user);
     });
+  }
+
+  /**
+   * Handles user by after he/she has been recognized
+   * @param user user
+   */
+  private handleUser(user: User) {
+    if (user != null) {
+      const previousStacks = CloneService.cloneStacks(this.stacks);
+
+      if (user.isAnonymous) {
+
+        // Clear stacks
+        this.stacksPersistenceService.clearStacks();
+
+        // Find users entities
+        this.stacksPersistenceService.findStacks(user);
+      } else {
+        // Show welcome message
+        this.snackbarService.showSnackbar(`Welcome back ${user.displayName}!`);
+
+        // Clear stacks
+        this.stacksPersistenceService.clearStacks();
+
+        // Find users entities
+        this.stacksPersistenceService.findStacks(user);
+
+        // Take stacks from anonymous user
+        this.stacksPersistenceService.clearStacks();
+        this.stacksPersistenceService.createStacks(previousStacks.map(stack => {
+          stack.id = new UUID().toString();
+          stack.owner = user.uid;
+          return stack;
+        })).then(() => {
+        });
+
+        // Delete stacks of anonymous user
+        // this.stacksService.deleteStacks(previousStacks);
+
+        // Delete anonymous user
+        // this.firebaseAuthenticationService.deleteUser(this.user);
+      }
+    } else {
+      // Show goodbye message
+      this.snackbarService.showSnackbar(`Goodbye.`);
+
+      this.firebaseAuthenticationService.loginAnonymously();
+    }
+
+    this.user = user;
   }
 
   /**
@@ -486,7 +503,8 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
    * Clears all filters
    */
   private clearFilters() {
-    this.filterService.clearAllFilters();
+    this.filterService.clearAllFilters().then(() => {
+    });
   }
 
   //
@@ -528,7 +546,7 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
 
             // Add stack
             this.addStack(stack);
-          }, reject => {
+          }, () => {
 
             // Add stack
             this.addStack(stack);
@@ -537,7 +555,10 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
         }, () => {
           // Add stack
           this.addStack(stack);
+        }).catch(err => {
+          console.error(err);
         });
+
         break;
       }
       case Action.UPDATE: {
@@ -556,7 +577,7 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
 
             // Update stack
             this.updateStack(stack);
-          }, reject => {
+          }, () => {
 
             // Update stack
             this.updateStack(stack);
@@ -628,7 +649,7 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
           stack: stack,
           stacks: this.stacks,
           tags: stack.tagIds.map(id => {
-            return this.tagService.tags.get(id);
+            return this.tagsService.tags.get(id);
           }).filter(tag => {
             return tag != null;
           })
@@ -657,7 +678,8 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
         break;
       }
       case Action.GO_INTO: {
-        this.router.navigate([`/cards/${stack.id}`]);
+        this.router.navigate([`/cards/${stack.id}`]).then(() => {
+        });
         break;
       }
     }
@@ -667,26 +689,27 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
    * Handles events targeting a tag
    * @param {any} event event parameters
    */
-  onTagEvent(event: { action: Action, tag?: Tag, tags?: Tag[] }) {
+  onTagEvent(event: { action: Action, stack?: Stack, tag?: Tag, tags?: Tag[] }) {
+    const stack = CloneService.cloneStack(event.stack as Stack);
     const tag = CloneService.cloneTag(event.tag as Tag);
     const tags = CloneService.cloneTags(event.tags as Tag[]);
 
     switch (event.action) {
       case Action.ADD: {
         this.filterService.updateTagsListIfNotEmpty([tag]);
-        this.tagService.createTag(tag).then(() => {
+        this.tagsService.createTag(stack, tag).then(() => {
         });
         break;
       }
       case Action.UPDATE: {
         this.filterService.updateTagsListIfNotEmpty([tag]);
-        this.tagService.updateTag(tag).then(() => {
+        this.tagsService.updateTag(stack, tag).then(() => {
         });
         break;
       }
       case Action.DELETE: {
-        const referencesStacks = Array.from(this.stacksPersistenceService.stacks.values()).some((stack: Stack) => {
-          return stack.tagIds != null && stack.tagIds.some(tagId => {
+        const referencesStacks = Array.from(this.stacksPersistenceService.stacks.values()).some((s: Stack) => {
+          return s.tagIds != null && s.tagIds.some(tagId => {
             return tagId === tag.id;
           });
         });
@@ -718,7 +741,7 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
           });
           confirmationDialogRef.afterClosed().subscribe(confirmationResult => {
             if (confirmationResult != null) {
-              this.tagService.deleteTag(confirmationResult as Tag).then(() => {
+              this.tagsService.deleteTag(stack, confirmationResult as Tag).then(() => {
               });
               this.filterService.tags.delete((confirmationResult as Tag).id);
             }
@@ -817,7 +840,8 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
         break;
       }
       case 'clear-filters': {
-        this.filterService.clearAllFilters();
+        this.filterService.clearAllFilters().then(() => {
+        });
         this.snackbarService.showSnackbar('Filters cleared');
         break;
       }
@@ -831,7 +855,8 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
         break;
       }
       case 'settings': {
-        this.router.navigate(['/settings']);
+        this.router.navigate(['/settings']).then(() => {
+        });
         break;
       }
       case 'android-release': {
@@ -885,6 +910,8 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
     this.stacksPersistenceService.clearStacks();
     this.stacksPersistenceService.createStack(stack).then(() => {
       this.snackbarService.showSnackbar('Added stack');
+    }).catch(err => {
+      console.error(err);
     });
   }
 
@@ -896,6 +923,8 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
     this.stacksPersistenceService.clearStacks();
     this.stacksPersistenceService.updateStack(stack).then(() => {
       this.snackbarService.showSnackbar('Updated stack');
+    }).catch(err => {
+      console.error(err);
     });
   }
 
@@ -910,11 +939,11 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
 
       // New tag
       tags.forEach(t => {
-        let tag = this.tagService.getTagByName(t.name);
+        let tag = this.tagsService.getTagByName(t.name);
 
         if (tag == null) {
           tag = new Tag(t.name, true);
-          this.tagService.createTag(tag).then(() => {
+          this.tagsService.createTag(stack, tag).then(() => {
           });
         }
 
@@ -986,6 +1015,7 @@ export class StacksComponent implements OnInit, AfterViewInit, OnDestroy {
       if (imageUrl != null) {
         Vibrant.from(imageUrl).getPalette((err, result) => {
           resolve(StacksComponent.convertToVibrantPalette(result));
+        }).then(() => {
         });
       } else {
         reject();

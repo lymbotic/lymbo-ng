@@ -1,9 +1,9 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output, ViewChild} from '@angular/core';
-import {Tag} from 'app/core/entity/model/tag.model';
-import {Action} from 'app/core/entity/model/action.enum';
 import {Media} from '../../../../../core/ui/model/media.enum';
 import {MatMenuTrigger} from '@angular/material';
 import {Animations, AnimationState} from './tag-list-item.animation';
+import {Tag} from '../../../../../core/entity/model/tag/tag.model';
+import {Action} from '../../../../../core/entity/model/action.enum';
 
 /**
  * Displays tag list item

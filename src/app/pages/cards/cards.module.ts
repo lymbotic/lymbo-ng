@@ -4,7 +4,7 @@ import {CardsToolbarComponent} from './components/toolbars/cards-toolbar/cards-t
 import {StackResolver} from './resolvers/stack.resolver';
 import {CardDialogComponent} from './components/dialogs/card-dialog/card-dialog.component';
 import {TagDialogComponent} from './components/dialogs/tag-dialog/tag-dialog.component';
-import {CardFragmentComponent} from './components/card/card-fragment/card-fragment.component';
+import {CardFragmentComponent} from './components/fragments/card-fragment/card-fragment.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MaterialModule} from '../../ui/material/material.module';
 import {CardsRoutingModule} from './cards-routing.module';
@@ -33,6 +33,7 @@ import {MarkdownFragmentModule} from '../../ui/markdown-fragment/markdown-fragme
 import {InformationFragmentComponent} from './components/fragments/language/information-fragment/information-fragment.component';
 import {MultipleChoiceFragmentComponent} from './components/fragments/quiz/multiple-choice-fragment/multiple-choice-fragment.component';
 import {TensesFormComponent} from './components/fragments/language/tenses-form/tenses-form.component';
+import {UserPopoverComponent} from './components/popovers/user-popover/user-popover.component';
 
 @NgModule({
   imports: [
@@ -101,6 +102,8 @@ import {TensesFormComponent} from './components/fragments/language/tenses-form/t
     QuizFormComponent,
 
     MultipleChoiceFragmentComponent,
+
+    UserPopoverComponent
   ], entryComponents: [
     // Pages
     CardsComponent,

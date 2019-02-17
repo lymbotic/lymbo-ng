@@ -3,13 +3,13 @@ import {Subject} from 'rxjs/Subject';
 import {StacksPersistenceService} from './stacks-persistence.interface';
 import {Stack} from '../../../model/stack/stack.model';
 import {PouchDBService} from '../../../../persistence/services/pouchdb.service';
-import {TagService} from '../../tag.service';
 import {EntityType} from '../../../model/entity-type.enum';
+import {TagsService} from '../../tag/tags.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class StacksPouchDbService implements StacksPersistenceService {
+export class StacksPouchdbService implements StacksPersistenceService {
 
   /** Map of all stacks */
   stacks = new Map<String, Stack>();
@@ -22,7 +22,7 @@ export class StacksPouchDbService implements StacksPersistenceService {
   stackSubject = new Subject<Stack>();
 
   constructor(private pouchDBService: PouchDBService,
-              private tagService: TagService) {
+              private tagsService: TagsService) {
     this.initializeStackSubscription();
   }
 
@@ -97,16 +97,15 @@ export class StacksPouchDbService implements StacksPersistenceService {
       }
 
       // Update related objects
-      this.updateRelatedTags(stack.tagIds);
-
+      this.updateRelatedTags(stack, stack.tagIds);
 
       // Update related objects
-      this.updateRelatedTags(stack.tagIds);
+      this.updateRelatedTags(stack, stack.tagIds);
 
       // Create stack
       return this.pouchDBService.upsert(stack.id, stack).then(() => {
         this.stacks.set(stack.id, stack);
-        this.notify();
+        this.notifyMultipleStacks();
         resolve();
       });
     });
@@ -135,14 +134,15 @@ export class StacksPouchDbService implements StacksPersistenceService {
       }
 
       // Update related objects
-      this.updateRelatedTags(stack.tagIds);
+      this.updateRelatedTags(stack, stack.tagIds);
 
       stack.modificationDate = new Date();
 
       // Update stack
       return this.pouchDBService.upsert(stack.id, stack).then(() => {
         this.stacks.set(stack.id, stack);
-        this.notify();
+        this.notifyMultipleStacks();
+        this.notifySingleStack();
         resolve();
       });
     });
@@ -164,7 +164,7 @@ export class StacksPouchDbService implements StacksPersistenceService {
 
       return this.pouchDBService.remove(stack.id, stack).then(() => {
         this.stacks.delete(stack.id);
-        this.notify();
+        this.notifyMultipleStacks();
         resolve();
       });
     });
@@ -203,11 +203,27 @@ export class StacksPouchDbService implements StacksPersistenceService {
   /**
    * Informs subscribers that something has changed
    */
-  public notify() {
+  public notifyMultipleStacks() {
     this.stackSubject.next(this.stack);
     this.stacksSubject.next(Array.from(this.stacks.values()).sort((t1, t2) => {
       return new Date(t2.modificationDate).getTime() - new Date(t1.modificationDate).getTime();
     }));
+  }
+
+  /**
+   * Informs subscribers that something has changed
+   */
+  public notifyMultipleStacks() {
+    this.stacksSubject.next(Array.from(this.stacks.values()).sort((t1, t2) => {
+      return new Date(t2.modificationDate).getTime() - new Date(t1.modificationDate).getTime();
+    }));
+  }
+
+  /**
+   * Informs subscribers that something has changed
+   */
+  public notifySingleStack() {
+    this.stackSubject.next(this.stack);
   }
 
   //
@@ -216,13 +232,13 @@ export class StacksPouchDbService implements StacksPersistenceService {
 
   /**
    * Updates related tags
+   * @param stack stack
    * @param tagIds tag IDs
    */
-  private updateRelatedTags(tagIds: string[]) {
+  private updateRelatedTags(stack: Stack, tagIds: string[]) {
     tagIds.forEach(id => {
-      const tag = this.tagService.getTagById(id);
-      this.tagService.updateTag(tag, false).then(() => {
-      });
+      const tag = this.tagsService.getTagById(id);
+      this.tagsService.updateTag(stack, tag);
     });
   }
 
@@ -237,7 +253,7 @@ export class StacksPouchDbService implements StacksPersistenceService {
           const stack = element as Stack;
           this.stacks.set(stack.id, stack);
         });
-        this.notify();
+        this.notifyMultipleStacks();
       }, error => {
         if (isDevMode()) {
           console.error(error);
@@ -256,7 +272,7 @@ export class StacksPouchDbService implements StacksPersistenceService {
         result['docs'].forEach(element => {
           this.stack = element as Stack;
         });
-        this.notify();
+        this.notifySingleStack();
       }, error => {
         if (isDevMode()) {
           console.error(error);

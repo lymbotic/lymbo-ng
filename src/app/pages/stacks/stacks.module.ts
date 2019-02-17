@@ -3,7 +3,7 @@ import {CommonModule} from '@angular/common';
 import {StacksComponent} from './pages/stacks/stacks.component';
 import {StacksToolbarComponent} from './components/toolbars/stacks-toolbar/stacks-toolbar.component';
 import {StackDialogComponent} from './components/dialogs/stack-dialog/stack-dialog.component';
-import {StackFragmentComponent} from './components/stack/stack-fragment/stack-fragment.component';
+import {StackFragmentComponent} from './components/fragments/stack-fragment/stack-fragment.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MaterialModule} from '../../ui/material/material.module';
 import {AboutDialogModule} from '../../ui/about-dialog/about-dialog.module';

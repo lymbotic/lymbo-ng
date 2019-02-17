@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
-import {Tag} from '../model/tag.model';
-import {TagService} from './tag.service';
+import {Tag} from '../model/tag/tag.model';
+import {TagsService} from './tag/tags.service';
 import {StacksService} from './stack/stacks.service';
 import {CardsService} from './card/cards.service';
 import {Stack} from '../model/stack/stack.model';
@@ -148,13 +148,13 @@ export class MatchService {
 
   /**
    * Constructor
-   * @param {StacksService} stacksService
-   * @param {CardsService} cardsService
-   * @param {TagService} tagService
+   * @param stacksService stacks service
+   * @param cardsService cards service
+   * @param tagsService tags service
    */
   constructor(private stacksService: StacksService,
               private cardsService: CardsService,
-              private tagService: TagService) {
+              private tagsService: TagsService) {
   }
 
   //
@@ -169,7 +169,7 @@ export class MatchService {
    */
   public stackMatchesTags(stack: Stack, tags: Tag[]): boolean {
     return tags.length === 0 || (stack.tagIds != null && stack.tagIds.map(id => {
-      return this.tagService.getTagById(id);
+      return this.tagsService.getTagById(id);
     }).filter(tag => {
       return tag != null;
     }).some(tag => {
@@ -185,7 +185,7 @@ export class MatchService {
    */
   public cardMatchesTags(card: Card, tags: Tag[]): boolean {
     return tags.length === 0 || (card.tagIds != null && card.tagIds.map(id => {
-      return this.tagService.getTagById(id);
+      return this.tagsService.getTagById(id);
     }).filter(tag => {
       return tag != null;
     }).some(tag => {
@@ -221,7 +221,7 @@ export class MatchService {
       return MatchService.stackTitleMatchesSingleItem(stack, item)
         || (stack.cards != null && this.cardsMatchesSingleItem(stack.cards, item))
         || (stack.tagIds != null && this.tagsMatchesSingleItem(stack.tagIds.map(id => {
-          return this.tagService.getTagById(id);
+          return this.tagsService.getTagById(id);
         }).filter(tag => {
           return tag != null;
         }), item));
@@ -238,7 +238,7 @@ export class MatchService {
     return items == null || items.trim() === '' || MatchService.splitSearchItems(items).every(item => {
       return (card != null && MatchService.cardMatchesSingleItem(card, item))
         || (card.tagIds != null && this.tagsMatchesSingleItem(card.tagIds.map(id => {
-          return this.tagService.getTagById(id);
+          return this.tagsService.getTagById(id);
         }).filter(tag => {
           return tag != null;
         }), item));

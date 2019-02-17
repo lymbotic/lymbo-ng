@@ -1,8 +1,8 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, isDevMode, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {MatDialog} from '@angular/material';
 import {SnackbarService} from '../../../../../core/ui/services/snackbar.service';
 import {CardsService} from '../../../../../core/entity/services/card/cards.service';
-import {Tag} from '../../../../../core/entity/model/tag.model';
+import {Tag} from '../../../../../core/entity/model/tag/tag.model';
 import {Action} from '../../../../../core/entity/model/action.enum';
 import {Card} from '../../../../../core/entity/model/card/card.model';
 import {Aspect} from '../../../../../core/entity/model/card/aspect.interface';
@@ -21,6 +21,7 @@ import {MaterialColorService} from '../../../../../core/ui/services/material-col
 import {Media} from '../../../../../core/ui/model/media.enum';
 import {InformationAspect} from '../../../../../core/entity/model/card/information/information-aspect.model';
 import {CardType} from '../../../../../core/entity/model/card/card-type.enum';
+import {Stack} from '../../../../../core/entity/model/stack/stack.model';
 
 /**
  * Displays a card
@@ -33,10 +34,12 @@ import {CardType} from '../../../../../core/entity/model/card/card-type.enum';
 })
 export class CardFragmentComponent implements OnInit, OnChanges {
 
+  /** Stack the card is contained in */
+  @Input() stack = new Stack();
   /** Card to be displayed */
   @Input() card = new Card();
-  /** Map of tags */
-  @Input() tags = new Map<string, Tag>();
+  /** Array of tags */
+  @Input() tags: Tag[] = [];
   /** Whether all cards are flipped */
   @Input() viceVersa = false;
   /** Image palette to be used */
@@ -48,6 +51,9 @@ export class CardFragmentComponent implements OnInit, OnChanges {
 
   /** Event emitter indicating click on card */
   @Output() cardEventEmitter = new EventEmitter<{ action: Action, card: Card }>();
+
+  /** Map of tags */
+  tagsMap = new Map<string, Tag>();
 
   /** Enum for media types */
   mediaType = Media;
@@ -79,6 +85,9 @@ export class CardFragmentComponent implements OnInit, OnChanges {
   /** Favorite color */
   favoriteColor = 'black';
 
+  /** Dev mode */
+  devMode = false;
+
   /**
    * Constructor
    * @param cardsService card service
@@ -90,6 +99,7 @@ export class CardFragmentComponent implements OnInit, OnChanges {
               private materialColorService: MaterialColorService,
               private snackbarService: SnackbarService,
               public dialog: MatDialog) {
+    this.devMode = isDevMode();
   }
 
   //
@@ -101,6 +111,8 @@ export class CardFragmentComponent implements OnInit, OnChanges {
    */
   ngOnInit() {
     this.initializeColors();
+    this.initializeTagsMap();
+
     if (this.card.aspects != null && this.card.aspects.length > 0) {
       this.activeAspect = this.card.aspects[0];
       this.update();
@@ -115,6 +127,19 @@ export class CardFragmentComponent implements OnInit, OnChanges {
       this.activeAspect = this.card.aspects[0];
       this.update();
     }
+  }
+
+  //
+  // Initialization
+  //
+
+  /**
+   * Initializes tags map
+   */
+  private initializeTagsMap() {
+    this.tags.forEach(tag => {
+      this.tagsMap.set(tag.id, tag);
+    });
   }
 
   /**
@@ -143,7 +168,7 @@ export class CardFragmentComponent implements OnInit, OnChanges {
         break;
       }
       default: {
-        this.cardEventEmitter.emit({action: action, card: this.card});
+        this.cardEventEmitter.emit({action: action, stack: this.stack, card: this.card});
       }
     }
   }

@@ -10,7 +10,6 @@ export enum Action {
   DELETE,
 
   GO_INTO,
-  PUT_ASIDE,
   PUT_TO_END,
   MOVE_TO_NEXT_BOX,
 

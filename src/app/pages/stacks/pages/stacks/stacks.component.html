@@ -27,7 +27,7 @@
 
   <mat-sidenav-content cdkScrollable>
     <div class="card-main-content">
-      <app-stack-fragment *ngFor="let s of stacks" [stack]="s" [tags]="tagsMap"
+      <app-stack-fragment *ngFor="let s of stacks" [stack]="s" [tags]="tags"
                           (stackEventEmitter)="onStackEvent($event)">
       </app-stack-fragment>
     </div>

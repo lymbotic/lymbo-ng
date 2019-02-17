@@ -1,5 +1,5 @@
 import {Pipe, PipeTransform} from '@angular/core';
-import {Tag} from '../../../core/entity/model/tag.model';
+import {Tag} from '../../../core/entity/model/tag/tag.model';
 
 /**
  * Transforms a list of tags into a list of their names

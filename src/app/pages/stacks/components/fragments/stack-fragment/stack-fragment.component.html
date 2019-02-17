@@ -1,6 +1,7 @@
 <div [class]="themeClass">
   <mat-card>
-    <div *ngIf="devMode" class="debug">{{ stack.id }}</div>
+    <div *ngIf="devMode" class="debug">id {{ stack.id.slice(0, 19) }}...</div>
+    <div *ngIf="devMode" class="debug">owner {{ stack.owner.slice(0, 19) }}...</div>
 
     <img *ngIf="stack.imageUrl !== ''" mat-card-image [attr.src]="stack.imageUrl" (click)="onStackClicked()">
     <mat-menu #menu="matMenu">
@@ -41,8 +42,8 @@
             <label class="language-label">{{ stack.sourceLanguage }} > {{ stack.targetLanguage }}</label>
           </span>
           <span *ngFor="let t of stack.tagIds">
-            <span class="tag" *ngIf="tags.get(t) != null">
-              <label class="tag-label">{{ tags.get(t).name }}</label>
+            <span class="tag" *ngIf="tagsMap.get(t) != null">
+              <label class="tag-label">{{ tagsMap.get(t).name }}</label>
             </span>
           </span>
         </div>

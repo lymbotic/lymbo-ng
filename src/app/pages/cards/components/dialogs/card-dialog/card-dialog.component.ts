@@ -1,7 +1,6 @@
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import {DialogMode} from '../../../../../core/entity/model/dialog-mode.enum';
-import {Tag} from '../../../../../core/entity/model/tag.model';
 import {CloneService} from '../../../../../core/entity/services/clone.service';
 import {SuggestionService} from '../../../../../core/entity/services/suggestion.service';
 import {DisplayAspect} from '../../../../../core/entity/services/card/card-display.service';
@@ -16,6 +15,7 @@ import {Media} from '../../../../../core/ui/model/media.enum';
 import {MediaService} from '../../../../../core/ui/services/media.service';
 import {takeUntil} from 'rxjs/operators';
 import {Subject} from 'rxjs';
+import {Tag} from '../../../../../core/entity/model/tag/tag.model';
 
 /**
  * Displays card dialog
@@ -232,6 +232,7 @@ export class CardDialogComponent implements OnInit, OnDestroy {
 
     this.dialogRef.close({
       action: Action.ADD,
+      stack: this.stack,
       card: this.card,
       tags: this.tags
     });
@@ -246,6 +247,7 @@ export class CardDialogComponent implements OnInit, OnDestroy {
 
     this.dialogRef.close({
       action: Action.UPDATE,
+      stack: this.stack,
       card: this.card,
       tags: this.tags
     });
@@ -256,7 +258,11 @@ export class CardDialogComponent implements OnInit, OnDestroy {
    */
   deleteCard() {
     this.mode = DialogMode.DELETE;
-    this.dialogRef.close({action: Action.DELETE, card: this.card});
+    this.dialogRef.close({
+      action: Action.DELETE,
+      stack: this.stack,
+      card: this.card
+    });
   }
 
   /**

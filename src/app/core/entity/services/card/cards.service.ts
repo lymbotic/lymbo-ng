@@ -1,15 +1,13 @@
 import {Injectable} from '@angular/core';
 import {Subject} from 'rxjs/Subject';
 import {Stack} from '../../model/stack/stack.model';
-import {PouchDBService} from '../../../persistence/services/pouchdb.service';
-import {StacksService} from '../stack/stacks.service';
-import {TagService} from '../tag.service';
 import {CardDisplayService, DisplayAspect} from './card-display.service';
 import {CardTypeService} from './card-type.service';
 import {Card} from '../../model/card/card.model';
 import {CardTypeGroup} from '../../model/card/card-type-group.enum';
 import {CardType} from '../../model/card/card-type.enum';
-import {Tag} from '../../model/tag.model';
+import {Tag} from '../../model/tag/tag.model';
+import {TagsService} from '../tag/tags.service';
 
 /**
  * Handles cards
@@ -18,9 +16,6 @@ import {Tag} from '../../model/tag.model';
   providedIn: 'root'
 })
 export class CardsService {
-
-  /** Stack in focus */
-  stack: Stack;
 
   /** Map of all cards */
   cards = new Map<String, Card>();
@@ -135,27 +130,15 @@ export class CardsService {
   /**
    * Constructor
    * @param cardTypeService card type service
-   * @param pouchDBService pouchDB service
-   * @param stackService stack service
-   * @param tagService tag service
+   * @param tagsService tag service
    */
   constructor(private cardTypeService: CardTypeService,
-              private pouchDBService: PouchDBService,
-              private stackService: StacksService,
-              private tagService: TagService) {
+              private tagsService: TagsService) {
   }
 
   //
   // Initialization
   //
-
-  /**
-   * Initializes stack
-   * @param stack stack
-   */
-  public initializeStack(stack: Stack) {
-    this.stack = stack;
-  }
 
   /**
    * Initializes cards
@@ -182,23 +165,11 @@ export class CardsService {
   //
 
   /**
-   * Updates existing stack
-   * @param stack stack
-   */
-  public updateStack(stack): Promise<any> {
-    return new Promise((resolve) => {
-      this.updateRelatedStack(stack).then(() => {
-        this.notify();
-        resolve();
-      });
-    });
-  }
-
-  /**
    * Creates a new card
+   * @param stack stack
    * @param card card to be created
    */
-  public createCard(card: Card): Promise<any> {
+  public createCard(stack: Stack, card: Card): Promise<any> {
     return new Promise((resolve, reject) => {
       if (card == null) {
         reject();
@@ -206,16 +177,17 @@ export class CardsService {
 
       card.index = CardsService.getMaxIndex(Array.from(this.cards.values())) + 1;
 
-      this.addCardToStack(this.stack, card);
+      stack.cards.push(card);
       resolve();
     });
   }
 
   /**
    * Updates an existing card
+   * @param stack stack
    * @param card card to be updated
    */
-  public updateCard(card: Card): Promise<any> {
+  public updateCard(stack: Stack, card: Card): Promise<any> {
     return new Promise((resolve, reject) => {
       if (card == null) {
         reject();
@@ -224,51 +196,45 @@ export class CardsService {
       // Set modification date
       card.modificationDate = new Date();
 
-      this.updateCardOfStack(this.stack, card);
+      this.updateCardOfStack(stack, card);
       resolve();
     });
   }
 
   /**
    * Deletes a card
-   * @param {Card} card card to be deleted
+   * @param card card to be deleted
+   * @param stack stack
    */
-  public deleteCard(card: Card): Promise<any> {
+  public deleteCard(stack: Stack, card: Card): Promise<any> {
     return new Promise((resolve, reject) => {
       if (card == null) {
         reject();
       }
 
 
-      this.removeCardFromStack(this.stack, card);
+      this.removeCardFromStack(stack, card);
       resolve();
     });
   }
 
+  //
+  //
+  //
+
   /**
    * Updates related tags
+   * @param stack
    * @param card card
    */
-  public updateRelatedTags(card: Card): Promise<any> {
+  public updateRelatedTags(stack, card: Card): Promise<any> {
     return new Promise((resolve) => {
       card.tagIds.forEach(id => {
-        const tag = this.tagService.getTagById(id);
-        this.tagService.updateTag(tag, false).then(() => {
+        const tag = this.tagsService.getTagById(id);
+        this.tagsService.updateTag(stack, tag).then(() => {
           resolve();
         });
       });
-    });
-  }
-
-  /**
-   * Adds card to stack
-   * @param stack stack
-   * @param card card
-   */
-  private addCardToStack(stack: Stack, card: Card) {
-    this.stack.cards.push(card);
-    this.updateRelatedStack(stack).then(() => {
-      this.notify();
     });
   }
 
@@ -285,10 +251,6 @@ export class CardsService {
 
     // Update the card
     stack.cards[index] = card;
-
-    this.updateRelatedStack(stack).then(() => {
-      this.notify();
-    });
   }
 
   /**
@@ -298,12 +260,8 @@ export class CardsService {
    */
   private removeCardFromStack(stack: Stack, card: Card) {
     // Filter out the card
-    this.stack.cards = this.stack.cards.filter(c => {
+    stack.cards = stack.cards.filter(c => {
       return c.id !== card.id;
-    });
-
-    this.updateRelatedStack(stack).then(() => {
-      this.notify();
     });
   }
 
@@ -319,7 +277,7 @@ export class CardsService {
   public putCardToEnd(stack: Stack, card: Card): Promise<any> {
     return new Promise((resolve) => {
       card.index = CardsService.getMinIndex(Array.from(this.cards.values())) - 1;
-      this.updateCard(card).then(() => {
+      this.updateCard(stack, card).then(() => {
         resolve();
       });
     });
@@ -333,7 +291,7 @@ export class CardsService {
   public moveCardToNextBox(stack: Stack, card: Card): Promise<any> {
     return new Promise((resolve) => {
       card.box != null ? card.box++ : card.box = 1;
-      this.updateCard(card).then(() => {
+      this.updateCard(stack, card).then(() => {
         resolve();
       });
     });
@@ -348,24 +306,7 @@ export class CardsService {
       stack.cards.forEach(card => {
         card.box = 0;
       });
-      this.updateStack(stack).then(() => {
-        resolve();
-      });
-    });
-  }
 
-  /**
-   * Normalizes card indices of a stack starting with zero
-   * @param stack stack
-   */
-  public normalizesStackIndices(stack: Stack): Promise<any> {
-    return new Promise((resolve) => {
-      let index = 0;
-
-      // Assign new indices to cards
-      stack.cards.forEach(card => {
-        card.index = index++;
-      });
       resolve();
     });
   }
@@ -383,9 +324,7 @@ export class CardsService {
         card.index = index++;
       });
 
-      this.updateStack(stack).then(() => {
-        resolve();
-      });
+      resolve();
     });
   }
 
@@ -398,20 +337,7 @@ export class CardsService {
   public setFavorite(stack: Stack, card: Card, favorite: boolean) {
     return new Promise((resolve) => {
       card.favorite = favorite;
-      this.updateCard(card).then(() => {
-        resolve();
-      });
-    });
-  }
-
-  /**
-   * Updates related stack
-   * @param stack stack
-   */
-  private updateRelatedStack(stack: Stack): Promise<any> {
-    return new Promise((resolve) => {
-      this.stackService.clearStacks();
-      this.stackService.updateStack(stack).then(() => {
+      this.updateCard(stack, card).then(() => {
         resolve();
       });
     });

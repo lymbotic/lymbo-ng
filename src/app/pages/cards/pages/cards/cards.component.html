@@ -8,6 +8,7 @@
   [filterActive]="filterActive"
   [cardsAreInMultipleBoxes]="cardsAreInMultipleBoxes"
   [stackNotEmpty]="cards.length > 0"
+  [user]="user"
   (searchItemEventEmitter)="onSearchItemChanged($event)"
   (menuItemEventEmitter)="onMenuItemClicked($event)"></app-cards-toolbar>
 
@@ -43,7 +44,7 @@
             <span>Box {{ index + 1 }} ({{ getCardsOfBox(index).length }})</span>
           </ng-template>
           <app-card-fragment *ngFor="let card of getCardsOfBox(index)"
-                             [card]="card" [tags]="tagsMap" [viceVersa]="viceVersa" [imagePalette]="stack.imagePalette"
+                             [card]="card" [tags]="tags" [viceVersa]="viceVersa" [imagePalette]="stack.imagePalette"
                              [media]="media"
                              (cardEventEmitter)="onCardEvent($event)">
           </app-card-fragment>
@@ -52,8 +53,8 @@
 
       <div *ngIf="!cardsAreInMultipleBoxes">
         <app-card-fragment *ngFor="let card of cards"
-                           [card]="card" [tags]="tagsMap" [viceVersa]="viceVersa" [imagePalette]="stack.imagePalette"
-                           [media]="media"
+                           [stack]="stack" [card]="card" [tags]="tags" [viceVersa]="viceVersa"
+                           [imagePalette]="stack.imagePalette" [media]="media"
                            (cardEventEmitter)="onCardEvent($event)">
         </app-card-fragment>
       </div>

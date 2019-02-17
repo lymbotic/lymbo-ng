@@ -3,8 +3,8 @@ import {StacksPersistenceService} from './stacks-persistence.interface';
 import {Subject} from 'rxjs/Subject';
 import {User} from 'firebase';
 import {Stack} from '../../../model/stack/stack.model';
-import {TagService} from '../../tag.service';
 import {FirebaseCloudFirestoreService} from '../../../../firebase/services/firebase-cloud-firestore.service';
+import {TagsService} from '../../tag/tags.service';
 
 @Injectable({
   providedIn: 'root'
@@ -24,12 +24,14 @@ export class StacksFirestoreService implements StacksPersistenceService {
   /**
    * Constructor
    * @param firebaseCloudFirestoreService Firebase Cloud Firestore service
-   * @param tagService tag service
+   * @param tagsService tags service
    */
   constructor(private firebaseCloudFirestoreService: FirebaseCloudFirestoreService,
-              private tagService: TagService) {
+              private tagsService: TagsService) {
+    this.initializeStacksSubscription();
     this.initializeStackSubscription();
-    this.notify();
+    this.notifyMultipleStacks();
+    this.notifySingleStack();
   }
 
   //
@@ -37,15 +39,25 @@ export class StacksFirestoreService implements StacksPersistenceService {
   //
 
   /**
-   * Initializes stack subscription from Firestore
+   * Initializes stacks subscription from Firestore
    */
-  private initializeStackSubscription() {
+  private initializeStacksSubscription() {
     this.firebaseCloudFirestoreService.stacksSubject.subscribe(stacks => {
       stacks.forEach(element => {
         const stack = element as Stack;
         this.stacks.set(stack.id, stack);
       });
-      this.notify();
+      this.notifyMultipleStacks();
+    });
+  }
+
+  /**
+   * Initializes stack subscription from Firestore
+   */
+  private initializeStackSubscription() {
+    this.firebaseCloudFirestoreService.stackSubject.subscribe(stack => {
+      this.stack = stack;
+      this.notifySingleStack();
     });
   }
 
@@ -55,17 +67,19 @@ export class StacksFirestoreService implements StacksPersistenceService {
 
   /**
    * Loads stacks from Firestore
+   * @param user user
    */
   public findStacks(user: User) {
-    console.log(`findStacks ${user.uid}`);
     this.firebaseCloudFirestoreService.readStacks(user);
   }
 
   /**
    * Finds stack by a given ID
-   * @param {number} id ID of filter by
+   * @param id ID of the stack
+   * @param user user
    */
-  findStackByID(id: string) {
+  public findStackByID(id: string, user: User) {
+    this.firebaseCloudFirestoreService.readStacksByID(user, id);
   }
 
   //
@@ -78,26 +92,20 @@ export class StacksFirestoreService implements StacksPersistenceService {
    */
   public createStack(stack: Stack): Promise<any> {
     return new Promise((resolve, reject) => {
-
       if (stack == null) {
         reject();
       }
 
       // Update related objects
-      this.updateRelatedTags(stack.tagIds);
-
-      // Update related objects
-      this.updateRelatedTags(stack.tagIds);
-
-      // Define follow-up
-      const followUp = () => {
-        this.notify();
-        resolve();
-      };
+      this.updateRelatedTags(stack, stack.tagIds);
 
       // Create stack
-      // return this.pouchDBService.upsert(stack.id, stack).then(followUp);
-      return this.firebaseCloudFirestoreService.addStack(stack).then(followUp);
+      return this.firebaseCloudFirestoreService.addStack(stack).then(() => {
+        this.notifyMultipleStacks();
+        resolve();
+      }).catch(err => {
+        console.error(err);
+      });
     });
   }
 
@@ -107,14 +115,12 @@ export class StacksFirestoreService implements StacksPersistenceService {
    */
   public createStacks(stacks: Stack[]): Promise<any> {
     return new Promise((resolve) => {
-      // Define follow-up
-      const followUp = () => {
-        this.notify();
-        resolve();
-      };
 
       // Create stacks
-      return this.firebaseCloudFirestoreService.addStacks(stacks).then(followUp);
+      return this.firebaseCloudFirestoreService.addStacks(stacks).then(() => {
+        this.notifyMultipleStacks();
+        resolve();
+      });
     });
   }
 
@@ -133,20 +139,17 @@ export class StacksFirestoreService implements StacksPersistenceService {
       }
 
       // Update related objects
-      this.updateRelatedTags(stack.tagIds);
+      this.updateRelatedTags(stack, stack.tagIds);
 
       // Set modification date
       stack.modificationDate = new Date();
 
-      // Define follow-up
-      const followUp = () => {
-        this.notify();
-        resolve();
-      };
-
       // Update stack
-      // return this.pouchDBService.upsert(stack.id, stack).then(followUp);
-      return this.firebaseCloudFirestoreService.updateStack(stack).then(followUp);
+      return this.firebaseCloudFirestoreService.updateStack(stack).then(() => {
+        this.notifyMultipleStacks();
+        this.notifySingleStack();
+        resolve();
+      });
     });
   }
 
@@ -164,14 +167,11 @@ export class StacksFirestoreService implements StacksPersistenceService {
         reject();
       }
 
-      // Define follow-up
-      const followUp = () => {
-        this.notify();
-        resolve();
-      };
-
       // Delete stack
-      return this.firebaseCloudFirestoreService.deleteStack(stack).then(followUp);
+      return this.firebaseCloudFirestoreService.deleteStack(stack).then(() => {
+        this.notifyMultipleStacks();
+        resolve();
+      });
     });
   }
 
@@ -181,8 +181,10 @@ export class StacksFirestoreService implements StacksPersistenceService {
    */
   public deleteStacks(stacks: Stack[]): Promise<any> {
     return new Promise((resolve) => {
+
       // Delete stacks
       return this.firebaseCloudFirestoreService.deleteStacks(stacks).then(() => {
+        this.notifyMultipleStacks();
         resolve();
       });
     });
@@ -204,7 +206,7 @@ export class StacksFirestoreService implements StacksPersistenceService {
   }
 
   /**
-   * Clears cards
+   * Clears stacks
    */
   public clearStacks() {
     this.stacks.clear();
@@ -213,12 +215,17 @@ export class StacksFirestoreService implements StacksPersistenceService {
   /**
    * Informs subscribers that something has changed
    */
-  public notify() {
-    console.log(`notify ${this.stacks.size}`);
-    this.stackSubject.next(this.stack);
+  public notifyMultipleStacks() {
     this.stacksSubject.next(Array.from(this.stacks.values()).sort((t1, t2) => {
       return new Date(t2.modificationDate).getTime() - new Date(t1.modificationDate).getTime();
     }));
+  }
+
+  /**
+   * Informs subscribers that something has changed
+   */
+  public notifySingleStack() {
+    this.stackSubject.next(this.stack);
   }
 
   //
@@ -227,12 +234,15 @@ export class StacksFirestoreService implements StacksPersistenceService {
 
   /**
    * Updates related tags
+   * @param stack stack
    * @param tagIds tag IDs
    */
-  private updateRelatedTags(tagIds: string[]) {
+  private updateRelatedTags(stack: Stack, tagIds: string[]) {
     tagIds.forEach(id => {
-      const tag = this.tagService.getTagById(id);
-      this.tagService.updateTag(tag, false).then(() => {
+      const tag = this.tagsService.getTagById(id);
+      this.tagsService.updateTag(stack, tag).then(() => {
+      }).catch(err => {
+        console.error(err);
       });
     });
   }

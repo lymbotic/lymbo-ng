@@ -1,11 +1,11 @@
 import {Injectable} from '@angular/core';
 import {DisplayAspect, StackDisplayService} from './stack-display.service';
 import {Stack} from '../../model/stack/stack.model';
-import {TagService} from '../tag.service';
 import {StackTypeGroup} from '../../model/stack/stack-type-group.enum';
 import {StackType} from '../../model/stack/stack-type.enum';
 import {StackTypeService} from './stack-type.service';
-import {Tag} from '../../model/tag.model';
+import {Tag} from '../../model/tag/tag.model';
+import {TagsService} from '../tag/tags.service';
 
 /**
  * Handles cards
@@ -65,11 +65,11 @@ export class StacksService {
    * Constructor
    * @param stackDisplayService stack display service
    * @param stackTypeService stack type service
-   * @param tagService tag service
+   * @param tagsService tags service
    */
   constructor(private stackDisplayService: StackDisplayService,
               private stackTypeService: StackTypeService,
-              private tagService: TagService) {
+              private tagsService: TagsService) {
   }
 
   //
