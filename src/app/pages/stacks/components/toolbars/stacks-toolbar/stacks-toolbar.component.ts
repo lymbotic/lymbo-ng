@@ -5,7 +5,7 @@ import {debounceTime} from 'rxjs/operators';
 import {Stack} from '../../../../../core/entity/model/stack/stack.model';
 import {StacksService} from '../../../../../core/entity/services/stack/stacks.service';
 import {User} from 'firebase';
-import {STACK_PERSISTENCE} from '../../../../../core/entity/entity.module';
+import {STACK_PERSISTENCE_FIRESTORE} from '../../../../../core/entity/entity.module';
 import {StacksPersistenceService} from '../../../../../core/entity/services/stack/persistence/stacks-persistence.interface';
 
 /**
@@ -52,7 +52,7 @@ export class StacksToolbarComponent implements OnInit {
    * @param stacksPersistenceService stacks persistence service
    */
   constructor(private stacksService: StacksService,
-              @Inject(STACK_PERSISTENCE) private stacksPersistenceService: StacksPersistenceService) {
+              @Inject(STACK_PERSISTENCE_FIRESTORE) private stacksPersistenceService: StacksPersistenceService) {
   }
 
   //

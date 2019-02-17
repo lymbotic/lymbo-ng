@@ -5,7 +5,7 @@ import {DropResult, SUCCESS} from '../../fragments/file-drop-fragment/file-drop-
 import {Stack} from '../../../../../core/entity/model/stack/stack.model';
 import {PouchDBService} from '../../../../../core/persistence/services/pouchdb.service';
 import {SnackbarService} from '../../../../../core/ui/services/snackbar.service';
-import {STACK_PERSISTENCE} from '../../../../../core/entity/entity.module';
+import {STACK_PERSISTENCE_FIRESTORE} from '../../../../../core/entity/entity.module';
 import {StacksPersistenceService} from '../../../../../core/entity/services/stack/persistence/stacks-persistence.interface';
 
 /**
@@ -34,7 +34,7 @@ export class UploadDialogComponent implements OnInit {
    */
   constructor(private pouchDBService: PouchDBService,
               private snackbarService: SnackbarService,
-              @Inject(STACK_PERSISTENCE) private stacksPersistenceService: StacksPersistenceService,
+              @Inject(STACK_PERSISTENCE_FIRESTORE) private stacksPersistenceService: StacksPersistenceService,
 
               public dialogRef: MatDialogRef<UploadDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any) {

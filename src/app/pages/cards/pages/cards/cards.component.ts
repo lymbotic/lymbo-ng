@@ -30,7 +30,7 @@ import {CardDialogComponent} from '../../components/dialogs/card-dialog/card-dia
 import {TagDialogComponent} from '../../components/dialogs/tag-dialog/tag-dialog.component';
 import {Card} from '../../../../core/entity/model/card/card.model';
 import {FormControl} from '@angular/forms';
-import {STACK_PERSISTENCE} from '../../../../core/entity/entity.module';
+import {STACK_PERSISTENCE_FIRESTORE} from '../../../../core/entity/entity.module';
 import {StacksPersistenceService} from '../../../../core/entity/services/stack/persistence/stacks-persistence.interface';
 import {TagsService} from '../../../../core/entity/services/tag/tags.service';
 import {FirebaseAuthenticationService} from '../../../../core/firebase/services/firebase-authentication.service';
@@ -159,7 +159,7 @@ export class CardsComponent implements OnInit, OnChanges, AfterViewInit, OnDestr
               private sanitizer: DomSanitizer,
               private scroll: ScrollDispatcher,
               private settingsService: SettingsService,
-              @Inject(STACK_PERSISTENCE) private stacksPersistenceService: StacksPersistenceService,
+              @Inject(STACK_PERSISTENCE_FIRESTORE) private stacksPersistenceService: StacksPersistenceService,
               private snackbarService: SnackbarService,
               private suggestionService: SuggestionService,
               private tagsService: TagsService,

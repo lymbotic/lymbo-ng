@@ -42,7 +42,7 @@ import {User} from 'firebase';
 import {FirebaseCloudFirestoreService} from '../../../../core/firebase/services/firebase-cloud-firestore.service';
 import {UUID} from '../../../../core/entity/model/uuid';
 import {StacksPersistenceService} from '../../../../core/entity/services/stack/persistence/stacks-persistence.interface';
-import {STACK_PERSISTENCE} from '../../../../core/entity/entity.module';
+import {STACK_PERSISTENCE_FIRESTORE} from '../../../../core/entity/entity.module';
 import {Tag} from '../../../../core/entity/model/tag/tag.model';
 import {TagsService} from '../../../../core/entity/services/tag/tags.service';
 // @ts-ignore
@@ -164,7 +164,7 @@ export class StacksComponent implements OnInit, OnChanges, AfterViewInit, OnDest
               private scroll: ScrollDispatcher,
               private settingsService: SettingsService,
               private stacksService: StacksService,
-              @Inject(STACK_PERSISTENCE) private stacksPersistenceService: StacksPersistenceService,
+              @Inject(STACK_PERSISTENCE_FIRESTORE) private stacksPersistenceService: StacksPersistenceService,
               private snackbarService: SnackbarService,
               private suggestionService: SuggestionService,
               private tagsService: TagsService,
