@@ -6,6 +6,9 @@ import {Stack} from '../../../model/stack/stack.model';
 import {FirebaseCloudFirestoreService} from '../../../../firebase/services/firebase-cloud-firestore.service';
 import {TagsService} from '../../tag/tags.service';
 
+/**
+ * Handles stack persistence via Firestore
+ */
 @Injectable({
   providedIn: 'root'
 })

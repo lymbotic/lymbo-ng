@@ -6,6 +6,9 @@ import {QuizAspect} from '../../../../../../core/entity/model/card/quiz/quiz-asp
 import {AspectType} from '../../../../../../core/entity/model/card/aspect.type';
 import {Answer} from '../../../../../../core/entity/model/card/quiz/answer.model';
 
+/**
+ * Displays quiz form
+ */
 @Component({
   selector: 'app-quiz-form',
   templateUrl: './quiz-form.component.html',

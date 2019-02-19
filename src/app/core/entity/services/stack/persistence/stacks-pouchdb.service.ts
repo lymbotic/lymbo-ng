@@ -6,6 +6,9 @@ import {PouchDBService} from '../../../../persistence/services/pouchdb.service';
 import {EntityType} from '../../../model/entity-type.enum';
 import {TagsService} from '../../tag/tags.service';
 
+/**
+ * Handles stack persistence via PouchDB
+ */
 @Injectable({
   providedIn: 'root'
 })
@@ -21,6 +24,11 @@ export class StacksPouchdbService implements StacksPersistenceService {
   /** Subject that publishes stack */
   stackSubject = new Subject<Stack>();
 
+  /**
+   * Constructor
+   * @param pouchDBService PouchDB service
+   * @param tagsService tags service
+   */
   constructor(private pouchDBService: PouchDBService,
               private tagsService: TagsService) {
     this.initializeStackSubscription();
@@ -198,16 +206,6 @@ export class StacksPouchdbService implements StacksPersistenceService {
    */
   public clearStacks() {
     this.stacks.clear();
-  }
-
-  /**
-   * Informs subscribers that something has changed
-   */
-  public notifyMultipleStacks() {
-    this.stackSubject.next(this.stack);
-    this.stacksSubject.next(Array.from(this.stacks.values()).sort((t1, t2) => {
-      return new Date(t2.modificationDate).getTime() - new Date(t1.modificationDate).getTime();
-    }));
   }
 
   /**
