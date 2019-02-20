@@ -7,6 +7,8 @@ import {StacksService} from '../../../../../core/entity/services/stack/stacks.se
 import {User} from 'firebase';
 import {STACK_PERSISTENCE_FIRESTORE} from '../../../../../core/entity/entity.module';
 import {StacksPersistenceService} from '../../../../../core/entity/services/stack/persistence/stacks-persistence.interface';
+import {ConfirmationDialogComponent} from '../../../../../ui/confirmation-dialog/confirmation-dialog/confirmation-dialog.component';
+import {MatDialog, MatDialogConfig} from '@angular/material';
 
 /**
  * Displays stacks toolbar
@@ -48,10 +50,12 @@ export class StacksToolbarComponent implements OnInit {
 
   /**
    * Constructor
+   * @param dialog dialog
    * @param stacksService stacks service
    * @param stacksPersistenceService stacks persistence service
    */
-  constructor(private stacksService: StacksService,
+  constructor(public dialog: MatDialog,
+              private stacksService: StacksService,
               @Inject(STACK_PERSISTENCE_FIRESTORE) private stacksPersistenceService: StacksPersistenceService) {
   }
 
@@ -118,7 +122,20 @@ export class StacksToolbarComponent implements OnInit {
       const [file] = event.target.files;
       reader.readAsText(file);
       reader.onload = () => {
-        this.stacksPersistenceService.uploadStack(JSON.parse(reader.result) as Stack, this.user);
+        const confirmationDialogRef = this.dialog.open(ConfirmationDialogComponent, <MatDialogConfig>{
+          disableClose: false,
+          data: {
+            title: 'Duplicate stack',
+            text: 'The stack you uploaded is a duplicate. Do you want to keep it?',
+            action: 'Sure',
+            value: true
+          }
+        });
+        confirmationDialogRef.afterClosed().subscribe(confirmationResult => {
+          if (confirmationResult != null) {
+            this.stacksPersistenceService.uploadStack(JSON.parse(reader.result) as Stack, this.user);
+          }
+        });
       };
     }
   }

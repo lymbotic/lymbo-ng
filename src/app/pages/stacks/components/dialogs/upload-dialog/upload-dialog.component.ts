@@ -1,5 +1,5 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
+import {MAT_DIALOG_DATA, MatDialog, MatDialogConfig, MatDialogRef} from '@angular/material';
 import {Subject} from 'rxjs';
 import {DropResult, SUCCESS} from '../../fragments/file-drop-fragment/file-drop-fragment.component';
 import {Stack} from '../../../../../core/entity/model/stack/stack.model';
@@ -8,6 +8,7 @@ import {SnackbarService} from '../../../../../core/ui/services/snackbar.service'
 import {STACK_PERSISTENCE_FIRESTORE} from '../../../../../core/entity/entity.module';
 import {StacksPersistenceService} from '../../../../../core/entity/services/stack/persistence/stacks-persistence.interface';
 import {User} from 'firebase';
+import {ConfirmationDialogComponent} from '../../../../../ui/confirmation-dialog/confirmation-dialog/confirmation-dialog.component';
 
 /**
  * Displays upload dialog
@@ -29,13 +30,15 @@ export class UploadDialogComponent implements OnInit {
 
   /**
    * Constructor
+   * @param dialog dialog
    * @param pouchDBService PouchDB service
    * @param snackbarService snackbar service
    * @param stacksPersistenceService stacks persistence service
    * @param dialogRef dialog reference
    * @param data dialog data
    */
-  constructor(private pouchDBService: PouchDBService,
+  constructor(public dialog: MatDialog,
+              private pouchDBService: PouchDBService,
               private snackbarService: SnackbarService,
               @Inject(STACK_PERSISTENCE_FIRESTORE) private stacksPersistenceService: StacksPersistenceService,
 
@@ -55,7 +58,20 @@ export class UploadDialogComponent implements OnInit {
     this.user = this.data.user;
 
     this.dropContent.asObservable().subscribe((result) => {
-      this.stacksPersistenceService.uploadStack(result as Stack, this.user);
+      const confirmationDialogRef = this.dialog.open(ConfirmationDialogComponent, <MatDialogConfig>{
+        disableClose: false,
+        data: {
+          title: 'Duplicate stack',
+          text: 'The stack you uploaded is a duplicate. Do you want to keep it?',
+          action: 'Sure',
+          value: true
+        }
+      });
+      confirmationDialogRef.afterClosed().subscribe(confirmationResult => {
+        if (confirmationResult != null) {
+          this.stacksPersistenceService.uploadStack(result as Stack, this.user);
+        }
+      });
     });
   }
 
