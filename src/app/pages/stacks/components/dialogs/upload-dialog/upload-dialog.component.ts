@@ -7,6 +7,7 @@ import {PouchDBService} from '../../../../../core/persistence/services/pouchdb.s
 import {SnackbarService} from '../../../../../core/ui/services/snackbar.service';
 import {STACK_PERSISTENCE_FIRESTORE} from '../../../../../core/entity/entity.module';
 import {StacksPersistenceService} from '../../../../../core/entity/services/stack/persistence/stacks-persistence.interface';
+import {User} from 'firebase';
 
 /**
  * Displays upload dialog
@@ -20,6 +21,8 @@ export class UploadDialogComponent implements OnInit {
 
   /** Dialog title */
   dialogTitle = '';
+  /** Current user */
+  user: User;
 
   /** Entities retrieved from dropped file */
   dropContent: Subject<Stack> = new Subject();
@@ -49,9 +52,10 @@ export class UploadDialogComponent implements OnInit {
    */
   ngOnInit() {
     this.dialogTitle = this.data.title;
+    this.user = this.data.user;
 
     this.dropContent.asObservable().subscribe((result) => {
-      this.stacksPersistenceService.uploadStack(result as Stack);
+      this.stacksPersistenceService.uploadStack(result as Stack, this.user);
     });
   }
 

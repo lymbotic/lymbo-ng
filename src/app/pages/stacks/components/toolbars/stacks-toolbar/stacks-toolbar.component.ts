@@ -118,7 +118,7 @@ export class StacksToolbarComponent implements OnInit {
       const [file] = event.target.files;
       reader.readAsText(file);
       reader.onload = () => {
-        this.stacksPersistenceService.uploadStack(JSON.parse(reader.result) as Stack);
+        this.stacksPersistenceService.uploadStack(JSON.parse(reader.result) as Stack, this.user);
       };
     }
   }

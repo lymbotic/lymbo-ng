@@ -83,8 +83,9 @@ export interface StacksPersistenceService {
   /**
    * Uploads a stack
    * @param stack stack
+   * @param owner user that will be the new owner of this stack
    */
-  uploadStack(stack: Stack);
+  uploadStack(stack: Stack, owner?: User);
 
   /**
    * Clears all stacks

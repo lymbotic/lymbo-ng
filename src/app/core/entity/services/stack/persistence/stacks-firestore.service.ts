@@ -5,6 +5,7 @@ import {User} from 'firebase';
 import {Stack} from '../../../model/stack/stack.model';
 import {FirebaseCloudFirestoreService} from '../../../../firebase/services/firebase-cloud-firestore.service';
 import {TagsService} from '../../tag/tags.service';
+import {UUID} from '../../../model/uuid';
 
 /**
  * Handles stack persistence via Firestore
@@ -197,13 +198,14 @@ export class StacksFirestoreService implements StacksPersistenceService {
   // Others
   //
 
-  /**
+  /**ca
    * Uploads a stack
    * @param stack stack
+   * @param owner user that will be the new owner of this stack
    */
-  public uploadStack(stack: Stack): Promise<any> {
-    stack['_rev'] = null;
-    stack['_id'] = null;
+  public uploadStack(stack: Stack, owner: User): Promise<any> {
+    stack.id = new UUID().toString();
+    stack.owner = owner.uid;
 
     return this.firebaseCloudFirestoreService.addStack(stack);
   }

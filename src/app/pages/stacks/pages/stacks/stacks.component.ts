@@ -849,7 +849,8 @@ export class StacksComponent implements OnInit, OnChanges, AfterViewInit, OnDest
         this.dialog.open(UploadDialogComponent, <MatDialogConfig>{
           disableClose: false,
           data: {
-            title: 'Upload'
+            title: 'Upload',
+            user: this.user
           }
         });
         break;

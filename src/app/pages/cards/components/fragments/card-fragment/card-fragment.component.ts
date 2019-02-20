@@ -50,7 +50,7 @@ export class CardFragmentComponent implements OnInit, OnChanges {
   @Input() themeClass = 'light-theme';
 
   /** Event emitter indicating click on card */
-  @Output() cardEventEmitter = new EventEmitter<{ action: Action, card: Card }>();
+  @Output() cardEventEmitter = new EventEmitter<{ action: Action, stack: Stack, card: Card }>();
 
   /** Map of tags */
   tagsMap = new Map<string, Tag>();
