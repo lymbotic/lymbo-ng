@@ -46,15 +46,13 @@ Share the cards you created with friends.
 | 0.24 | Card boxes |
 | 0.25 | Vice versa |
 | 0.26 | Information cards |
+| 0.27 | Data synchronization |
 
 ### Planned features
 
-* automatic translation
-* quiz card-fragment
 * sharing cards
-* multi-device synchronization
 * learning statistics
-* stack-fragment in-app store
+* stack in-app store
 
 ### Based on Amphibian
 
