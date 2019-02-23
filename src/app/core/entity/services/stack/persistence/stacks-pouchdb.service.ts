@@ -51,6 +51,16 @@ export class StacksPouchdbService implements StacksPersistenceService {
   }
 
   //
+  // Cancel
+  //
+
+  /**
+   * Cancels subscription
+   */
+  public cancelSubscription() {
+  }
+
+  //
   // Read
   //
 
@@ -123,7 +133,7 @@ export class StacksPouchdbService implements StacksPersistenceService {
    * Creates new stacks
    * @param stacks stacks to be created
    */
-  createStacks(stacks: Stack[]): Promise<any> {
+  public createStacks(stacks: Stack[]): Promise<any> {
     return undefined;
   }
 
@@ -154,6 +164,14 @@ export class StacksPouchdbService implements StacksPersistenceService {
         resolve();
       });
     });
+  }
+
+  /**
+   * Updates existing stacks
+   * @param stacks stacks to be updated
+   */
+  public updateStacks(stacks: Stack[]): Promise<any> {
+    return undefined;
   }
 
   //

@@ -58,6 +58,9 @@ export class UploadDialogComponent implements OnInit {
     this.user = this.data.user;
 
     this.dropContent.asObservable().subscribe((result) => {
+      this.stacksPersistenceService.uploadStack(result as Stack, this.user);
+
+      /*
       const confirmationDialogRef = this.dialog.open(ConfirmationDialogComponent, <MatDialogConfig>{
         disableClose: false,
         data: {
@@ -72,6 +75,7 @@ export class UploadDialogComponent implements OnInit {
           this.stacksPersistenceService.uploadStack(result as Stack, this.user);
         }
       });
+      */
     });
   }
 

@@ -66,6 +66,17 @@ export class StacksFirestoreService implements StacksPersistenceService {
   }
 
   //
+  // Cancel
+  //
+
+  /**
+   * Cancels subscription
+   */
+  public cancelSubscription() {
+    this.firebaseCloudFirestoreService.cancelSubscription();
+  }
+
+  //
   // Read
   //
 
@@ -152,6 +163,21 @@ export class StacksFirestoreService implements StacksPersistenceService {
       return this.firebaseCloudFirestoreService.updateStack(stack).then(() => {
         this.notifyMultipleStacks();
         this.notifySingleStack();
+        resolve();
+      });
+    });
+  }
+
+  /**
+   * Updates existing stacks
+   * @param stacks stacks to be updated
+   */
+  public updateStacks(stacks: Stack[]): Promise<any> {
+    return new Promise((resolve) => {
+
+      // Create stacks
+      return this.firebaseCloudFirestoreService.updatesStacks(stacks).then(() => {
+        this.notifyMultipleStacks();
         resolve();
       });
     });

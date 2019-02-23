@@ -40,11 +40,11 @@ import {UploadDialogComponent} from '../../components/dialogs/upload-dialog/uplo
 import {FirebaseAuthenticationService} from '../../../../core/firebase/services/firebase-authentication.service';
 import {User} from 'firebase';
 import {FirebaseCloudFirestoreService} from '../../../../core/firebase/services/firebase-cloud-firestore.service';
-import {UUID} from '../../../../core/entity/model/uuid';
 import {StacksPersistenceService} from '../../../../core/entity/services/stack/persistence/stacks-persistence.interface';
 import {STACK_PERSISTENCE_FIRESTORE} from '../../../../core/entity/entity.module';
 import {Tag} from '../../../../core/entity/model/tag/tag.model';
 import {TagsService} from '../../../../core/entity/services/tag/tags.service';
+import {UUID} from '../../../../core/entity/model/uuid';
 // @ts-ignore
 import Vibrant = require('node-vibrant');
 
@@ -269,13 +269,15 @@ export class StacksComponent implements OnInit, OnChanges, AfterViewInit, OnDest
   private assembleTags(stacks: Stack[]) {
     this.tagsService.tags.clear();
     stacks.forEach(stack => {
-      stack.tags.filter(tag => {
-        return stack.tagIds.some(id => {
-          return id === tag.id;
+      if (stack.tags != null) {
+        stack.tags.filter(tag => {
+          return stack.tagIds.some(id => {
+            return id === tag.id;
+          });
+        }).forEach(tag => {
+          this.tagsService.tags.set(tag.id, tag);
         });
-      }).forEach(tag => {
-        this.tagsService.tags.set(tag.id, tag);
-      });
+      }
     });
   }
 
@@ -390,40 +392,29 @@ export class StacksComponent implements OnInit, OnChanges, AfterViewInit, OnDest
    */
   private handleUser(user: User) {
     if (user != null) {
+      // Save previous stacks
       const previousStacks = CloneService.cloneStacks(this.stacks);
 
-      if (user.isAnonymous) {
+      // Clear stacks
+      this.stacksPersistenceService.clearStacks();
 
-        // Clear stacks
-        this.stacksPersistenceService.clearStacks();
-
-        // Find users entities
-        this.stacksPersistenceService.findStacks(user);
-      } else {
+      if (!user.isAnonymous) {
         // Show welcome message
         this.snackbarService.showSnackbar(`Welcome back ${user.displayName}!`);
 
-        // Clear stacks
-        this.stacksPersistenceService.clearStacks();
-
-        // Find users entities
-        this.stacksPersistenceService.findStacks(user);
-
         // Take stacks from anonymous user
-        this.stacksPersistenceService.clearStacks();
-        this.stacksPersistenceService.createStacks(previousStacks.map(stack => {
-          stack.id = new UUID().toString();
-          stack.owner = user.uid;
-          return stack;
-        })).then(() => {
-        });
-
-        // Delete stacks of anonymous user
-        // this.stacksService.deleteStacks(previousStacks);
-
-        // Delete anonymous user
-        // this.firebaseAuthenticationService.deleteUser(this.user);
+        if (previousStacks.length > 0) {
+          this.stacksPersistenceService.createStacks(this.stacks.map(stack => {
+            stack.id = new UUID().toString();
+            stack.owner = user.uid;
+            return stack;
+          })).then(() => {
+          });
+        }
       }
+
+      // Find stacks
+      this.stacksPersistenceService.findStacks(user);
     } else {
       // Show goodbye message
       this.snackbarService.showSnackbar(`Goodbye.`);

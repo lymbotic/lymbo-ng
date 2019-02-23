@@ -3,7 +3,7 @@ import {AngularFirestore, AngularFirestoreCollection} from '@angular/fire/firest
 import {Stack} from '../../entity/model/stack/stack.model';
 import {User} from 'firebase';
 import {Observable, Subject} from 'rxjs';
-import {map} from 'rxjs/operators';
+import {map, takeUntil} from 'rxjs/operators';
 import {CloneService} from '../../entity/services/clone.service';
 
 /**
@@ -27,6 +27,9 @@ export class FirebaseCloudFirestoreService {
   /** Stack subject */
   stackSubject: Subject<Stack>;
 
+  /** Helper subject used to finish other subscriptions */
+  private unsubscribeSubject = new Subject();
+
   /**
    * Constructor
    * @param angularFirestore Angular Firestore
@@ -39,6 +42,14 @@ export class FirebaseCloudFirestoreService {
   }
 
   /**
+   * Cancels subscription
+   */
+  cancelSubscription() {
+    this.unsubscribeSubject.next();
+    this.unsubscribeSubject.complete();
+  }
+
+  /**
    * Reads stacks of a given user
    * @param user user
    */
@@ -47,13 +58,12 @@ export class FirebaseCloudFirestoreService {
       ref => ref.where('owner', '==', user.uid));
     this.stacksObservable = this.stacksCollection.snapshotChanges().pipe(
       map(actions => actions.map(a => {
-        const stack = a.payload.doc.data() as Stack;
-        // data.uid = a.payload.doc.id;
-
-        return stack;
+        return a.payload.doc.data() as Stack;
       }))
     );
-    this.stacksObservable.subscribe(stacks => {
+    this.stacksObservable.pipe(
+      takeUntil(this.unsubscribeSubject)
+    ).subscribe(stacks => {
         this.stacksSubject.next(stacks);
       }
     );
@@ -72,10 +82,7 @@ export class FirebaseCloudFirestoreService {
         .limit(1));
     this.stackObservable = this.stacksCollection.snapshotChanges().pipe(
       map(actions => actions.map(a => {
-        const stack = a.payload.doc.data() as Stack;
-        // data.id = a.payload.doc.id;
-
-        return stack;
+        return a.payload.doc.data() as Stack;
       }))
     );
     this.stackObservable.subscribe(stacks => {
@@ -125,9 +132,29 @@ export class FirebaseCloudFirestoreService {
     const s = CloneService.cloneStack(stack);
 
     return new Promise((resolve) => {
-      this.stacksCollection.doc(stack.id).update(s);
+      this.stacksCollection.doc(stack.id).update(s).then(() => {
+      });
       resolve();
     });
+  }
+
+  /**
+   * Updates an array of stacks
+   * @param stacks stacks
+   */
+  updatesStacks(stacks: Stack[]): Promise<any> {
+    const batch = this.angularFirestore.firestore.batch();
+
+    stacks.forEach(stack => {
+      const s = CloneService.cloneStack(stack);
+
+      const id = s.id;
+      const ref = this.angularFirestore.firestore.collection('stacks').doc(id);
+
+      batch.set(ref, s);
+    });
+
+    return batch.commit();
   }
 
   /**
@@ -138,7 +165,8 @@ export class FirebaseCloudFirestoreService {
     const s = CloneService.cloneStack(stack);
 
     return new Promise((resolve) => {
-      this.stacksCollection.doc(s.id).delete();
+      this.stacksCollection.doc(s.id).delete().then(() => {
+      });
       resolve();
     });
   }

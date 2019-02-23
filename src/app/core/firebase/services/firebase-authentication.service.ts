@@ -1,7 +1,9 @@
-import {Injectable} from '@angular/core';
+import {Inject, Injectable} from '@angular/core';
 import {auth, User} from 'firebase/app';
 import {Subject} from 'rxjs/Subject';
 import {AngularFireAuth} from '@angular/fire/auth';
+import {STACK_PERSISTENCE_FIRESTORE} from '../../entity/entity.module';
+import {StacksPersistenceService} from '../../entity/services/stack/persistence/stacks-persistence.interface';
 
 /***
  * Handles firebase authentication
@@ -19,8 +21,10 @@ export class FirebaseAuthenticationService {
   /**
    * Constructor
    * @param angularFireAuth Angular fire auth
+   * @param stacksPersistenceService stacks persistence service
    */
-  constructor(private angularFireAuth: AngularFireAuth) {
+  constructor(private angularFireAuth: AngularFireAuth,
+              @Inject(STACK_PERSISTENCE_FIRESTORE) private stacksPersistenceService: StacksPersistenceService) {
     this.initializeUserSubscription();
   }
 
@@ -42,6 +46,9 @@ export class FirebaseAuthenticationService {
    * Handles login with Google
    */
   loginWithGoogle() {
+    // Reset subscription to prevent privilege error
+    this.stacksPersistenceService.cancelSubscription();
+
     this.angularFireAuth.auth.signInWithPopup(new auth.GoogleAuthProvider());
   }
 
@@ -49,6 +56,9 @@ export class FirebaseAuthenticationService {
    * Handles anonymous login
    */
   loginAnonymously() {
+    // Reset subscription to prevent privilege error
+    this.stacksPersistenceService.cancelSubscription();
+
     this.angularFireAuth.auth.signInAnonymously();
   }
 

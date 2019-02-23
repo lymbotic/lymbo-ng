@@ -18,6 +18,15 @@ export interface StacksPersistenceService {
   stackSubject: Subject<Stack>;
 
   //
+  // Cancel
+  //
+
+  /**
+   * Cancels subscription
+   */
+  cancelSubscription();
+
+  //
   // Read
   //
 
@@ -59,6 +68,12 @@ export interface StacksPersistenceService {
    * @param stack stack to be updated
    */
   updateStack(stack: Stack): Promise<any>;
+
+  /**
+   * Updates existing stacks
+   * @param stacks stacks to be updated
+   */
+  updateStacks(stacks: Stack[]): Promise<any>;
 
   //
   // Delete

@@ -334,15 +334,17 @@ export class CardsComponent implements OnInit, OnChanges, AfterViewInit, OnDestr
    */
   private assembleTags(stack: Stack) {
     this.tagsService.tags.clear();
-    stack.tags.filter(tag => {
-      return stack.cards.some(card => {
-        return card.tagIds.some(id => {
-          return id === tag.id;
+    if (stack.tags != null) {
+      stack.tags.filter(tag => {
+        return stack.cards.some(card => {
+          return card.tagIds.some(id => {
+            return id === tag.id;
+          });
         });
+      }).forEach(tag => {
+        this.tagsService.tags.set(tag.id, tag);
       });
-    }).forEach(tag => {
-      this.tagsService.tags.set(tag.id, tag);
-    });
+    }
   }
 
   /**
