@@ -350,9 +350,7 @@ export class StacksComponent implements OnInit, OnChanges, AfterViewInit, OnDest
       // Filter stacks
       this.stacks = Array.from(this.stacksPersistenceService.stacks.values()).filter((stack: Stack) => {
         return this.filterStack(stack);
-      }).sort((s1, s2) => {
-        return new Date(s2.modificationDate).getTime() > new Date(s1.modificationDate).getTime() ? 1 : -1;
-      });
+      }).sort(StacksService.sortStacks);
     });
   }
 

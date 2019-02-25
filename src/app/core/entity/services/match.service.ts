@@ -218,13 +218,15 @@ export class MatchService {
    */
   public stackMatchesEveryItem(stack: Stack, items: string): boolean {
     return items == null || items.trim() === '' || MatchService.splitSearchItems(items).every(item => {
-      return MatchService.stackTitleMatchesSingleItem(stack, item)
-        || (stack.cards != null && this.cardsMatchesSingleItem(stack.cards, item))
-        || (stack.tagIds != null && this.tagsMatchesSingleItem(stack.tagIds.map(id => {
-          return this.tagsService.getTagById(id);
-        }).filter(tag => {
-          return tag != null;
-        }), item));
+      return MatchService.stackTitleMatchesSingleItem(stack, item);
+      /*
+      || (stack.cards != null && this.cardsMatchesSingleItem(stack.cards, item))
+      || (stack.tagIds != null && this.tagsMatchesSingleItem(stack.tagIds.map(id => {
+        return this.tagsService.getTagById(id);
+      }).filter(tag => {
+        return tag != null;
+      }), item));
+    */
     });
   }
 

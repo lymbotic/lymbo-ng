@@ -93,7 +93,6 @@ export class SuggestionService {
         // Add person name to search options
         if (t.name) {
           const value = t.name.trim();
-          this.searchOptions.set(value, value);
           this.tagOptions.set(value, t);
         }
       }

@@ -6,6 +6,7 @@ import {StackType} from '../../model/stack/stack-type.enum';
 import {StackTypeService} from './stack-type.service';
 import {Tag} from '../../model/tag/tag.model';
 import {TagsService} from '../tag/tags.service';
+import {Card} from '../../model/card/card.model';
 
 /**
  * Handles cards
@@ -36,6 +37,19 @@ export class StacksService {
         return StackDisplayService.containsLanguage(stack);
       }
     }
+  }
+
+  //
+  // Sort
+  //
+
+  /**
+   * Sorts stacks based on their modification date
+   * @param stackA first stack
+   * @param stackB seconds stack
+   */
+  static sortStacks(stackA: Stack, stackB: Stack) {
+    return new Date(stackB.modificationDate).getTime() > new Date(stackA.modificationDate).getTime() ? 1 : -1;
   }
 
   //
