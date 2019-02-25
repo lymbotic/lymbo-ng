@@ -244,6 +244,9 @@ export class CardsComponent implements OnInit, OnChanges, AfterViewInit, OnDestr
 
       this.initializeStack(stack);
       this.initializeTags(Array.from(this.tagsService.tags.values()));
+
+      this.suggestionService.updateByCards(this.cards);
+      this.suggestionService.updateByTags(this.tags);
     }
   }
 
@@ -260,6 +263,9 @@ export class CardsComponent implements OnInit, OnChanges, AfterViewInit, OnDestr
 
         this.initializeStack(stack);
         this.initializeTags(Array.from(this.tagsService.tags.values()));
+
+        this.suggestionService.updateByCards(this.cards);
+        this.suggestionService.updateByTags(this.tags);
       }
     });
   }

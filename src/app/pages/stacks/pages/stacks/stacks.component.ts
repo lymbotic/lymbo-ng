@@ -226,6 +226,9 @@ export class StacksComponent implements OnInit, OnChanges, AfterViewInit, OnDest
    * Initializes stack subscription
    */
   private initializeStackSubscription() {
+    // Clear stacks
+    this.stacksPersistenceService.clearStacks();
+
     this.stacksPersistenceService.stacksSubject.pipe(
       takeUntil(this.unsubscribeSubject)
     ).subscribe((value) => {
@@ -235,6 +238,9 @@ export class StacksComponent implements OnInit, OnChanges, AfterViewInit, OnDest
 
         this.initializeStacks(stacks);
         this.initializeTags(Array.from(this.tagsService.tags.values()));
+
+        this.suggestionService.updateByStacks(this.stacks);
+        this.suggestionService.updateByTags(this.tags);
       }
     });
   }
@@ -404,7 +410,11 @@ export class StacksComponent implements OnInit, OnChanges, AfterViewInit, OnDest
 
         // Take stacks from anonymous user
         if (previousStacks.length > 0) {
-          this.stacksPersistenceService.createStacks(this.stacks.map(stack => {
+          this.stacksPersistenceService.createStacks(previousStacks.filter(stack => {
+            return !this.stacks.some(s => {
+              return s.id === stack.id;
+            });
+          }).map(stack => {
             stack.id = new UUID().toString();
             stack.owner = user.uid;
             return stack;
