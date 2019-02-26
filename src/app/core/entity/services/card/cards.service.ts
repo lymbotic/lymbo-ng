@@ -73,7 +73,11 @@ export class CardsService {
    * @param cardB seconds card
    */
   static sortCards(cardA: Card, cardB: Card) {
-    return (!isNaN(cardA.index) && !isNaN(cardB.index)) ? cardB.index - cardA.index : 0;
+    if (!isNaN(cardA.index) && !isNaN(cardB.index)) {
+      return (cardA.index > cardB.index) ? -1 : 1;
+    } else {
+      return 0;
+    }
   }
 
   /**
@@ -321,6 +325,24 @@ export class CardsService {
 
       // Assign new indices to shuffled cards
       CardsService.shuffleCards(stack.cards).forEach(card => {
+        card.index = index++;
+      });
+
+      resolve();
+    });
+  }
+
+  /**
+   * Restores card order (reverse chronological)
+   * @param stack stack
+   */
+  public restoreCardOrder(stack: Stack): Promise<any> {
+    return new Promise((resolve) => {
+      let index = 0;
+
+      stack.cards.sort((cardA, cardB) => {
+        return new Date(cardB.creationDate).getTime() < new Date(cardA.creationDate).getTime() ? 1 : -1;
+      }).forEach(card => {
         card.index = index++;
       });
 

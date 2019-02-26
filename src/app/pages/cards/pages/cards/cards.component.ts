@@ -308,9 +308,11 @@ export class CardsComponent implements OnInit, OnChanges, AfterViewInit, OnDestr
    * @param cards cards
    */
   private initializeCards(cards: Card[]) {
+
+    // Filter and sort cards
     this.cards = cards.filter(card => {
       return this.filterCard(card);
-    });
+    }).sort(CardsService.sortCards);
   }
 
   /**
@@ -387,7 +389,7 @@ export class CardsComponent implements OnInit, OnChanges, AfterViewInit, OnDestr
       this.filterActive = this.filterService.searchItem.length > 0
         || this.tagsFiltered.length > 0;
 
-      // Filter cards
+      // Filter and sort cards
       this.cards = Array.from(this.cardsService.cards.values()).filter((card: Card) => {
         return this.filterCard(card);
       }).sort(CardsService.sortCards);
@@ -904,13 +906,16 @@ export class CardsComponent implements OnInit, OnChanges, AfterViewInit, OnDestr
       case 'restore-cards': {
         this.moveAllCardsToFirstBox().then(() => {
           this.initializeCardsAreInMultipleBoxes();
-          this.snackbarService.showSnackbar('Moved all cards to first box');
         });
         break;
       }
       case 'shuffle-cards': {
         this.shuffleCards().then(() => {
-          this.snackbarService.showSnackbar('Shuffled cards');
+        });
+        break;
+      }
+      case 'restore-card-order': {
+        this.restoreCardOrder().then(() => {
         });
         break;
       }
@@ -1037,7 +1042,7 @@ export class CardsComponent implements OnInit, OnChanges, AfterViewInit, OnDestr
   getCardsOfBox(index: number) {
     return this.cards.filter(card => {
       return (card.box == null && index === 0) || card.box === index;
-    });
+    }).sort(CardsService.sortCards);
   }
 
   /**
@@ -1091,13 +1096,28 @@ export class CardsComponent implements OnInit, OnChanges, AfterViewInit, OnDestr
    * Shuffles cards
    */
   private shuffleCards(): Promise<any> {
-    return new Promise((resolve) => {
+    return new Promise(() => {
       this.cardsService.shuffleStack(this.stack).then((() => {
         this.stacksPersistenceService.updateStack(this.stack).then(() => {
           this.initializeBoxes(this.stack);
           this.snackbarService.showSnackbar('Shuffled cards');
         }).catch(err => {
           this.snackbarService.showSnackbar('Failed to shuffle cards');
+        });
+      }));
+    });
+  }
+
+  /**
+   * Restores card order (reverse chronological)
+   */
+  private restoreCardOrder(): Promise<any> {
+    return new Promise(() => {
+      this.cardsService.restoreCardOrder(this.stack).then((() => {
+        this.stacksPersistenceService.updateStack(this.stack).then(() => {
+          this.snackbarService.showSnackbar('Restored card order');
+        }).catch(err => {
+          this.snackbarService.showSnackbar('Failed to restore card order');
         });
       }));
     });

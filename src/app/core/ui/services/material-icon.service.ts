@@ -78,6 +78,7 @@ export class MaterialIconService {
     icons.push(new Icon(IconTopic.ACTION, 'settings', 'ic_settings_24px.svg'));
     icons.push(new Icon(IconTopic.ACTION, 'schedule', 'ic_schedule_24px.svg'));
     icons.push(new Icon(IconTopic.ACTION, 'translate', 'ic_translate_24px.svg'));
+    icons.push(new Icon(IconTopic.AV, 'replay', 'ic_replay_24px.svg'));
     icons.push(new Icon(IconTopic.AV, 'shuffle', 'ic_shuffle_24px.svg'));
     icons.push(new Icon(IconTopic.AV, 'skip_next', 'ic_skip_next_24px.svg'));
     icons.push(new Icon(IconTopic.COMMUNICATION, 'vpn_key', 'ic_vpn_key_24px.svg'));

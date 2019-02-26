@@ -103,6 +103,10 @@
         <mat-icon svgIcon="shuffle"></mat-icon>
         <span>Shuffle cards</span>
       </button>
+      <button mat-menu-item [disabled]="!stackNotEmpty" (click)="onMenuItemClicked('restore-card-order')">
+        <mat-icon svgIcon="replay"></mat-icon>
+        <span>Restore card order</span>
+      </button>
       <button mat-menu-item (click)="onMenuItemClicked('vice-versa')">
         <mat-icon svgIcon="flip"></mat-icon>
         <span>Flip all cards</span>

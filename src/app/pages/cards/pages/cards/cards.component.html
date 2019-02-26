@@ -53,7 +53,7 @@
       </mat-tab-group>
 
       <div *ngIf="!cardsAreInMultipleBoxes">
-        <app-card-fragment *ngFor="let card of cards"
+        <app-card-fragment *ngFor="let card of getCardsOfBox(0)"
                            [stack]="stack" [card]="card" [tags]="tags" [viceVersa]="viceVersa"
                            [imagePalette]="stack.imagePalette" [media]="media"
                            (cardEventEmitter)="onCardEvent($event)">
