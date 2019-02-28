@@ -36,6 +36,8 @@ import {TagsService} from '../../../../core/entity/services/tag/tags.service';
 import {FirebaseAuthenticationService} from '../../../../core/firebase/services/firebase-authentication.service';
 import {FirebaseCloudFirestoreService} from '../../../../core/firebase/services/firebase-cloud-firestore.service';
 import {User} from 'firebase';
+import {Setting} from '../../../../core/settings/model/setting.model';
+import {SettingType} from '../../../../core/settings/model/setting-type.enum';
 
 /**
  * Displays cards page
@@ -909,6 +911,14 @@ export class CardsComponent implements OnInit, OnChanges, AfterViewInit, OnDestr
    */
   onMenuItemClicked(menuItem: string) {
     switch (menuItem) {
+      case 'menu': {
+        this.sidenavStart.toggle().then(() => {
+          this.settingsService.updateSetting(new Setting(SettingType.STACKS_SIDENAV_OPENED, this.sidenavStart.opened));
+        });
+        // this.sidenavEnd.toggle().then(() => {
+        // });
+        break;
+      }
       case 'back': {
         this.cardsService.clearCards();
         this.router.navigate([`/stacks`]).then();

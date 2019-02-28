@@ -1,3 +1,4 @@
+@import '../../../../../styles';
 @import '../../../../../flex';
 @import '../../../../../sizes';
 
@@ -13,9 +14,46 @@
 }
 
 .sidenav {
-  background: transparent;
+  background: $background;
   width: 232px;
 }
+
+//
+
+.toolbar-wrapper {
+  align-items: center;
+  display: flex;
+  height: 56px;
+  padding: 0 16px;
+}
+
+.toolbar-menu-item {
+  vertical-align: top;
+  text-align: start;
+  width: 100%;
+
+  @media #{$breakpoint-small} {
+    padding: 0;
+  }
+  @media #{$breakpoint-medium} {
+    padding: 0 10px;
+  }
+  @media #{$breakpoint-large} {
+    padding: 0 20px;
+  }
+}
+
+.toolbar-block {
+  padding-left: 10px;
+  padding-right: 10px;
+  width: 100%;
+}
+
+.icon {
+  margin-right: 16px;
+}
+
+//
 
 .card-main-content {
   @media #{$breakpoint-small} {
@@ -37,11 +75,11 @@
 
 .sidenav {
   @media #{$breakpoint-small} {
-    padding-top: 88px;
+    // padding-top: 88px;
     margin-right: 10px;
   }
   @media #{$breakpoint-medium} {
-    padding-top: 88px;
+    // padding-top: 88px;
     margin-right: 20px;
   }
   @media #{$breakpoint-large} {

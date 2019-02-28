@@ -1,4 +1,5 @@
 <app-cards-toolbar
+  *ngIf="media > mediaType.MEDIUM"
   [@toolbarAnimation]="scrollDirection"
   class="fixed"
   [title]="title"
@@ -22,13 +23,42 @@
                     (tagEventEmitter)="onTagEvent($event)"></app-tag-list>
     </div>
   </mat-sidenav>
-  <mat-sidenav *ngIf="media > mediaType.MEDIUM" #sidenavEnd mode="side"
-               position="end" [opened]="sidenavOpened"
-               class="sidenav sidenav-end">
-    <div [@toolbarAnimation]="scrollDirection"></div>
+
+  <mat-sidenav *ngIf="media < mediaType.LARGE" #sidenavStart mode="over"
+               position="start" [opened]="sidenavOpened"
+               class="sidenav sidenav-start">
+    <div [@toolbarAnimation]="scrollDirection">
+      <div class="toolbar-wrapper">
+        <div class="toolbar-block start">
+          <button mat-button class="toolbar-menu-item" (click)="onMenuItemClicked('menu')">
+            <mat-icon svgIcon="arrow_back" class="icon"></mat-icon>
+            BACK
+          </button>
+          <span *ngIf="media != mediaType.SMALL" class="toolbar-title">{{ title }}</span>
+        </div>
+      </div>
+      <app-tag-list [tags]="tags" [tagsFiltered]="tagsFiltered" [recentCount]="'10'" [media]="media"
+                    (tagEventEmitter)="onTagEvent($event)"></app-tag-list>
+    </div>
   </mat-sidenav>
 
   <mat-sidenav-content cdkScrollable>
+    <app-cards-toolbar
+      *ngIf="media < mediaType.LARGE"
+      [@toolbarAnimation]="scrollDirection"
+      class="fixed"
+      [title]="title"
+      [titleColor]="titleColor"
+      [media]="media"
+      [searchOptions]="searchOptions"
+      [filterFavorites]="filterFavorites"
+      [filterActive]="filterActive"
+      [cardsAreInMultipleBoxes]="cardsAreInMultipleBoxes"
+      [stackNotEmpty]="cards.length > 0"
+      [user]="user"
+      (searchItemEventEmitter)="onSearchItemChanged($event)"
+      (menuItemEventEmitter)="onMenuItemClicked($event)"></app-cards-toolbar>
+
     <div class="card-main-content">
       <mat-tab-group *ngIf="cardsAreInMultipleBoxes"
                      mat-align-tabs="end"
@@ -62,6 +92,11 @@
     </div>
   </mat-sidenav-content>
 
+  <mat-sidenav *ngIf="media > mediaType.MEDIUM" #sidenavStart mode="side"
+               position="end" [opened]="sidenavOpened"
+               class="sidenav sidenav-end">
+    <!-- Just for symmetry -->
+  </mat-sidenav>
 </mat-sidenav-container>
 
 <button mat-fab class="fab" (click)="onAddCardClicked()" [style.background]="fabColor">
