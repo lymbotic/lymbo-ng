@@ -600,7 +600,7 @@ export class CardsComponent implements OnInit, OnChanges, AfterViewInit, OnDestr
         this.evaluateCardTags(stack, card, tags);
 
         // Add card
-        this.addCard(stack, card);
+        this.addCard(stack, card).then();
         break;
       }
       case Action.UPDATE: {
@@ -773,12 +773,17 @@ export class CardsComponent implements OnInit, OnChanges, AfterViewInit, OnDestr
       case Action.ADD: {
         this.filterService.updateTagsListIfNotEmpty([tag]);
         this.tagsService.createTag(stack, tag).then(() => {
+          this.snackbarService.showSnackbar('Added tag');
+        }, () => {
+          this.snackbarService.showSnackbar('Failed to add tag');
         });
         break;
       }
       case Action.UPDATE: {
-        this.filterService.updateTagsListIfNotEmpty([tag]);
-        this.tagsService.updateTag(stack, tag).then(() => {
+        this.updateTag(stack, tag).then(() => {
+          this.snackbarService.showSnackbar('Updated tag');
+        }, () => {
+          this.snackbarService.showSnackbar('Failed to update tag');
         });
         break;
       }
@@ -829,6 +834,7 @@ export class CardsComponent implements OnInit, OnChanges, AfterViewInit, OnDestr
         const data = {
           mode: DialogMode.ADD,
           dialogTitle: 'Add tag',
+          stack: this.stack,
           tag: new Tag('')
         };
 
@@ -842,10 +848,12 @@ export class CardsComponent implements OnInit, OnChanges, AfterViewInit, OnDestr
         dialogRef.afterClosed().subscribe(result => {
           if (result != null) {
             const resultingAction = result.action as Action;
+            const resultingStack = result.stack as Stack;
             const resultingTag = result.tag as Tag;
 
             this.onTagEvent({
               action: resultingAction,
+              stack: resultingStack,
               tag: resultingTag,
             });
           }
@@ -857,6 +865,7 @@ export class CardsComponent implements OnInit, OnChanges, AfterViewInit, OnDestr
         const data = {
           mode: DialogMode.UPDATE,
           dialogTitle: 'Update tag',
+          stack: this.stack,
           tag: tag
         };
 
@@ -870,10 +879,12 @@ export class CardsComponent implements OnInit, OnChanges, AfterViewInit, OnDestr
         dialogRef.afterClosed().subscribe(result => {
           if (result != null) {
             const resultingAction = result.action as Action;
+            const resultingStack = result.stack as Stack;
             const resultingTag = result.tag as Tag;
 
             this.onTagEvent({
               action: resultingAction,
+              stack: resultingStack,
               tag: resultingTag
             });
           }
@@ -1000,16 +1011,20 @@ export class CardsComponent implements OnInit, OnChanges, AfterViewInit, OnDestr
    * @param stack stack
    * @param card card
    */
-  private addCard(stack: Stack, card: Card) {
-    this.cardsService.createCard(stack, card).then(() => {
-      this.stacksPersistenceService.clearStacks();
-      this.stacksPersistenceService.updateStack(stack).then(() => {
-        this.snackbarService.showSnackbar('Added card');
+  private addCard(stack: Stack, card: Card): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.cardsService.createCard(stack, card).then(() => {
+        this.stacksPersistenceService.clearStacks();
+        this.stacksPersistenceService.updateStack(stack).then(() => {
+          resolve();
+        }).catch(err => {
+          console.error(err);
+          reject();
+        });
       }).catch(err => {
         console.error(err);
+        reject();
       });
-    }).catch(err => {
-      console.error(err);
     });
   }
 
@@ -1022,6 +1037,48 @@ export class CardsComponent implements OnInit, OnChanges, AfterViewInit, OnDestr
     return new Promise((resolve, reject) => {
       this.cardsService.updateCard(stack, card).then(() => {
         this.stacksPersistenceService.clearStacks();
+        this.stacksPersistenceService.updateStack(stack).then(() => {
+          resolve();
+        }).catch(err => {
+          console.error(err);
+          reject();
+        });
+      }).catch(err => {
+        console.error(err);
+        reject();
+      });
+    });
+  }
+
+  /**
+   * Adds a tag
+   * @param stack stack
+   * @param tag tag
+   */
+  private addTag(stack: Stack, tag: Tag): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.tagsService.createTag(stack, tag).then(() => {
+        this.stacksPersistenceService.updateStack(stack).then(() => {
+          resolve();
+        }).catch(err => {
+          console.error(err);
+          reject();
+        });
+      }).catch(err => {
+        console.error(err);
+        reject();
+      });
+    });
+  }
+
+  /**
+   * Updates a tag
+   * @param stack stack
+   * @param tag tag
+   */
+  private updateTag(stack: Stack, tag: Tag): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.tagsService.updateTag(stack, tag).then(() => {
         this.stacksPersistenceService.updateStack(stack).then(() => {
           resolve();
         }).catch(err => {
