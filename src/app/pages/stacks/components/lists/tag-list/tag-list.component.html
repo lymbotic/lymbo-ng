@@ -1,3 +1,4 @@
+<!--
 <mat-accordion class="headers-align">
   <mat-expansion-panel [expanded]="true" (opened)="true" hideToggle>
     <mat-expansion-panel-header>
@@ -7,6 +8,8 @@
         </div>
       </mat-panel-title>
     </mat-expansion-panel-header>
+-->
+
     <!-- Recent -->
     <app-tag-list-item *ngFor="let t of tagsRecent" [tag]="t" [media]="media" [active]="isInFocus(t)"
                        (tagEventEmitter)="onTagEvent($event)">
@@ -20,5 +23,9 @@
     </div>
 
     <button mat-button *ngIf="tags.length > recentCount" (click)="onMoreLessToggled()">{{ showMoreLabel }}</button>
+
+<!--
   </mat-expansion-panel>
 </mat-accordion>
+-->
+

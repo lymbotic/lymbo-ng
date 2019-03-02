@@ -25,4 +25,15 @@
       <mat-icon svgIcon='filter_list'></mat-icon>
     </button>
   </div>
+  <div *ngIf="media < mediaType.LARGE" class="flexcontainer">
+    <button mat-icon-button
+            matTooltip="Filter"
+            matTooltipPosition="above"
+            matTooltipShowDelay="250"
+            class="action"
+            [disableRipple]="true"
+            (click)="onFilterClicked()">
+      <mat-icon svgIcon='filter_list'></mat-icon>
+    </button>
+  </div>
 </div>
