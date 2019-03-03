@@ -10,7 +10,7 @@
   (searchItemEventEmitter)="onSearchItemChanged($event)"
   (menuItemEventEmitter)="onMenuItemClicked($event)"></app-stacks-toolbar>
 
-<mat-sidenav-container class="sidenav-container" layout="column">
+<mat-sidenav-container class="sidenav-container" layout="column" (keydown)="onKeyDown($event)">
   <mat-sidenav *ngIf="media > mediaType.MEDIUM" #sidenavStart mode="side" disableClose="true"
                position="start" [opened]="sidenavOpened"
                class="sidenav sidenav-start">

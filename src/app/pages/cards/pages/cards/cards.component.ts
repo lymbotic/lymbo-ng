@@ -1012,6 +1012,17 @@ export class CardsComponent implements OnInit, OnChanges, AfterViewInit, OnDestr
     this.filterService.updateSearchItem(searchItem);
   }
 
+  /**
+   * Handles key down event
+   * @param event
+   */
+  onKeyDown(event: any) {
+    const KEY_CODE_ENTER = 13;
+    if (event.keyCode === KEY_CODE_ENTER && event.ctrlKey) {
+      this.onCardEvent({action: Action.OPEN_DIALOG_ADD, stack: this.stack, card: null});
+    }
+  }
+
   //
   // Helpers
   //

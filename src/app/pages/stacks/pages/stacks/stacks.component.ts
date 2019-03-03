@@ -912,6 +912,17 @@ export class StacksComponent implements OnInit, OnChanges, AfterViewInit, OnDest
     this.filterService.updateSearchItem(searchItem);
   }
 
+  /**
+   * Handles key down event
+   * @param event
+   */
+  onKeyDown(event: any) {
+    const KEY_CODE_ENTER = 13;
+    if (event.keyCode === KEY_CODE_ENTER && event.ctrlKey) {
+      this.onStackEvent({action: Action.OPEN_DIALOG_ADD, stack: null});
+    }
+  }
+
   //
   // Helpers
   //

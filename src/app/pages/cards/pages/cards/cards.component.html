@@ -17,7 +17,8 @@
 <mat-sidenav-container class="sidenav-container" layout="column">
   <mat-sidenav *ngIf="media > mediaType.MEDIUM" #sidenavStart mode="side" disableClose="true"
                position="start" [opened]="sidenavOpened"
-               class="sidenav sidenav-start">
+               class="sidenav sidenav-start"
+               (keydown)="onKeyDown($event)">
     <div [@toolbarAnimation]="scrollDirection">
       <app-tag-list [tags]="tags" [tagsFiltered]="tagsFiltered" [recentCount]="'10'" [media]="media"
                     (tagEventEmitter)="onTagEvent($event)"></app-tag-list>
@@ -26,7 +27,8 @@
 
   <mat-sidenav *ngIf="media < mediaType.LARGE" #sidenavStart mode="over" disableClose="true"
                position="start" [opened]="sidenavOpened"
-               class="sidenav sidenav-start">
+               class="sidenav sidenav-start"
+               (keydown)="onKeyDown($event)">
     <div [@toolbarAnimation]="scrollDirection">
       <div class="toolbar-wrapper">
         <div class="toolbar-block start">
@@ -42,7 +44,7 @@
     </div>
   </mat-sidenav>
 
-  <mat-sidenav-content cdkScrollable>
+  <mat-sidenav-content cdkScrollable (keydown)="onKeyDown($event)">
     <app-cards-toolbar
       *ngIf="media < mediaType.LARGE"
       [@toolbarAnimation]="scrollDirection"
@@ -56,6 +58,7 @@
       [cardsAreInMultipleBoxes]="cardsAreInMultipleBoxes"
       [stackNotEmpty]="cards.length > 0"
       [user]="user"
+      (keydown)="onKeyDown($event)"
       (searchItemEventEmitter)="onSearchItemChanged($event)"
       (menuItemEventEmitter)="onMenuItemClicked($event)"></app-cards-toolbar>
 
@@ -94,7 +97,8 @@
 
   <mat-sidenav *ngIf="media > mediaType.MEDIUM" #sidenavStart mode="side" disableClose="true"
                position="end" [opened]="sidenavOpened"
-               class="sidenav sidenav-end">
+               class="sidenav sidenav-end"
+               (keydown)="onKeyDown($event)">
     <!-- Just for symmetry -->
   </mat-sidenav>
 </mat-sidenav-container>
