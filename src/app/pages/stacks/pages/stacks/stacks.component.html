@@ -11,7 +11,7 @@
   (menuItemEventEmitter)="onMenuItemClicked($event)"></app-stacks-toolbar>
 
 <mat-sidenav-container class="sidenav-container" layout="column">
-  <mat-sidenav *ngIf="media > mediaType.MEDIUM" #sidenavStart mode="side"
+  <mat-sidenav *ngIf="media > mediaType.MEDIUM" #sidenavStart mode="side" disableClose="true"
                position="start" [opened]="sidenavOpened"
                class="sidenav sidenav-start">
     <div [@toolbarAnimation]="scrollDirection">
@@ -20,7 +20,7 @@
     </div>
   </mat-sidenav>
 
-  <mat-sidenav *ngIf="media < mediaType.LARGE" #sidenavStart mode="over"
+  <mat-sidenav *ngIf="media < mediaType.LARGE" #sidenavStart mode="over" disableClose="true"
                position="start" [opened]="sidenavOpened"
                class="sidenav sidenav-start">
     <div [@toolbarAnimation]="scrollDirection">
