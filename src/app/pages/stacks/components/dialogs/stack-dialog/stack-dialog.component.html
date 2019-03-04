@@ -5,6 +5,7 @@
       <app-stack-type-fragment [stack]="stack" (stackTypeEventEmitter)="onStackTypeChanged($event)">
       </app-stack-type-fragment>
       <app-stack-title-fragment class="stack-title"
+                                cdkTrapFocus
                                 [stackTitle]="stack.title" [placeholder]="'Stack name'"
                                 (stackTitleChangedEmitter)="onStackTitleChanged($event)">
       </app-stack-title-fragment>

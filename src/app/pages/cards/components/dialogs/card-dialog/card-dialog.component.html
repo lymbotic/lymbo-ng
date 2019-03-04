@@ -7,6 +7,7 @@
 
       <!-- Sides -->
       <app-side-form *ngIf="containsDisplayAspect(displayAspectType.TITLES, card)"
+                     cdkTrapFocus
                      [card]="card" [stack]="stack"
                      (cardEventEmitter)="onSidesChanged($event)"></app-side-form>
 

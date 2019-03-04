@@ -1,5 +1,5 @@
 <div class="searchbox">
-  <input class="search-input" matInput name="search" type="text" [placeholder]="placeholder"
+  <input class="search-input" cdkFocusInitial matInput name="search" type="text" [placeholder]="placeholder"
          [ngModel]="stackTitle"
          (ngModelChange)="onStackTitleChanged($event)"
          [disabled]="readonly"

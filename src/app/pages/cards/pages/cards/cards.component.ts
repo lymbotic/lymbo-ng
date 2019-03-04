@@ -699,6 +699,7 @@ export class CardsComponent implements OnInit, OnChanges, AfterViewInit, OnDestr
 
         // Open dialog
         const dialogRef = this.dialog.open(CardDialogComponent, {
+          // autoFocus: false,
           disableClose: false,
           data: data
         });
