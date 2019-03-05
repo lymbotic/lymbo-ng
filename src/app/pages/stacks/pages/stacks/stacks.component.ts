@@ -620,7 +620,6 @@ export class StacksComponent implements OnInit, OnChanges, AfterViewInit, OnDest
 
         // Open dialog
         const dialogRef = this.dialog.open(StackDialogComponent, {
-          autoFocus: false,
           disableClose: false,
           data: data
         });
