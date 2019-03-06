@@ -28,7 +28,7 @@
         <div *ngIf="activeAspect != null" [ngSwitch]="activeAspect.type">
           <div *ngSwitchCase="aspectType.SIDE" (click)="onCardClicked(actionType.NONE)">
             <img *ngIf="activeSide.imageUrl !== ''" mat-card-image [attr.src]="activeSide.imageUrl">
-            <mat-card-title class="side-title">{{ activeSide.title }}</mat-card-title>
+            <mat-card-title class="side-title side">{{ activeSide.title }}</mat-card-title>
           </div>
           <div *ngSwitchCase="aspectType.TENSE" (click)="onCardClicked(actionType.NONE)">
             <app-tense-fragment [tenseGroup]="activeTenseGroup" [readonly]="true">
