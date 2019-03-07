@@ -12,7 +12,8 @@
 </div>
 <mat-list>
   <mat-list-item *ngFor="let form of tenseGroup.forms">
-    <input matInput type="text" autocomplete="off" [placeholder]=form.person
-           [readonly]="readonly" [ngModel]="form.value" (ngModelChange)="onFormChanged(form.person, $event)">
+    <input *ngIf="!readonly "matInput type="text" autocomplete="off" [placeholder]=form.person
+           [ngModel]="form.value" (ngModelChange)="onFormChanged(form.person, $event)">
+    <app-markdown-preview *ngIf="readonly" [markdownText]="form.value" preventParagraphMargins="true" class="preview"></app-markdown-preview>
   </mat-list-item>
 </mat-list>
