@@ -112,7 +112,7 @@ export class CardsComponent implements OnInit, OnChanges, AfterViewInit, OnDestr
   public scrollState: ScrollState = ScrollState.NON_SCROLLING;
 
   /** Sidenav state */
-  public sidenavOpened = true;
+  public sidenavOpened = false;
 
   /** Side navigation at start */
   @ViewChild('sidenavStart') sidenavStart: MatSidenav;
