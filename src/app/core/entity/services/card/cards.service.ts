@@ -215,8 +215,6 @@ export class CardsService {
       if (card == null) {
         reject();
       }
-
-
       this.removeCardFromStack(stack, card);
       resolve();
     });

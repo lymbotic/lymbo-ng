@@ -678,7 +678,7 @@ export class CardsComponent implements OnInit, OnChanges, AfterViewInit, OnDestr
         });
         confirmationDialogRef.afterClosed().subscribe(confirmationResult => {
           if (confirmationResult != null) {
-            this.cardsService.deleteCard(stack, confirmationResult as Card).then(() => {
+            this.deleteCard(stack, confirmationResult as Card).then(() => {
               this.snackbarService.showSnackbar('Deleted card');
             }, () => {
               this.snackbarService.showSnackbar('Failed to deleted card');
@@ -1057,6 +1057,28 @@ export class CardsComponent implements OnInit, OnChanges, AfterViewInit, OnDestr
   private updateCard(stack: Stack, card: Card): Promise<any> {
     return new Promise((resolve, reject) => {
       this.cardsService.updateCard(stack, card).then(() => {
+        this.stacksPersistenceService.clearStacks();
+        this.stacksPersistenceService.updateStack(stack).then(() => {
+          resolve();
+        }).catch(err => {
+          console.error(err);
+          reject();
+        });
+      }).catch(err => {
+        console.error(err);
+        reject();
+      });
+    });
+  }
+
+  /**
+   * Deletes a card
+   * @param stack stack
+   * @param card card
+   */
+  private deleteCard(stack: Stack, card: Card): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.cardsService.deleteCard(stack, card).then(() => {
         this.stacksPersistenceService.clearStacks();
         this.stacksPersistenceService.updateStack(stack).then(() => {
           resolve();
