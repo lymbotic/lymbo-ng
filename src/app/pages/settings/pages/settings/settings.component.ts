@@ -131,8 +131,12 @@ export class SettingsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.settingsService.settingsSubject.subscribe(value => {
       if (value != null) {
         this.settings = value as Map<string, Setting>;
-        this.apiKeyMicrosoftTextTranslate = this.settings.get(SettingType.API_KEY_MICROSOFT_TEXT_TRANSLATE).value;
-        this.apiKeyPexelsImages = this.settings.get(SettingType.API_KEY_PEXELS_IMAGE).value;
+
+        const apiKeyMicrosoftTextTranslateSetting = this.settings.get(SettingType.API_KEY_MICROSOFT_TEXT_TRANSLATE);
+        const apiKeyPexelsImagesSetting = this.settings.get(SettingType.API_KEY_PEXELS_IMAGE);
+
+        this.apiKeyMicrosoftTextTranslate = apiKeyMicrosoftTextTranslateSetting != null ? apiKeyMicrosoftTextTranslateSetting.value : '';
+        this.apiKeyPexelsImages = apiKeyPexelsImagesSetting != null ? apiKeyPexelsImagesSetting.value : '';
       }
     });
   }
