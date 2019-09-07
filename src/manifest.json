@@ -1,6 +1,11 @@
 {
   "name": "Lymbo",
   "short_name": "Lymbo",
+  "theme_color": "#fafafa",
+  "background_color": "#fafafa",
+  "display": "standalone",
+  "scope": "/",
+  "start_url": "/",
   "icons": [
     {
       "src": "assets/logos/logo-144x144.png",
@@ -12,10 +17,5 @@
       "sizes": "256x256",
       "type": "image/png"
     }
-  ],
-  "theme_color": "#fafafa",
-  "background_color": "#fafafa",
-  "display": "standalone",
-  "orientation": "portrait",
-  "start_url": "./?utm_source=web_app_manifest"
+  ]
 }

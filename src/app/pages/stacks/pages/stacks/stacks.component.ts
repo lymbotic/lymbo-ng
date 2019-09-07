@@ -101,11 +101,11 @@ export class StacksComponent implements OnInit, OnChanges, AfterViewInit, OnDest
   public sidenavOpened = false;
 
   /** Side navigation at start */
-  @ViewChild('sidenavStart') sidenavStart: MatSidenav;
+  @ViewChild('sidenavStart', {static: false}) sidenavStart: MatSidenav;
   /** Side navigation at end */
-  @ViewChild('sidenavEnd') sidenavEnd: MatSidenav;
+  @ViewChild('sidenavEnd', {static: false}) sidenavEnd: MatSidenav;
   /** Scrollable directive */
-  @ViewChild(CdkScrollable) scrollable: CdkScrollable;
+  @ViewChild(CdkScrollable, {static: false}) scrollable: CdkScrollable;
 
   /**
    * Converts palette into a vibrant palette object
@@ -519,7 +519,7 @@ export class StacksComponent implements OnInit, OnChanges, AfterViewInit, OnDest
 
   /**
    * Handles events targeting a stack
-   * @param {any} event event parameters
+   * @param event event parameters
    */
   onStackEvent(event: { action: Action, stack: Stack, tags?: Tag[] }) {
     const stack = CloneService.cloneStack(event.stack as Stack);
@@ -590,7 +590,7 @@ export class StacksComponent implements OnInit, OnChanges, AfterViewInit, OnDest
         break;
       }
       case Action.DELETE: {
-        const confirmationDialogRef = this.dialog.open(ConfirmationDialogComponent, <MatDialogConfig>{
+        const confirmationDialogRef = this.dialog.open(ConfirmationDialogComponent, {
           disableClose: false,
           data: {
             title: 'Delete stack',
@@ -621,7 +621,7 @@ export class StacksComponent implements OnInit, OnChanges, AfterViewInit, OnDest
         // Open dialog
         const dialogRef = this.dialog.open(StackDialogComponent, {
           disableClose: false,
-          data: data
+          data
         });
 
         // Handle dialog close
@@ -645,7 +645,7 @@ export class StacksComponent implements OnInit, OnChanges, AfterViewInit, OnDest
         const data = {
           mode: DialogMode.UPDATE,
           dialogTitle: 'Update stack',
-          stack: stack,
+          stack,
           stacks: this.stacks,
           tags: stack.tagIds.map(id => {
             return this.tagsService.tags.get(id);
@@ -657,7 +657,7 @@ export class StacksComponent implements OnInit, OnChanges, AfterViewInit, OnDest
         // Open dialog
         const dialogRef = this.dialog.open(StackDialogComponent, {
           disableClose: false,
-          data: data
+          data
         });
 
         // Handle dialog close
@@ -686,7 +686,7 @@ export class StacksComponent implements OnInit, OnChanges, AfterViewInit, OnDest
 
   /**
    * Handles events targeting a tag
-   * @param {any} event event parameters
+   * @param event event parameters
    */
   onTagEvent(event: { action: Action, stack?: Stack, tag?: Tag, tags?: Tag[] }) {
     const stack = CloneService.cloneStack(event.stack as Stack);
@@ -724,7 +724,7 @@ export class StacksComponent implements OnInit, OnChanges, AfterViewInit, OnDest
         });
 
         if (referencesStacks || referencesCards) {
-          this.dialog.open(InformationDialogComponent, <MatDialogConfig>{
+          this.dialog.open(InformationDialogComponent, {
             disableClose: false,
             data: {
               title: 'Cannot delete tag',
@@ -734,7 +734,7 @@ export class StacksComponent implements OnInit, OnChanges, AfterViewInit, OnDest
             }
           });
         } else {
-          const confirmationDialogRef = this.dialog.open(ConfirmationDialogComponent, <MatDialogConfig>{
+          const confirmationDialogRef = this.dialog.open(ConfirmationDialogComponent, {
             disableClose: false,
             data: {
               title: 'Delete tag',
@@ -758,14 +758,14 @@ export class StacksComponent implements OnInit, OnChanges, AfterViewInit, OnDest
         const data = {
           mode: DialogMode.ADD,
           dialogTitle: 'Add tag',
-          stack: stack,
+          stack,
           tag: new Tag('')
         };
 
         // Open dialog
         const dialogRef = this.dialog.open(TagDialogComponent, {
           disableClose: false,
-          data: data
+          data
         });
 
         // Handle dialog close
@@ -832,7 +832,7 @@ export class StacksComponent implements OnInit, OnChanges, AfterViewInit, OnDest
 
   /**
    * Handles click on menu items
-   * @param {string} menuItem menu item that has been clicked
+   * @param menuItem menu item that has been clicked
    */
   onMenuItemClicked(menuItem: string) {
     switch (menuItem) {
@@ -859,7 +859,7 @@ export class StacksComponent implements OnInit, OnChanges, AfterViewInit, OnDest
         break;
       }
       case 'upload': {
-        this.dialog.open(UploadDialogComponent, <MatDialogConfig>{
+        this.dialog.open(UploadDialogComponent, {
           disableClose: false,
           data: {
             title: 'Upload',
@@ -886,7 +886,7 @@ export class StacksComponent implements OnInit, OnChanges, AfterViewInit, OnDest
         break;
       }
       case 'about': {
-        this.dialog.open(AboutDialogComponent, <MatDialogConfig>{
+        this.dialog.open(AboutDialogComponent, {
           disableClose: false,
           data: {
             title: 'About',
@@ -906,7 +906,7 @@ export class StacksComponent implements OnInit, OnChanges, AfterViewInit, OnDest
 
   /**
    * Handles search item typed into the search field
-   * @param {string} searchItem new search item
+   * @param searchItem new search item
    */
   onSearchItemChanged(searchItem: string) {
     this.filterService.updateSearchItem(searchItem);
@@ -914,7 +914,7 @@ export class StacksComponent implements OnInit, OnChanges, AfterViewInit, OnDest
 
   /**
    * Handles key down event
-   * @param event
+   * @param event event
    */
   onKeyDown(event: any) {
     const KEY_CODE_ENTER = 13;
@@ -997,8 +997,8 @@ export class StacksComponent implements OnInit, OnChanges, AfterViewInit, OnDest
 
   /**
    * Determines whether the tags assigned to a given stack already exist, otherwise creates new ones
-   * @param {stack} stack task assign tags to
-   * @param {Tag[]} tags array of tags to be checked
+   * @param stack task assign tags to
+   * @param tags array of tags to be checked
    */
   private evaluateStackTags(stack: Stack, tags: Tag[]) {
     if (tags != null) {

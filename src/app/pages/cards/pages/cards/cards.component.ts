@@ -3,7 +3,7 @@ import {AboutDialogComponent} from '../../../../ui/about-dialog/about-dialog/abo
 import {environment} from '../../../../../environments/environment';
 import {AfterViewInit, Component, Inject, NgZone, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {Subject} from 'rxjs';
-import {MatDialog, MatDialogConfig, MatIconRegistry, MatSidenav} from '@angular/material';
+import {MatDialog, MatIconRegistry, MatSidenav} from '@angular/material';
 import {Media} from '../../../../core/ui/model/media.enum';
 import {CdkScrollable, ScrollDispatcher} from '@angular/cdk/overlay';
 import {Animations, ScrollDirection, ScrollState} from './cards.animation';
@@ -115,11 +115,11 @@ export class CardsComponent implements OnInit, OnChanges, AfterViewInit, OnDestr
   public sidenavOpened = false;
 
   /** Side navigation at start */
-  @ViewChild('sidenavStart') sidenavStart: MatSidenav;
+  @ViewChild('sidenavStart', {static: false}) sidenavStart: MatSidenav;
   /** Side navigation at end */
-  @ViewChild('sidenavEnd') sidenavEnd: MatSidenav;
+  @ViewChild('sidenavEnd', {static: false}) sidenavEnd: MatSidenav;
   /** Scrollable directive */
-  @ViewChild(CdkScrollable) scrollable: CdkScrollable;
+  @ViewChild(CdkScrollable, {static: false}) scrollable: CdkScrollable;
 
   /** Selected tab */
   selectedTab = new FormControl(0);
@@ -464,8 +464,7 @@ export class CardsComponent implements OnInit, OnChanges, AfterViewInit, OnDestr
 
   /**
    * Initializes colors
-   *
-   * @param stack
+   * @param stack stack
    */
   private initializeColors(stack: Stack) {
     if (stack.imagePalette != null) {
@@ -589,7 +588,7 @@ export class CardsComponent implements OnInit, OnChanges, AfterViewInit, OnDestr
 
   /**
    * Handles events targeting a card
-   * @param {any} event event parameters
+   * @param event event parameters
    */
   onCardEvent(event: { action: Action, stack: Stack, card: Card, tags?: Tag[] }) {
     const stack = CloneService.cloneStack(event.stack as Stack);
@@ -667,7 +666,7 @@ export class CardsComponent implements OnInit, OnChanges, AfterViewInit, OnDestr
         break;
       }
       case Action.DELETE: {
-        const confirmationDialogRef = this.dialog.open(ConfirmationDialogComponent, <MatDialogConfig>{
+        const confirmationDialogRef = this.dialog.open(ConfirmationDialogComponent, {
           disableClose: false,
           data: {
             title: 'Delete card',
@@ -693,14 +692,14 @@ export class CardsComponent implements OnInit, OnChanges, AfterViewInit, OnDestr
           mode: DialogMode.ADD,
           dialogTitle: 'Add card',
           card: new Card(),
-          stack: stack,
+          stack,
           tags: []
         };
 
         // Open dialog
         const dialogRef = this.dialog.open(CardDialogComponent, {
           disableClose: false,
-          data: data
+          data
         });
 
         // Handle dialog close
@@ -726,7 +725,7 @@ export class CardsComponent implements OnInit, OnChanges, AfterViewInit, OnDestr
         const data = {
           mode: DialogMode.UPDATE,
           dialogTitle: 'Update card',
-          card: card,
+          card,
           stack: this.stack,
           tags: card.tagIds.map(id => {
             return this.tagsService.tags.get(id);
@@ -738,7 +737,7 @@ export class CardsComponent implements OnInit, OnChanges, AfterViewInit, OnDestr
         // Open dialog
         const dialogRef = this.dialog.open(CardDialogComponent, {
           disableClose: false,
-          data: data
+          data
         });
 
         // Handle dialog close
@@ -764,7 +763,7 @@ export class CardsComponent implements OnInit, OnChanges, AfterViewInit, OnDestr
 
   /**
    * Handles events targeting a tag
-   * @param {any} event event parameters
+   * @param event event parameters
    */
   onTagEvent(event: { action: Action, stack?: Stack, tag?: Tag, tags?: Tag[] }) {
     const stack = CloneService.cloneStack(event.stack as Stack);
@@ -802,7 +801,7 @@ export class CardsComponent implements OnInit, OnChanges, AfterViewInit, OnDestr
         });
 
         if (referencesStacks || referencesCards) {
-          this.dialog.open(InformationDialogComponent, <MatDialogConfig>{
+          this.dialog.open(InformationDialogComponent, {
             disableClose: false,
             data: {
               title: 'Cannot delete tag',
@@ -812,7 +811,7 @@ export class CardsComponent implements OnInit, OnChanges, AfterViewInit, OnDestr
             }
           });
         } else {
-          const confirmationDialogRef = this.dialog.open(ConfirmationDialogComponent, <MatDialogConfig>{
+          const confirmationDialogRef = this.dialog.open(ConfirmationDialogComponent, {
             disableClose: false,
             data: {
               title: 'Delete tag',
@@ -843,7 +842,7 @@ export class CardsComponent implements OnInit, OnChanges, AfterViewInit, OnDestr
         // Open dialog
         const dialogRef = this.dialog.open(TagDialogComponent, {
           disableClose: false,
-          data: data
+          data
         });
 
         // Handle dialog close
@@ -868,13 +867,13 @@ export class CardsComponent implements OnInit, OnChanges, AfterViewInit, OnDestr
           mode: DialogMode.UPDATE,
           dialogTitle: 'Update tag',
           stack: this.stack,
-          tag: tag
+          tag
         };
 
         // Open dialog
         const dialogRef = this.dialog.open(TagDialogComponent, {
           disableClose: false,
-          data: data
+          data
         });
 
         // Handle dialog close
@@ -907,7 +906,7 @@ export class CardsComponent implements OnInit, OnChanges, AfterViewInit, OnDestr
 
   /**
    * Handles click on menu items
-   * @param {string} menuItem menu item that has been clicked
+   * @param menuItem menu item that has been clicked
    */
   onMenuItemClicked(menuItem: string) {
     switch (menuItem) {
@@ -986,7 +985,7 @@ export class CardsComponent implements OnInit, OnChanges, AfterViewInit, OnDestr
         break;
       }
       case 'about': {
-        this.dialog.open(AboutDialogComponent, <MatDialogConfig>{
+        this.dialog.open(AboutDialogComponent, {
           disableClose: false,
           data: {
             title: 'About',
@@ -1006,7 +1005,7 @@ export class CardsComponent implements OnInit, OnChanges, AfterViewInit, OnDestr
 
   /**
    * Handles search item typed into the search field
-   * @param {string} searchItem new search item
+   * @param searchItem new search item
    */
   onSearchItemChanged(searchItem: string) {
     this.filterService.updateSearchItem(searchItem);
@@ -1014,11 +1013,11 @@ export class CardsComponent implements OnInit, OnChanges, AfterViewInit, OnDestr
 
   /**
    * Handles key down event
-   * @param event
+   * @param event event
    */
   onKeyDown(event: any) {
     const KEY_CODE_ENTER = 13;
-    if (event.keyCode === KEY_CODE_ENTER && event.ctrlKey) {
+    if (event.code === KEY_CODE_ENTER && event.ctrlKey) {
       this.onCardEvent({action: Action.OPEN_DIALOG_ADD, stack: this.stack, card: null});
     }
   }
@@ -1180,12 +1179,12 @@ export class CardsComponent implements OnInit, OnChanges, AfterViewInit, OnDestr
    * Restores all cards that have been put aside
    */
   private moveAllCardsToFirstBox(): Promise<any> {
-    return new Promise((resolve) => {
+    return new Promise(() => {
       this.cardsService.moveAllCardsToFirstBox(this.stack).then((() => {
         this.stacksPersistenceService.updateStack(this.stack).then(() => {
           this.initializeBoxes(this.stack);
           this.snackbarService.showSnackbar('Moved all cards to first box');
-        }).catch(err => {
+        }).catch(() => {
           this.snackbarService.showSnackbar('Failed to move all cards to first box');
         });
       }));
@@ -1201,7 +1200,7 @@ export class CardsComponent implements OnInit, OnChanges, AfterViewInit, OnDestr
         this.stacksPersistenceService.updateStack(this.stack).then(() => {
           this.initializeBoxes(this.stack);
           this.snackbarService.showSnackbar('Shuffled cards');
-        }).catch(err => {
+        }).catch(() => {
           this.snackbarService.showSnackbar('Failed to shuffle cards');
         });
       }));
@@ -1216,7 +1215,7 @@ export class CardsComponent implements OnInit, OnChanges, AfterViewInit, OnDestr
       this.cardsService.restoreCardOrder(this.stack).then((() => {
         this.stacksPersistenceService.updateStack(this.stack).then(() => {
           this.snackbarService.showSnackbar('Restored card order');
-        }).catch(err => {
+        }).catch(() => {
           this.snackbarService.showSnackbar('Failed to restore card order');
         });
       }));

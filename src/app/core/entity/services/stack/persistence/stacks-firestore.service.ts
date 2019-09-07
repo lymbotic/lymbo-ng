@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {StacksPersistenceService} from './stacks-persistence.interface';
-import {Subject} from 'rxjs/Subject';
+import {Subject} from 'rxjs';
 import {User} from 'firebase';
 import {Stack} from '../../../model/stack/stack.model';
 import {FirebaseCloudFirestoreService} from '../../../../firebase/services/firebase-cloud-firestore.service';

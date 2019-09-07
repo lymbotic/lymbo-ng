@@ -43,7 +43,7 @@ export class StackTypeFragmentComponent implements OnInit, OnChanges {
   @Output() stackTypeEventEmitter = new EventEmitter<StackType>();
 
   /** Tasklet type selection */
-  @ViewChild('select') select: MatSelect;
+  @ViewChild('select', {static: false}) select: MatSelect;
 
   /** Available stack types */
   stackTypes = Object.keys(StackType).map(key => StackType[key]);
@@ -146,8 +146,8 @@ export class StackTypeFragmentComponent implements OnInit, OnChanges {
 
   /**
    * Handles hover over container
-   * @param {boolean} hovered whether there is currently a hover event
-   * @param {StackTypeGroupAction} action stack type group action
+   * @param hovered whether there is currently a hover event
+   * @param action stack type group action
    */
   onHoverContainer(hovered: boolean, action: StackTypeGroupAction) {
     this.hoveredGroup = hovered ? action.group : null;

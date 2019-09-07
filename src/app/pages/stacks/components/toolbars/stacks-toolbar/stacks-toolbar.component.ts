@@ -8,7 +8,7 @@ import {User} from 'firebase';
 import {STACK_PERSISTENCE_FIRESTORE} from '../../../../../core/entity/entity.module';
 import {StacksPersistenceService} from '../../../../../core/entity/services/stack/persistence/stacks-persistence.interface';
 import {ConfirmationDialogComponent} from '../../../../../ui/confirmation-dialog/confirmation-dialog/confirmation-dialog.component';
-import {MatDialog, MatDialogConfig} from '@angular/material';
+import {MatDialog} from '@angular/material';
 
 /**
  * Displays stacks toolbar
@@ -36,7 +36,7 @@ export class StacksToolbarComponent implements OnInit {
   @Output() menuItemEventEmitter = new EventEmitter<string>();
 
   /** File change input */
-  @ViewChild('fileChange') fileChange: ElementRef;
+  @ViewChild('fileChange', {static: false}) fileChange: ElementRef;
 
   /** Enum for media types */
   mediaType = Media;
@@ -98,7 +98,7 @@ export class StacksToolbarComponent implements OnInit {
   //
 
   /** Handles click on menu item
-   * @param {string} menuItem
+   * @param menuItem menu item
    */
   onMenuItemClicked(menuItem: string): void {
     this.menuItemEventEmitter.emit(menuItem);
@@ -122,7 +122,7 @@ export class StacksToolbarComponent implements OnInit {
       const [file] = event.target.files;
       reader.readAsText(file);
       reader.onload = () => {
-        const confirmationDialogRef = this.dialog.open(ConfirmationDialogComponent, <MatDialogConfig>{
+        const confirmationDialogRef = this.dialog.open(ConfirmationDialogComponent, {
           disableClose: false,
           data: {
             title: 'Duplicate stack',
@@ -133,7 +133,7 @@ export class StacksToolbarComponent implements OnInit {
         });
         confirmationDialogRef.afterClosed().subscribe(confirmationResult => {
           if (confirmationResult != null) {
-            this.stacksPersistenceService.uploadStack(JSON.parse(reader.result) as Stack, this.user);
+            this.stacksPersistenceService.uploadStack(JSON.parse(reader.result.toString()) as Stack, this.user);
           }
         });
       };
@@ -185,8 +185,8 @@ export class StacksToolbarComponent implements OnInit {
 
   /**
    * Filters options according to current value of input field
-   * @param {string} value input field value
-   * @returns {string[]} array of filtered options
+   * @param value input field value
+   * @returns array of filtered options
    */
   private filterOptions(value: string): string[] {
     return this.searchOptions.filter(option =>

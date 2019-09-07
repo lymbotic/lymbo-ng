@@ -2,7 +2,6 @@ import {EventEmitter, Injectable} from '@angular/core';
 import {UUID} from '../../entity/model/uuid';
 import {HttpClient} from '@angular/common/http';
 import {SettingsService} from '../../settings/services/settings.service';
-import {el} from '@angular/platform-browser/testing/src/browser_util';
 import {SettingType} from '../../settings/model/setting-type.enum';
 import {ConnectionService} from '../../common/services/connection.service';
 import {Language} from '../../entity/model/card/language.enum';
@@ -188,9 +187,10 @@ export class MicrosoftTranslateService {
           json: true,
         };
 
-        const ob = this.httpClient.post(`https://api.cognitive.microsofttranslator.com/translate?api-version=3.0&to=${languageCode}`, [{
-          'text': text
-        }], options);
+        const ob = this.httpClient
+          .post(`https://api.cognitive.microsofttranslator.com/translate?api-version=3.0&to=${languageCode}`, [{
+            text
+          }], options);
         ob.subscribe(value => {
           translationEmitter.emit(value[0]['translations'][0]['text']);
         });

@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Subject} from 'rxjs/Subject';
+import {Subject} from 'rxjs';
 import {Stack} from '../../model/stack/stack.model';
 import {CardDisplayService, DisplayAspect} from './card-display.service';
 import {CardTypeService} from './card-type.service';

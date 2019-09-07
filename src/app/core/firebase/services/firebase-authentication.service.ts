@@ -1,6 +1,6 @@
 import {Inject, Injectable} from '@angular/core';
 import {auth, User} from 'firebase/app';
-import {Subject} from 'rxjs/Subject';
+import {Subject} from 'rxjs';
 import {AngularFireAuth} from '@angular/fire/auth';
 import {STACK_PERSISTENCE_FIRESTORE} from '../../entity/entity.module';
 import {StacksPersistenceService} from '../../entity/services/stack/persistence/stacks-persistence.interface';

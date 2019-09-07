@@ -6,7 +6,7 @@ import {MaterialColorService} from '../../../../core/ui/services/material-color.
 import {MaterialIconService} from '../../../../core/ui/services/material-icon.service';
 import {DomSanitizer} from '@angular/platform-browser';
 import {MatIconRegistry} from '@angular/material';
-import {Subject} from 'rxjs/Subject';
+import {Subject} from 'rxjs';
 import {SettingsService} from '../../../../core/settings/services/settings.service';
 import {SettingType} from '../../../../core/settings/model/setting-type.enum';
 import {Setting} from '../../../../core/settings/model/setting.model';
@@ -32,7 +32,7 @@ export class SettingsComponent implements OnInit, AfterViewInit, OnDestroy {
   title = 'Settings';
 
   /** Map of current settings */
-  settings = new Map<String, Setting>();
+  settings = new Map<string, Setting>();
 
   /** Setting API key Microsoft text translate */
   apiKeyMicrosoftTextTranslate: number;
@@ -61,7 +61,7 @@ export class SettingsComponent implements OnInit, AfterViewInit, OnDestroy {
   settingsType = SettingType;
 
   /** Scrollable directive */
-  @ViewChild(CdkScrollable) scrollable: CdkScrollable;
+  @ViewChild(CdkScrollable, {static: false}) scrollable: CdkScrollable;
 
   /**
    * Constructor
@@ -130,7 +130,7 @@ export class SettingsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.settingsService.fetch();
     this.settingsService.settingsSubject.subscribe(value => {
       if (value != null) {
-        this.settings = value;
+        this.settings = value as Map<string, Setting>;
         this.apiKeyMicrosoftTextTranslate = this.settings.get(SettingType.API_KEY_MICROSOFT_TEXT_TRANSLATE).value;
         this.apiKeyPexelsImages = this.settings.get(SettingType.API_KEY_PEXELS_IMAGE).value;
       }
@@ -177,7 +177,7 @@ export class SettingsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   /**
    * Handles click on menu items
-   * @param {string} menuItem menu item that has been clicked
+   * @param menuItem menu item that has been clicked
    */
   onMenuItemClicked(menuItem: string) {
     switch (menuItem) {
@@ -186,12 +186,15 @@ export class SettingsComponent implements OnInit, AfterViewInit, OnDestroy {
         });
         break;
       }
+      default: {
+        break;
+      }
     }
   }
 
   /**
    * Handles search item typed into the search field
-   * @param {string} searchItem new search item
+   * @param searchItem new search item
    */
   onSearchItemChanged(searchItem: string) {
   }

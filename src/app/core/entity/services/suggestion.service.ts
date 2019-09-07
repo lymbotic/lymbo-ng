@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Subject} from 'rxjs/Subject';
+import {Subject} from 'rxjs';
 import {Tag} from '../model/tag/tag.model';
 import {Stack} from '../model/stack/stack.model';
 import {Card} from '../model/card/card.model';
