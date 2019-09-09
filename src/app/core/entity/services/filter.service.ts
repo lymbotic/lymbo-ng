@@ -46,7 +46,7 @@ export class FilterService {
 
   /**
    * Updates search item and notifies subscribers
-   * @param {string} searchItem new search item
+   * @param searchItem new search item
    */
   public updateSearchItem(searchItem: string) {
     this.searchItem = searchItem;
@@ -66,7 +66,7 @@ export class FilterService {
 
   /**
    * Updates tags and notifies subscribers
-   * @param {Tag[]} tags arry of tags
+   * @param tags arry of tags
    */
   public updateTagsList(tags: Tag[]) {
     this.updateTagsListInternal(tags);
@@ -75,7 +75,7 @@ export class FilterService {
 
   /**
    * Updates tags and notifies subscribers
-   * @param {Tag[]} tags array of tags
+   * @param tags array of tags
    */
   public updateTagsListIfNotEmpty(tags: Tag[]) {
     if (this.tags.size > 0) {
@@ -85,7 +85,7 @@ export class FilterService {
 
   /**
    * Updates tags
-   * @param {Tag[]} tags array of tags
+   * @param tags array of tags
    */
   private updateTagsListInternal(tags: Tag[]) {
     if (tags != null) {
@@ -110,7 +110,7 @@ export class FilterService {
 
   /**
    * Updates favorites flag and notifies subscribers
-   * @param {boolean} favorites favorites flag
+   * @param favorites favorites flag
    */
   public updateFavorites(favorites: boolean): Promise<any> {
     return new Promise((resolve) => {

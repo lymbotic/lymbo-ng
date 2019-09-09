@@ -1,4 +1,4 @@
-import { UtilModule } from './util.module';
+import {UtilModule} from './util.module';
 
 describe('UtilModule', () => {
   let commonModule: UtilModule;

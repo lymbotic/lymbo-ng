@@ -51,34 +51,38 @@ export class ExamplesFormComponent implements OnInit {
    * Initializes tense aspect
    */
   private initializeTenseAspect() {
-    // Add aspect if not present
-    if (!this.card.aspects.some(aspect => {
-      return aspect.type === AspectType.TENSE;
-    })) {
-      this.card.aspects.push(new TenseAspect());
-    }
+    if (this.card != null && this.card.aspects != null) {
+      // Add aspect if not present
+      if (!this.card.aspects.some(aspect => {
+        return aspect.type === AspectType.TENSE;
+      })) {
+        this.card.aspects.push(new TenseAspect());
+      }
 
-    // Get aspect
-    this.tenseAspect = this.card.aspects.filter(aspect => {
-      return aspect.type === AspectType.TENSE;
-    })[0] as TenseAspect;
+      // Get aspect
+      this.tenseAspect = this.card.aspects.filter(aspect => {
+        return aspect.type === AspectType.TENSE;
+      })[0] as TenseAspect;
+    }
   }
 
   /**
    * Initializes example aspect
    */
   private initializeExampleAspect() {
-    // Add aspect if not present
-    if (!this.card.aspects.some(aspect => {
-      return aspect.type === AspectType.EXAMPLE;
-    })) {
-      this.card.aspects.push(new ExampleAspect());
-    }
+    if (this.card != null && this.card.aspects != null) {
+      // Add aspect if not present
+      if (!this.card.aspects.some(aspect => {
+        return aspect.type === AspectType.EXAMPLE;
+      })) {
+        this.card.aspects.push(new ExampleAspect());
+      }
 
-    // Get aspect
-    this.exampleAspect = this.card.aspects.filter(aspect => {
-      return aspect.type === AspectType.EXAMPLE;
-    })[0] as ExampleAspect;
+      // Get aspect
+      this.exampleAspect = this.card.aspects.filter(aspect => {
+        return aspect.type === AspectType.EXAMPLE;
+      })[0] as ExampleAspect;
+    }
   }
 
   //

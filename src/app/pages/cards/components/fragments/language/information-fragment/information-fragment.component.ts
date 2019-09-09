@@ -45,17 +45,19 @@ export class InformationFragmentComponent implements OnInit {
    * Initializes information aspect
    */
   private initializeInformationAspect() {
-    // Add aspect if not present
-    if (!this.card.aspects.some(aspect => {
-      return aspect.type === AspectType.INFORMATION;
-    })) {
-      this.card.aspects.push(new InformationAspect());
-    }
+    if (this.card != null && this.card.aspects) {
+      // Add aspect if not present
+      if (!this.card.aspects.some(aspect => {
+        return aspect.type === AspectType.INFORMATION;
+      })) {
+        this.card.aspects.push(new InformationAspect());
+      }
 
-    // Get aspect
-    this.informationAspect = this.card.aspects.filter(aspect => {
-      return aspect.type === AspectType.INFORMATION;
-    })[0] as InformationAspect;
+      // Get aspect
+      this.informationAspect = this.card.aspects.filter(aspect => {
+        return aspect.type === AspectType.INFORMATION;
+      })[0] as InformationAspect;
+    }
   }
 
   //

@@ -1,6 +1,8 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {CardTypeFragmentComponent} from './card-type-fragment.component';
+import {CardsDeclarations} from '../../../cards.declarations';
+import {CardsImports} from '../../../cards.imports';
 
 describe('CardTypeFragmentComponent', () => {
   let component: CardTypeFragmentComponent;
@@ -8,7 +10,8 @@ describe('CardTypeFragmentComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [CardTypeFragmentComponent]
+      declarations: [CardsDeclarations],
+      imports: [CardsImports],
     })
       .compileComponents();
   }));

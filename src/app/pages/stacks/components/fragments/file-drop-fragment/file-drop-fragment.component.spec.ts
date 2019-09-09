@@ -1,7 +1,8 @@
 /* tslint:disable:no-unused-variable */
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {FileDropFragmentComponent} from './file-drop-fragment.component';
-import {FileUploadModule} from 'ng2-file-upload';
+import {StacksDeclarations} from '../../../stacks.declarations';
+import {StacksImports} from '../../../stacks.imports';
 
 describe('FileDropFragmentComponent', () => {
   let component: FileDropFragmentComponent;
@@ -9,12 +10,8 @@ describe('FileDropFragmentComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        FileDropFragmentComponent
-      ],
-      imports: [
-        FileUploadModule
-      ]
+      declarations: [StacksDeclarations],
+      imports: [StacksImports],
     })
       .compileComponents();
   }));

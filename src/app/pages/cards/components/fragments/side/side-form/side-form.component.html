@@ -1,16 +1,16 @@
 <div class="side-title">
-  <app-side-title-fragment cdkTrapFocus
-    [sideTitle]="sideAspect.sides[0].title" [placeholder]=placeholderFront
-    (sideTitleChangedEmitter)="onFrontTitleChanged($event)"
-    (sideClickedEmitter)="onFrontTitleClicked()">
+  <app-side-title-fragment *ngIf="sideAspect != null" cdkTrapFocus
+                           [sideTitle]="sideAspect.sides[0].title" [placeholder]=placeholderFront
+                           (sideTitleChangedEmitter)="onFrontTitleChanged($event)"
+                           (sideClickedEmitter)="onFrontTitleClicked()">
   </app-side-title-fragment>
 </div>
 <div class="side-title target">
   <div class="flexcontainer">
-    <app-side-title-fragment
-      [sideTitle]="sideAspect.sides[1].title" [placeholder]=placeholderBack
-      (sideTitleChangedEmitter)="onBackTitleChanged($event)"
-      (sideClickedEmitter)="onBackTitleClicked()">
+    <app-side-title-fragment *ngIf="sideAspect != null"
+                             [sideTitle]="sideAspect.sides[1].title" [placeholder]=placeholderBack
+                             (sideTitleChangedEmitter)="onBackTitleChanged($event)"
+                             (sideClickedEmitter)="onBackTitleClicked()">
     </app-side-title-fragment>
   </div>
 </div>

@@ -36,11 +36,11 @@ export class PouchDBService {
    * Finds documents by a given index and options
    * @param index index used to index documents
    * @param options options to query documents by
-   * @returns {any} array of documents
+   * @returns array of documents
    */
   public find(index: any, options) {
     return this.database.createIndex({
-      index: index
+      index
     }).then(() => {
       return this.database.find(options);
     });
@@ -48,7 +48,7 @@ export class PouchDBService {
 
   /**
    * Returns all documents from the DATABASE_ENTITIES
-   * @returns {any} array of documents
+   * @returns array of documents
    */
   public fetch() {
     return this.database.allDocs({include_docs: true});
@@ -73,20 +73,18 @@ export class PouchDBService {
    * Inserts a document into the DATABASE_ENTITIES
    * @param id ID of the document to be put
    * @param document document to be put
-   * @returns {wdpromise.Promise<any>|Promise<any|Observable<>|
-   * Observable<Response>|IDBRequest>|Promise<R>|webdriver.promise.Promise<any>|webdriver.promise.Promise<R>|Promise<U>|any}
+   * @returns observable
    */
   public put(id: string, document: any) {
     document._id = id;
-
     return this.database.put(document);
   }
 
   /**
    * Updates a given document and creates it if it does not exist
-   * @param {string} id ID of the document to be updated or created
+   * @param id ID of the document to be updated or created
    * @param document document to be updated or created
-   * @returns {any}
+   * @returns observable
    */
   public upsert(id: string, document: any) {
     document._id = id;
@@ -98,8 +96,8 @@ export class PouchDBService {
 
   /**
    * Updates an array of documents
-   * @param {any[]} documents
-   * @returns {any}
+   * @param documents documents
+   * @returns observable
    */
   public bulk(documents: any[]) {
     documents.forEach(d => {
@@ -112,10 +110,13 @@ export class PouchDBService {
   /**
    * Removes a document by a given ID
    * @param id ID of the document to be removed
-   * @param document document to be removed
    */
-  public remove(id: string, document: any) {
-    return this.database.remove(document._id, document._rev);
+  public remove(id: string) {
+    return this.database.get(id).then(document => {
+      return this.database.remove(document._id, document._rev);
+    }).catch(err => {
+      console.log(err);
+    });
   }
 
   /**
@@ -150,17 +151,17 @@ export class PouchDBService {
 
   /**
    * Synchronizes local DATABASE_ENTITIES with a remote DATABASE_ENTITIES
-   * @param {string} remote remote string
-   * @param {string} username username used for authentication
-   * @param {string} password password used for authentication
+   * @param remote remote string
+   * @param username username used for authentication
+   * @param password password used for authentication
    */
   public syncWithUser(remote: string, username: string, password: string) {
     const remoteDatabase = new PouchDB(remote);
     this.database.sync(remoteDatabase, {
       live: true,
       auth: {
-        username: username,
-        password: password
+        username,
+        password
       },
     }).on('change', change => {
       this.listener.emit(change);
@@ -171,7 +172,7 @@ export class PouchDBService {
 
   /**
    * Returns this services change listener
-   * @returns {EventEmitter<any>}
+   * @returns event emitter
    */
   public getChangeListener() {
     return this.listener;

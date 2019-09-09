@@ -17,8 +17,8 @@ export class MatchService {
 
   /**
    * Normalizes a string in order to make comparison less prone to errors
-   * @param {string} value input value
-   * @returns {string} normalized string
+   * @param value input value
+   * @returns normalized string
    */
   static normalize(value: string): string {
     return (value != null) ? value
@@ -39,9 +39,9 @@ export class MatchService {
 
   /**
    * Compares two string values
-   * @param {string} value1 first value
-   * @param {string} value2 second value
-   * @returns {number} 1 if the first values comes after the second one, otherwise -1
+   * @param value1 first value
+   * @param value2 second value
+   * @returns 1 if the first values comes after the second one, otherwise -1
    */
   static compare(value1: string, value2: string) {
     return MatchService.normalize(value1) > MatchService.normalize(value2) ? 1 : -1;
@@ -67,8 +67,8 @@ export class MatchService {
   /**
    * Splits a item into an array of items using space as an delimiter where words can be grouped by surrounding them
    * with double quotes
-   * @param {string} items search items formatted as a single string
-   * @returns {string[]} array of search items
+   * @param items search items formatted as a single string
+   * @returns array of search items
    */
   static splitSearchItems(items: string): string[] {
 
@@ -92,9 +92,9 @@ export class MatchService {
 
   /**
    * Determines whether a text matches a single item
-   * @param {string} text text to check
-   * @param {string} item search item
-   * @returns {boolean} true if text matches search item
+   * @param text text to check
+   * @param item search item
+   * @returns true if text matches search item
    */
   static textMatchesSingleItem(text: string, item: string): boolean {
     return MatchService.valueMatchesSingleItem(text, item);
@@ -102,9 +102,9 @@ export class MatchService {
 
   /**
    * Determines whether a stack matches a single item
-   * @param {Stack} stack stack to check
-   * @param {string} item search item
-   * @returns {boolean} true if task matches search item
+   * @param stack stack to check
+   * @param item search item
+   * @returns true if task matches search item
    */
   static stackTitleMatchesSingleItem(stack: Stack, item: string): boolean {
     return (stack != null) ? MatchService.textMatchesSingleItem(stack.title, item) : false;
@@ -112,9 +112,9 @@ export class MatchService {
 
   /**
    * Determines whether a cards matches a single item
-   * @param {Card} card to check
-   * @param {string} item search item
-   * @returns {boolean} true if project matches search item
+   * @param card to check
+   * @param item search item
+   * @returns true if project matches search item
    */
   static cardMatchesSingleItem(card: Card, item: string): boolean {
     const sideAspect = card.aspects.filter(aspect => {
@@ -128,9 +128,9 @@ export class MatchService {
 
   /**
    * Determines whether a side matches a single item
-   * @param {Side} side side to check
-   * @param {string} item search item
-   * @returns {boolean} true if task matches search item
+   * @param side side to check
+   * @param item search item
+   * @returns true if task matches search item
    */
   static sideMatchesSingleItem(side: Side, item: string): boolean {
     return (side != null) ? MatchService.textMatchesSingleItem(side.title, item) : false;
@@ -138,9 +138,9 @@ export class MatchService {
 
   /**
    * Determines whether a tag's name matches a single item
-   * @param {Tag} tag tag to check
-   * @param {string} item search item
-   * @returns {boolean} true if tag's name matches search item
+   * @param tag tag to check
+   * @param item search item
+   * @returns true if tag's name matches search item
    */
   static tagNameMatchesSingleItem(tag: Tag, item: string): boolean {
     return (tag != null) ? MatchService.textMatchesSingleItem(tag.name, item) : false;
@@ -265,9 +265,9 @@ export class MatchService {
 
   /**
    * Determines whether at least one card of a given array matches a given search item
-   * @param {Card[]} cards array of cards to check
-   * @param {string} item search item
-   * @returns {boolean} true if at least one card matches search item
+   * @param cards array of cards to check
+   * @param item search item
+   * @returns true if at least one card matches search item
    */
   private cardsMatchesSingleItem(cards: Card[], item: string): boolean {
     return cards != null && cards.some(c => {
@@ -277,9 +277,9 @@ export class MatchService {
 
   /**
    * Determines whether at least one tag of a given array matches a given search item
-   * @param {Tag[]} tags array of tags to check
-   * @param {string} item search item
-   * @returns {boolean} true if at least one tag matches search item
+   * @param tags array of tags to check
+   * @param item search item
+   * @returns true if at least one tag matches search item
    */
   private tagsMatchesSingleItem(tags: Tag[], item: string): boolean {
     return tags != null && tags.some(t => {

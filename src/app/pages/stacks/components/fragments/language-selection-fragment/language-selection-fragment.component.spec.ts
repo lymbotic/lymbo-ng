@@ -1,6 +1,9 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {LanguageSelectionFragmentComponent} from './language-selection-fragment.component';
+import {StacksDeclarations} from '../../../stacks.declarations';
+import {StacksImports} from '../../../stacks.imports';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 describe('LanguageSelectionFragmentComponent', () => {
   let component: LanguageSelectionFragmentComponent;
@@ -8,7 +11,8 @@ describe('LanguageSelectionFragmentComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [LanguageSelectionFragmentComponent]
+      declarations: [StacksDeclarations],
+      imports: [StacksImports, BrowserAnimationsModule],
     })
       .compileComponents();
   }));

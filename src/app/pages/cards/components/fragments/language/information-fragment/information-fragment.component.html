@@ -1,2 +1,4 @@
-<app-markdown-editor [text]="informationAspect.text" (textChangedEmitter)="onTextChanged($event)">
+<app-markdown-editor *ngIf="informationAspect != null"
+                     [text]="informationAspect.text"
+                     (textChangedEmitter)="onTextChanged($event)">
 </app-markdown-editor>

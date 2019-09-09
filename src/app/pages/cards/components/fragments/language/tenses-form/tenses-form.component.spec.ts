@@ -1,20 +1,22 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {TensesFormComponent} from './tenses-form.component';
+import {CardsDeclarations} from '../../../../cards.declarations';
+import {CardsImports} from '../../../../cards.imports';
 
-import { VocabularyFormComponent } from './examples-form.component';
-
-describe('ExamplesFormComponent', () => {
-  let component: VocabularyFormComponent;
-  let fixture: ComponentFixture<VocabularyFormComponent>;
+describe('TensesFormComponent', () => {
+  let component: TensesFormComponent;
+  let fixture: ComponentFixture<TensesFormComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ VocabularyFormComponent ]
+      declarations: [CardsDeclarations],
+      imports: [CardsImports],
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(VocabularyFormComponent);
+    fixture = TestBed.createComponent(TensesFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

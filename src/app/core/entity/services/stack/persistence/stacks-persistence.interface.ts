@@ -8,7 +8,7 @@ import {Subject} from 'rxjs';
 export interface StacksPersistenceService {
 
   /** Map of all stacks */
-  stacks: Map<String, Stack>;
+  stacks: Map<string, Stack>;
   /** Subject that publishes stacks */
   stacksSubject: Subject<Stack[]>;
 
@@ -39,7 +39,7 @@ export interface StacksPersistenceService {
   /**
    * Finds stack by a given ID
    * @param user user (optional)
-   * @param {number} id ID of filter by
+   * @param id ID of filter by
    */
   findStackByID(id: string, user?: User);
 
@@ -81,7 +81,7 @@ export interface StacksPersistenceService {
 
   /**
    * Deletes a stack
-   * @param {Stack} stack stack to be deleted
+   * @param stack stack to be deleted
    */
   deleteStack(stack: Stack): Promise<any>;
 

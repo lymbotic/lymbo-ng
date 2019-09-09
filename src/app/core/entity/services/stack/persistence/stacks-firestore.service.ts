@@ -16,7 +16,7 @@ import {UUID} from '../../../model/uuid';
 export class StacksFirestoreService implements StacksPersistenceService {
 
   /** Map of all stacks */
-  stacks = new Map<String, Stack>();
+  stacks = new Map<string, Stack>();
   /** Subject that publishes stacks */
   stacksSubject = new Subject<Stack[]>();
 
@@ -189,7 +189,7 @@ export class StacksFirestoreService implements StacksPersistenceService {
 
   /**
    * Deletes a stack
-   * @param {Stack} stack stack to be deleted
+   * @param stack stack to be deleted
    */
   public deleteStack(stack: Stack): Promise<any> {
     return new Promise((resolve, reject) => {

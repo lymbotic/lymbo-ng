@@ -1,4 +1,4 @@
-<div class="tense-header flexcontainer">
+<div *ngIf="tenseGroup != null" class="tense-header flexcontainer">
   <button mat-button disabled>
     {{ tenseGroup.tense }}
   </button>
@@ -10,10 +10,11 @@
     CLEAR
   </button>
 </div>
-<mat-list>
+<mat-list *ngIf="tenseGroup != null">
   <mat-list-item *ngFor="let form of tenseGroup.forms">
-    <input *ngIf="!readonly "matInput type="text" autocomplete="off" [placeholder]=form.person
+    <input *ngIf="!readonly " matInput type="text" autocomplete="off" [placeholder]=form.person
            [ngModel]="form.value" (ngModelChange)="onFormChanged(form.person, $event)">
-    <app-markdown-preview *ngIf="readonly" [markdownText]="form.value" preventParagraphMargins="true" class="preview"></app-markdown-preview>
+    <app-markdown-preview *ngIf="readonly" [markdownText]="form.value" preventParagraphMargins="true"
+                          class="preview"></app-markdown-preview>
   </mat-list-item>
 </mat-list>

@@ -150,8 +150,8 @@ export class TagsService {
 
   /**
    * Retrieves a tag by a given ID
-   * @param {string} id ID to find tag by
-   * @returns {Tag} tag identified by given ID, null if no such tag exists
+   * @param id ID to find tag by
+   * @returns tag identified by given ID, null if no such tag exists
    */
   public getTagById(id: string): Tag {
     return this.tags.get(id);
@@ -159,8 +159,8 @@ export class TagsService {
 
   /**
    * Retrieves a tag by a given name
-   * @param {string} name name to find tag by
-   * @returns {Tag} tag identified by given name, null if no such tag exists
+   * @param name name to find tag by
+   * @returns tag identified by given name, null if no such tag exists
    */
   public getTagByName(name: string): Tag {
     let tag: Tag = null;

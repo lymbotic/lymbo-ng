@@ -51,13 +51,15 @@ export class TenseFragmentComponent {
    * @param value value
    */
   onFormChanged(person: GrammaticalPerson, value: string) {
-    this.tenseGroup.forms.forEach(form => {
-      if (form.person === person) {
-        form.value = value;
-      }
-    });
+    if (this.tenseGroup != null && this.tenseGroup.forms != null) {
+      this.tenseGroup.forms.forEach(form => {
+        if (form.person === person) {
+          form.value = value;
+        }
+      });
 
-    this.notify();
+      this.notify();
+    }
   }
 
   //

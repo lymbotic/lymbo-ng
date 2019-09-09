@@ -1,6 +1,8 @@
-<input matInput class="question" title="question" type="text" autocomplete="off" placeholder="Question"
+<input *ngIf="quizAspect != null" matInput class="question" title="question" type="text" autocomplete="off"
+       placeholder="Question"
        [ngModel]="quizAspect.question"
        (ngModelChange)="onQuestionChanged($event)"
        [disabled]="readonly">
-<app-checkable-list [items]="quizAspect.answers" newEntryPlaceholder="New answer"
+<app-checkable-list *ngIf="quizAspect != null"
+                    [items]="quizAspect.answers" newEntryPlaceholder="New answer"
                     (itemsChangedEmitter)="onAnswersChanged($event)"></app-checkable-list>

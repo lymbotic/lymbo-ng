@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output} from '@angular/core';
 import {Subject} from 'rxjs';
 import {debounceTime} from 'rxjs/operators';
 
@@ -11,7 +11,7 @@ import {debounceTime} from 'rxjs/operators';
   styleUrls: ['./tag-chips.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TagChipsComponent implements OnInit {
+export class TagChipsComponent implements OnChanges {
 
   /** Tags to be displayed */
   @Input() tags: string[] = [];
@@ -20,9 +20,9 @@ export class TagChipsComponent implements OnInit {
   /** Array of options */
   @Input() tagOptions: string[] = [];
   /** Text color of the tag */
-  @Input() color: 'black';
+  @Input() color = 'black';
   /** Background color of the tag */
-  @Input() background: 'white';
+  @Input() background = 'white';
   /** Placeholder for new elements */
   @Input() placeholder = 'New tag';
   /** Event emitter indicating changes in tags */
@@ -40,9 +40,9 @@ export class TagChipsComponent implements OnInit {
   //
 
   /**
-   * Handles on-init lifecycle phase
+   * Handles on-changes lifecycle phase
    */
-  ngOnInit() {
+  ngOnChanges() {
     this.initializeOptions();
     this.initializeDebouncer();
   }
@@ -83,7 +83,7 @@ export class TagChipsComponent implements OnInit {
 
   /**
    * Handles deletion of a tag
-   * @param {string} value tag to be deleted
+   * @param value tag to be deleted
    */
   onDeleteTag(value: string) {
     if (!this.readonly) {
@@ -97,15 +97,13 @@ export class TagChipsComponent implements OnInit {
 
   /**
    * Handles key up event
-   * @param event
+   * @param event event
    */
   onKeyUp(event: any) {
     if (!this.readonly) {
-      const KEY_CODE_ENTER = 13;
-      const KEY_CODE_COMMA = 188;
 
       if (this.value !== '' && this.value !== ','
-        && (event.keyCode === KEY_CODE_ENTER || event.keyCode === KEY_CODE_COMMA)) {
+        && (event.key === 'Enter' || event.key === ',')) {
         this.tags.push(this.value.replace(/,/, ''));
         this.value = '';
         this.notify();
@@ -137,8 +135,8 @@ export class TagChipsComponent implements OnInit {
 
   /**
    * Filters auto-complete options
-   * @param {string} value input value
-   * @returns {string[]} filtered options
+   * @param value input value
+   * @returns filtered options
    */
   filterAutoCompleteOptions(value: string): string[] {
     return this.tagOptions.filter(option =>

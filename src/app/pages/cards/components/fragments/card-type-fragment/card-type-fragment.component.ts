@@ -144,8 +144,8 @@ export class CardTypeFragmentComponent implements OnInit, OnChanges {
 
   /**
    * Handles hover over container
-   * @param {boolean} hovered whether there is currently a hover event
-   * @param {CardTypeGroupAction} action card type group action
+   * @param hovered whether there is currently a hover event
+   * @param action card type group action
    */
   onHoverContainer(hovered: boolean, action: CardTypeGroupAction) {
     this.hoveredGroup = hovered ? action.group : null;

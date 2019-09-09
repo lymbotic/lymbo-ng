@@ -1,6 +1,8 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {StackTitleFragmentComponent} from './stack-title-fragment.component';
+import {StacksDeclarations} from '../../../stacks.declarations';
+import {StacksImports} from '../../../stacks.imports';
 
 describe('SideTitleFragmentComponent', () => {
   let component: StackTitleFragmentComponent;
@@ -8,7 +10,8 @@ describe('SideTitleFragmentComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [StackTitleFragmentComponent]
+      declarations: [StacksDeclarations],
+      imports: [StacksImports],
     })
       .compileComponents();
   }));

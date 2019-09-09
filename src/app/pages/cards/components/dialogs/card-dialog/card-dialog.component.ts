@@ -306,8 +306,7 @@ export class CardDialogComponent implements OnInit, OnDestroy {
 
   /**
    * Aggregates tags
-   * @param {Card} card
-   * @returns {Tag[]}
+   * @param card card
    */
   private aggregateTags(card: Card): Tag[] {
     const aggregatedTags = new Map<string, Tag>();

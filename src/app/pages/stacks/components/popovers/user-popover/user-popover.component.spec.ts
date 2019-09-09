@@ -1,6 +1,8 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { UserPopoverComponent } from './user-popover.component';
+import {UserPopoverComponent} from './user-popover.component';
+import {StacksDeclarations} from '../../../stacks.declarations';
+import {StacksImports} from '../../../stacks.imports';
 
 describe('UserPopoverComponent', () => {
   let component: UserPopoverComponent;
@@ -8,9 +10,10 @@ describe('UserPopoverComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ UserPopoverComponent ]
+      declarations: [StacksDeclarations],
+      imports: [StacksImports],
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

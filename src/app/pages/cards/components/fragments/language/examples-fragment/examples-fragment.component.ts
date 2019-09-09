@@ -44,9 +44,9 @@ export class ExamplesFragmentComponent implements OnInit {
    * Initializes examples
    */
   private initializeExamples() {
-    this.examples = this.examples.filter(example => {
+    this.examples = this.examples != null ? this.examples.filter(example => {
       return example.source.trim() !== '' && example.target.trim() !== '';
-    });
+    }) : [];
   }
 
   //

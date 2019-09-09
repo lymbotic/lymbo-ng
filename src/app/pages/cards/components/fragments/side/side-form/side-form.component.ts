@@ -66,8 +66,10 @@ export class SideFormComponent implements OnInit {
     this.initializeSideAspect();
     this.initializePlaceholders();
 
-    this.initializeTitleChangedSubject(this.frontTitleChangedSubject, this.stack.targetLanguage, this.indexFront, this.indexBack);
-    this.initializeTitleChangedSubject(this.backTitleChangedSubject, this.stack.sourceLanguage, this.indexBack, this.indexFront);
+    if (this.stack != null) {
+      this.initializeTitleChangedSubject(this.frontTitleChangedSubject, this.stack.targetLanguage, this.indexFront, this.indexBack);
+      this.initializeTitleChangedSubject(this.backTitleChangedSubject, this.stack.sourceLanguage, this.indexBack, this.indexFront);
+    }
   }
 
   //
@@ -78,24 +80,26 @@ export class SideFormComponent implements OnInit {
    * Initializes side aspect
    */
   private initializeSideAspect() {
-    // Add aspect if not present
-    if (!this.card.aspects.some(aspect => {
-      return aspect.type === AspectType.SIDE;
-    })) {
-      this.card.aspects.push(new SideAspect());
-    }
+    if (this.card != null && this.card.aspects != null) {
+      // Add aspect if not present
+      if (!this.card.aspects.some(aspect => {
+        return aspect.type === AspectType.SIDE;
+      })) {
+        this.card.aspects.push(new SideAspect());
+      }
 
-    // Get aspect
-    this.sideAspect = this.card.aspects.filter(aspect => {
-      return aspect.type === AspectType.SIDE;
-    })[0] as SideAspect;
+      // Get aspect
+      this.sideAspect = this.card.aspects.filter(aspect => {
+        return aspect.type === AspectType.SIDE;
+      })[0] as SideAspect;
+    }
   }
 
   /**
    * Initializes placeholders
    */
   private initializePlaceholders() {
-    if (this.stack.type === StackType.LANGUAGE) {
+    if (this.stack != null && this.stack.type === StackType.LANGUAGE) {
       this.placeholderFront = this.stack.sourceLanguage;
       this.placeholderBack = this.stack.targetLanguage;
     } else {
@@ -197,7 +201,6 @@ export class SideFormComponent implements OnInit {
    * Translates a given text and uses it as the back title
    * @param text text
    * @param targetLanguage target tense
-   * @return {EventEmitter<string>}
    */
   private translateText(text: string, targetLanguage: Language): EventEmitter<string> {
     const translationEmitter: EventEmitter<string> = new EventEmitter<string>();

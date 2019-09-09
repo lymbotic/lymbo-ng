@@ -1,6 +1,8 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { TenseFragmentComponent } from './tense-fragment.component';
+import {TenseFragmentComponent} from './tense-fragment.component';
+import {CardsDeclarations} from '../../../../cards.declarations';
+import {CardsImports} from '../../../../cards.imports';
 
 describe('TenseFragmentComponent', () => {
   let component: TenseFragmentComponent;
@@ -8,9 +10,10 @@ describe('TenseFragmentComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TenseFragmentComponent ]
+      declarations: [CardsDeclarations],
+      imports: [CardsImports],
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

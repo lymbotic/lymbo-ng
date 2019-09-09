@@ -46,8 +46,8 @@ export class ColorService {
 
   /**
    * Determines a stack's color
-   * @param {Stack} stack stack to get color for
-   * @returns {string} color string derived from stack name
+   * @param stack stack to get color for
+   * @returns color string derived from stack name
    */
   getStackColor(stack: Stack) {
     const hue = this.getStackHue(stack);
@@ -57,8 +57,8 @@ export class ColorService {
 
   /**
    * Determines a stack's contrast
-   * @param {Stack} stack stack to get color for
-   * @returns {string} contrast color string derived from stack name
+   * @param stack stack to get color for
+   * @returns contrast color string derived from stack name
    */
   getStackContrast(stack: Stack) {
     const hue = this.getStackHue(stack);
@@ -96,7 +96,7 @@ export class ColorService {
 
   /**
    * Returns a color associated to stack type group
-   * @param {StackTypeGroup} group stack type group
+   * @param group stack type group
    */
   getStackTypeGroupColor(group: StackTypeGroup): Hue {
     switch (group) {
@@ -117,7 +117,7 @@ export class ColorService {
 
   /**
    * Returns a color associated to card type group
-   * @param {CardTypeGroup} group card type group
+   * @param group card type group
    */
   getCardTypeGroupColor(group: CardTypeGroup): Hue {
     switch (group) {

@@ -34,9 +34,9 @@ class Icon {
 
   /**
    * Constructor
-   * @param {IconTopic} topic
-   * @param {string} name
-   * @param {string} file
+   * @param topic topic
+   * @param name name
+   * @param file file
    */
   constructor(topic: IconTopic, name: string, file: string) {
     this.topic = topic;

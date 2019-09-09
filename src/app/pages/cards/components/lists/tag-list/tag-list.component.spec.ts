@@ -1,6 +1,8 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {TagListComponent} from './tag-list.component';
+import {CardsDeclarations} from '../../../cards.declarations';
+import {CardsImports} from '../../../cards.imports';
 
 describe('TagListComponent', () => {
   let component: TagListComponent;
@@ -8,7 +10,8 @@ describe('TagListComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [TagListComponent]
+      declarations: [CardsDeclarations],
+      imports: [CardsImports],
     })
       .compileComponents();
   }));

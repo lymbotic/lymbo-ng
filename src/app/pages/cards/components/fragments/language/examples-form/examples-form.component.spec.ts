@@ -1,6 +1,8 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { ExamplesFormComponent } from './examples-form.component';
+import {ExamplesFormComponent} from './examples-form.component';
+import {CardsDeclarations} from '../../../../cards.declarations';
+import {CardsImports} from '../../../../cards.imports';
 
 describe('ExamplesFormComponent', () => {
   let component: ExamplesFormComponent;
@@ -8,9 +10,10 @@ describe('ExamplesFormComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ExamplesFormComponent ]
+      declarations: [CardsDeclarations],
+      imports: [CardsImports],
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

@@ -81,7 +81,7 @@ export class StackFragmentComponent implements OnInit {
    * Initializes colors
    */
   private initializeColors() {
-    if (this.stack.imagePalette != null) {
+    if (this.stack != null && this.stack.imagePalette != null) {
       const swatchMuted = this.stack.imagePalette.muted;
       this.titleColor = `rgb(${swatchMuted.rgb[0]},${swatchMuted.rgb[1]},${swatchMuted.rgb[2]})`;
 

@@ -1,6 +1,8 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { SingleChoiceFragmentComponent } from './single-choice-fragment.component';
+import {SingleChoiceFragmentComponent} from './single-choice-fragment.component';
+import {CardsDeclarations} from '../../../../cards.declarations';
+import {CardsImports} from '../../../../cards.imports';
 
 describe('SingleChoiceFragmentComponent', () => {
   let component: SingleChoiceFragmentComponent;
@@ -8,9 +10,10 @@ describe('SingleChoiceFragmentComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SingleChoiceFragmentComponent ]
+      declarations: [CardsDeclarations],
+      imports: [CardsImports],
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

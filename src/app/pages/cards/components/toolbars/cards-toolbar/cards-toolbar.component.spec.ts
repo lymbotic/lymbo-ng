@@ -1,6 +1,9 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {CardsToolbarComponent} from './cards-toolbar.component';
+import {CardsDeclarations} from '../../../cards.declarations';
+import {CardsImports} from '../../../cards.imports';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 describe('CardsToolbarComponent', () => {
   let component: CardsToolbarComponent;
@@ -8,7 +11,8 @@ describe('CardsToolbarComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [CardsToolbarComponent]
+      declarations: [CardsDeclarations],
+      imports: [CardsImports, BrowserAnimationsModule],
     })
       .compileComponents();
   }));

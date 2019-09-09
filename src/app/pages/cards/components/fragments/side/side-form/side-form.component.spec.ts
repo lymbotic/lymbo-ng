@@ -1,6 +1,10 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { SideFormComponent } from './side-form.component';
+import {SideFormComponent} from './side-form.component';
+import {CardsDeclarations} from '../../../../cards.declarations';
+import {CardsImports} from '../../../../cards.imports';
+import {HttpClientModule} from '@angular/common/http';
+import {MatIconRegistry} from '@angular/material';
 
 describe('SideFormComponent', () => {
   let component: SideFormComponent;
@@ -8,9 +12,13 @@ describe('SideFormComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SideFormComponent ]
+      declarations: [CardsDeclarations],
+      imports: [CardsImports, HttpClientModule],
+      providers: [
+        MatIconRegistry
+      ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

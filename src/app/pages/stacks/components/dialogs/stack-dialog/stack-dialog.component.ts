@@ -232,8 +232,7 @@ export class StackDialogComponent implements OnInit, OnDestroy {
 
   /**
    * Aggregates tags
-   * @param {Stack} stack
-   * @returns {Tag[]}
+   * @param stack stack
    */
   private aggregateTags(stack: Stack): Tag[] {
     const aggregatedTags = new Map<string, Tag>();

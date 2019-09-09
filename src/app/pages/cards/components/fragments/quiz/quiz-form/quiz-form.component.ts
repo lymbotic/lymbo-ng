@@ -57,17 +57,19 @@ export class QuizFormComponent implements OnInit {
    * Initializes quiz aspect
    */
   private initializeQuizAspect() {
-    // Add aspect if not present
-    if (!this.card.aspects.some(aspect => {
-      return aspect.type === AspectType.QUIZ;
-    })) {
-      this.card.aspects.push(new QuizAspect());
-    }
+    if (this.card != null && this.card.aspects != null) {
+      // Add aspect if not present
+      if (!this.card.aspects.some(aspect => {
+        return aspect.type === AspectType.QUIZ;
+      })) {
+        this.card.aspects.push(new QuizAspect());
+      }
 
-    // Get aspect
-    this.quizAspect = this.card.aspects.filter(aspect => {
-      return aspect.type === AspectType.QUIZ;
-    })[0] as QuizAspect;
+      // Get aspect
+      this.quizAspect = this.card.aspects.filter(aspect => {
+        return aspect.type === AspectType.QUIZ;
+      })[0] as QuizAspect;
+    }
   }
 
   //

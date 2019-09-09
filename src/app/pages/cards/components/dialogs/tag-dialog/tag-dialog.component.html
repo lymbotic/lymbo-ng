@@ -1,9 +1,9 @@
-<div (keydown)="onKeyDown($event)">
+<div *ngIf="tag != null" (keydown)="onKeyDown($event)">
   <h2 mat-dialog-title>{{ dialogTitle }}</h2>
   <mat-dialog-content>
     <form #formCtrl="ngForm">
       <div>
-        <mat-form-field class="wide-box">
+        <mat-form-field *ngIf="tag != null" class="wide-box">
           <input matInput required name="tag" type="text" placeholder="Tag" ngControl="controlTag"
                  [disabled]="readonly"
                  [(ngModel)]="tag.name">

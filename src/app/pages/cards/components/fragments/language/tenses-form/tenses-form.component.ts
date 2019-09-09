@@ -50,17 +50,19 @@ export class TensesFormComponent implements OnInit {
    * Initializes tense aspect
    */
   private initializeTenseAspect() {
-    // Add aspect if not present
-    if (!this.card.aspects.some(aspect => {
-      return aspect.type === AspectType.TENSE;
-    })) {
-      this.card.aspects.push(new TenseAspect());
-    }
+    if (this.card != null && this.card.aspects != null) {
+      // Add aspect if not present
+      if (!this.card.aspects.some(aspect => {
+        return aspect.type === AspectType.TENSE;
+      })) {
+        this.card.aspects.push(new TenseAspect());
+      }
 
-    // Get aspect
-    this.tenseAspect = this.card.aspects.filter(aspect => {
-      return aspect.type === AspectType.TENSE;
-    })[0] as TenseAspect;
+      // Get aspect
+      this.tenseAspect = this.card.aspects.filter(aspect => {
+        return aspect.type === AspectType.TENSE;
+      })[0] as TenseAspect;
+    }
   }
 
   //

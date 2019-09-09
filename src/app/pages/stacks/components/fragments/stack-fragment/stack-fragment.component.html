@@ -1,9 +1,11 @@
 <div [class]="themeClass">
-  <mat-card>
+  <mat-card *ngIf="stack != null">
     <div *ngIf="devMode" class="debug">id {{ stack.id.slice(0, 19) }}...</div>
     <div *ngIf="devMode" class="debug">owner {{ stack.owner.slice(0, 19) }}...</div>
 
-    <img *ngIf="stack.imageUrl !== ''" mat-card-image [attr.src]="stack.imageUrl" (click)="onStackClicked()">
+    <img *ngIf="stack != null && stack.imageUrl !== ''" mat-card-image
+         [attr.src]="stack.imageUrl"
+         (click)="onStackClicked()">
     <mat-menu #menu="matMenu">
       <button mat-menu-item (click)="onUpdateClicked()">
         <mat-icon svgIcon="mode_edit"></mat-icon>
@@ -34,7 +36,7 @@
 
     <mat-card-footer>
       <div class="flexcontainer">
-        <div class="tags-holder"
+        <div class="tags-holder" *ngIf="stack != null"
              (click)="onStackClicked()">
           <span *ngIf="containsDisplayAspect(displayAspectType.LANGUAGE, stack)
                 && stack.sourceLanguage !=null

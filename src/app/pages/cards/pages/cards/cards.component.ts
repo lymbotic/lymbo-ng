@@ -7,7 +7,7 @@ import {MatDialog, MatIconRegistry, MatSidenav} from '@angular/material';
 import {Media} from '../../../../core/ui/model/media.enum';
 import {CdkScrollable, ScrollDispatcher} from '@angular/cdk/overlay';
 import {Animations, ScrollDirection, ScrollState} from './cards.animation';
-import {map, takeUntil} from 'rxjs/operators';
+import {filter, map, takeUntil} from 'rxjs/operators';
 import {FilterService} from '../../../../core/entity/services/filter.service';
 import {SuggestionService} from '../../../../core/entity/services/suggestion.service';
 import {MaterialColorService} from '../../../../core/ui/services/material-color.service';

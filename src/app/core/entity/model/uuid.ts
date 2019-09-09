@@ -9,7 +9,7 @@ export class UUID {
 
   /**
    * Constructor
-   * @param {string} input existing UUID if available
+   * @param input existing UUID if available
    */
   constructor(input?: string) {
     this.value = input || this.getNewUUIDString();

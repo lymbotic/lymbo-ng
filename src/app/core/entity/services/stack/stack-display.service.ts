@@ -45,6 +45,6 @@ export class StackDisplayService {
    * @param stack stack
    */
   static containsLanguage(stack: Stack): boolean {
-    return stack.type === StackType.LANGUAGE;
+    return stack != null && stack.type === StackType.LANGUAGE;
   }
 }

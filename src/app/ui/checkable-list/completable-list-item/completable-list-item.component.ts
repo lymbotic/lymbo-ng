@@ -1,4 +1,13 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChildren
+} from '@angular/core';
 import {SelectableItem} from '../selectable-item';
 
 /**
@@ -10,14 +19,19 @@ import {SelectableItem} from '../selectable-item';
   styleUrls: ['./completable-list-item.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CompletableListItemComponent implements OnInit {
+export class CompletableListItemComponent implements OnInit, AfterViewInit {
 
   /** Item to be display */
   @Input() item: SelectableItem;
   /** Whether component is readonly or not */
   @Input() readonly = false;
+  /** Whether input fields of new elememnts should be focussed or not */
+  @Input() focusNewElement = false;
   /** Event emitter indicating item changes */
   @Output() itemChangedEmitter = new EventEmitter<any>();
+
+  /** Input view child */
+  @ViewChildren('label') input;
 
   /** CSS class */
   itemClass = '';
@@ -34,10 +48,23 @@ export class CompletableListItemComponent implements OnInit {
   }
 
   /**
+   * Handles after-view-init lifecycle phase
+   */
+  ngAfterViewInit() {
+    if (this.focusNewElement && !this.item.selected && this.input.first != null) {
+      this.input.first.nativeElement.focus();
+    }
+  }
+
+  //
+  // Initialization
+  //
+
+  /**
    * Initializes style sheet
    */
   private initializeStyleSheet() {
-    this.itemClass = this.item.selected ? 'selected' : 'unselected';
+    this.itemClass = (this.item != null && this.item.selected) ? 'selected' : 'unselected';
   }
 
   //
@@ -49,8 +76,10 @@ export class CompletableListItemComponent implements OnInit {
    * @param event selection state
    */
   onItemSelected(event: any) {
-    this.item.selected = event.checked;
-    this.itemChangedEmitter.emit();
+    if (this.item != null) {
+      this.item.selected = event.checked;
+      this.itemChangedEmitter.emit();
+    }
   }
 
   /**
@@ -58,15 +87,19 @@ export class CompletableListItemComponent implements OnInit {
    * @param text text
    */
   onTextChanged(text: string) {
-    this.item.text = text;
-    this.itemChangedEmitter.emit();
+    if (this.item != null) {
+      this.item.text = text;
+      this.itemChangedEmitter.emit();
+    }
   }
 
   /**
    * Handles click on delete button
    */
   onDeleteClicked() {
-    this.item.text = null;
-    this.itemChangedEmitter.emit();
+    if (this.item != null) {
+      this.item.text = null;
+      this.itemChangedEmitter.emit();
+    }
   }
 }

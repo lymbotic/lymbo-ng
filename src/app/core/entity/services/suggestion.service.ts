@@ -39,7 +39,7 @@ export class SuggestionService {
 
   /**
    * Adds cards information to suggestions
-   * @param {Stack[]} stacks new array of cards
+   * @param stacks new array of cards
    */
   public updateByStacks(stacks: Stack[]) {
     stacks.sort((s1, s2) => {
@@ -59,7 +59,7 @@ export class SuggestionService {
 
   /**
    * Adds cards information to suggestions
-   * @param {Card[]} cards new array of cards
+   * @param cards new array of cards
    */
   public updateByCards(cards: Card[]) {
     cards.sort((cardA: Card, cardB: Card) => {
@@ -85,7 +85,7 @@ export class SuggestionService {
 
   /**
    * Add tags information to suggestions
-   * @param {Tag[]} tags new array of tags
+   * @param tags new array of tags
    */
   public updateByTags(tags: Tag[]) {
     tags.forEach(t => {

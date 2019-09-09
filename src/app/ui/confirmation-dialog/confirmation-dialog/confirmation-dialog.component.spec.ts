@@ -1,6 +1,9 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {ConfirmationDialogComponent} from './confirmation-dialog.component';
+import {ConfirmationDialogImports} from '../confirmation-dialog.imports';
+import {ConfirmationDialogDeclarations} from '../confirmation-dialog.declaration';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 
 describe('ConfirmationDialogComponent', () => {
   let component: ConfirmationDialogComponent;
@@ -8,7 +11,18 @@ describe('ConfirmationDialogComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ConfirmationDialogComponent]
+      imports: [ConfirmationDialogImports],
+      declarations: [ConfirmationDialogDeclarations],
+      providers: [
+        {
+          provide: MAT_DIALOG_DATA, useValue: {}
+        },
+        {
+          provide: MatDialogRef, useValue: {
+            close: jasmine.createSpy('close')
+          }
+        }
+      ],
     })
       .compileComponents();
   }));

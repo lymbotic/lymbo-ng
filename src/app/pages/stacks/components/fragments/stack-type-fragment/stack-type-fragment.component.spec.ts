@@ -1,6 +1,8 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {StackTypeFragmentComponent} from './stack-type-fragment.component';
+import {StacksDeclarations} from '../../../stacks.declarations';
+import {StacksImports} from '../../../stacks.imports';
 
 describe('CardTypeFragmentComponent', () => {
   let component: StackTypeFragmentComponent;
@@ -8,7 +10,8 @@ describe('CardTypeFragmentComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [StackTypeFragmentComponent]
+      declarations: [StacksDeclarations],
+      imports: [StacksImports],
     })
       .compileComponents();
   }));

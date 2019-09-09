@@ -15,7 +15,7 @@ import {TagsService} from '../../tag/tags.service';
 export class StacksPouchdbService implements StacksPersistenceService {
 
   /** Map of all stacks */
-  stacks = new Map<String, Stack>();
+  stacks = new Map<string, Stack>();
   /** Subject that publishes stacks */
   stacksSubject = new Subject<Stack[]>();
 
@@ -71,7 +71,7 @@ export class StacksPouchdbService implements StacksPersistenceService {
     const index = {fields: ['entityType']};
     const options = {
       selector: {
-        '$and': [
+        $and: [
           {entityType: {$eq: EntityType.STACK}}
         ]
       },
@@ -83,13 +83,13 @@ export class StacksPouchdbService implements StacksPersistenceService {
 
   /**
    * Finds stack by a given ID
-   * @param {number} id ID of filter by
+   * @param id ID of filter by
    */
   public findStackByID(id: string) {
     const index = {fields: ['entityType', 'id', 'creationDate']};
     const options = {
       selector: {
-        '$and': [
+        $and: [
           {entityType: {$eq: EntityType.STACK}},
           {id: {$eq: id}}
         ]
@@ -180,7 +180,7 @@ export class StacksPouchdbService implements StacksPersistenceService {
 
   /**
    * Deletes a stack
-   * @param {Stack} stack stack to be deleted
+   * @param stack stack to be deleted
    */
   public deleteStack(stack: Stack): Promise<any> {
     return new Promise((resolve, reject) => {
@@ -188,7 +188,7 @@ export class StacksPouchdbService implements StacksPersistenceService {
         reject();
       }
 
-      return this.pouchDBService.remove(stack.id, stack).then(() => {
+      return this.pouchDBService.remove(stack.id).then(() => {
         this.stacks.delete(stack.id);
         this.notifyMultipleStacks();
         resolve();

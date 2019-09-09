@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component, isDevMode, OnInit} from '@angular/core';
 import {MatSnackBar, MatSnackBarConfig} from '@angular/material';
 import {environment} from '../environments/environment';
 import {SnackbarService} from './core/ui/services/snackbar.service';
@@ -27,18 +27,18 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   /**
    * Constructor
-   * @param stackService
-   * @param cardService
-   * @param {SnackbarService} snackbarService
-   * @param {PouchDBService} pouchDBService
-   * @param {PouchDBSettingsService} pouchDBSettingsService
-   * @param {SettingsService} settingsService
-   * @param {ThemeService} themeService
-   * @param {OverlayContainer} overlayContainer
-   * @param {MatSnackBar} snackBar snack bar
+   * @param stacksService stacks service
+   * @param cardsService cards service
+   * @param snackbarService snackbar service
+   * @param pouchDBService pouchDB service
+   * @param pouchDBSettingsService pouchDB settings service
+   * @param settingsService settings service
+   * @param themeService theme service
+   * @param overlayContainer overlay container
+   * @param snackBar snack bar
    */
-  constructor(private stackService: StacksService,
-              private cardService: CardsService,
+  constructor(private stacksService: StacksService,
+              private cardsService: CardsService,
               private snackbarService: SnackbarService,
               private pouchDBService: PouchDBService,
               private pouchDBSettingsService: PouchDBSettingsService,
@@ -107,8 +107,10 @@ export class AppComponent implements OnInit, AfterViewInit {
    * Initializes database sync
    */
   private initializeDatabaseSync() {
-    this.pouchDBService.sync(`http://localhost:5984/${environment.DATABASE_ENTITIES}`);
-    this.pouchDBSettingsService.sync(`http://localhost:5984/${environment.DATABASE_SETTINGS}`);
+    if (isDevMode()) {
+      this.pouchDBService.sync(`http://localhost:5984/${environment.DATABASE_ENTITIES}`);
+      this.pouchDBSettingsService.sync(`http://localhost:5984/${environment.DATABASE_SETTINGS}`);
+    }
   }
 
   //
@@ -122,7 +124,7 @@ export class AppComponent implements OnInit, AfterViewInit {
    * @param action action to be triggered if action name is clicked
    */
   private openSnackBar(message: string, actionName: string, action: any) {
-    const snackbarRef = this.snackBar.open(message, actionName, <MatSnackBarConfig>{
+    const snackbarRef = this.snackBar.open(message, actionName, {
       duration: 5000,
     });
 

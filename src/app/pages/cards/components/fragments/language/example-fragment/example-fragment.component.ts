@@ -72,7 +72,7 @@ export class ExampleFragmentComponent implements OnInit {
       debounceTime(environment.TRANSLATE_DEBOUNCE_TIME),
       distinctUntilChanged()
     ).subscribe(() => {
-      if (targetLanguage != null) {
+      if (this.example != null && targetLanguage != null) {
         const originalText = sourceIndex === 0 ? this.example.source : this.example.target;
 
         this.translateText(originalText, targetLanguage).subscribe(translatedText => {
@@ -97,8 +97,10 @@ export class ExampleFragmentComponent implements OnInit {
    * @param source source
    */
   onExampleSourceChanged(source: string) {
-    this.example.source = source;
-    this.notify();
+    if (this.example != null) {
+      this.example.source = source;
+      this.notify();
+    }
   }
 
   /**
@@ -106,7 +108,7 @@ export class ExampleFragmentComponent implements OnInit {
    */
   onExampleSourceClicked() {
     // Check if source is empty
-    if (this.example.target.trim() !== ''
+    if (this.example != null && this.example.target.trim() !== ''
       && (this.example.source === null || this.example.source.trim() === '')) {
       this.exampleTargetChangedSubject.next(this.example.target);
     }
@@ -117,8 +119,10 @@ export class ExampleFragmentComponent implements OnInit {
    * @param target target
    */
   onExampleTargetChanged(target: string) {
-    this.example.target = target;
-    this.notify();
+    if (this.example != null) {
+      this.example.target = target;
+      this.notify();
+    }
   }
 
   /**
@@ -126,7 +130,7 @@ export class ExampleFragmentComponent implements OnInit {
    */
   onExampleTargetClicked() {
     // Check if target is empty
-    if (this.example.source.trim() !== ''
+    if (this.example != null && this.example.source.trim() !== ''
       && (this.example.target === null || this.example.target.trim() === '')) {
       this.exampleSourceChangedSubject.next(this.example.source);
     }
@@ -140,7 +144,6 @@ export class ExampleFragmentComponent implements OnInit {
    * Translates a given text and uses it as the back title
    * @param text text
    * @param targetLanguage target tense
-   * @return {EventEmitter<string>}
    */
   private translateText(text: string, targetLanguage: Language): EventEmitter<string> {
     const translationEmitter: EventEmitter<string> = new EventEmitter<string>();

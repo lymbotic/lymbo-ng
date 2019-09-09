@@ -1,6 +1,8 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {StackFragmentComponent} from './stack-fragment.component';
+import {StacksDeclarations} from '../../../stacks.declarations';
+import {StacksImports} from '../../../stacks.imports';
 
 describe('StackFragmentComponent', () => {
   let component: StackFragmentComponent;
@@ -8,7 +10,8 @@ describe('StackFragmentComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [StackFragmentComponent]
+      declarations: [StacksDeclarations],
+      imports: [StacksImports],
     })
       .compileComponents();
   }));

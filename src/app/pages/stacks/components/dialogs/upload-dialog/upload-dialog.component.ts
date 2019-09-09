@@ -85,7 +85,7 @@ export class UploadDialogComponent implements OnInit {
 
   /**
    * Handles files dropped into the dropzone
-   * @param {DropResult} result drop result
+   * @param result drop result
    */
   public onFilesUploaded(result: DropResult) {
     if (result.result.toString().toLowerCase() === SUCCESS) {

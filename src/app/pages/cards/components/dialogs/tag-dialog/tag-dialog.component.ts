@@ -33,7 +33,7 @@ export class TagDialogComponent implements OnInit {
 
   /**
    * Constructor
-   * @param {MatDialogRef<ConfirmationDialogComponent>} dialogRef dialog reference
+   * @param dialogRef dialog reference
    * @param data dialog data
    */
   constructor(public dialogRef: MatDialogRef<TagDialogComponent>,
@@ -71,7 +71,7 @@ export class TagDialogComponent implements OnInit {
 
   /**
    * Handles key down event
-   * @param event
+   * @param event event
    */
   onKeyDown(event: any) {
     const KEY_CODE_ENTER = 13;

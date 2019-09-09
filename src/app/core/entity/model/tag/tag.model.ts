@@ -13,8 +13,8 @@ export class Tag extends Entity {
 
   /**
    * Constructor
-   * @param {string} name tag name
-   * @param {boolean} checked whether tags is checked in filter mechanism
+   * @param name tag name
+   * @param checked whether tags is checked in filter mechanism
    */
   constructor(name: string, checked = false) {
     super();
