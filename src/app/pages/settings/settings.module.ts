@@ -1,10 +1,10 @@
 import {NgModule} from '@angular/core';
-import {SettingsRoutingModule} from './settings-routing.module';
 import {SettingsComponent} from './pages/settings/settings.component';
 import {SettingsDeclarations} from './settings.declarations';
+import {SettingsImports} from './settings.imports';
 
 @NgModule({
-  imports: [SettingsRoutingModule],
+  imports: [SettingsImports],
   declarations: [SettingsDeclarations],
   entryComponents: [
     // Pages
