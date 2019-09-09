@@ -3,9 +3,9 @@
  */
 export class Vocabel {
 
-  /** Source **/
+  /** Source */
   source: string;
-  /** Target **/
+  /** Target */
   target: string;
 
   /**

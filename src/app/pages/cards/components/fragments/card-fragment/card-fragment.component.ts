@@ -77,7 +77,7 @@ export class CardFragmentComponent implements OnInit, OnChanges {
   activeExample: Vocabel;
   /** Active information */
   activeInformation: string;
-  /** Active single choice*/
+  /** Active single choice */
   activeSingleChoice: boolean;
   /** Active answers */
   activeAnswers: Answer[];
@@ -168,7 +168,7 @@ export class CardFragmentComponent implements OnInit, OnChanges {
         break;
       }
       default: {
-        this.cardEventEmitter.emit({action: action, stack: this.stack, card: this.card});
+        this.cardEventEmitter.emit({action, stack: this.stack, card: this.card});
       }
     }
   }

@@ -331,7 +331,7 @@ export class CardsComponent implements OnInit, OnChanges, AfterViewInit, OnDestr
   private filterCard(card: Card) {
     const matchesSearchItem = this.matchService.cardMatchesEveryItem(card, this.filterService.searchItem);
     const matchesTags = this.matchService.cardMatchesTags(card, Array.from(this.filterService.tags.values()));
-    const matchesFavorites = this.matchService.cardMatchesFavorites(card, this.filterService.favorites);
+    const matchesFavorites = MatchService.cardMatchesFavorites(card, this.filterService.favorites);
 
     return matchesSearchItem && matchesTags && matchesFavorites;
   }

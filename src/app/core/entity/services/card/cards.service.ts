@@ -18,7 +18,7 @@ import {TagsService} from '../tag/tags.service';
 export class CardsService {
 
   /** Map of all cards */
-  cards = new Map<String, Card>();
+  cards = new Map<string, Card>();
   /** Subject that publishes cards */
   cardsSubject = new Subject<Card[]>();
 
@@ -85,7 +85,9 @@ export class CardsService {
    * @param cards cards
    */
   static shuffleCards(cards: Card[]): Card[] {
-    let currentIndex = cards.length, temporaryValue, randomIndex;
+    let currentIndex = cards.length;
+    let temporaryValue;
+    let randomIndex;
 
     while (0 !== currentIndex) {
       randomIndex = Math.floor(Math.random() * currentIndex);
@@ -226,7 +228,7 @@ export class CardsService {
 
   /**
    * Updates related tags
-   * @param stack
+   * @param stack stack
    * @param card card
    */
   public updateRelatedTags(stack, card: Card): Promise<any> {

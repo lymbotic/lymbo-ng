@@ -18,7 +18,7 @@ export class TagListComponent implements OnChanges {
   @Input() tags = [];
   /** Tags that are currently filtered */
   @Input() tagsFiltered: Tag[] = [];
-  /** Number of items to be shown initially **/
+  /** Number of items to be shown initially */
   @Input() recentCount: number;
   /** Current media */
   @Input() media: Media;

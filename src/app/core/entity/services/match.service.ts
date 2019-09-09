@@ -55,7 +55,7 @@ export class MatchService {
    * Determines whether a value contains a specific item
    * @param value value to check
    * @param item single word
-   * @returns {boolean} true if value includes word
+   * @returns true if value includes word
    */
   static valueMatchesSingleItem(value: string, item: string): boolean {
     return value != null
@@ -121,7 +121,7 @@ export class MatchService {
       return aspect.type === AspectType.SIDE;
     })[0] as SideAspect;
 
-    return (card != null && sideAspect != null) ? sideAspect.sides.some(side => {
+    return (sideAspect != null) ? sideAspect.sides.some(side => {
       return MatchService.sideMatchesSingleItem(side, item);
     }) : false;
   }
@@ -146,6 +146,19 @@ export class MatchService {
     return (tag != null) ? MatchService.textMatchesSingleItem(tag.name, item) : false;
   }
 
+  //
+  // Favorites
+  //
+
+  /**
+   * Determines whether a card matches favorites flag
+   * @param card card
+   * @param favorites favorites flag
+   */
+  static cardMatchesFavorites(card: Card, favorites: boolean) {
+    return !favorites || card.favorite;
+  }
+
   /**
    * Constructor
    * @param stacksService stacks service
@@ -165,7 +178,7 @@ export class MatchService {
    * Determines whether a stack matches a given set of tags
    * @param stack stack to check
    * @param tags array of tags the stack should contain
-   * @returns {boolean} true if stack matches given tags
+   * @returns true if stack matches given tags
    */
   public stackMatchesTags(stack: Stack, tags: Tag[]): boolean {
     return tags.length === 0 || (stack.tagIds != null && stack.tagIds.map(id => {
@@ -181,7 +194,7 @@ export class MatchService {
    * Determines whether a card matches a given set of tags
    * @param card card to check
    * @param tags array of tags the card should contain
-   * @returns {boolean} true if card matches given tags
+   * @returns true if card matches given tags
    */
   public cardMatchesTags(card: Card, tags: Tag[]): boolean {
     return tags.length === 0 || (card.tagIds != null && card.tagIds.map(id => {
@@ -197,7 +210,7 @@ export class MatchService {
    * Determines whether a tag matches a given set of tags
    * @param tag tag to check
    * @param tags array of tags the tag should be contained in
-   * @returns {boolean} true if tag matches given tags
+   * @returns true if tag matches given tags
    */
   public tagMatchesTags(tag: Tag, tags: Tag[]) {
     return (tag == null && tags.length === 0)
@@ -214,7 +227,7 @@ export class MatchService {
    * Determines whether a stack matches every of the specified items
    * @param stack stack to check
    * @param items multiple words in one string
-   * @returns {boolean} true if stack matches every search item
+   * @returns true if stack matches every search item
    */
   public stackMatchesEveryItem(stack: Stack, items: string): boolean {
     return items == null || items.trim() === '' || MatchService.splitSearchItems(items).every(item => {
@@ -234,12 +247,12 @@ export class MatchService {
    * Determines whether a card matches every of the specified items
    * @param card card to check
    * @param items multiple words in one string
-   * @returns {boolean} true if card matches every search item
+   * @returns true if card matches every search item
    */
   public cardMatchesEveryItem(card: Card, items: string): boolean {
     return items == null || items.trim() === '' || MatchService.splitSearchItems(items).every(item => {
       return (card != null && MatchService.cardMatchesSingleItem(card, item))
-        || (card.tagIds != null && this.tagsMatchesSingleItem(card.tagIds.map(id => {
+        || (card != null && card.tagIds != null && this.tagsMatchesSingleItem(card.tagIds.map(id => {
           return this.tagsService.getTagById(id);
         }).filter(tag => {
           return tag != null;
@@ -251,7 +264,7 @@ export class MatchService {
    * Determines whether a tag matches every of the specified items
    * @param tag tag to check
    * @param items multiple words in one string
-   * @returns {boolean} true if tag matches every search item
+   * @returns true if tag matches every search item
    */
   public tagMatchesEveryItem(tag: Tag, items: string): boolean {
     return items == null || items.trim() === '' || MatchService.splitSearchItems(items).every(item => {
@@ -285,18 +298,5 @@ export class MatchService {
     return tags != null && tags.some(t => {
       return MatchService.textMatchesSingleItem(t.name, item);
     });
-  }
-
-  //
-  // Favorites
-  //
-
-  /**
-   * Determines whether a card matches favorites flag
-   * @param card card
-   * @param favorites favorites flag
-   */
-  public cardMatchesFavorites(card: Card, favorites: boolean) {
-    return !favorites || card.favorite;
   }
 }

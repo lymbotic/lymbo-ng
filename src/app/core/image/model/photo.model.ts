@@ -16,6 +16,7 @@ export class Photo {
   /** Photographer */
   photographer: string;
   /** Photographer URL */
+  // tslint:disable-next-line:variable-name
   photographer_url: string;
   /** Source */
   src: Source;

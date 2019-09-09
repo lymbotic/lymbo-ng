@@ -41,11 +41,12 @@ export class PexelsService {
         const options = {
           method: 'GET',
           headers: {
-            'Authorization': apiKey.value
+            Authorization: apiKey.value
           },
           json: true,
         };
 
+        // tslint:disable-next-line:max-line-length
         const ob = this.httpClient.get(`https://api.pexels.com/v1/search?query=${searchItems.join('+')}&per_page=${perPage}&page=${page}`, options);
         ob.subscribe(value => {
           resultEmitter.emit(value as SearchResult);

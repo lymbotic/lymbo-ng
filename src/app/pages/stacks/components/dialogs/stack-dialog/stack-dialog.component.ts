@@ -117,7 +117,7 @@ export class StackDialogComponent implements OnInit, OnDestroy {
 
   /**
    * Handles stack title change
-   * @param stackTitle
+   * @param stackTitle stack title
    */
   onStackTitleChanged(stackTitle: string) {
     this.stack.title = stackTitle;
@@ -189,7 +189,7 @@ export class StackDialogComponent implements OnInit, OnDestroy {
 
   /**
    * Handles key down event
-   * @param event
+   * @param event event
    */
   onKeyDown(event: any) {
     const KEY_CODE_ENTER = 13;

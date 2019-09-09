@@ -267,7 +267,7 @@ export class CardDialogComponent implements OnInit, OnDestroy {
 
   /**
    * Handles key down event
-   * @param event
+   * @param event event
    */
   onKeyDown(event: any) {
     const KEY_CODE_ENTER = 13;
@@ -322,7 +322,6 @@ export class CardDialogComponent implements OnInit, OnDestroy {
   /**
    * Filters unused aspects
    * @param card card
-   * @returns {Aspect[]}
    */
   private filterUnusedAspects(card: Card): Aspect[] {
     return card.aspects.filter(aspect => {
