@@ -1,12 +1,12 @@
 {
   "projects": {
-    "default": "lymbotical"
+    "default": "lymbo-975a9"
   },
   "targets": {
-    "lymbotical": {
+    "lymbo-975a9": {
       "hosting": {
-        "lymbotical": [
-          "lymbotical"
+        "lymbo-cards": [
+          "lymbo-cards"
         ]
       }
     }

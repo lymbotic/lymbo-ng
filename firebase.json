@@ -1,7 +1,7 @@
 {
   "hosting": [
     {
-      "target": "lymbotical",
+      "target": "lymbo-cards",
       "public": "dist/lymbo",
       "ignore": [ "firebase.json", "**/.*", "**/node_modules/**" ],
       "rewrites": [ { "source": "**", "destination": "/index.html" } ]

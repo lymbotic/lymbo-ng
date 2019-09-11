@@ -55,7 +55,7 @@ pipeline {
         // }
         stage('Deploy') {
             steps {
-                sh "firebase deploy --project lymbotical --only hosting:lymbotical --token ${FIREBASE_TOKEN_LYMBO}"
+                sh "firebase deploy --project lymbo-975a9 --only hosting:lymbo-cards --token ${FIREBASE_TOKEN_LYMBO}"
             }
         }
         stage('Release') {
