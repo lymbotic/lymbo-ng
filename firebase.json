@@ -1,0 +1,10 @@
+{
+  "hosting": [
+    {
+      "target": "lymbotical",
+      "public": "dist/lymbo",
+      "ignore": [ "firebase.json", "**/.*", "**/node_modules/**" ],
+      "rewrites": [ { "source": "**", "destination": "/index.html" } ]
+    }
+  ]
+}

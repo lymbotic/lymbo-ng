@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "lymbotical"
+  },
+  "targets": {
+    "lymbotical": {
+      "hosting": {
+        "lymbotical": [
+          "lymbotical"
+        ]
+      }
+    }
+  }
+}
