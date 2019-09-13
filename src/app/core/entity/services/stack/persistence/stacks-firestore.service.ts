@@ -25,6 +25,9 @@ export class StacksFirestoreService implements StacksPersistenceService {
   /** Subject that publishes stack */
   stackSubject = new Subject<Stack>();
 
+  /** Subject that publishes database errors */
+  databaseErrorSubject = new Subject<string>();
+
   /**
    * Constructor
    * @param firebaseCloudFirestoreService Firebase Cloud Firestore service
@@ -118,8 +121,10 @@ export class StacksFirestoreService implements StacksPersistenceService {
       return this.firebaseCloudFirestoreService.addStack(stack).then(() => {
         this.notifyMultipleStacks();
         resolve();
-      }).catch(err => {
-        console.error(err);
+      }).catch(error => {
+        console.error(error);
+
+        this.notifyDatabaseError(error);
       });
     });
   }
@@ -259,6 +264,14 @@ export class StacksFirestoreService implements StacksPersistenceService {
     this.stackSubject.next(this.stack);
   }
 
+  /**
+   * Notifies subscribers that a database error occurs
+   * @param error error
+   */
+  public notifyDatabaseError(error: any) {
+    this.databaseErrorSubject.next(error);
+  }
+
   //
   // Internal
   //
@@ -272,8 +285,9 @@ export class StacksFirestoreService implements StacksPersistenceService {
     tagIds.forEach(id => {
       const tag = this.tagsService.getTagById(id);
       this.tagsService.updateTag(stack, tag).then(() => {
-      }).catch(err => {
-        console.error(err);
+      }).catch(error => {
+        console.error(error);
+        this.notifyDatabaseError(error);
       });
     });
   }
