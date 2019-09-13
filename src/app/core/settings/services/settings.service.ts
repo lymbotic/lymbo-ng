@@ -3,6 +3,7 @@ import {Setting} from '../model/setting.model';
 import {Subject} from 'rxjs';
 import {SettingType} from '../model/setting-type.enum';
 import {PouchDBSettingsService} from '../../persistence/services/pouchdb-settings.service';
+import {CardsDisplayMode} from '../model/cards-display-mode.enum';
 
 /**
  * Handles settings
@@ -16,6 +17,43 @@ export class SettingsService {
   settings = new Map<string, Setting>();
   /** Subject that publishes changes in settings */
   settingsSubject = new Subject<Map<string, Setting>>();
+
+  //
+  // Static methods
+  //
+
+  /**
+   * Determines if a setting is active
+   * @param settingType setting type
+   * @param settingsMap setting map
+   */
+  static isSettingActive(settingType: SettingType, settingsMap: Map<string, Setting>): boolean {
+    const setting = settingsMap.get(settingType);
+
+    return setting != null && setting.value != null && JSON.parse(setting.value) === true;
+  }
+
+  /**
+   * Determines if a setting is active
+   * @param settingsMap setting map
+   */
+  static getCardsDisplayMode(settingsMap: Map<string, Setting>): CardsDisplayMode {
+    if (settingsMap != null && settingsMap.get(SettingType.CARDS_DISPLAY_MODE) != null) {
+      switch (settingsMap.get(SettingType.CARDS_DISPLAY_MODE).value) {
+        case CardsDisplayMode.LIST.toString(): {
+          return CardsDisplayMode.LIST;
+        }
+        case CardsDisplayMode.STACK.toString(): {
+          return CardsDisplayMode.STACK;
+        }
+        default: {
+          return CardsDisplayMode.LIST;
+        }
+      }
+    }
+
+    return CardsDisplayMode.LIST;
+  }
 
   /**
    * Constructor
