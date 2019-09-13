@@ -53,6 +53,7 @@
     "@angular/router": "~8.0.2",
     "@angular/service-worker": "~8.0.2",
     "@ecodev/fab-speed-dial": "^2.0.0",
+    "angular2-swing": "^0.14.0",
     "core-js": "^2.5.4",
     "crypto": "^1.0.1",
     "firebase": "^5.8.3",
