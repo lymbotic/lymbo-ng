@@ -1,0 +1,24 @@
+<div swing-stack #swingStack
+     [stackConfig]="stackConfig"
+     (throwout)="onCardThrownOut($event)"
+     (throwoutend)="onCardThrownOutEnd($event)">
+  <div swing-card class="animate-translation-100">
+    <app-card-fragment class="card-swipable" [card]="cards[0]" [tags]="tags"
+                       [viceVersa]="viceVersa"
+                       [imagePalette]="stack.imagePalette" [media]="media">
+    </app-card-fragment>
+  </div>
+</div>
+<div *ngIf="media !== mediaType.SMALL" class="flexcontainer button-container">
+  <button mat-button
+          [disabled]="cards.length < 1"
+          (click)="onPutToEndClicked()">
+    PUT CARD TO END
+  </button>
+  <div class="flexbox"></div>
+  <button mat-button
+          [disabled]="cards.length < 1"
+          (click)="onMoveCardClicked()">
+    MOVE TO NEXT BOX
+  </button>
+</div>

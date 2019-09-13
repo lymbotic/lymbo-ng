@@ -21,6 +21,7 @@ import {SingleChoiceFragmentComponent} from './components/fragments/quiz/single-
 import {MultipleChoiceFragmentComponent} from './components/fragments/quiz/multiple-choice-fragment/multiple-choice-fragment.component';
 import {ContainsSelectedPipe} from './pipes/contains-selected.pipe';
 import {UserPopoverComponent} from './components/popovers/user-popover/user-popover.component';
+import {CardsStackFragmentComponent} from './components/fragments/cards-stack-fragment/cards-stack-fragment.component';
 
 /**
  * Declarations of cards module
@@ -31,6 +32,7 @@ export const CardsDeclarations = [
 
   // Fragments
   CardTypeFragmentComponent,
+  CardsStackFragmentComponent,
   ExamplesFragmentComponent,
   ExamplesFormComponent,
   SideTitleFragmentComponent,
