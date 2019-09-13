@@ -78,6 +78,7 @@ export class MaterialIconService {
     icons.push(new Icon(IconTopic.ACTION, 'settings', 'ic_settings_24px.svg'));
     icons.push(new Icon(IconTopic.ACTION, 'schedule', 'ic_schedule_24px.svg'));
     icons.push(new Icon(IconTopic.ACTION, 'translate', 'ic_translate_24px.svg'));
+    icons.push(new Icon(IconTopic.ACTION, 'view_agenda', 'ic_view_agenda_24px.svg'));
     icons.push(new Icon(IconTopic.AV, 'replay', 'ic_replay_24px.svg'));
     icons.push(new Icon(IconTopic.AV, 'shuffle', 'ic_shuffle_24px.svg'));
     icons.push(new Icon(IconTopic.AV, 'skip_next', 'ic_skip_next_24px.svg'));
@@ -120,5 +121,6 @@ export class MaterialIconService {
     iconRegistry.addSvgIcon('markdown', sanitizer.bypassSecurityTrustResourceUrl('assets/icons/ic_markdown_24px.svg'));
     iconRegistry.addSvgIcon('checkbox_outline', sanitizer.bypassSecurityTrustResourceUrl('assets/icons/ic_checkbox_outline_24px.svg'));
     iconRegistry.addSvgIcon('checkbox_multiple_marked_outline', sanitizer.bypassSecurityTrustResourceUrl('assets/icons/ic_checkbox_multiple_marked_outline_24px.svg'));
+    iconRegistry.addSvgIcon('cards_outline', sanitizer.bypassSecurityTrustResourceUrl('assets/icons/ic_cards_outline_24px.svg'));
   }
 }
