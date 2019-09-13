@@ -1,7 +1,7 @@
 import {SnackbarService} from '../../../../core/ui/services/snackbar.service';
 import {AboutDialogComponent} from '../../../../ui/about-dialog/about-dialog/about-dialog.component';
 import {environment} from '../../../../../environments/environment';
-import {AfterViewInit, Component, Inject, NgZone, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, Inject, NgZone, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren} from '@angular/core';
 import {Subject} from 'rxjs';
 import {MatDialog, MatIconRegistry, MatSidenav} from '@angular/material';
 import {Media} from '../../../../core/ui/model/media.enum';
@@ -38,6 +38,8 @@ import {FirebaseCloudFirestoreService} from '../../../../core/firebase/services/
 import {User} from 'firebase';
 import {Setting} from '../../../../core/settings/model/setting.model';
 import {SettingType} from '../../../../core/settings/model/setting-type.enum';
+import {Direction, StackConfig, SwingCardComponent, SwingStackComponent, ThrowEvent} from 'angular2-swing';
+import {CardsDisplayMode} from '../../../../core/settings/model/cards-display-mode.enum';
 
 /**
  * Displays cards page
@@ -52,7 +54,7 @@ import {SettingType} from '../../../../core/settings/model/setting-type.enum';
     Animations.dateIndicatorAnimation,
   ]
 })
-export class CardsComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
+export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   /** App title */
   public title = environment.APP_NAME;
@@ -75,6 +77,13 @@ export class CardsComponent implements OnInit, OnChanges, AfterViewInit, OnDestr
   /** Array of tags */
   public tags: Tag[] = [];
 
+  /** Map of settings */
+  public settingsMap = new Map<string, Setting>();
+  /** Sidenav state */
+  public sidenavOpened = false;
+  /** Cards display mode */
+  public cardsDisplayMode = CardsDisplayMode.LIST;
+
   /** Whether all cards are flipped */
   public viceVersa = false;
 
@@ -92,6 +101,9 @@ export class CardsComponent implements OnInit, OnChanges, AfterViewInit, OnDestr
   public mediaType = Media;
   /** Current media */
   public media: Media = Media.UNDEFINED;
+
+  /** Enum of action types */
+  public actionType = Action;
 
   /** Current user */
   public user: User;
@@ -111,9 +123,6 @@ export class CardsComponent implements OnInit, OnChanges, AfterViewInit, OnDestr
   /** Scroll state */
   public scrollState: ScrollState = ScrollState.NON_SCROLLING;
 
-  /** Sidenav state */
-  public sidenavOpened = false;
-
   /** Side navigation at start */
   @ViewChild('sidenavStart', {static: false}) sidenavStart: MatSidenav;
   /** Side navigation at end */
@@ -123,6 +132,9 @@ export class CardsComponent implements OnInit, OnChanges, AfterViewInit, OnDestr
 
   /** Selected tab */
   selectedTab = new FormControl(0);
+
+  /** Enum of cards display mode */
+  public cardsDisplayModeType = CardsDisplayMode;
 
   /**
    * Constructor
@@ -178,35 +190,24 @@ export class CardsComponent implements OnInit, OnChanges, AfterViewInit, OnDestr
    */
   ngOnInit() {
     this.initializeStackSubscription();
+    this.initializeCardSubscription();
     this.initializeFilterSubscription();
+    this.initializeSettingsSubscription();
     this.initializeSuggestionSubscription();
+    this.initializeDatabaseErrorSubscription();
 
+    // TODO Check internet connection
     this.initializeFirebaseUser();
     this.initializeFirebaseUserSubscription();
 
     this.initializeParameters();
     // this.initializeResolvedData();
 
-    this.initializeCardSubscription();
     this.initializeViceVersa();
+    this.initializeFilters();
 
     this.initializeMaterial();
     this.initializeMediaSubscription();
-
-    this.initializeSettings();
-
-    this.clearFilters();
-
-    this.route.params.subscribe(() => {
-      this.id = this.route.snapshot.paramMap.get('id');
-      this.findEntities(this.id, this.user);
-    });
-  }
-
-  /**
-   * Handles on-changes lifecycle phase
-   */
-  ngOnChanges() {
   }
 
   /**
@@ -214,6 +215,13 @@ export class CardsComponent implements OnInit, OnChanges, AfterViewInit, OnDestr
    */
   ngAfterViewInit() {
     this.initializeScrollDetection();
+
+    this.route.params.subscribe(() => {
+      this.id = this.route.snapshot.paramMap.get('id');
+      this.findEntities(this.id, this.user);
+    });
+
+    this.findSettings();
   }
 
   /**
@@ -228,29 +236,7 @@ export class CardsComponent implements OnInit, OnChanges, AfterViewInit, OnDestr
   // Initialization
   //
 
-  /**
-   * Initializes parameters
-   */
-  private initializeParameters() {
-    this.id = this.route.snapshot.paramMap.get('id');
-  }
-
-  /**
-   * Initializes resolved data
-   */
-  private initializeResolvedData() {
-    const resolved = this.route.snapshot.data['stack'];
-    if (resolved != null) {
-      const stack = resolved as Stack;
-      this.assembleTags(stack);
-
-      this.initializeStack(stack);
-      this.initializeTags(Array.from(this.tagsService.tags.values()));
-
-      this.suggestionService.updateByCards(this.cards);
-      this.suggestionService.updateByTags(this.tags);
-    }
-  }
+  // Subscriptions
 
   /**
    * Initializes stack subscription
@@ -286,6 +272,193 @@ export class CardsComponent implements OnInit, OnChanges, AfterViewInit, OnDestr
     });
   }
 
+  /**
+   * Initializes filter subscription
+   */
+  private initializeFilterSubscription() {
+    this.filterService.filterSubject.pipe(
+      takeUntil(this.unsubscribeSubject)
+    ).subscribe(() => {
+      this.tagsFiltered = Array.from(this.filterService.tags.values());
+      this.filterFavorites = this.filterService.favorites;
+      this.filterActive = this.filterService.searchItem.length > 0
+        || this.tagsFiltered.length > 0;
+
+      // Filter and sort cards
+      this.cards = Array.from(this.cardsService.cards.values()).filter((card: Card) => {
+        return this.filterCard(card);
+      }).sort(CardsService.sortCards);
+    });
+  }
+
+  /**
+   * Initializes settings subscription
+   */
+  private initializeSettingsSubscription() {
+    this.settingsService.settingsSubject.pipe(
+      takeUntil(this.unsubscribeSubject),
+      filter(value => value != null)
+    ).subscribe(value => {
+      if (value != null) {
+        const settings = value as Map<string, Setting>;
+        this.initializeSettings(settings);
+      }
+    });
+  }
+
+  /**
+   * Initializes suggestion subscription
+   */
+  private initializeSuggestionSubscription() {
+    this.searchOptions = Array.from(this.suggestionService.searchOptions.values()).reverse();
+    this.suggestionService.searchOptionsSubject.pipe(
+      takeUntil(this.unsubscribeSubject)
+    ).subscribe((value) => {
+      if (value != null) {
+        this.searchOptions = (value as string[]).reverse();
+      }
+    });
+  }
+
+  /**
+   * Initializes database error subscription
+   */
+  private initializeDatabaseErrorSubscription() {
+    this.stacksPersistenceService.databaseErrorSubject.pipe(
+      takeUntil(this.unsubscribeSubject)
+    ).subscribe((value) => {
+      // TODO Check error more specifically
+      if (value != null) {
+        this.snackbarService.showSnackbar('Speicherplatz knapp. Spiel wird nicht gespeichert.');
+      }
+    });
+  }
+
+  /**
+   * Initializes scroll detection
+   */
+  private initializeScrollDetection() {
+    let scrollTimeout = null;
+
+    this.scroll.scrolled(0)
+      .pipe(map(() => {
+        // Update scroll state
+        this.scrollState = ScrollState.SCROLLING;
+        clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(() => {
+          this.scrollState = ScrollState.NON_SCROLLING;
+        }, 500);
+
+        // Update scroll direction
+        const scrollPos = this.scrollable.getElementRef().nativeElement.scrollTop;
+        if (this.scrollDirection === ScrollDirection.UP && scrollPos > this.scrollPosLast) {
+          this.scrollDirection = ScrollDirection.DOWN;
+          // Since scroll is run outside Angular zone change detection must be triggered manually
+          this.zone.run(() => {
+          });
+        } else if (this.scrollDirection === ScrollDirection.DOWN && scrollPos < this.scrollPosLast) {
+          this.scrollDirection = ScrollDirection.UP;
+          // Since scroll is run outside Angular zone change detection must be triggered manually
+          this.zone.run(() => {
+          });
+        }
+
+        // Save current scroll position
+        this.scrollPosLast = scrollPos;
+      })).subscribe();
+  }
+
+  // Firebase
+
+  /**
+   * Initializes existing user after navigation
+   */
+  private initializeFirebaseUser() {
+    const user = this.firebaseAuthenticationService.user;
+
+    if (user != null) {
+      this.handleUser(user);
+    }
+  }
+
+  /**
+   * Initialize firebase user subscription
+   */
+  private initializeFirebaseUserSubscription() {
+    this.firebaseAuthenticationService.userSubject.pipe(
+      takeUntil(this.unsubscribeSubject)
+    ).subscribe(user => {
+      this.handleUser(user);
+    });
+  }
+
+  // Parameters
+
+  /**
+   * Initializes parameters
+   */
+  private initializeParameters() {
+    this.id = this.route.snapshot.paramMap.get('id');
+  }
+
+  /**
+   * Initializes resolved data
+   */
+  private initializeResolvedData() {
+    const resolved = this.route.snapshot.data['stack'];
+    if (resolved != null) {
+      const stack = resolved as Stack;
+      this.assembleTags(stack);
+
+      this.initializeStack(stack);
+      this.initializeTags(Array.from(this.tagsService.tags.values()));
+
+      this.suggestionService.updateByCards(this.cards);
+      this.suggestionService.updateByTags(this.tags);
+    }
+  }
+
+  // Others
+
+  /**
+   * Initializes vice versa
+   */
+  private initializeViceVersa() {
+    this.viceVersa = this.cardsService.viceVersa;
+  }
+
+  /**
+   * Clears all filters
+   */
+  private initializeFilters() {
+    this.filterService.clearAllFilters().then();
+  }
+
+  // Media
+
+  /**
+   * Initializes material colors and icons
+   */
+  private initializeMaterial() {
+    this.materialIconService.initializeIcons(this.iconRegistry, this.sanitizer);
+  }
+
+  /**
+   * Initializes media subscription
+   */
+  private initializeMediaSubscription() {
+    this.media = this.mediaService.media;
+    this.mediaService.mediaSubject.pipe(
+      takeUntil(this.unsubscribeSubject)
+    ).subscribe((value) => {
+      this.media = value as Media;
+    });
+  }
+
+  //
+  //
+  //
+
   // Stack
 
   /**
@@ -300,6 +473,45 @@ export class CardsComponent implements OnInit, OnChanges, AfterViewInit, OnDestr
       this.initializeColors(stack);
       this.initializeBoxes(stack);
       this.cardsService.initializeCards(stack.cards);
+    }
+  }
+
+  /**
+   * Initializes title
+   * @param stack stack
+   */
+  private initializeTitle(stack: Stack) {
+    this.title = stack != null ? stack.title : this.title;
+  }
+
+  /**
+   * Initializes colors
+   * @param stack stack
+   */
+  private initializeColors(stack: Stack) {
+    if (stack.imagePalette != null) {
+      const muted = stack.imagePalette.muted;
+      const vibrant = stack.imagePalette.vibrant;
+      this.titleColor = `rgb(${muted.rgb[0]},${muted.rgb[1]},${muted.rgb[2]})`;
+      this.fabColor = `rgb(${vibrant.rgb[0]},${vibrant.rgb[1]},${vibrant.rgb[2]})`;
+    } else {
+      const primary = this.materialColorService.primary;
+      const accent = this.materialColorService.accent;
+      this.titleColor = primary;
+      this.fabColor = accent;
+    }
+  }
+
+  /**
+   * Initializes boxes
+   */
+  private initializeBoxes(stack: Stack) {
+    this.boxes = [];
+    this.boxesCount = this.cardsService.getBoxCount(stack.cards);
+
+    for (let i = 0; i < this.boxesCount; i++) {
+      this.boxes.push(i);
+
     }
   }
 
@@ -377,62 +589,7 @@ export class CardsComponent implements OnInit, OnChanges, AfterViewInit, OnDestr
     return this.matchService.tagMatchesEveryItem(tag, this.filterService.searchItem);
   }
 
-  // Other
-
-  /**
-   * Initializes filter subscription
-   */
-  private initializeFilterSubscription() {
-    this.filterService.filterSubject.pipe(
-      takeUntil(this.unsubscribeSubject)
-    ).subscribe(() => {
-      this.tagsFiltered = Array.from(this.filterService.tags.values());
-      this.filterFavorites = this.filterService.favorites;
-      this.filterActive = this.filterService.searchItem.length > 0
-        || this.tagsFiltered.length > 0;
-
-      // Filter and sort cards
-      this.cards = Array.from(this.cardsService.cards.values()).filter((card: Card) => {
-        return this.filterCard(card);
-      }).sort(CardsService.sortCards);
-    });
-  }
-
-  /**
-   * Initializes suggestion subscription
-   */
-  private initializeSuggestionSubscription() {
-    this.searchOptions = Array.from(this.suggestionService.searchOptions.values()).reverse();
-    this.suggestionService.searchOptionsSubject.pipe(
-      takeUntil(this.unsubscribeSubject)
-    ).subscribe((value) => {
-      if (value != null) {
-        this.searchOptions = (value as string[]).reverse();
-      }
-    });
-  }
-
-  /**
-   * Initializes existing user after navigation
-   */
-  private initializeFirebaseUser() {
-    const user = this.firebaseAuthenticationService.user;
-
-    if (user != null) {
-      this.handleUser(user);
-    }
-  }
-
-  /**
-   * Initialize firebase user subscription
-   */
-  private initializeFirebaseUserSubscription() {
-    this.firebaseAuthenticationService.userSubject.pipe(
-      takeUntil(this.unsubscribeSubject)
-    ).subscribe(user => {
-      this.handleUser(user);
-    });
-  }
+  // User
 
   /**
    * Handles user by after he/she has been recognized
@@ -451,6 +608,28 @@ export class CardsComponent implements OnInit, OnChanges, AfterViewInit, OnDestr
     this.user = user;
   }
 
+  // Settings
+
+  /**
+   * Initializes settings
+   * @param settingsMap settings map
+   */
+  private initializeSettings(settingsMap: Map<string, Setting>) {
+    this.settingsMap = new Map(settingsMap);
+    this.sidenavOpened = SettingsService.isSettingActive(SettingType.CARD_SIDENAV_OPENED, this.settingsMap);
+    this.cardsDisplayMode = SettingsService.getCardsDisplayMode(this.settingsMap);
+
+    if (this.sidenavOpened) {
+      this.sidenavStart.open();
+    } else {
+      this.sidenavStart.close();
+    }
+  }
+
+  //
+  // Find
+  //
+
   /**
    * Finds entities by a given ID and a given user
    * @param id ID
@@ -463,116 +642,10 @@ export class CardsComponent implements OnInit, OnChanges, AfterViewInit, OnDestr
   }
 
   /**
-   * Initializes colors
-   * @param stack stack
+   * Finds settings
    */
-  private initializeColors(stack: Stack) {
-    if (stack.imagePalette != null) {
-      const muted = stack.imagePalette.muted;
-      const vibrant = stack.imagePalette.vibrant;
-      this.titleColor = `rgb(${muted.rgb[0]},${muted.rgb[1]},${muted.rgb[2]})`;
-      this.fabColor = `rgb(${vibrant.rgb[0]},${vibrant.rgb[1]},${vibrant.rgb[2]})`;
-    } else {
-      const primary = this.materialColorService.primary;
-      const accent = this.materialColorService.accent;
-      this.titleColor = primary;
-      this.fabColor = accent;
-    }
-  }
-
-  /**
-   * Initializes boxes
-   */
-  private initializeBoxes(stack: Stack) {
-    this.boxes = [];
-    this.boxesCount = this.cardsService.getBoxCount(stack.cards);
-
-    for (let i = 0; i < this.boxesCount; i++) {
-      this.boxes.push(i);
-
-    }
-  }
-
-  /**
-   * Initializes vice versa
-   */
-  private initializeViceVersa() {
-    this.viceVersa = this.cardsService.viceVersa;
-  }
-
-  /**
-   * Initializes material colors and icons
-   */
-  private initializeMaterial() {
-    this.materialIconService.initializeIcons(this.iconRegistry, this.sanitizer);
-  }
-
-  /**
-   * Initializes media subscription
-   */
-  private initializeMediaSubscription() {
-    this.media = this.mediaService.media;
-    this.mediaService.mediaSubject.pipe(
-      takeUntil(this.unsubscribeSubject)
-    ).subscribe((value) => {
-      this.media = value as Media;
-    });
-  }
-
-  /**
-   * Initializes scroll detection
-   */
-  private initializeScrollDetection() {
-    let scrollTimeout = null;
-
-    this.scroll.scrolled(0)
-      .pipe(map(() => {
-        // Update scroll state
-        this.scrollState = ScrollState.SCROLLING;
-        clearTimeout(scrollTimeout);
-        scrollTimeout = setTimeout(() => {
-          this.scrollState = ScrollState.NON_SCROLLING;
-        }, 500);
-
-        // Update scroll direction
-        const scrollPos = this.scrollable.getElementRef().nativeElement.scrollTop;
-        if (this.scrollDirection === ScrollDirection.UP && scrollPos > this.scrollPosLast) {
-          this.scrollDirection = ScrollDirection.DOWN;
-          // Since scroll is run outside Angular zone change detection must be triggered manually
-          this.zone.run(() => {
-          });
-        } else if (this.scrollDirection === ScrollDirection.DOWN && scrollPos < this.scrollPosLast) {
-          this.scrollDirection = ScrollDirection.UP;
-          // Since scroll is run outside Angular zone change detection must be triggered manually
-          this.zone.run(() => {
-          });
-        }
-
-        // Save current scroll position
-        this.scrollPosLast = scrollPos;
-      })).subscribe();
-  }
-
-  /**
-   * Initializes settings
-   */
-  private initializeSettings() {
+  private findSettings() {
     this.settingsService.fetch();
-  }
-
-  /**
-   * Clears all filters
-   */
-  private clearFilters() {
-    this.filterService.clearAllFilters().then();
-  }
-
-  /**
-   * Initializes title
-   * @param stack stack
-   */
-  private initializeTitle(stack: Stack) {
-    this.title = stack != null ? stack.title : this.title;
   }
 
   //
@@ -617,7 +690,7 @@ export class CardsComponent implements OnInit, OnChanges, AfterViewInit, OnDestr
         break;
       }
       case Action.PUT_TO_END: {
-        this.cardsService.putCardToEnd(this.stack, card).then(() => {
+        this.cardsService.putCardToEnd(stack, card).then(() => {
 
           // Update card
           this.updateCard(stack, card).then(() => {
@@ -629,7 +702,7 @@ export class CardsComponent implements OnInit, OnChanges, AfterViewInit, OnDestr
         break;
       }
       case Action.MOVE_TO_NEXT_BOX: {
-        this.cardsService.moveCardToNextBox(this.stack, card).then(() => {
+        this.cardsService.moveCardToNextBox(stack, card).then(() => {
           this.initializeCardsAreInMultipleBoxes();
 
           // Update card
@@ -642,7 +715,7 @@ export class CardsComponent implements OnInit, OnChanges, AfterViewInit, OnDestr
         break;
       }
       case Action.SET_FAVORITE: {
-        this.cardsService.setFavorite(this.stack, card, true).then(() => {
+        this.cardsService.setFavorite(stack, card, true).then(() => {
 
           // Update card
           this.updateCard(stack, card).then(() => {
@@ -654,7 +727,7 @@ export class CardsComponent implements OnInit, OnChanges, AfterViewInit, OnDestr
         break;
       }
       case Action.UNSET_FAVORITE: {
-        this.cardsService.setFavorite(this.stack, card, false).then(() => {
+        this.cardsService.setFavorite(stack, card, false).then(() => {
 
           // Update card
           this.updateCard(stack, card).then(() => {
@@ -911,16 +984,20 @@ export class CardsComponent implements OnInit, OnChanges, AfterViewInit, OnDestr
   onMenuItemClicked(menuItem: string) {
     switch (menuItem) {
       case 'menu': {
-        this.sidenavStart.toggle().then(() => {
-          this.settingsService.updateSetting(new Setting(SettingType.STACKS_SIDENAV_OPENED, this.sidenavStart.opened));
-        });
-        // this.sidenavEnd.toggle().then(() => {
-        // });
+        this.settingsService.updateSetting(new Setting(SettingType.STACKS_SIDENAV_OPENED, !this.sidenavOpened));
         break;
       }
       case 'back': {
         this.cardsService.clearCards();
         this.router.navigate([`/stacks`]).then();
+        break;
+      }
+      case 'set-display-mode-list': {
+        this.settingsService.updateSetting(new Setting(SettingType.CARDS_DISPLAY_MODE, CardsDisplayMode.LIST));
+        break;
+      }
+      case 'set-display-mode-stack': {
+        this.settingsService.updateSetting(new Setting(SettingType.CARDS_DISPLAY_MODE, CardsDisplayMode.STACK));
         break;
       }
       case 'restore-cards': {
@@ -1009,6 +1086,13 @@ export class CardsComponent implements OnInit, OnChanges, AfterViewInit, OnDestr
    */
   onSearchItemChanged(searchItem: string) {
     this.filterService.updateSearchItem(searchItem);
+  }
+
+  /**
+   * Handles click on placeholder
+   */
+  onPlaceholderClicked() {
+    this.onCardEvent({action: Action.OPEN_DIALOG_ADD, stack: this.stack, card: null});
   }
 
   /**

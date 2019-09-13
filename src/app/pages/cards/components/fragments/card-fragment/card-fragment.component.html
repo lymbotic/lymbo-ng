@@ -1,5 +1,5 @@
 <div [class]="themeClass">
-  <mat-card class="container">
+  <mat-card *ngIf="card != null" class="container">
     <div *ngIf="devMode" class="debug">id {{ card.id.slice(0, 19)  }}...</div>
     <div *ngIf="devMode" class="debug">index {{ card.index }}</div>
 
@@ -95,7 +95,8 @@
     </mat-card-footer>
 
     <mat-card-actions
-      *ngIf="(activeAspect != null && activeAspect.type != aspectType.SIDE && activeAspect.type != aspectType.QUIZ)|| activePartIndex !== 0"
+      *ngIf="displayActionButtons && ((activeAspect != null && activeAspect.type != aspectType.SIDE && activeAspect.type != aspectType.QUIZ)
+      || activePartIndex !== 0)"
       align="right">
       <div class="flexcontainer">
         <button mat-button

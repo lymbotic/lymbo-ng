@@ -42,6 +42,8 @@ export class CardFragmentComponent implements OnInit, OnChanges {
   @Input() tags: Tag[] = [];
   /** Whether all cards are flipped */
   @Input() viceVersa = false;
+  /** Whether to display action buttons */
+  @Input() displayActionButtons = false;
   /** Image palette to be used */
   @Input() imagePalette: VibrantPalette;
   /** Current media */
@@ -113,7 +115,7 @@ export class CardFragmentComponent implements OnInit, OnChanges {
     this.initializeColors();
     this.initializeTagsMap();
 
-    if (this.card.aspects != null && this.card.aspects.length > 0) {
+    if (this.card != null && this.card.aspects != null && this.card.aspects.length > 0) {
       this.activeAspect = this.card.aspects[0];
       this.update();
     }
@@ -123,7 +125,7 @@ export class CardFragmentComponent implements OnInit, OnChanges {
    * Handles on-changes lifecycle phase
    */
   ngOnChanges(changes: SimpleChanges) {
-    if (this.card.aspects != null && this.card.aspects.length > 0) {
+    if (this.card != null && this.card.aspects != null && this.card.aspects.length > 0) {
       this.activeAspect = this.card.aspects[0];
       this.update();
     }
@@ -160,6 +162,7 @@ export class CardFragmentComponent implements OnInit, OnChanges {
 
   /**
    * Handles click on the card
+   * @param action action
    */
   onCardClicked(action: Action) {
     switch (action) {

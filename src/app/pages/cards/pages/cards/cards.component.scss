@@ -2,6 +2,22 @@
 @import '../../../../../flex';
 @import '../../../../../sizes';
 
+.placeholder-container {
+  height: 100%;
+}
+
+.placeholder-title {
+  font-family: 'Roboto Slab', serif;
+  font-weight: 700;
+  font-size: 1.8em;
+}
+
+.placeholder {
+  color: mat-color($mat-grey, 400);
+  background: transparent;
+  white-space: normal;
+}
+
 .fixed {
   width: 100%;
   position: fixed;
@@ -55,22 +71,58 @@
 
 //
 
-.card-main-content {
+.horizontal-center {
+  text-align: center;
+
+  width: 100%;
+  -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+  -moz-box-sizing: border-box; /* Firefox, other Gecko */
+  box-sizing: border-box; /* Opera/IE 8+ */
+
+  &:hover .hidden {
+    display: inline-block;
+  }
+}
+
+.vertical-center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.full-height {
+  height: 100%;
+}
+
+.full-height-minus-toolbar {
+  height: calc(100% - 88px);
+}
+
+.button {
   @media #{$breakpoint-small} {
-    padding-top: 88px;
-    margin-left: 10px;
-    margin-right: 10px;
+    margin: 5px;
   }
   @media #{$breakpoint-medium} {
-    padding-top: 88px;
-    margin-left: 20px;
-    margin-right: 20px;
+    margin: 10px;
   }
   @media #{$breakpoint-large} {
-    padding-top: 88px;
-    margin-left: 40px;
-    margin-right: 40px;
+    margin: 20px;
   }
+
+  white-space: pre-wrap !important;
+}
+
+.card-main-content {
+  width: 100%;
+  height: 100%;
+}
+
+.card-main-content-margin {
+  padding-top: 88px;
+}
+
+.card-swipable {
+  padding: 15px;
 }
 
 .sidenav {

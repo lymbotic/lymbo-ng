@@ -11,6 +11,7 @@
   [cardsAreInMultipleBoxes]="cardsAreInMultipleBoxes"
   [stackNotEmpty]="cards.length > 0"
   [user]="user"
+  [cardsDisplayMode]="cardsDisplayMode"
   (searchItemEventEmitter)="onSearchItemChanged($event)"
   (menuItemEventEmitter)="onMenuItemClicked($event)"></app-cards-toolbar>
 
@@ -58,43 +59,69 @@
       [cardsAreInMultipleBoxes]="cardsAreInMultipleBoxes"
       [stackNotEmpty]="cards.length > 0"
       [user]="user"
+      [cardsDisplayMode]="cardsDisplayMode"
       (keydown)="onKeyDown($event)"
       (searchItemEventEmitter)="onSearchItemChanged($event)"
       (menuItemEventEmitter)="onMenuItemClicked($event)"></app-cards-toolbar>
 
     <div class="card-main-content">
-      <mat-tab-group *ngIf="cardsAreInMultipleBoxes"
+
+      <mat-tab-group class="card-main-content-margin full-height"
                      mat-align-tabs="end"
                      [color]="fabColor"
                      [selectedIndex]="selectedTab.value"
                      (selectedIndexChange)="selectedTab.setValue($event)">
         <mat-tab *ngFor="let box of boxes; let index = index;">
-          <ng-template mat-tab-label *ngIf="index === selectedTab.value">
+          <ng-template mat-tab-label *ngIf="cardsAreInMultipleBoxes && index === selectedTab.value">
             <mat-icon svgIcon="inbox" class="box-icon" [style.fill]="titleColor"></mat-icon>
             <span [style.color]="titleColor">Box {{ index + 1 }} ({{ getCardsOfBox(index).length }})</span>
           </ng-template>
-          <ng-template mat-tab-label *ngIf="index !== selectedTab.value">
+          <ng-template mat-tab-label *ngIf="cardsAreInMultipleBoxes && index !== selectedTab.value">
             <mat-icon svgIcon="inbox" class="box-icon"></mat-icon>
             <span>Box {{ index + 1 }} ({{ getCardsOfBox(index).length }})</span>
           </ng-template>
-          <app-card-fragment *ngFor="let card of getCardsOfBox(index)"
-                             [card]="card" [tags]="tags" [viceVersa]="viceVersa" [imagePalette]="stack.imagePalette"
-                             [media]="media"
-                             (cardEventEmitter)="onCardEvent($event)">
-          </app-card-fragment>
+
+          <div *ngIf="getCardsOfBox(index).length > 0" class="full-height-minus-toolbar">
+            <!-- Display cards as list -->
+
+            <div *ngIf="stack != null && cardsDisplayMode === cardsDisplayModeType.LIST">
+              <app-card-fragment *ngFor="let card of getCardsOfBox(index)"
+                                 [card]="card" [tags]="tags" [viceVersa]="viceVersa" [displayActionButtons]=true
+                                 [imagePalette]="stack.imagePalette" [media]="media"
+                                 (cardEventEmitter)="onCardEvent($event)">
+              </app-card-fragment>
+            </div>
+
+            <!-- Display cards as stack -->
+
+            <div *ngIf="stack != null && cardsDisplayMode === cardsDisplayModeType.STACK" class="full-height">
+              <div class="vertical-center full-height">
+                <app-cards-stack-fragment [stack]="stack" [cards]="getCardsOfBox(index)" [viceVersa]="viceVersa"
+                                          [tags]="tags" [media]="media"
+                                          (cardEventEmitter)="onCardEvent($event)">
+                </app-cards-stack-fragment>
+              </div>
+            </div>
+          </div>
+
+          <!-- Placeholder for empty box -->
+
+          <div *ngIf="getCardsOfBox(index).length == 0" class="placeholder-container vertical-center">
+            <button *ngIf="!cardsAreInMultipleBoxes" mat-flat-button class="placeholder"
+                    (click)="onPlaceholderClicked()">
+              <div class="placeholder-title">Wanna get started?</div>
+              There are no cards in this stack yet. Click here to begin with your first tasklet
+            </button>
+            <button *ngIf="cardsAreInMultipleBoxes" mat-flat-button class="placeholder"
+                    (click)="onPlaceholderClicked()">
+              <div class="placeholder-title">Empty box</div>
+              There are no cards in this box. Move to another box or click here to create a card.
+            </button>
+          </div>
         </mat-tab>
       </mat-tab-group>
-
-      <div *ngIf="!cardsAreInMultipleBoxes">
-        <app-card-fragment *ngFor="let card of getCardsOfBox(0)"
-                           [stack]="stack" [card]="card" [tags]="tags" [viceVersa]="viceVersa"
-                           [imagePalette]="stack.imagePalette" [media]="media"
-                           (cardEventEmitter)="onCardEvent($event)">
-        </app-card-fragment>
-      </div>
     </div>
   </mat-sidenav-content>
-
   <mat-sidenav *ngIf="media > mediaType.MEDIUM" #sidenavStart mode="side" disableClose="true"
                position="end" [opened]="sidenavOpened"
                class="sidenav sidenav-end"

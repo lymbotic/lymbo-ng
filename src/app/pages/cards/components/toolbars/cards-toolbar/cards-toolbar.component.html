@@ -31,16 +31,30 @@
     </mat-form-field>
     <mat-autocomplete #auto="matAutocomplete">
       <mat-option *ngFor="let option of searchOptionsFiltered" [value]="option"
-                  (click)="onOptionSelected($event)">
+                  (click)="onOptionSelected()">
         {{ option }}
       </mat-option>
-
     </mat-autocomplete>
   </div>
   <div class="flexbox"></div>
   <div class="toolbar-block end">
-
     <!-- Optional buttons desktop -->
+    <button *ngIf="media > mediaType.MEDIUM && cardsDisplayMode === cardsDisplayModeType.LIST"
+            mat-button
+            class="toolbar-menu-item"
+            [matTooltip]="'Displays as stack'"
+            [matTooltipPosition]="'left'"
+            (click)="onMenuItemClicked('set-display-mode-stack')">
+      <mat-icon svgIcon="cards_outline"></mat-icon>
+    </button>
+    <button *ngIf="media > mediaType.MEDIUM && cardsDisplayMode === cardsDisplayModeType.STACK"
+            mat-button
+            class="toolbar-menu-item"
+            [matTooltip]="'Displays as list'"
+            [matTooltipPosition]="'left'"
+            (click)="onMenuItemClicked('set-display-mode-list')">
+      <mat-icon svgIcon="view_agenda"></mat-icon>
+    </button>
     <button *ngIf="media > mediaType.MEDIUM"
             mat-button
             class="toolbar-menu-item"
@@ -87,6 +101,15 @@
 
       <!-- Optional buttons mobile -->
       <div *ngIf="media < mediaType.LARGE">
+        <button *ngIf="cardsDisplayMode === cardsDisplayModeType.LIST" mat-menu-item (click)="onMenuItemClicked('set-display-mode-stack')">
+          <mat-icon svgIcon="cards_outline"></mat-icon>
+          <span>Display as stack</span>
+        </button>
+        <button *ngIf="cardsDisplayMode === cardsDisplayModeType.STACK" mat-menu-item (click)="onMenuItemClicked('set-display-mode-list')">
+          <mat-icon svgIcon="view_agenda"></mat-icon>
+          <span>Display as list</span>
+        </button>
+
         <button mat-menu-item *ngIf="user == null || user.isAnonymous" (click)="onMenuItemClicked('login')">
           <mat-icon svgIcon="person"></mat-icon>
           <span>Login</span>

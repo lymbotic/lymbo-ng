@@ -138,6 +138,15 @@ mat-list-item.text > .mat-list-item-content {
   background-color: rgba(84, 110, 122, .4) !important;
 }
 
+mat-tab-group, .mat-tab-body-wrapper {
+  // height: calc(100% - 88px) !important;
+  height: 100% !important;
+}
+
+mat-tab-header, .mat-tab-header {
+  border-bottom: 0 solid transparent !important;
+}
+
 @font-face {
   font-family: 'Google Sans';
   font-style: normal;
