@@ -1,7 +1,7 @@
 import {SnackbarService} from '../../../../core/ui/services/snackbar.service';
 import {AboutDialogComponent} from '../../../../ui/about-dialog/about-dialog/about-dialog.component';
 import {environment} from '../../../../../environments/environment';
-import {AfterViewInit, Component, Inject, NgZone, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren} from '@angular/core';
+import {AfterViewInit, Component, Inject, NgZone, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {Subject} from 'rxjs';
 import {MatDialog, MatIconRegistry, MatSidenav} from '@angular/material';
 import {Media} from '../../../../core/ui/model/media.enum';
@@ -30,7 +30,6 @@ import {CardDialogComponent} from '../../components/dialogs/card-dialog/card-dia
 import {TagDialogComponent} from '../../components/dialogs/tag-dialog/tag-dialog.component';
 import {Card} from '../../../../core/entity/model/card/card.model';
 import {FormControl} from '@angular/forms';
-import {STACK_PERSISTENCE_FIRESTORE} from '../../../../core/entity/entity.module';
 import {StacksPersistenceService} from '../../../../core/entity/services/stack/persistence/stacks-persistence.interface';
 import {TagsService} from '../../../../core/entity/services/tag/tags.service';
 import {FirebaseAuthenticationService} from '../../../../core/firebase/services/firebase-authentication.service';
@@ -38,7 +37,6 @@ import {FirebaseCloudFirestoreService} from '../../../../core/firebase/services/
 import {User} from 'firebase';
 import {Setting} from '../../../../core/settings/model/setting.model';
 import {SettingType} from '../../../../core/settings/model/setting-type.enum';
-import {Direction, StackConfig, SwingCardComponent, SwingStackComponent, ThrowEvent} from 'angular2-swing';
 import {CardsDisplayMode} from '../../../../core/settings/model/cards-display-mode.enum';
 import {LogService} from '../../../../core/log/services/log.service';
 import {ConnectionService} from '../../../../core/common/services/connection.service';
@@ -175,7 +173,7 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
               private sanitizer: DomSanitizer,
               private scroll: ScrollDispatcher,
               private settingsService: SettingsService,
-              @Inject(STACK_PERSISTENCE_FIRESTORE) private stacksPersistenceService: StacksPersistenceService,
+              @Inject(environment.PERSISTENCE_INJECTION_TOKEN) private stacksPersistenceService: StacksPersistenceService,
               private snackbarService: SnackbarService,
               private suggestionService: SuggestionService,
               private tagsService: TagsService,

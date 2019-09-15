@@ -14,10 +14,8 @@ import {FirebaseAuthenticationServiceMock} from '../../../../../core/firebase/se
 import {of} from 'rxjs';
 import {FirebaseCloudFirestoreService} from '../../../../../core/firebase/services/firebase-cloud-firestore.service';
 import {FirebaseCloudFirestoreServiceMock} from '../../../../../core/firebase/services/firebase-cloud-firestore.service.mock';
-import {Inject} from '@angular/core';
-import {STACK_PERSISTENCE_FIRESTORE} from '../../../../../core/entity/entity.module';
-import {StacksPersistenceService} from '../../../../../core/entity/services/stack/persistence/stacks-persistence.interface';
 import {StacksPersistenceServiceMock} from '../../../../../core/entity/services/stack/persistence/stacks-persistence.mock';
+import {environment} from '../../../../../../environments/environment';
 
 describe('UploadDialogComponent', () => {
   let component: UploadDialogComponent;
@@ -40,7 +38,7 @@ describe('UploadDialogComponent', () => {
         {provide: AngularFireAuth, use: mockAngularFireAuth},
         {provide: FirebaseAuthenticationService, use: FirebaseAuthenticationServiceMock},
         {provide: FirebaseCloudFirestoreService, useClass: FirebaseCloudFirestoreServiceMock},
-        {provide: STACK_PERSISTENCE_FIRESTORE, use: StacksPersistenceServiceMock},
+        {provide: environment.PERSISTENCE_INJECTION_TOKEN, use: StacksPersistenceServiceMock},
         {provide: PouchDBService, useClass: PouchDBServiceMock},
         {provide: PouchDBSettingsService, useClass: PouchDBSettingsServiceMock},
       ],

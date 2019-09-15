@@ -41,14 +41,13 @@ import {FirebaseAuthenticationService} from '../../../../core/firebase/services/
 import {User} from 'firebase';
 import {FirebaseCloudFirestoreService} from '../../../../core/firebase/services/firebase-cloud-firestore.service';
 import {StacksPersistenceService} from '../../../../core/entity/services/stack/persistence/stacks-persistence.interface';
-import {STACK_PERSISTENCE_FIRESTORE} from '../../../../core/entity/entity.module';
 import {Tag} from '../../../../core/entity/model/tag/tag.model';
 import {TagsService} from '../../../../core/entity/services/tag/tags.service';
 import {UUID} from '../../../../core/entity/model/uuid';
 import {LogService} from '../../../../core/log/services/log.service';
+import {ConnectionService} from '../../../../core/common/services/connection.service';
 // @ts-ignore
 import Vibrant = require('node-vibrant');
-import {ConnectionService} from '../../../../core/common/services/connection.service';
 
 /**
  * Displays stacks page
@@ -166,7 +165,7 @@ export class StacksComponent implements OnInit, OnChanges, AfterViewInit, OnDest
               private scroll: ScrollDispatcher,
               private settingsService: SettingsService,
               private stacksService: StacksService,
-              @Inject(STACK_PERSISTENCE_FIRESTORE) private stacksPersistenceService: StacksPersistenceService,
+              @Inject(environment.PERSISTENCE_INJECTION_TOKEN) private stacksPersistenceService: StacksPersistenceService,
               private snackbarService: SnackbarService,
               private suggestionService: SuggestionService,
               private tagsService: TagsService,
