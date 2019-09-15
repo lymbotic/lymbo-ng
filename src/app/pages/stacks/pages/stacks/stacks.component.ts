@@ -48,6 +48,7 @@ import {UUID} from '../../../../core/entity/model/uuid';
 import {LogService} from '../../../../core/log/services/log.service';
 // @ts-ignore
 import Vibrant = require('node-vibrant');
+import {ConnectionService} from '../../../../core/common/services/connection.service';
 
 /**
  * Displays stacks page
@@ -185,8 +186,7 @@ export class StacksComponent implements OnInit, OnChanges, AfterViewInit, OnDest
     this.initializeFilterSubscription();
     this.initializeSuggestionSubscription();
 
-    this.initializeFirebaseUser();
-    this.initializeFirebaseUserSubscription();
+    this.initializeFirebase();
 
     this.initializeMaterial();
     this.initializeMediaSubscription();
@@ -380,6 +380,18 @@ export class StacksComponent implements OnInit, OnChanges, AfterViewInit, OnDest
         this.searchOptions = (value as string[]).reverse();
       }
     });
+  }
+
+  /**
+   * Initializes firebase
+   */
+  private initializeFirebase() {
+    if (ConnectionService.isOnline()) {
+      this.initializeFirebaseUser();
+      this.initializeFirebaseUserSubscription();
+    } else {
+      this.snackbarService.showSnackbar('You are offline. Changes will not be saved');
+    }
   }
 
   /**
@@ -1037,39 +1049,44 @@ export class StacksComponent implements OnInit, OnChanges, AfterViewInit, OnDest
    */
   private fetchPhoto(stack: Stack, searchItems: string[]): Promise<any> {
     return new Promise((resolve, reject) => {
-      const apiKeyPexels = this.settingsService.settings.get(SettingType.API_KEY_PEXELS_IMAGE);
-      const apiKeyMicrosoftTextTranslate = this.settingsService.settings.get(SettingType.API_KEY_MICROSOFT_TEXT_TRANSLATE);
 
-      // Reject if no API key is specified
-      if (apiKeyPexels === null) {
-        reject();
-      }
+      if (ConnectionService.isOnline()) {
+        const apiKeyPexels = this.settingsService.settings.get(SettingType.API_KEY_PEXELS_IMAGE);
+        const apiKeyMicrosoftTextTranslate = this.settingsService.settings.get(SettingType.API_KEY_MICROSOFT_TEXT_TRANSLATE);
 
-      const resultEmitter: EventEmitter<SearchResult> = new EventEmitter<SearchResult>();
-      resultEmitter.subscribe(result => {
-        if (result != null && result.photos != null && result.photos.length > 0) {
-          resolve((result.photos[0] as Photo).src.landscape);
-        } else {
+        // Reject if no API key is specified
+        if (apiKeyPexels === null) {
           reject();
         }
-      });
 
-      if (apiKeyMicrosoftTextTranslate !== null) {
-        // Try to translate into English, then call Pexels service
-        const translationEmitter: EventEmitter<string> = new EventEmitter<string>();
-        translationEmitter.subscribe(result => {
-          if (result != null) {
-            // Search for images with translated tags
-            this.pexelsService.search(result.split(', '), 1, 1, resultEmitter);
+        const resultEmitter: EventEmitter<SearchResult> = new EventEmitter<SearchResult>();
+        resultEmitter.subscribe(result => {
+          if (result != null && result.photos != null && result.photos.length > 0) {
+            resolve((result.photos[0] as Photo).src.landscape);
           } else {
-            // Search for images with original tags
-            this.pexelsService.search(searchItems, 1, 1, resultEmitter);
+            reject();
           }
         });
-        this.microsoftTranslateService.translate(searchItems.join(', '), Language.ENGLISH, translationEmitter);
+
+        if (apiKeyMicrosoftTextTranslate !== null) {
+          // Try to translate into English, then call Pexels service
+          const translationEmitter: EventEmitter<string> = new EventEmitter<string>();
+          translationEmitter.subscribe(result => {
+            if (result != null) {
+              // Search for images with translated tags
+              this.pexelsService.search(result.split(', '), 1, 1, resultEmitter);
+            } else {
+              // Search for images with original tags
+              this.pexelsService.search(searchItems, 1, 1, resultEmitter);
+            }
+          });
+          this.microsoftTranslateService.translate(searchItems.join(', '), Language.ENGLISH, translationEmitter);
+        } else {
+          // Call Pexels service without translating
+          this.pexelsService.search(searchItems, 1, 1, resultEmitter);
+        }
       } else {
-        // Call Pexels service without translating
-        this.pexelsService.search(searchItems, 1, 1, resultEmitter);
+        reject();
       }
     });
   }

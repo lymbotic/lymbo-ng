@@ -41,6 +41,7 @@ import {SettingType} from '../../../../core/settings/model/setting-type.enum';
 import {Direction, StackConfig, SwingCardComponent, SwingStackComponent, ThrowEvent} from 'angular2-swing';
 import {CardsDisplayMode} from '../../../../core/settings/model/cards-display-mode.enum';
 import {LogService} from '../../../../core/log/services/log.service';
+import {ConnectionService} from '../../../../core/common/services/connection.service';
 
 /**
  * Displays cards page
@@ -197,9 +198,7 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.initializeSuggestionSubscription();
     this.initializeDatabaseErrorSubscription();
 
-    // TODO Check internet connection
-    this.initializeFirebaseUser();
-    this.initializeFirebaseUserSubscription();
+    this.initializeFirebase();
 
     this.initializeParameters();
     // this.initializeResolvedData();
@@ -243,6 +242,7 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
    * Initializes stack subscription
    */
   private initializeStackSubscription() {
+    LogService.trace(`initializeStackSubscription`);
     this.stacksPersistenceService.stackSubject.pipe(
       takeUntil(this.unsubscribeSubject)
     ).subscribe((value) => {
@@ -263,6 +263,7 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
    * Initializes card subscription
    */
   private initializeCardSubscription() {
+    LogService.trace(`initializeCardSubscription`);
     this.cardsService.cardsSubject.pipe(
       takeUntil(this.unsubscribeSubject)
     ).subscribe((value) => {
@@ -305,6 +306,18 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
         this.initializeSettings(settings);
       }
     });
+  }
+
+  /**
+   * Initializes firebase
+   */
+  private initializeFirebase() {
+    if (ConnectionService.isOnline()) {
+      this.initializeFirebaseUser();
+      this.initializeFirebaseUserSubscription();
+    } else {
+      this.snackbarService.showSnackbar('You are offline. Changes will not be saved');
+    }
   }
 
   /**
@@ -482,7 +495,7 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
    * @param stack stack
    */
   private initializeTitle(stack: Stack) {
-    this.title = stack != null ? stack.title : this.title;
+    this.title = (stack != null && stack.title != null && stack.title.length > 0) ? stack.title : this.title;
   }
 
   /**
@@ -1117,8 +1130,10 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
    * @param card card
    */
   private addCard(stack: Stack, card: Card): Promise<any> {
+    LogService.trace(`addCard`);
     return new Promise((resolve, reject) => {
       this.cardsService.createCard(stack, card).then(() => {
+
         this.stacksPersistenceService.clearStacks();
         this.stacksPersistenceService.updateStack(stack).then(() => {
           resolve();
