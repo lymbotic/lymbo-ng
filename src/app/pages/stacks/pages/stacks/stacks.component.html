@@ -11,8 +11,8 @@
   (menuItemEventEmitter)="onMenuItemClicked($event)"></app-stacks-toolbar>
 
 <mat-sidenav-container class="sidenav-container" layout="column">
-  <mat-sidenav *ngIf="media > mediaType.MEDIUM" #sidenavStart mode="side" disableClose="true"
-               position="start" [opened]="sidenavOpened"
+  <mat-sidenav *ngIf="media > mediaType.MEDIUM" mode="side" disableClose="true"
+               position="start" [opened]="'true'"
                class="sidenav sidenav-start"
                (keydown)="onKeyDown($event)">
     <div [@toolbarAnimation]="scrollDirection">
@@ -21,17 +21,19 @@
     </div>
   </mat-sidenav>
 
-  <mat-sidenav *ngIf="media < mediaType.LARGE" #sidenavStart mode="over" disableClose="true"
+  <mat-sidenav *ngIf="media < mediaType.LARGE" #sidenavStart mode="over" disableClose="false"
                position="start" [opened]="sidenavOpened"
                class="sidenav sidenav-start"
-               (keydown)="onKeyDown($event)">
+               (keydown)="onKeyDown($event)"
+               (opened)="onSidenavOpened()"
+               (closed)="onSidenavClosed()">
     <div [@toolbarAnimation]="scrollDirection">
       <div class="toolbar-wrapper">
         <div class="toolbar-block start">
-          <button mat-button class="toolbar-menu-item" (click)="onMenuItemClicked('menu')">
-            <mat-icon svgIcon="arrow_back" class="icon"></mat-icon>BACK
+          <button mat-button class="toolbar-menu-item" (click)="sidenavStart.close()">
+            <mat-icon svgIcon="close" class="icon"></mat-icon>
+            CLOSE
           </button>
-          <span *ngIf="media != mediaType.SMALL" class="toolbar-title">{{ title }}</span>
         </div>
       </div>
       <app-tag-list [tags]="tags" [tagsFiltered]="tagsFiltered" [recentCount]="'10'" [media]="media"

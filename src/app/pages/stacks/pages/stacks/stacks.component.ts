@@ -103,8 +103,6 @@ export class StacksComponent implements OnInit, OnChanges, AfterViewInit, OnDest
 
   /** Side navigation at start */
   @ViewChild('sidenavStart', {static: false}) sidenavStart: MatSidenav;
-  /** Side navigation at end */
-  @ViewChild('sidenavEnd', {static: false}) sidenavEnd: MatSidenav;
   /** Scrollable directive */
   @ViewChild(CdkScrollable, {static: false}) scrollable: CdkScrollable;
 
@@ -851,11 +849,9 @@ export class StacksComponent implements OnInit, OnChanges, AfterViewInit, OnDest
   onMenuItemClicked(menuItem: string) {
     switch (menuItem) {
       case 'menu': {
-        this.sidenavStart.toggle().then(() => {
-          this.settingsService.updateSetting(new Setting(SettingType.STACKS_SIDENAV_OPENED, this.sidenavStart.opened));
-        });
-        // this.sidenavEnd.toggle().then(() => {
-        // });
+        if (this.media < Media.LARGE) {
+          this.sidenavStart.toggle();
+        }
         break;
       }
       case 'login': {
@@ -924,6 +920,22 @@ export class StacksComponent implements OnInit, OnChanges, AfterViewInit, OnDest
    */
   onSearchItemChanged(searchItem: string) {
     this.filterService.updateSearchItem(searchItem);
+  }
+
+  /**
+   * Handles sidenav opening event
+   */
+  onSidenavOpened() {
+    LogService.trace(`onSidenavOpened`);
+    this.settingsService.updateSetting(new Setting(SettingType.STACKS_SIDENAV_OPENED, true));
+  }
+
+  /**
+   * Handles sidenav closing event
+   */
+  onSidenavClosed() {
+    LogService.trace(`onSidenavClosed`);
+    this.settingsService.updateSetting(new Setting(SettingType.STACKS_SIDENAV_OPENED, false));
   }
 
   /**

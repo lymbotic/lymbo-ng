@@ -125,8 +125,6 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   /** Side navigation at start */
   @ViewChild('sidenavStart', {static: false}) sidenavStart: MatSidenav;
-  /** Side navigation at end */
-  @ViewChild('sidenavEnd', {static: false}) sidenavEnd: MatSidenav;
   /** Scrollable directive */
   @ViewChild(CdkScrollable, {static: false}) scrollable: CdkScrollable;
 
@@ -628,7 +626,7 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
    */
   private initializeSettings(settingsMap: Map<string, Setting>) {
     this.settingsMap = new Map(settingsMap);
-    this.sidenavOpened = SettingsService.isSettingActive(SettingType.CARD_SIDENAV_OPENED, this.settingsMap);
+    this.sidenavOpened = SettingsService.isSettingActive(SettingType.CARDS_SIDENAV_OPENED, this.settingsMap);
     this.cardsDisplayMode = SettingsService.getCardsDisplayMode(this.settingsMap);
 
     if (this.sidenavOpened) {
@@ -996,7 +994,7 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
   onMenuItemClicked(menuItem: string) {
     switch (menuItem) {
       case 'menu': {
-        this.settingsService.updateSetting(new Setting(SettingType.STACKS_SIDENAV_OPENED, !this.sidenavOpened));
+        this.sidenavStart.toggle();
         break;
       }
       case 'back': {
@@ -1105,6 +1103,22 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
    */
   onPlaceholderClicked() {
     this.onCardEvent({action: Action.OPEN_DIALOG_ADD, stack: this.stack, card: null});
+  }
+
+  /**
+   * Handles sidenav opening event
+   */
+  onSidenavOpened() {
+    LogService.trace(`onSidenavOpened`);
+    this.settingsService.updateSetting(new Setting(SettingType.CARDS_SIDENAV_OPENED, true));
+  }
+
+  /**
+   * Handles sidenav closing event
+   */
+  onSidenavClosed() {
+    LogService.trace(`onSidenavClosed`);
+    this.settingsService.updateSetting(new Setting(SettingType.CARDS_SIDENAV_OPENED, false));
   }
 
   /**

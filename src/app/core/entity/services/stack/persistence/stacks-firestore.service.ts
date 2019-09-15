@@ -90,7 +90,7 @@ export class StacksFirestoreService implements StacksPersistenceService {
    * @param user user
    */
   public findStacks(user: User) {
-    LogService.trace(`findStacks ${JSON.stringify(user)}`);
+    LogService.trace(`findStacks`);
     this.firebaseCloudFirestoreService.readStacks(user);
   }
 
