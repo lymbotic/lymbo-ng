@@ -40,6 +40,7 @@ import {Setting} from '../../../../core/settings/model/setting.model';
 import {SettingType} from '../../../../core/settings/model/setting-type.enum';
 import {Direction, StackConfig, SwingCardComponent, SwingStackComponent, ThrowEvent} from 'angular2-swing';
 import {CardsDisplayMode} from '../../../../core/settings/model/cards-display-mode.enum';
+import {LogService} from '../../../../core/log/services/log.service';
 
 /**
  * Displays cards page
@@ -1122,11 +1123,11 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
         this.stacksPersistenceService.updateStack(stack).then(() => {
           resolve();
         }).catch(err => {
-          console.error(err);
+          LogService.fatal(err);
           reject();
         });
       }).catch(err => {
-        console.error(err);
+        LogService.fatal(err);
         reject();
       });
     });
@@ -1144,11 +1145,11 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
         this.stacksPersistenceService.updateStack(stack).then(() => {
           resolve();
         }).catch(err => {
-          console.error(err);
+          LogService.fatal(err);
           reject();
         });
       }).catch(err => {
-        console.error(err);
+        LogService.fatal(err);
         reject();
       });
     });
@@ -1166,11 +1167,11 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
         this.stacksPersistenceService.updateStack(stack).then(() => {
           resolve();
         }).catch(err => {
-          console.error(err);
+          LogService.fatal(err);
           reject();
         });
       }).catch(err => {
-        console.error(err);
+        LogService.fatal(err);
         reject();
       });
     });
@@ -1187,11 +1188,11 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
         this.stacksPersistenceService.updateStack(stack).then(() => {
           resolve();
         }).catch(err => {
-          console.error(err);
+          LogService.fatal(err);
           reject();
         });
       }).catch(err => {
-        console.error(err);
+        LogService.fatal(err);
         reject();
       });
     });
@@ -1208,11 +1209,11 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
         this.stacksPersistenceService.updateStack(stack).then(() => {
           resolve();
         }).catch(err => {
-          console.error(err);
+          LogService.fatal(err);
           reject();
         });
       }).catch(err => {
-        console.error(err);
+        LogService.fatal(err);
         reject();
       });
     });

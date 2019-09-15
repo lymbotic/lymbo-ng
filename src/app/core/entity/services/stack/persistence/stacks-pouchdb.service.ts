@@ -5,6 +5,7 @@ import {Stack} from '../../../model/stack/stack.model';
 import {PouchDBService} from '../../../../persistence/services/pouchdb.service';
 import {EntityType} from '../../../model/entity-type.enum';
 import {TagsService} from '../../tag/tags.service';
+import {LogService} from '../../../../log/services/log.service';
 
 /**
  * Handles stack persistence via PouchDB
@@ -283,7 +284,7 @@ export class StacksPouchdbService implements StacksPersistenceService {
         this.notifyMultipleStacks();
       }, error => {
         if (isDevMode()) {
-          console.error(error);
+          LogService.fatal(error);
         }
 
         this.notifyDatabaseError(error);
@@ -304,7 +305,7 @@ export class StacksPouchdbService implements StacksPersistenceService {
         this.notifySingleStack();
       }, error => {
         if (isDevMode()) {
-          console.error(error);
+          LogService.fatal(error);
         }
 
         this.notifyDatabaseError(error);

@@ -4,6 +4,7 @@ import {Subject} from 'rxjs';
 import {SettingType} from '../model/setting-type.enum';
 import {PouchDBSettingsService} from '../../persistence/services/pouchdb-settings.service';
 import {CardsDisplayMode} from '../model/cards-display-mode.enum';
+import {LogService} from '../../log/services/log.service';
 
 /**
  * Handles settings
@@ -94,7 +95,7 @@ export class SettingsService {
         this.notify();
       }, error => {
         if (isDevMode()) {
-          console.error(error);
+          LogService.fatal(error);
         }
       }
     );

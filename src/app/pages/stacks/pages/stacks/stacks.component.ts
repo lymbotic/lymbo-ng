@@ -3,7 +3,7 @@ import {SnackbarService} from '../../../../core/ui/services/snackbar.service';
 import {environment} from '../../../../../environments/environment';
 import {AfterViewInit, Component, EventEmitter, Inject, NgZone, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {Subject} from 'rxjs';
-import {MatDialog, MatDialogConfig, MatIconRegistry, MatSidenav} from '@angular/material';
+import {MatDialog, MatIconRegistry, MatSidenav} from '@angular/material';
 import {Media} from '../../../../core/ui/model/media.enum';
 import {CdkScrollable, ScrollDispatcher} from '@angular/cdk/overlay';
 import {Animations, ScrollDirection, ScrollState} from './stacks.animation';
@@ -45,6 +45,7 @@ import {STACK_PERSISTENCE_FIRESTORE} from '../../../../core/entity/entity.module
 import {Tag} from '../../../../core/entity/model/tag/tag.model';
 import {TagsService} from '../../../../core/entity/services/tag/tags.service';
 import {UUID} from '../../../../core/entity/model/uuid';
+import {LogService} from '../../../../core/log/services/log.service';
 // @ts-ignore
 import Vibrant = require('node-vibrant');
 
@@ -358,6 +359,7 @@ export class StacksComponent implements OnInit, OnChanges, AfterViewInit, OnDest
    * Initializes existing user after navigation
    */
   private initializeFirebaseUser() {
+    LogService.trace('initializeFirebaseUser');
     const user = this.firebaseAuthenticationService.user;
 
     if (user != null) {
@@ -369,6 +371,7 @@ export class StacksComponent implements OnInit, OnChanges, AfterViewInit, OnDest
    * Initializes suggestion subscription
    */
   private initializeSuggestionSubscription() {
+    LogService.trace('initializeSuggestionSubscription');
     this.searchOptions = Array.from(this.suggestionService.searchOptions.values()).reverse();
     this.suggestionService.searchOptionsSubject.pipe(
       takeUntil(this.unsubscribeSubject)
@@ -555,7 +558,7 @@ export class StacksComponent implements OnInit, OnChanges, AfterViewInit, OnDest
           // Add stack
           this.addStack(stack);
         }).catch(err => {
-          console.error(err);
+          LogService.fatal(err);
         });
 
         break;
@@ -936,7 +939,7 @@ export class StacksComponent implements OnInit, OnChanges, AfterViewInit, OnDest
     this.stacksPersistenceService.createStack(stack).then(() => {
       this.snackbarService.showSnackbar('Added stack');
     }).catch(err => {
-      console.error(err);
+      LogService.fatal(err);
     });
   }
 
@@ -949,7 +952,7 @@ export class StacksComponent implements OnInit, OnChanges, AfterViewInit, OnDest
     this.stacksPersistenceService.updateStack(stack).then(() => {
       this.snackbarService.showSnackbar('Updated stack');
     }).catch(err => {
-      console.error(err);
+      LogService.fatal(err);
     });
   }
 
@@ -964,11 +967,11 @@ export class StacksComponent implements OnInit, OnChanges, AfterViewInit, OnDest
         this.stacksPersistenceService.updateStack(stack).then(() => {
           resolve();
         }).catch(err => {
-          console.error(err);
+          LogService.fatal(err);
           reject();
         });
       }).catch(err => {
-        console.error(err);
+        LogService.fatal(err);
         reject();
       });
     });
@@ -985,11 +988,11 @@ export class StacksComponent implements OnInit, OnChanges, AfterViewInit, OnDest
         this.stacksPersistenceService.updateStack(stack).then(() => {
           resolve();
         }).catch(err => {
-          console.error(err);
+          LogService.fatal(err);
           reject();
         });
       }).catch(err => {
-        console.error(err);
+        LogService.fatal(err);
         reject();
       });
     });

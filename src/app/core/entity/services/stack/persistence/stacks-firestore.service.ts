@@ -6,6 +6,7 @@ import {Stack} from '../../../model/stack/stack.model';
 import {FirebaseCloudFirestoreService} from '../../../../firebase/services/firebase-cloud-firestore.service';
 import {TagsService} from '../../tag/tags.service';
 import {UUID} from '../../../model/uuid';
+import {LogService} from '../../../../log/services/log.service';
 
 /**
  * Handles stack persistence via Firestore
@@ -88,6 +89,7 @@ export class StacksFirestoreService implements StacksPersistenceService {
    * @param user user
    */
   public findStacks(user: User) {
+    LogService.trace(`findStacks ${JSON.stringify(user)}`);
     this.firebaseCloudFirestoreService.readStacks(user);
   }
 
@@ -122,7 +124,7 @@ export class StacksFirestoreService implements StacksPersistenceService {
         this.notifyMultipleStacks();
         resolve();
       }).catch(error => {
-        console.error(error);
+        LogService.fatal(error);
 
         this.notifyDatabaseError(error);
       });
@@ -286,7 +288,7 @@ export class StacksFirestoreService implements StacksPersistenceService {
       const tag = this.tagsService.getTagById(id);
       this.tagsService.updateTag(stack, tag).then(() => {
       }).catch(error => {
-        console.error(error);
+        LogService.fatal(error);
         this.notifyDatabaseError(error);
       });
     });

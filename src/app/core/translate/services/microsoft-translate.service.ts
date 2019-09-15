@@ -5,6 +5,7 @@ import {SettingsService} from '../../settings/services/settings.service';
 import {SettingType} from '../../settings/model/setting-type.enum';
 import {ConnectionService} from '../../common/services/connection.service';
 import {Language} from '../../entity/model/card/language.enum';
+import {LogService} from '../../log/services/log.service';
 
 /**
  * Handles calls to Microsoft Text Translation API
@@ -196,7 +197,7 @@ export class MicrosoftTranslateService {
         });
       }
     } else {
-      console.error('Client is offline');
+      LogService.fatal('Client is offline');
       translationEmitter.emit(null);
     }
   }
