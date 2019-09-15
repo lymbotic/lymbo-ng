@@ -113,7 +113,6 @@ export class CardFragmentComponent implements OnInit, OnChanges {
    */
   ngOnInit() {
     this.initializeColors();
-    this.initializeTagsMap();
 
     if (this.card != null && this.card.aspects != null && this.card.aspects.length > 0) {
       this.activeAspect = this.card.aspects[0];
@@ -125,6 +124,8 @@ export class CardFragmentComponent implements OnInit, OnChanges {
    * Handles on-changes lifecycle phase
    */
   ngOnChanges(changes: SimpleChanges) {
+    this.initializeTagsMap();
+
     if (this.card != null && this.card.aspects != null && this.card.aspects.length > 0) {
       this.activeAspect = this.card.aspects[0];
       this.update();

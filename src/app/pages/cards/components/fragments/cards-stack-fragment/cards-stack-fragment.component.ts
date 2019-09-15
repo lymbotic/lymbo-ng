@@ -1,20 +1,8 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  Input,
-  OnChanges,
-  OnInit,
-  Output,
-  QueryList, SimpleChanges,
-  ViewChild,
-  ViewChildren
-} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output, QueryList, ViewChild, ViewChildren} from '@angular/core';
 import {Direction, StackConfig, SwingCardComponent, SwingStackComponent, ThrowEvent} from 'angular2-swing';
 import {Action} from '../../../../../core/entity/model/action.enum';
 import {Stack} from '../../../../../core/entity/model/stack/stack.model';
 import {Card} from '../../../../../core/entity/model/card/card.model';
-import {CardsService} from '../../../../../core/entity/services/card/cards.service';
 import {Tag} from '../../../../../core/entity/model/tag/tag.model';
 import {Media} from '../../../../../core/ui/model/media.enum';
 
