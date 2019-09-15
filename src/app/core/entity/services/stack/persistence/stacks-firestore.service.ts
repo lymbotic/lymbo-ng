@@ -323,10 +323,12 @@ export class StacksFirestoreService implements StacksPersistenceService {
   private updateRelatedTags(stack: Stack, tagIds: string[]) {
     tagIds.forEach(id => {
       const tag = this.tagsService.getTagById(id);
-      this.tagsService.updateTag(stack, tag).then(() => {
-      }).catch(error => {
-        this.notifyDatabaseError(error);
-      });
+      if (tag != null) {
+        this.tagsService.updateTag(stack, tag).then(() => {
+        }).catch(error => {
+          this.notifyDatabaseError(error);
+        });
+      }
     });
   }
 }
