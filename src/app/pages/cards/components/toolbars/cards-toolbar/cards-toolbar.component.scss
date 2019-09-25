@@ -56,6 +56,10 @@
   text-align: end;
 }
 
+.inline {
+  display: inline;
+}
+
 .search-form-field {
   width: 100%;
 }
@@ -111,6 +115,23 @@
   :-ms-input-placeholder { /* Microsoft Edge */
     color: mat-color($mat-grey, 300);
   }
+}
+
+.photo-small {
+  height: 24px;
+  width: 24px;
+  margin-right: 16px;
+  vertical-align: middle;
+}
+
+.photo-large {
+  height: 40px;
+  width: 40px;
+}
+
+.avatar {
+  border-radius: 50%;
+  flex-shrink: 0;
 }
 
 //

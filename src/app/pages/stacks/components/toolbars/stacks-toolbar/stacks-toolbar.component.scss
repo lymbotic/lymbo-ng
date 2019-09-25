@@ -56,6 +56,10 @@
   text-align: end;
 }
 
+.inline {
+  display: inline;
+}
+
 .search-form-field {
   width: 100%;
 }
@@ -120,9 +124,12 @@
   vertical-align: middle;
 }
 
-.avatar {
+.photo-large {
   height: 40px;
   width: 40px;
+}
+
+.avatar {
   border-radius: 50%;
   flex-shrink: 0;
 }
