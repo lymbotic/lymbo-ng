@@ -245,6 +245,7 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
       takeUntil(this.unsubscribeSubject)
     ).subscribe((value) => {
       if (value != null) {
+        LogService.debug(`NEW STACK`);
         const stack = value as Stack;
         this.assembleTags(stack);
 
@@ -481,6 +482,7 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
    * @param stack stack
    */
   private initializeStack(stack: Stack) {
+    LogService.trace(`initializeStack`);
     this.stack = stack;
 
     if (stack != null) {
@@ -589,6 +591,8 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
    * @param tags tags
    */
   private initializeTags(tags: Tag[]) {
+    LogService.trace(`initializeTags`);
+
     this.tags = tags.filter(tag => {
       return this.cardsService.tagIsContainedInCards(this.cards, tag);
     }).filter(tag => {
@@ -1350,5 +1354,14 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
       this.cardsService.toggleViceVersa();
       resolve();
     });
+  }
+
+  /**
+   * Get box title color for a given box
+   * @param boxIndex index of box
+   * @param selectedIndex index of box currently selected
+   */
+  getTitleColor(boxIndex: number, selectedIndex: number) {
+    return (boxIndex === selectedIndex) ? this.titleColor : null;
   }
 }
