@@ -635,16 +635,7 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
    */
   private initializeSettings(settingsMap: Map<string, Setting>) {
     this.settingsMap = new Map(settingsMap);
-    this.sidenavOpened = SettingsService.isSettingActive(SettingType.CARDS_SIDENAV_OPENED, this.settingsMap);
     this.cardsDisplayMode = SettingsService.getCardsDisplayMode(this.settingsMap);
-
-    if (this.sidenavOpened) {
-      this.sidenavStart.open();
-      this.sidenavEnd.open();
-    } else {
-      this.sidenavStart.close();
-      this.sidenavEnd.close();
-    }
   }
 
   //
@@ -1004,13 +995,13 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
   onMenuItemClicked(menuItem: string) {
     switch (menuItem) {
       case 'menu': {
-        this.sidenavStart.toggle();
-        this.sidenavEnd.toggle();
+        this.toggleSidenav();
         break;
       }
       case 'back': {
-        this.cardsService.clearCards();
-        this.router.navigate([`/stacks`]).then();
+        this.router.navigate([`/stacks`]).then(() => {
+          this.cardsService.clearCards();
+        });
         break;
       }
       case 'set-display-mode-list': {
@@ -1117,22 +1108,6 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   /**
-   * Handles sidenav opening event
-   */
-  onSidenavOpened() {
-    LogService.trace(`onSidenavOpened`);
-    this.settingsService.updateSetting(new Setting(SettingType.CARDS_SIDENAV_OPENED, true));
-  }
-
-  /**
-   * Handles sidenav closing event
-   */
-  onSidenavClosed() {
-    LogService.trace(`onSidenavClosed`);
-    this.settingsService.updateSetting(new Setting(SettingType.CARDS_SIDENAV_OPENED, false));
-  }
-
-  /**
    * Handles key down event
    * @param event event
    */
@@ -1178,8 +1153,6 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
    */
   private updateCard(stack: Stack, card: Card): Promise<any> {
     LogService.trace(`updateCard`);
-    LogService.debug(`stack ${JSON.stringify(stack)}`);
-    LogService.debug(`card ${JSON.stringify(card)}`);
 
     return new Promise((resolve, reject) => {
       this.cardsService.updateCard(stack, card).then(() => {
@@ -1299,6 +1272,42 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
     } else {
       // Unassign tags
       card.tagIds = [];
+    }
+  }
+
+  /**
+   * Opens sidenav
+   */
+  private openSidenav() {
+    if (this.sidenavStart != null) {
+      this.sidenavStart.open();
+    }
+    if (this.sidenavEnd != null) {
+      this.sidenavEnd.open();
+    }
+  }
+
+  /**
+   * Closes sidenav
+   */
+  private closeSidenav() {
+    if (this.sidenavStart != null) {
+      this.sidenavStart.close();
+    }
+    if (this.sidenavEnd != null) {
+      this.sidenavEnd.close();
+    }
+  }
+
+  /**
+   * Toggles sidenav
+   */
+  private toggleSidenav() {
+    if (this.sidenavStart != null) {
+      this.sidenavStart.toggle();
+    }
+    if (this.sidenavEnd != null) {
+      this.sidenavEnd.toggle();
     }
   }
 

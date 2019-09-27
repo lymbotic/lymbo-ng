@@ -29,9 +29,7 @@
   <mat-sidenav *ngIf="media < mediaType.LARGE" #sidenavStart mode="over" disableClose="false"
                position="start" [opened]="sidenavOpened"
                class="sidenav sidenav-start"
-               (keydown)="onKeyDown($event)"
-               (opened)="onSidenavOpened()"
-               (closed)="onSidenavClosed()">
+               (keydown)="onKeyDown($event)">
     <div [@toolbarAnimation]="scrollDirection">
       <div class="toolbar-wrapper">
         <div class="toolbar-block start">

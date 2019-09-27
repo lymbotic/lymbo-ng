@@ -691,8 +691,7 @@ export class StacksComponent implements OnInit, OnChanges, AfterViewInit, OnDest
         break;
       }
       case Action.GO_INTO: {
-        this.router.navigate([`/cards/${stack.id}`]).then(() => {
-        });
+        this.router.navigate([`/cards/${stack.id}`]).then();
         break;
       }
     }
