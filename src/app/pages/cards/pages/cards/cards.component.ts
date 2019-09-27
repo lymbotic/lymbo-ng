@@ -40,6 +40,8 @@ import {SettingType} from '../../../../core/settings/model/setting-type.enum';
 import {CardsDisplayMode} from '../../../../core/settings/model/cards-display-mode.enum';
 import {LogService} from '../../../../core/log/services/log.service';
 import {ConnectionService} from '../../../../core/common/services/connection.service';
+import {PaletteType} from '../../../../core/ui/model/palette-type.enum';
+import {HueType} from '../../../../core/ui/model/hue-type.enum';
 
 /**
  * Displays cards page
@@ -1372,8 +1374,11 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
    * Get box title color for a given box
    * @param boxIndex index of box
    * @param selectedIndex index of box currently selected
+   * @param cardCount number of cards
    */
-  getTitleColor(boxIndex: number, selectedIndex: number) {
-    return (boxIndex === selectedIndex) ? this.titleColor : null;
+  getTitleColor(boxIndex: number, selectedIndex: number, cardCount: number) {
+    return (boxIndex === selectedIndex)
+      ? this.titleColor
+      : (cardCount > 0) ? null : this.materialColorService.color(PaletteType.GREY, HueType._400);
   }
 }

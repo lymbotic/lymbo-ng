@@ -74,9 +74,10 @@
           <!-- <ng-template mat-tab-label *ngIf="cardsAreInMultipleBoxes -->
           <ng-template mat-tab-label>
             <mat-icon svgIcon="inbox" class="box-icon"
-                      [style.fill]="getTitleColor(index, selectedTab.value)"></mat-icon>
-            <span [style.color]="getTitleColor(index, selectedTab.value)">Box {{ index + 1 }}
-              ({{ getCardsOfBox(index).length }})</span>
+                      [style.fill]="getTitleColor(index, selectedTab.value, getCardsOfBox(index).length)"></mat-icon>
+            <span [style.color]="getTitleColor(index, selectedTab.value, getCardsOfBox(index).length)">Box {{ index + 1 }}</span>
+            <span [style.color]="getTitleColor(index, selectedTab.value, getCardsOfBox(index).length)" style="margin-left: 16px;"
+                  *ngIf="getCardsOfBox(index).length > 0">({{ getCardsOfBox(index).length }})</span>
           </ng-template>
 
           <div *ngIf="getCardsOfBox(index).length > 0" class="flexcontainer-vertical full-height">
