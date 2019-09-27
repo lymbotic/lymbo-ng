@@ -86,7 +86,8 @@
 
             <div *ngIf="stack != null && cardsDisplayMode === cardsDisplayModeType.LIST">
               <app-card-fragment *ngFor="let card of getCardsOfBox(index)"
-                                 [card]="card" [tags]="tags" [viceVersa]="viceVersa" [displayActionButtons]=true
+                                 [stack]="stack" [card]="card" [tags]="tags" [viceVersa]="viceVersa"
+                                 [displayActionButtons]=true
                                  [imagePalette]="stack.imagePalette" [media]="media"
                                  (cardEventEmitter)="onCardEvent($event)">
               </app-card-fragment>

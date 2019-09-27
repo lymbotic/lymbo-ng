@@ -736,8 +736,7 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
         break;
       }
       case Action.SET_FAVORITE: {
-        this.cardsService.setFavorite(stack, card, true).then(() => {
-
+        this.cardsService.setFavorite(card, true).then(() => {
           // Update card
           this.updateCard(stack, card).then(() => {
             this.snackbarService.showSnackbar('Added card to favorites');
@@ -748,7 +747,7 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
         break;
       }
       case Action.UNSET_FAVORITE: {
-        this.cardsService.setFavorite(stack, card, false).then(() => {
+        this.cardsService.setFavorite(card, false).then(() => {
 
           // Update card
           this.updateCard(stack, card).then(() => {
@@ -1178,6 +1177,10 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
    * @param card card
    */
   private updateCard(stack: Stack, card: Card): Promise<any> {
+    LogService.trace(`updateCard`);
+    LogService.debug(`stack ${JSON.stringify(stack)}`);
+    LogService.debug(`card ${JSON.stringify(card)}`);
+
     return new Promise((resolve, reject) => {
       this.cardsService.updateCard(stack, card).then(() => {
         this.stacksPersistenceService.clearStacks();

@@ -355,17 +355,14 @@ export class CardsService {
 
   /**
    * Toggles favorite
-   * @param stack stack
    * @param card card
    * @param favorite favorite
    */
-  public setFavorite(stack: Stack, card: Card, favorite: boolean) {
+  public setFavorite(card: Card, favorite: boolean) {
     LogService.trace(`setFavorite`);
     return new Promise((resolve) => {
       card.favorite = favorite;
-      this.updateCard(stack, card).then(() => {
-        resolve();
-      });
+      resolve();
     });
   }
 

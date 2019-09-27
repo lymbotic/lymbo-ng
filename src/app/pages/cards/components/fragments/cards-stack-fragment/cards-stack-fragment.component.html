@@ -6,7 +6,7 @@
        (throwoutend)="onCardThrownOutEnd($event)">
 
     <div swing-card class="animate-translation-100">
-      <app-card-fragment class="card-swipable" [card]="cards[0]" [tags]="tags"
+      <app-card-fragment class="card-swipable" [stack]="stack" [card]="cards[0]" [tags]="tags"
                          [viceVersa]="viceVersa"
                          [imagePalette]="stack.imagePalette" [media]="media"
                          (cardEventEmitter)="cardEventEmitter.emit($event)">
