@@ -16,7 +16,7 @@
   (menuItemEventEmitter)="onMenuItemClicked($event)"></app-cards-toolbar>
 
 <mat-sidenav-container class="sidenav-container" layout="column">
-  <mat-sidenav *ngIf="media > mediaType.MEDIUM" mode="side" disableClose="true"
+  <mat-sidenav *ngIf="media > mediaType.MEDIUM" #sidenavStart mode="side" disableClose="true"
                position="start" [opened]="'true'"
                class="sidenav sidenav-start"
                (keydown)="onKeyDown($event)">
@@ -65,24 +65,23 @@
       (searchItemEventEmitter)="onSearchItemChanged($event)"
       (menuItemEventEmitter)="onMenuItemClicked($event)"></app-cards-toolbar>
 
-    <div class="card-main-content">
+    <div class="card-main-content flexcontainer-vertical">
 
-      <mat-tab-group class="card-main-content-margin full-height"
+      <mat-tab-group class="card-main-content-margin flexbox"
                      mat-align-tabs="end"
                      [color]="fabColor"
                      [selectedIndex]="selectedTab.value"
                      (selectedIndexChange)="selectedTab.setValue($event)">
         <mat-tab *ngFor="let box of boxes; let index = index;">
-          <ng-template mat-tab-label *ngIf="cardsAreInMultipleBoxes && index === selectedTab.value">
-            <mat-icon svgIcon="inbox" class="box-icon" [style.fill]="titleColor"></mat-icon>
-            <span [style.color]="titleColor">Box {{ index + 1 }} ({{ getCardsOfBox(index).length }})</span>
-          </ng-template>
-          <ng-template mat-tab-label *ngIf="cardsAreInMultipleBoxes && index !== selectedTab.value">
-            <mat-icon svgIcon="inbox" class="box-icon"></mat-icon>
-            <span>Box {{ index + 1 }} ({{ getCardsOfBox(index).length }})</span>
+          <!-- <ng-template mat-tab-label *ngIf="cardsAreInMultipleBoxes -->
+          <ng-template mat-tab-label>
+            <mat-icon svgIcon="inbox" class="box-icon"
+                      [style.fill]="getTitleColor(index, selectedTab.value)"></mat-icon>
+            <span [style.color]="getTitleColor(index, selectedTab.value)">Box {{ index + 1 }}
+              ({{ getCardsOfBox(index).length }})</span>
           </ng-template>
 
-          <div *ngIf="getCardsOfBox(index).length > 0" class="full-height-minus-toolbar">
+          <div *ngIf="getCardsOfBox(index).length > 0" class="flexcontainer-vertical full-height">
             <!-- Display cards as list -->
 
             <div *ngIf="stack != null && cardsDisplayMode === cardsDisplayModeType.LIST">
@@ -95,14 +94,12 @@
 
             <!-- Display cards as stack -->
 
-            <div *ngIf="stack != null && cardsDisplayMode === cardsDisplayModeType.STACK" class="full-height">
-              <div class="vertical-center full-height">
-                <app-cards-stack-fragment [stack]="stack" [cards]="getCardsOfBox(index)" [viceVersa]="viceVersa"
-                                          [tags]="tags" [media]="media"
-                                          (cardEventEmitter)="onCardEvent($event)">
-                </app-cards-stack-fragment>
-              </div>
-            </div>
+            <app-cards-stack-fragment *ngIf="stack != null && cardsDisplayMode === cardsDisplayModeType.STACK"
+                                      class="flexbox" [stack]="stack" [cards]="getCardsOfBox(index)"
+                                      [viceVersa]="viceVersa"
+                                      [tags]="tags" [media]="media"
+                                      (cardEventEmitter)="onCardEvent($event)">
+            </app-cards-stack-fragment>
           </div>
 
           <!-- Placeholder for empty box -->
@@ -123,7 +120,7 @@
       </mat-tab-group>
     </div>
   </mat-sidenav-content>
-  <mat-sidenav *ngIf="media > mediaType.MEDIUM" #sidenavStart mode="side" disableClose="true"
+  <mat-sidenav *ngIf="media > mediaType.MEDIUM" #sidenavEnd mode="side" disableClose="true"
                position="end" [opened]="sidenavOpened"
                class="sidenav sidenav-end"
                (keydown)="onKeyDown($event)">

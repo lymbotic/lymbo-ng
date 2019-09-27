@@ -125,6 +125,8 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   /** Side navigation at start */
   @ViewChild('sidenavStart', {static: false}) sidenavStart: MatSidenav;
+  /** Side navigation at end */
+  @ViewChild('sidenavEnd', {static: false}) sidenavEnd: MatSidenav;
   /** Scrollable directive */
   @ViewChild(CdkScrollable, {static: false}) scrollable: CdkScrollable;
 
@@ -634,8 +636,10 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
 
     if (this.sidenavOpened) {
       this.sidenavStart.open();
+      this.sidenavEnd.open();
     } else {
       this.sidenavStart.close();
+      this.sidenavEnd.close();
     }
   }
 
@@ -998,6 +1002,7 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
     switch (menuItem) {
       case 'menu': {
         this.sidenavStart.toggle();
+        this.sidenavEnd.toggle();
         break;
       }
       case 'back': {
