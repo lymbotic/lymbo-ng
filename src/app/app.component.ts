@@ -11,6 +11,7 @@ import {PouchDBService} from './core/persistence/services/pouchdb.service';
 import {PouchDBSettingsService} from './core/persistence/services/pouchdb-settings.service';
 import {SettingType} from './core/settings/model/setting-type.enum';
 import {Setting} from './core/settings/model/setting.model';
+import {PersistenceMode} from './core/persistence/model/persistence-mode.enum';
 
 /**
  * Displays root element
@@ -107,7 +108,7 @@ export class AppComponent implements OnInit, AfterViewInit {
    * Initializes database sync
    */
   private initializeDatabaseSync() {
-    if (isDevMode()) {
+    if (isDevMode() && environment.PERSISTENCE_MODE === PersistenceMode.POUCHDB) {
       this.pouchDBService.sync(`http://localhost:5984/${environment.DATABASE_ENTITIES}`);
       this.pouchDBSettingsService.sync(`http://localhost:5984/${environment.DATABASE_SETTINGS}`);
     }

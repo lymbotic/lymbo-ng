@@ -4,6 +4,7 @@ import {SettingsService} from '../../settings/services/settings.service';
 import {SettingType} from '../../settings/model/setting-type.enum';
 import {HttpClient} from '@angular/common/http';
 import {SearchResult} from '../model/search-result';
+import {LogService} from '../../log/services/log.service';
 
 /**
  * Handles image lookup via Pexels
@@ -55,7 +56,7 @@ export class PexelsService {
         resultEmitter.emit(null);
       }
     } else {
-      console.error('Client is offline');
+      LogService.fatal('Client is offline');
     }
   }
 }

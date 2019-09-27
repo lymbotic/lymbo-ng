@@ -3,6 +3,9 @@
 // `ng build --env=prod` then `environment.prod.ts` will be used instead.
 // The list of which env maps to which file can be found in `angular-cli.json`.
 
+import {STACK_PERSISTENCE_FIRESTORE} from '../app/core/entity/services/stack/model/injection-tokens';
+
+
 /**
  * Environment settings for development environment
  */
@@ -13,6 +16,8 @@ export const environment = {
   DATABASE_SETTINGS: 'lymbo_settings-dev',
   LIMIT_TAGS: 500,
 
+  PERSISTENCE_MODE: 'firebase',
+  PERSISTENCE_INJECTION_TOKEN: STACK_PERSISTENCE_FIRESTORE,
   TRANSLATE_DEBOUNCE_TIME: 500,
 
   NAME: require('../../package.json').name,

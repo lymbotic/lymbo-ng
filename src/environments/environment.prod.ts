@@ -1,3 +1,5 @@
+import {STACK_PERSISTENCE_FIRESTORE} from '../app/core/entity/services/stack/model/injection-tokens';
+
 /**
  * Environment settings for production environment
  */
@@ -8,6 +10,8 @@ export const environment = {
   DATABASE_SETTINGS: 'lymbo_settings',
   LIMIT_TAGS: 500,
 
+  PERSISTENCE_MODE: 'firebase',
+  PERSISTENCE_INJECTION_TOKEN: STACK_PERSISTENCE_FIRESTORE,
   TRANSLATE_DEBOUNCE_TIME: 500,
 
   NAME: require('../../package.json').name,

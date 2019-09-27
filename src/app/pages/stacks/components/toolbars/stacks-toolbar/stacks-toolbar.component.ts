@@ -5,10 +5,10 @@ import {debounceTime} from 'rxjs/operators';
 import {Stack} from '../../../../../core/entity/model/stack/stack.model';
 import {StacksService} from '../../../../../core/entity/services/stack/stacks.service';
 import {User} from 'firebase';
-import {STACK_PERSISTENCE_FIRESTORE} from '../../../../../core/entity/entity.module';
 import {StacksPersistenceService} from '../../../../../core/entity/services/stack/persistence/stacks-persistence.interface';
 import {ConfirmationDialogComponent} from '../../../../../ui/confirmation-dialog/confirmation-dialog/confirmation-dialog.component';
 import {MatDialog} from '@angular/material';
+import {environment} from '../../../../../../environments/environment';
 
 /**
  * Displays stacks toolbar
@@ -56,7 +56,7 @@ export class StacksToolbarComponent implements OnInit {
    */
   constructor(public dialog: MatDialog,
               private stacksService: StacksService,
-              @Inject(STACK_PERSISTENCE_FIRESTORE) private stacksPersistenceService: StacksPersistenceService) {
+              @Inject(environment.PERSISTENCE_INJECTION_TOKEN) private stacksPersistenceService: StacksPersistenceService) {
   }
 
   //

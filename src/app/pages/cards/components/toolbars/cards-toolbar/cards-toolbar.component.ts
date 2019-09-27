@@ -1,8 +1,9 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {Media} from '../../../../../core/ui/model/media.enum';
 import {Subject} from 'rxjs';
 import {debounceTime} from 'rxjs/operators';
 import {User} from 'firebase';
+import {CardsDisplayMode} from '../../../../../core/settings/model/cards-display-mode.enum';
 
 /**
  * Displays cards toolbar
@@ -33,6 +34,8 @@ export class CardsToolbarComponent implements OnInit {
   @Input() stackNotEmpty = false;
   /** Current user */
   @Input() user: User;
+  /** Cards display mode */
+  @Input() cardsDisplayMode: CardsDisplayMode;
   /** Event emitter indicating changes in search bar */
   @Output() searchItemEventEmitter = new EventEmitter<string>();
   /** Event emitter indicating menu items being clicked */
@@ -40,6 +43,8 @@ export class CardsToolbarComponent implements OnInit {
 
   /** Enum for media types */
   mediaType = Media;
+  /** Enum for cards display mode */
+  cardsDisplayModeType = CardsDisplayMode;
 
   /** Current search item */
   searchItem = '';

@@ -20,6 +20,8 @@ export enum SettingType {
   // Preferences
   //
 
-  STACKS_SIDENAV_OPENED = 'stack-sidenav-opened',
-  CARD_SIDENAV_OPENED = 'card-sidenav-opened'
+  STACKS_SIDENAV_OPENED = 'stacks-sidenav-opened',
+  CARDS_SIDENAV_OPENED = 'cards-sidenav-opened',
+
+  CARDS_DISPLAY_MODE = 'cards-display-mode'
 }

@@ -5,6 +5,7 @@ import {Stack} from '../../../model/stack/stack.model';
 import {PouchDBService} from '../../../../persistence/services/pouchdb.service';
 import {EntityType} from '../../../model/entity-type.enum';
 import {TagsService} from '../../tag/tags.service';
+import {LogService} from '../../../../log/services/log.service';
 
 /**
  * Handles stack persistence via PouchDB
@@ -23,6 +24,9 @@ export class StacksPouchdbService implements StacksPersistenceService {
   stack: Stack;
   /** Subject that publishes stack */
   stackSubject = new Subject<Stack>();
+
+  /** Subject that publishes database errors */
+  databaseErrorSubject = new Subject<string>();
 
   /**
    * Constructor
@@ -242,6 +246,14 @@ export class StacksPouchdbService implements StacksPersistenceService {
     this.stackSubject.next(this.stack);
   }
 
+  /**
+   * Notifies subscribers that a database error occurs
+   * @param error error
+   */
+  public notifyDatabaseError(error: any) {
+    this.databaseErrorSubject.next(error);
+  }
+
   //
   // Internal
   //
@@ -254,7 +266,7 @@ export class StacksPouchdbService implements StacksPersistenceService {
   private updateRelatedTags(stack: Stack, tagIds: string[]) {
     tagIds.forEach(id => {
       const tag = this.tagsService.getTagById(id);
-      this.tagsService.updateTag(stack, tag);
+      this.tagsService.updateTag(stack, tag).then();
     });
   }
 
@@ -272,8 +284,10 @@ export class StacksPouchdbService implements StacksPersistenceService {
         this.notifyMultipleStacks();
       }, error => {
         if (isDevMode()) {
-          console.error(error);
+          LogService.fatal(error);
         }
+
+        this.notifyDatabaseError(error);
       }
     );
   }
@@ -291,8 +305,10 @@ export class StacksPouchdbService implements StacksPersistenceService {
         this.notifySingleStack();
       }, error => {
         if (isDevMode()) {
-          console.error(error);
+          LogService.fatal(error);
         }
+
+        this.notifyDatabaseError(error);
       }
     );
   }

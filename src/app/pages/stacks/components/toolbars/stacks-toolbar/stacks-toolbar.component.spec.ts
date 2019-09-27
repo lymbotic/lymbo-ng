@@ -3,8 +3,8 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {StacksToolbarComponent} from './stacks-toolbar.component';
 import {StacksDeclarations} from '../../../stacks.declarations';
 import {StacksImports} from '../../../stacks.imports';
-import {STACK_PERSISTENCE_FIRESTORE} from '../../../../../core/entity/entity.module';
 import {StacksPersistenceServiceMock} from '../../../../../core/entity/services/stack/persistence/stacks-persistence.mock';
+import {environment} from '../../../../../../environments/environment';
 
 xdescribe('StacksToolbarComponent', () => {
   let component: StacksToolbarComponent;
@@ -15,7 +15,7 @@ xdescribe('StacksToolbarComponent', () => {
       declarations: [StacksDeclarations],
       imports: [StacksImports],
       providers: [
-        {provide: STACK_PERSISTENCE_FIRESTORE, use: StacksPersistenceServiceMock},
+        {provide: environment.PERSISTENCE_INJECTION_TOKEN, use: StacksPersistenceServiceMock},
       ]
     })
       .compileComponents();

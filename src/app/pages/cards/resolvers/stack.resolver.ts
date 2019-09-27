@@ -2,9 +2,8 @@ import {Inject, Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot} from '@angular/router';
 import {Observable} from 'rxjs';
 import {Stack} from '../../../core/entity/model/stack/stack.model';
-import {StacksService} from '../../../core/entity/services/stack/stacks.service';
 import {StacksPersistenceService} from '../../../core/entity/services/stack/persistence/stacks-persistence.interface';
-import {STACK_PERSISTENCE_FIRESTORE} from '../../../core/entity/entity.module';
+import {environment} from '../../../../environments/environment';
 
 /**
  * Resolves stack by ID
@@ -18,7 +17,7 @@ export class StackResolver implements Resolve<Stack> {
    * @param stacksPersistenceService stacks persistence service
    */
   constructor(private router: Router,
-              @Inject(STACK_PERSISTENCE_FIRESTORE) private stacksPersistenceService: StacksPersistenceService) {
+              @Inject(environment.PERSISTENCE_INJECTION_TOKEN) private stacksPersistenceService: StacksPersistenceService) {
   }
 
   /**

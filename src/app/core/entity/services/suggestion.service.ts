@@ -5,6 +5,7 @@ import {Stack} from '../model/stack/stack.model';
 import {Card} from '../model/card/card.model';
 import {AspectType} from '../model/card/aspect.type';
 import {SideAspect} from '../model/card/side/side-aspect';
+import {LogService} from '../../log/services/log.service';
 
 /**
  * Service handling suggestions
@@ -62,6 +63,7 @@ export class SuggestionService {
    * @param cards new array of cards
    */
   public updateByCards(cards: Card[]) {
+    LogService.trace(`updateByCards`);
     cards.sort((cardA: Card, cardB: Card) => {
       return new Date(cardA.modificationDate).getTime() - new Date(cardB.modificationDate).getTime();
     }).forEach(c => {
@@ -88,6 +90,7 @@ export class SuggestionService {
    * @param tags new array of tags
    */
   public updateByTags(tags: Tag[]) {
+    LogService.trace(`updateByTags`);
     tags.forEach(t => {
       if (t != null) {
         // Add person name to search options

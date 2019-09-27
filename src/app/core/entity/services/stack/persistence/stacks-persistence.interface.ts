@@ -17,6 +17,9 @@ export interface StacksPersistenceService {
   /** Subject that publishes stack */
   stackSubject: Subject<Stack>;
 
+  /** Subject that publishes database errors */
+  databaseErrorSubject: Subject<string>;
+
   //
   // Cancel
   //

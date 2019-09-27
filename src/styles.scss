@@ -138,6 +138,22 @@ mat-list-item.text > .mat-list-item-content {
   background-color: rgba(84, 110, 122, .4) !important;
 }
 
+.mat-drawer-side {
+  border-left: transparent !important;
+  border-right: transparent !important;
+}
+
+.mat-tab-body-wrapper {
+  // height: calc(100% - 88px) !important;
+  height: 100% !important;
+  display: flex;
+  flex-direction: column;
+}
+
+mat-tab-header, .mat-tab-header {
+  border-bottom: 0 solid transparent !important;
+}
+
 @font-face {
   font-family: 'Google Sans';
   font-style: normal;

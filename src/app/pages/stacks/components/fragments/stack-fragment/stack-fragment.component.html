@@ -20,11 +20,12 @@
         <span>Export</span>
       </button>
     </mat-menu>
+
     <div class="flexcontainer">
-      <mat-card-header (click)="onStackClicked()">
+      <div (click)="onStackClicked()">
         <mat-card-title class="stack-title" [style.color]="titleColor">{{ stack.title }}</mat-card-title>
         <mat-card-subtitle>{{ stack.cards.length }} cards</mat-card-subtitle>
-      </mat-card-header>
+      </div>
       <div class="flexbox"></div>
       <button mat-icon-button [matMenuTriggerFor]="menu" id="more" class="hidden">
         <mat-icon svgIcon="more_vert"></mat-icon>

@@ -11,6 +11,7 @@ import {SuggestedActionButtonModule} from '../../ui/suggested-action-button/sugg
 import {TagChipsModule} from '../../ui/tag-chips/tag-chips.module';
 import {TagsNamePipeModule} from '../../ui/tags-name-pipe/tags-name-pipe.module';
 import {FirebaseModule} from '../../core/firebase/firebase.module';
+import {SwingModule} from 'angular2-swing';
 
 /**
  * Imports of cards module
@@ -20,6 +21,8 @@ export const CardsImports = [
   FormsModule,
   ReactiveFormsModule,
   MaterialModule,
+
+  SwingModule,
 
   CardsRoutingModule,
 

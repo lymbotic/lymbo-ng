@@ -25,7 +25,7 @@ import {SuggestionService} from '../../../../core/entity/services/suggestion.ser
 import {TagsService} from '../../../../core/entity/services/tag/tags.service';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {StacksPersistenceServiceMock} from '../../../../core/entity/services/stack/persistence/stacks-persistence.mock';
-import {STACK_PERSISTENCE_FIRESTORE} from '../../../../core/entity/entity.module';
+import {environment} from '../../../../../environments/environment';
 
 xdescribe('CardsComponent', () => {
   let component: CardsComponent;
@@ -65,7 +65,7 @@ xdescribe('CardsComponent', () => {
         DomSanitizer,
         ScrollDispatcher,
         SettingsService,
-        {provide: STACK_PERSISTENCE_FIRESTORE, use: StacksPersistenceServiceMock},
+        {provide: environment.PERSISTENCE_INJECTION_TOKEN, use: StacksPersistenceServiceMock},
         SnackbarService,
         SuggestionService,
         TagsService,

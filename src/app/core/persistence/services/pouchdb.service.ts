@@ -3,6 +3,7 @@ import {environment} from '../../../../environments/environment';
 import PouchDB from 'pouchdb';
 import PouchdbFind from 'pouchdb-find';
 import PouchdbUpsert from 'pouchdb-upsert';
+import {LogService} from '../../log/services/log.service';
 
 /**
  * Handles pouchdb operations for entity database
@@ -115,7 +116,7 @@ export class PouchDBService {
     return this.database.get(id).then(document => {
       return this.database.remove(document._id, document._rev);
     }).catch(err => {
-      console.log(err);
+      LogService.fatal(err);
     });
   }
 
@@ -129,7 +130,7 @@ export class PouchDBService {
       });
     }, error => {
       if (isDevMode()) {
-        console.error(error);
+        LogService.fatal(error);
       }
     });
   }
@@ -145,7 +146,7 @@ export class PouchDBService {
     }).on('change', change => {
       this.listener.emit(change);
     }).on('error', error => {
-      console.error(JSON.stringify(error));
+      LogService.fatal(JSON.stringify(error));
     });
   }
 
@@ -166,7 +167,7 @@ export class PouchDBService {
     }).on('change', change => {
       this.listener.emit(change);
     }).on('error', error => {
-      console.error(JSON.stringify(error));
+      LogService.fatal(JSON.stringify(error));
     });
   }
 

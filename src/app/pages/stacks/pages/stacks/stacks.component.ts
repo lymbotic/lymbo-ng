@@ -3,7 +3,7 @@ import {SnackbarService} from '../../../../core/ui/services/snackbar.service';
 import {environment} from '../../../../../environments/environment';
 import {AfterViewInit, Component, EventEmitter, Inject, NgZone, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {Subject} from 'rxjs';
-import {MatDialog, MatDialogConfig, MatIconRegistry, MatSidenav} from '@angular/material';
+import {MatDialog, MatIconRegistry, MatSidenav} from '@angular/material';
 import {Media} from '../../../../core/ui/model/media.enum';
 import {CdkScrollable, ScrollDispatcher} from '@angular/cdk/overlay';
 import {Animations, ScrollDirection, ScrollState} from './stacks.animation';
@@ -41,10 +41,11 @@ import {FirebaseAuthenticationService} from '../../../../core/firebase/services/
 import {User} from 'firebase';
 import {FirebaseCloudFirestoreService} from '../../../../core/firebase/services/firebase-cloud-firestore.service';
 import {StacksPersistenceService} from '../../../../core/entity/services/stack/persistence/stacks-persistence.interface';
-import {STACK_PERSISTENCE_FIRESTORE} from '../../../../core/entity/entity.module';
 import {Tag} from '../../../../core/entity/model/tag/tag.model';
 import {TagsService} from '../../../../core/entity/services/tag/tags.service';
 import {UUID} from '../../../../core/entity/model/uuid';
+import {LogService} from '../../../../core/log/services/log.service';
+import {ConnectionService} from '../../../../core/common/services/connection.service';
 // @ts-ignore
 import Vibrant = require('node-vibrant');
 
@@ -102,8 +103,6 @@ export class StacksComponent implements OnInit, OnChanges, AfterViewInit, OnDest
 
   /** Side navigation at start */
   @ViewChild('sidenavStart', {static: false}) sidenavStart: MatSidenav;
-  /** Side navigation at end */
-  @ViewChild('sidenavEnd', {static: false}) sidenavEnd: MatSidenav;
   /** Scrollable directive */
   @ViewChild(CdkScrollable, {static: false}) scrollable: CdkScrollable;
 
@@ -164,7 +163,7 @@ export class StacksComponent implements OnInit, OnChanges, AfterViewInit, OnDest
               private scroll: ScrollDispatcher,
               private settingsService: SettingsService,
               private stacksService: StacksService,
-              @Inject(STACK_PERSISTENCE_FIRESTORE) private stacksPersistenceService: StacksPersistenceService,
+              @Inject(environment.PERSISTENCE_INJECTION_TOKEN) private stacksPersistenceService: StacksPersistenceService,
               private snackbarService: SnackbarService,
               private suggestionService: SuggestionService,
               private tagsService: TagsService,
@@ -184,8 +183,7 @@ export class StacksComponent implements OnInit, OnChanges, AfterViewInit, OnDest
     this.initializeFilterSubscription();
     this.initializeSuggestionSubscription();
 
-    this.initializeFirebaseUser();
-    this.initializeFirebaseUserSubscription();
+    this.initializeFirebase();
 
     this.initializeMaterial();
     this.initializeMediaSubscription();
@@ -358,6 +356,7 @@ export class StacksComponent implements OnInit, OnChanges, AfterViewInit, OnDest
    * Initializes existing user after navigation
    */
   private initializeFirebaseUser() {
+    LogService.trace('initializeFirebaseUser');
     const user = this.firebaseAuthenticationService.user;
 
     if (user != null) {
@@ -369,6 +368,7 @@ export class StacksComponent implements OnInit, OnChanges, AfterViewInit, OnDest
    * Initializes suggestion subscription
    */
   private initializeSuggestionSubscription() {
+    LogService.trace('initializeSuggestionSubscription');
     this.searchOptions = Array.from(this.suggestionService.searchOptions.values()).reverse();
     this.suggestionService.searchOptionsSubject.pipe(
       takeUntil(this.unsubscribeSubject)
@@ -377,6 +377,18 @@ export class StacksComponent implements OnInit, OnChanges, AfterViewInit, OnDest
         this.searchOptions = (value as string[]).reverse();
       }
     });
+  }
+
+  /**
+   * Initializes firebase
+   */
+  private initializeFirebase() {
+    if (ConnectionService.isOnline()) {
+      this.initializeFirebaseUser();
+      this.initializeFirebaseUserSubscription();
+    } else {
+      this.snackbarService.showSnackbar('You are offline. Changes will not be saved');
+    }
   }
 
   /**
@@ -468,21 +480,23 @@ export class StacksComponent implements OnInit, OnChanges, AfterViewInit, OnDest
         }, 500);
 
         // Update scroll direction
-        const scrollPos = this.scrollable.getElementRef().nativeElement.scrollTop;
-        if (this.scrollDirection === ScrollDirection.UP && scrollPos > this.scrollPosLast) {
-          this.scrollDirection = ScrollDirection.DOWN;
-          // Since scroll is run outside Angular zone change detection must be triggered manually
-          this.zone.run(() => {
-          });
-        } else if (this.scrollDirection === ScrollDirection.DOWN && scrollPos < this.scrollPosLast) {
-          this.scrollDirection = ScrollDirection.UP;
-          // Since scroll is run outside Angular zone change detection must be triggered manually
-          this.zone.run(() => {
-          });
-        }
+        if (this.scrollable != null) {
+          const scrollPos = this.scrollable.getElementRef().nativeElement.scrollTop;
+          if (this.scrollDirection === ScrollDirection.UP && scrollPos > this.scrollPosLast) {
+            this.scrollDirection = ScrollDirection.DOWN;
+            // Since scroll is run outside Angular zone change detection must be triggered manually
+            this.zone.run(() => {
+            });
+          } else if (this.scrollDirection === ScrollDirection.DOWN && scrollPos < this.scrollPosLast) {
+            this.scrollDirection = ScrollDirection.UP;
+            // Since scroll is run outside Angular zone change detection must be triggered manually
+            this.zone.run(() => {
+            });
+          }
 
-        // Save current scroll position
-        this.scrollPosLast = scrollPos;
+          // Save current scroll position
+          this.scrollPosLast = scrollPos;
+        }
       })).subscribe();
   }
 
@@ -555,7 +569,7 @@ export class StacksComponent implements OnInit, OnChanges, AfterViewInit, OnDest
           // Add stack
           this.addStack(stack);
         }).catch(err => {
-          console.error(err);
+          LogService.fatal(err);
         });
 
         break;
@@ -677,8 +691,7 @@ export class StacksComponent implements OnInit, OnChanges, AfterViewInit, OnDest
         break;
       }
       case Action.GO_INTO: {
-        this.router.navigate([`/cards/${stack.id}`]).then(() => {
-        });
+        this.router.navigate([`/cards/${stack.id}`]).then();
         break;
       }
     }
@@ -837,11 +850,9 @@ export class StacksComponent implements OnInit, OnChanges, AfterViewInit, OnDest
   onMenuItemClicked(menuItem: string) {
     switch (menuItem) {
       case 'menu': {
-        this.sidenavStart.toggle().then(() => {
-          this.settingsService.updateSetting(new Setting(SettingType.STACKS_SIDENAV_OPENED, this.sidenavStart.opened));
-        });
-        // this.sidenavEnd.toggle().then(() => {
-        // });
+        if (this.media < Media.LARGE) {
+          this.sidenavStart.toggle();
+        }
         break;
       }
       case 'login': {
@@ -913,6 +924,22 @@ export class StacksComponent implements OnInit, OnChanges, AfterViewInit, OnDest
   }
 
   /**
+   * Handles sidenav opening event
+   */
+  onSidenavOpened() {
+    LogService.trace(`onSidenavOpened`);
+    this.settingsService.updateSetting(new Setting(SettingType.STACKS_SIDENAV_OPENED, true));
+  }
+
+  /**
+   * Handles sidenav closing event
+   */
+  onSidenavClosed() {
+    LogService.trace(`onSidenavClosed`);
+    this.settingsService.updateSetting(new Setting(SettingType.STACKS_SIDENAV_OPENED, false));
+  }
+
+  /**
    * Handles key down event
    * @param event event
    */
@@ -936,7 +963,7 @@ export class StacksComponent implements OnInit, OnChanges, AfterViewInit, OnDest
     this.stacksPersistenceService.createStack(stack).then(() => {
       this.snackbarService.showSnackbar('Added stack');
     }).catch(err => {
-      console.error(err);
+      LogService.fatal(err);
     });
   }
 
@@ -949,7 +976,7 @@ export class StacksComponent implements OnInit, OnChanges, AfterViewInit, OnDest
     this.stacksPersistenceService.updateStack(stack).then(() => {
       this.snackbarService.showSnackbar('Updated stack');
     }).catch(err => {
-      console.error(err);
+      LogService.fatal(err);
     });
   }
 
@@ -964,11 +991,11 @@ export class StacksComponent implements OnInit, OnChanges, AfterViewInit, OnDest
         this.stacksPersistenceService.updateStack(stack).then(() => {
           resolve();
         }).catch(err => {
-          console.error(err);
+          LogService.fatal(err);
           reject();
         });
       }).catch(err => {
-        console.error(err);
+        LogService.fatal(err);
         reject();
       });
     });
@@ -985,11 +1012,11 @@ export class StacksComponent implements OnInit, OnChanges, AfterViewInit, OnDest
         this.stacksPersistenceService.updateStack(stack).then(() => {
           resolve();
         }).catch(err => {
-          console.error(err);
+          LogService.fatal(err);
           reject();
         });
       }).catch(err => {
-        console.error(err);
+        LogService.fatal(err);
         reject();
       });
     });
@@ -1034,39 +1061,44 @@ export class StacksComponent implements OnInit, OnChanges, AfterViewInit, OnDest
    */
   private fetchPhoto(stack: Stack, searchItems: string[]): Promise<any> {
     return new Promise((resolve, reject) => {
-      const apiKeyPexels = this.settingsService.settings.get(SettingType.API_KEY_PEXELS_IMAGE);
-      const apiKeyMicrosoftTextTranslate = this.settingsService.settings.get(SettingType.API_KEY_MICROSOFT_TEXT_TRANSLATE);
 
-      // Reject if no API key is specified
-      if (apiKeyPexels === null) {
-        reject();
-      }
+      if (ConnectionService.isOnline()) {
+        const apiKeyPexels = this.settingsService.settings.get(SettingType.API_KEY_PEXELS_IMAGE);
+        const apiKeyMicrosoftTextTranslate = this.settingsService.settings.get(SettingType.API_KEY_MICROSOFT_TEXT_TRANSLATE);
 
-      const resultEmitter: EventEmitter<SearchResult> = new EventEmitter<SearchResult>();
-      resultEmitter.subscribe(result => {
-        if (result != null && result.photos != null && result.photos.length > 0) {
-          resolve((result.photos[0] as Photo).src.landscape);
-        } else {
+        // Reject if no API key is specified
+        if (apiKeyPexels === null) {
           reject();
         }
-      });
 
-      if (apiKeyMicrosoftTextTranslate !== null) {
-        // Try to translate into English, then call Pexels service
-        const translationEmitter: EventEmitter<string> = new EventEmitter<string>();
-        translationEmitter.subscribe(result => {
-          if (result != null) {
-            // Search for images with translated tags
-            this.pexelsService.search(result.split(', '), 1, 1, resultEmitter);
+        const resultEmitter: EventEmitter<SearchResult> = new EventEmitter<SearchResult>();
+        resultEmitter.subscribe(result => {
+          if (result != null && result.photos != null && result.photos.length > 0) {
+            resolve((result.photos[0] as Photo).src.landscape);
           } else {
-            // Search for images with original tags
-            this.pexelsService.search(searchItems, 1, 1, resultEmitter);
+            reject();
           }
         });
-        this.microsoftTranslateService.translate(searchItems.join(', '), Language.ENGLISH, translationEmitter);
+
+        if (apiKeyMicrosoftTextTranslate !== null) {
+          // Try to translate into English, then call Pexels service
+          const translationEmitter: EventEmitter<string> = new EventEmitter<string>();
+          translationEmitter.subscribe(result => {
+            if (result != null) {
+              // Search for images with translated tags
+              this.pexelsService.search(result.split(', '), 1, 1, resultEmitter);
+            } else {
+              // Search for images with original tags
+              this.pexelsService.search(searchItems, 1, 1, resultEmitter);
+            }
+          });
+          this.microsoftTranslateService.translate(searchItems.join(', '), Language.ENGLISH, translationEmitter);
+        } else {
+          // Call Pexels service without translating
+          this.pexelsService.search(searchItems, 1, 1, resultEmitter);
+        }
       } else {
-        // Call Pexels service without translating
-        this.pexelsService.search(searchItems, 1, 1, resultEmitter);
+        reject();
       }
     });
   }

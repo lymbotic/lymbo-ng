@@ -8,6 +8,7 @@ import {CardTypeGroup} from '../../model/card/card-type-group.enum';
 import {CardType} from '../../model/card/card-type.enum';
 import {Tag} from '../../model/tag/tag.model';
 import {TagsService} from '../tag/tags.service';
+import {LogService} from '../../../log/services/log.service';
 
 /**
  * Handles cards
@@ -176,6 +177,7 @@ export class CardsService {
    * @param card card to be created
    */
   public createCard(stack: Stack, card: Card): Promise<any> {
+    LogService.trace(`createCard`);
     return new Promise((resolve, reject) => {
       if (card == null) {
         reject();
@@ -194,6 +196,7 @@ export class CardsService {
    * @param card card to be updated
    */
   public updateCard(stack: Stack, card: Card): Promise<any> {
+    LogService.trace(`updateCard`);
     return new Promise((resolve, reject) => {
       if (card == null) {
         reject();
@@ -352,16 +355,14 @@ export class CardsService {
 
   /**
    * Toggles favorite
-   * @param stack stack
    * @param card card
    * @param favorite favorite
    */
-  public setFavorite(stack: Stack, card: Card, favorite: boolean) {
+  public setFavorite(card: Card, favorite: boolean) {
+    LogService.trace(`setFavorite`);
     return new Promise((resolve) => {
       card.favorite = favorite;
-      this.updateCard(stack, card).then(() => {
-        resolve();
-      });
+      resolve();
     });
   }
 

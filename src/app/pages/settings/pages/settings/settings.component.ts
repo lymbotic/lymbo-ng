@@ -157,21 +157,23 @@ export class SettingsComponent implements OnInit, AfterViewInit, OnDestroy {
         }, 500);
 
         // Update scroll direction
-        const scrollPos = this.scrollable.getElementRef().nativeElement.scrollTop;
-        if (this.scrollDirection === ScrollDirection.UP && scrollPos > this.scrollPosLast) {
-          this.scrollDirection = ScrollDirection.DOWN;
-          // Since scroll is run outside Angular zone change detection must be triggered manually
-          this.zone.run(() => {
-          });
-        } else if (this.scrollDirection === ScrollDirection.DOWN && scrollPos < this.scrollPosLast) {
-          this.scrollDirection = ScrollDirection.UP;
-          // Since scroll is run outside Angular zone change detection must be triggered manually
-          this.zone.run(() => {
-          });
-        }
+        if (this.scrollable != null) {
+          const scrollPos = this.scrollable.getElementRef().nativeElement.scrollTop;
+          if (this.scrollDirection === ScrollDirection.UP && scrollPos > this.scrollPosLast) {
+            this.scrollDirection = ScrollDirection.DOWN;
+            // Since scroll is run outside Angular zone change detection must be triggered manually
+            this.zone.run(() => {
+            });
+          } else if (this.scrollDirection === ScrollDirection.DOWN && scrollPos < this.scrollPosLast) {
+            this.scrollDirection = ScrollDirection.UP;
+            // Since scroll is run outside Angular zone change detection must be triggered manually
+            this.zone.run(() => {
+            });
+          }
 
-        // Save current scroll position
-        this.scrollPosLast = scrollPos;
+          // Save current scroll position
+          this.scrollPosLast = scrollPos;
+        }
       })).subscribe();
   }
 
