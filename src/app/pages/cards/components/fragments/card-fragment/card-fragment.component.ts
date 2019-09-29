@@ -137,15 +137,6 @@ export class CardFragmentComponent implements OnInit, OnChanges {
   //
 
   /**
-   * Initializes tags map
-   */
-  private initializeTagsMap() {
-    this.tags.forEach(tag => {
-      this.tagsMap.set(tag.id, tag);
-    });
-  }
-
-  /**
    * Initializes colors
    */
   private initializeColors() {
@@ -155,6 +146,15 @@ export class CardFragmentComponent implements OnInit, OnChanges {
     } else {
       this.favoriteColor = this.materialColorService.accent;
     }
+  }
+
+  /**
+   * Initializes tags map
+   */
+  private initializeTagsMap() {
+    this.tags.forEach(tag => {
+      this.tagsMap.set(tag.id, tag);
+    });
   }
 
   //

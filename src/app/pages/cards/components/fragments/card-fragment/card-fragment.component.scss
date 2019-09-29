@@ -23,7 +23,11 @@
   font-family: 'Roboto Slab', serif;
   font-weight: 700;
   font-size: 1.8em;
-  width: 255px;
+  width: 100%;
+}
+
+.side-container {
+  min-height: 100px;
 }
 
 .side {
@@ -69,35 +73,36 @@ hr {
   display: none;
 }
 
-.side {
+.hidden-container {
   &:hover .hidden {
     display: inline-block;
   }
 }
 
-.holder {
-  padding: 0 24px 24px;
+.footer-container {
+  min-height: 30px;
+  padding: 0 12px 12px;
+}
 
-  .group {
-    padding-right: 12px;
-  }
+.tags-container {
+  margin: 0 16px;
+}
+
+.favorite-icon, .more-icon {
+  margin-top: 5px;
+  min-width: 24px;;
+  vertical-align: baseline;
 }
 
 .light-theme {
   .favorite-icon {
     fill: mat-color($light-accent, 600);
-
-    margin-top: 5px;
-    vertical-align: baseline;
   }
 }
 
 .dark-theme {
   .favorite-icon {
     fill: mat-color($dark-accent, 600);
-
-    margin-top: 5px;
-    vertical-align: baseline;
   }
 }
 

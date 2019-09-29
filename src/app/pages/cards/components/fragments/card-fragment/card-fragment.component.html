@@ -24,9 +24,9 @@
     </mat-menu>
 
     <div class="flexcontainer">
-      <div class="card-main-content">
+      <div class="card-main-content flexbox">
         <div *ngIf="activeAspect != null" [ngSwitch]="activeAspect.type">
-          <div *ngSwitchCase="aspectType.SIDE" (click)="onCardClicked(actionType.NONE)">
+          <div *ngSwitchCase="aspectType.SIDE" class="side-container" (click)="onCardClicked(actionType.NONE)">
             <img *ngIf="activeSide.imageUrl !== ''" mat-card-image [attr.src]="activeSide.imageUrl">
             <mat-card-title class="side-title side">{{ activeSide.title }}</mat-card-title>
           </div>
@@ -65,8 +65,8 @@
                 <mat-card-title class="side-title" (click)="onCardClicked(actionType.NONE)">{{ activeSide.title }}
                 </mat-card-title>
                 <app-multiple-choice-fragment *ngIf="!activeSingleChoice"
-                                    [items]="activeAnswers" [readonly]="true" [editable]=false
-                                    (click)="onCardClicked(actionType.NONE)"></app-multiple-choice-fragment>
+                                              [items]="activeAnswers" [readonly]="true" [editable]=false
+                                              (click)="onCardClicked(actionType.NONE)"></app-multiple-choice-fragment>
                 <app-single-choice-fragment *ngIf="activeSingleChoice"
                                             [items]="activeAnswers" [readonly]=true
                                             (itemsChangedEmitter)="onAnswerSelected($event)"></app-single-choice-fragment>
@@ -75,39 +75,29 @@
           </div>
         </div>
       </div>
-      <div class="flexbox"></div>
-      <button mat-icon-button [matMenuTriggerFor]="menu" id="more" class="hidden">
-        <mat-icon svgIcon="more_vert"></mat-icon>
-      </button>
     </div>
-    <mat-card-footer>
-      <div class="flexcontainer holder">
-        <div class="group">
-          <mat-icon *ngIf="card.favorite" svgIcon="favorite" class="favorite-icon"
-                    [style.fill]="favoriteColor"></mat-icon>
-        </div>
-        <div (click)="onCardClicked(actionType.NONE)">
+    <mat-card-actions>
+      <div class="flexcontainer hidden-container footer-container">
+        <mat-icon *ngIf="card.favorite" svgIcon="favorite" class="favorite-icon"
+                  [style.fill]="favoriteColor"></mat-icon>
+        <div class="tags-container" (click)="onCardClicked(actionType.NONE)">
           <span *ngFor="let t of card.tagIds">
             <span class="tag" *ngIf="tagsMap.get(t) != null"><label class="tag-label">{{ tagsMap.get(t).name }}</label></span>
           </span>
         </div>
+        <div class="flexbox"></div>
+        <mat-icon svgIcon="more_vert_18" [matMenuTriggerFor]="menu" class="more-icon hidden"></mat-icon>
       </div>
-    </mat-card-footer>
-
-    <mat-card-actions
-      *ngIf="displayActionButtons && ((activeAspect != null && activeAspect.type != aspectType.SIDE && activeAspect.type != aspectType.QUIZ)
-      || activePartIndex !== 0)"
-      align="right">
-      <div class="flexcontainer">
+    </mat-card-actions>
+    <mat-card-actions *ngIf="displayActionButtons && ((activeAspect != null && activeAspect.type != aspectType.SIDE && activeAspect.type != aspectType.QUIZ) || activePartIndex !== 0)">
+      <div *ngIf="media < mediaType.MEDIUM" class="flexcontainer">
         <button mat-button
                 matTooltip="Put card to end"
                 matTooltipPosition="above"
                 matTooltipShowDelay="250"
                 (click)="onCardClicked(actionType.PUT_TO_END)">
           <mat-icon svgIcon="rotate_left"></mat-icon>
-          <span mat-button *ngIf="media < mediaType.MEDIUM">
-                PUT TO END
-          </span>
+          <span mat-button>PUT TO END</span>
         </button>
         <div class="flexbox"></div>
 
@@ -116,9 +106,7 @@
                 matTooltipPosition="above"
                 matTooltipShowDelay="250"
                 (click)="onCardClicked(actionType.MOVE_TO_NEXT_BOX)">
-          <span mat-button *ngIf="media < mediaType.MEDIUM">
-                MOVE TO NEXT BOX
-          </span>
+          <span mat-button *ngIf="media < mediaType.MEDIUM">MOVE TO NEXT BOX</span>
           <mat-icon svgIcon="skip_next"></mat-icon>
         </button>
       </div>
