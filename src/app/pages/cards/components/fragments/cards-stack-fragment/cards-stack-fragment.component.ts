@@ -5,6 +5,7 @@ import {Stack} from '../../../../../core/entity/model/stack/stack.model';
 import {Card} from '../../../../../core/entity/model/card/card.model';
 import {Tag} from '../../../../../core/entity/model/tag/tag.model';
 import {Media} from '../../../../../core/ui/model/media.enum';
+import {MaterialColorService} from '../../../../../core/ui/services/material-color.service';
 
 /**
  * Displays cards as swipable stack
@@ -34,6 +35,13 @@ export class CardsStackFragmentComponent implements OnInit {
   @ViewChild('swingStack', {static: false}) swingStack: SwingStackComponent;
   /** Swing cards control */
   @ViewChildren('swingCards') swingCards: QueryList<SwingCardComponent>;
+  /** x value of a card */
+  cardX = 0;
+  /** Ammount of pixels a card bumps back when snapped back */
+  cardBumpBack = 75;
+
+  /** Favorite color */
+  favoriteColor = 'transparent';
 
   /** Stack configuration */
   stackConfig: StackConfig;
@@ -48,6 +56,13 @@ export class CardsStackFragmentComponent implements OnInit {
   /** Enum of action types */
   public actionType = Action;
 
+  /**
+   * Constructor
+   * @param materialColorService material color service
+   */
+  constructor(private materialColorService: MaterialColorService) {
+  }
+
   //
   // Lifecycle hooks
   //
@@ -56,6 +71,7 @@ export class CardsStackFragmentComponent implements OnInit {
    * Handles on-init lifecycle phase
    */
   ngOnInit() {
+    this.initializeColors();
     this.initializeThrowOutFactor();
     this.initializeStackConfig();
   }
@@ -63,6 +79,21 @@ export class CardsStackFragmentComponent implements OnInit {
   //
   // Initialization
   //
+
+  /**
+   * Initializes colors
+   */
+  private initializeColors() {
+    if (this.stack.imagePalette != null) {
+      const vibrant = this.stack.imagePalette.vibrant;
+      const lightMuted = this.stack.imagePalette.lightMuted;
+      this.favoriteColor = `rgb(${lightMuted.rgb[0]},${lightMuted.rgb[1]},${lightMuted.rgb[2]})`;
+    } else {
+      this.favoriteColor = this.materialColorService.accent;
+    }
+
+    console.log(`favoriteColor ${this.favoriteColor}`);
+  }
 
   /**
    * Initializes throw-out factor
@@ -115,6 +146,7 @@ export class CardsStackFragmentComponent implements OnInit {
    * @param r degrees
    */
   onItemMove(element, x, y, r) {
+    this.cardX = x;
     element.style.transform = `translate3d(0, 0, 0) translate(${x}px, ${y}px) rotate(${r}deg)`;
     element.style.opacity = 1 - (1.2 * (Math.abs(x) / this.throwOutDistance));
   }

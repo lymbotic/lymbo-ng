@@ -4,6 +4,7 @@
 
 .button-container {
   margin: 0 auto;
+  min-height: 24px;
 
   @media #{$breakpoint-small} {
     width: 100%;

@@ -4,26 +4,24 @@
        [stackConfig]="stackConfig"
        (throwout)="onCardThrownOut($event)"
        (throwoutend)="onCardThrownOutEnd($event)">
-
     <div swing-card class="animate-translation-100">
       <app-card-fragment class="card-swipable" [stack]="stack" [card]="cards[0]" [tags]="tags"
-                         [viceVersa]="viceVersa"
-                         [imagePalette]="stack.imagePalette" [media]="media"
+                         [viceVersa]="viceVersa" [imagePalette]="stack.imagePalette" [media]="media"
                          (cardEventEmitter)="cardEventEmitter.emit($event)">
       </app-card-fragment>
     </div>
   </div>
-  <div *ngIf="media !== mediaType.SMALL" class="flexcontainer button-container">
-    <button mat-button
-            [disabled]="cards.length < 1"
-            (click)="onPutToEndClicked()">
-      PUT CARD TO END
+  <div class="flexcontainer button-container">
+    <button mat-flat-button *ngIf="cardX < -cardBumpBack" [style.background]="favoriteColor">PUT CARD TO END</button>
+    <button mat-button *ngIf="cardX >= -cardBumpBack && media !== mediaType.SMALL"
+            [disabled]="cards.length < 1 || cardX > cardBumpBack"
+            (click)="onPutToEndClicked()">PUT CARD TO END
     </button>
     <div class="flexbox"></div>
-    <button mat-button
-            [disabled]="cards.length < 1"
-            (click)="onMoveCardClicked()">
-      MOVE TO NEXT BOX
+    <button mat-flat-button *ngIf="cardX > cardBumpBack" [style.background]="favoriteColor">MOVE TO NEXT BOX</button>
+    <button mat-button *ngIf="cardX <= cardBumpBack && media !== mediaType.SMALL"
+            [disabled]="cards.length < 1 || cardX < -cardBumpBack"
+            (click)="onMoveCardClicked()">MOVE TO NEXT BOX
     </button>
   </div>
   <div class="flexbox"></div>
