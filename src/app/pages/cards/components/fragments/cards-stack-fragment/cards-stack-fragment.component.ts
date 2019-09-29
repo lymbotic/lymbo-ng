@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output, QueryList, ViewChild, ViewChildren} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output, QueryList, ViewChild, ViewChildren} from '@angular/core';
 import {Direction, StackConfig, SwingCardComponent, SwingStackComponent, ThrowEvent} from 'angular2-swing';
 import {Action} from '../../../../../core/entity/model/action.enum';
 import {Stack} from '../../../../../core/entity/model/stack/stack.model';
@@ -15,7 +15,7 @@ import {Media} from '../../../../../core/ui/model/media.enum';
   styleUrls: ['./cards-stack-fragment.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CardsStackFragmentComponent {
+export class CardsStackFragmentComponent implements OnInit {
 
   /** Stack the card is contained in */
   @Input() stack = new Stack();
@@ -38,14 +38,86 @@ export class CardsStackFragmentComponent {
   /** Stack configuration */
   stackConfig: StackConfig;
 
+  /** Factor by which the card is being considered thrown-out, 1=default, 0.5=at half the distance */
+  private throwOutFactor = 1;
+  /** Number of pixels the card needs to be moved before it counts as swiped */
+  private throwOutDistance = 800;
+
   /** Enum of media types */
   public mediaType = Media;
   /** Enum of action types */
   public actionType = Action;
 
   //
+  // Lifecycle hooks
+  //
+
+  /**
+   * Handles on-init lifecycle phase
+   */
+  ngOnInit() {
+    this.initializeThrowOutFactor();
+    this.initializeStackConfig();
+  }
+
+  //
+  // Initialization
+  //
+
+  /**
+   * Initializes throw-out factor
+   */
+  private initializeThrowOutFactor() {
+    switch (this.media) {
+      case Media.LARGE: {
+        this.throwOutFactor = 1;
+        break;
+      }
+      case Media.MEDIUM: {
+        this.throwOutFactor = 1;
+        break;
+      }
+      case Media.SMALL: {
+        this.throwOutFactor = 1;
+        break;
+      }
+    }
+  }
+
+  /**
+   * Initializes stack config
+   */
+  private initializeStackConfig() {
+    this.throwOutDistance = 800 * this.throwOutFactor;
+    this.stackConfig = {
+      allowedDirections: [Direction.LEFT, Direction.RIGHT],
+      throwOutConfidence: (offsetX, offsetY, element) => {
+        return Math.min((Math.abs(offsetX) / (element.offsetWidth / 2)) / this.throwOutFactor, 1);
+      },
+      transform: (element, x, y, r) => {
+        this.onItemMove(element, x, y, r);
+      },
+      throwOutDistance: () => {
+        return this.throwOutDistance;
+      }
+    };
+  }
+
+  //
   // Actions
   //
+
+  /**
+   * Handles moving item
+   * @param element element
+   * @param x x value
+   * @param y y value
+   * @param r degrees
+   */
+  onItemMove(element, x, y, r) {
+    element.style.transform = `translate3d(0, 0, 0) translate(${x}px, ${y}px) rotate(${r}deg)`;
+    element.style.opacity = 1 - (1.2 * (Math.abs(x) / this.throwOutDistance));
+  }
 
   /**
    * Handles throw out of a card
