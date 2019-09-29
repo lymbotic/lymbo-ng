@@ -112,6 +112,8 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   /** Title color */
   public titleColor = 'black';
+  /** Box color */
+  public boxColor = 'transparent';
   /** FAB color */
   public fabColor = 'black';
 
@@ -510,13 +512,16 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
   private initializeColors(stack: Stack) {
     if (stack.imagePalette != null) {
       const muted = stack.imagePalette.muted;
+      const lightMuted = stack.imagePalette.lightMuted;
       const vibrant = stack.imagePalette.vibrant;
       this.titleColor = `rgb(${muted.rgb[0]},${muted.rgb[1]},${muted.rgb[2]})`;
+      this.boxColor = `rgb(${lightMuted.rgb[0]},${lightMuted.rgb[1]},${lightMuted.rgb[2]})`;
       this.fabColor = `rgb(${vibrant.rgb[0]},${vibrant.rgb[1]},${vibrant.rgb[2]})`;
     } else {
       const primary = this.materialColorService.primary;
       const accent = this.materialColorService.accent;
       this.titleColor = primary;
+      this.boxColor = primary;
       this.fabColor = accent;
     }
   }
@@ -1378,7 +1383,18 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
    */
   getTitleColor(boxIndex: number, selectedIndex: number, cardCount: number) {
     return (boxIndex === selectedIndex)
-      ? this.titleColor
+      ? `black`
       : (cardCount > 0) ? null : this.materialColorService.color(PaletteType.GREY, HueType._400);
+  }
+
+  /**
+   * Get box background color for a given box
+   * @param boxIndex index of box
+   * @param selectedIndex index of box currently selected
+   */
+  getBackgroundColor(boxIndex: number, selectedIndex: number) {
+    return (boxIndex === selectedIndex)
+      ? this.boxColor
+      : `transparent`;
   }
 }

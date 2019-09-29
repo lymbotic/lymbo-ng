@@ -73,11 +73,13 @@
         <mat-tab *ngFor="let box of boxes; let index = index;">
           <!-- <ng-template mat-tab-label *ngIf="cardsAreInMultipleBoxes -->
           <ng-template mat-tab-label>
-            <mat-icon svgIcon="inbox" class="box-icon"
-                      [style.fill]="getTitleColor(index, selectedTab.value, getCardsOfBox(index).length)"></mat-icon>
-            <span [style.color]="getTitleColor(index, selectedTab.value, getCardsOfBox(index).length)">Box {{ index + 1 }}</span>
-            <span [style.color]="getTitleColor(index, selectedTab.value, getCardsOfBox(index).length)" style="margin-left: 16px;"
-                  *ngIf="getCardsOfBox(index).length > 0">({{ getCardsOfBox(index).length }})</span>
+            <button mat-flat-button [disableRipple]="true" [style.background]="getBackgroundColor(index, selectedTab.value)">
+              <mat-icon svgIcon="inbox" class="box-icon"
+                        [style.fill]="getTitleColor(index, selectedTab.value, getCardsOfBox(index).length)"></mat-icon>
+              <span [style.color]="getTitleColor(index, selectedTab.value, getCardsOfBox(index).length)">Box {{ index + 1 }}</span>
+              <span [style.color]="getTitleColor(index, selectedTab.value, getCardsOfBox(index).length)" style="margin-left: 16px;"
+                    *ngIf="getCardsOfBox(index).length > 0">({{ getCardsOfBox(index).length }})</span>
+            </button>
           </ng-template>
 
           <div *ngIf="getCardsOfBox(index).length > 0" class="flexcontainer-vertical full-height">
