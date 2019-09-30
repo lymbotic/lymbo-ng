@@ -1,12 +1,12 @@
 <mat-toolbar class="toolbar flexcontainer">
   <div *ngIf="media > mediaType.MEDIUM" class="toolbar-block start">
-    <button mat-button class="toolbar-menu-item" (click)="onMenuItemClicked('back')">
+    <button mat-button class="toolbar-menu-item" aria-label="Back" (click)="onMenuItemClicked('back')">
       <mat-icon svgIcon="arrow_back"></mat-icon>
     </button>
     <span *ngIf="media != mediaType.SMALL" class="toolbar-title" [style.color]="titleColor">{{ title }}</span>
   </div>
   <div *ngIf="media < mediaType.LARGE" class="toolbar-block start">
-    <button mat-button class="toolbar-menu-item" (click)="onMenuItemClicked('menu')">
+    <button mat-button class="toolbar-menu-item" aria-label="Menu" (click)="onMenuItemClicked('menu')">
       <mat-icon svgIcon="menu"></mat-icon>
     </button>
     <span *ngIf="media != mediaType.SMALL" class="toolbar-title" [style.color]="titleColor">{{ title }}</span>
@@ -44,6 +44,7 @@
       <button *ngIf="cardsDisplayMode === cardsDisplayModeType.LIST"
               mat-button
               class="toolbar-menu-item"
+              aria-label="Display as stack"
               [matTooltip]="'Displays as stack'"
               [matTooltipPosition]="'left'"
               (click)="onMenuItemClicked('set-display-mode-stack')">
@@ -52,6 +53,7 @@
       <button *ngIf="cardsDisplayMode === cardsDisplayModeType.STACK"
               mat-button
               class="toolbar-menu-item"
+              aria-label="Display as list"
               [matTooltip]="'Displays as list'"
               [matTooltipPosition]="'left'"
               (click)="onMenuItemClicked('set-display-mode-list')">
@@ -59,6 +61,7 @@
       </button>
       <button mat-button
               class="toolbar-menu-item"
+              aria-label="Move all cards to first box"
               [disabled]="!cardsAreInMultipleBoxes"
               [matTooltip]="'Move all cards to first box'"
               [matTooltipPosition]="'left'"
@@ -67,6 +70,7 @@
       </button>
       <button mat-button
               class="toolbar-menu-item"
+              aria-label="Clear filters"
               [disabled]="!filterActive"
               [matTooltip]="'Clear filters'"
               [matTooltipPosition]="'left'"
@@ -76,12 +80,14 @@
       <button *ngIf="(user == null || user.isAnonymous)"
               mat-button
               class="toolbar-menu-item"
+              aria-label="Login"
               (click)="onMenuItemClicked('login')">
         <mat-icon svgIcon="person"></mat-icon>
       </button>
       <button *ngIf="user != null && !user.isAnonymous"
               mat-button
               class="toolbar-menu-item no-hover-effect"
+              aria-label="Avatar"
               [matMenuTriggerFor]="userPopover">
         <img mat-card-avatar
              class="photo-large avatar"
@@ -96,7 +102,7 @@
         <app-user-popover [user]="user" (logoutEventEmitter)="onMenuItemClicked('logout')"></app-user-popover>
       </div>
     </mat-menu>
-    <button mat-button class="toolbar-menu-item right" [matMenuTriggerFor]="menu">
+    <button mat-button class="toolbar-menu-item right" aria-label="Menu" [matMenuTriggerFor]="menu">
       <mat-icon svgIcon="more_vert"></mat-icon>
     </button>
     <mat-menu #menu="matMenu">

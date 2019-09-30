@@ -30,7 +30,7 @@
     <div [@toolbarAnimation]="scrollDirection">
       <div class="toolbar-wrapper">
         <div class="toolbar-block start">
-          <button mat-button class="toolbar-menu-item" (click)="sidenavStart.close()">
+          <button mat-button class="toolbar-menu-item" aria-label="Close" (click)="sidenavStart.close()">
             <mat-icon svgIcon="close" class="icon"></mat-icon>
             CLOSE
           </button>
@@ -62,6 +62,6 @@
 
 </mat-sidenav-container>
 
-<button mat-fab class="fab" (click)="onAddStackClicked()">
+<button mat-fab class="fab" aria-label="Floating Action Button" (click)="onAddStackClicked()">
   <mat-icon svgIcon="add" class="icon-accent-contrast"></mat-icon>
 </button>

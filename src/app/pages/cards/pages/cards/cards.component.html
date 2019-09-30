@@ -33,7 +33,7 @@
     <div [@toolbarAnimation]="scrollDirection">
       <div class="toolbar-wrapper">
         <div class="toolbar-block start">
-          <button mat-button class="toolbar-menu-item" (click)="onMenuItemClicked('back')">
+          <button mat-button class="toolbar-menu-item" aria-label="Back" (click)="onMenuItemClicked('back')">
             <mat-icon svgIcon="arrow_back" class="icon"></mat-icon>
             BACK TO STACKS
           </button>
@@ -130,6 +130,6 @@
   </mat-sidenav>
 </mat-sidenav-container>
 
-<button mat-fab class="fab" (click)="onAddCardClicked()" [style.background]="fabColor">
+<button mat-fab class="fab" aria-label="Floating Action Button" (click)="onAddCardClicked()" [style.background]="fabColor">
   <mat-icon svgIcon="add" class="icon-accent-contrast"></mat-icon>
 </button>
