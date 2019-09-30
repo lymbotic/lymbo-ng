@@ -51,6 +51,8 @@ export class PexelsService {
         const ob = this.httpClient.get(`https://api.pexels.com/v1/search?query=${searchItems.join('+')}&per_page=${perPage}&page=${page}`, options);
         ob.subscribe(value => {
           resultEmitter.emit(value as SearchResult);
+        }, () => {
+          resultEmitter.emit(null);
         });
       } else {
         resultEmitter.emit(null);
