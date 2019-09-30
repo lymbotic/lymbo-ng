@@ -1063,11 +1063,14 @@ export class StacksComponent implements OnInit, OnChanges, AfterViewInit, OnDest
     return new Promise((resolve, reject) => {
 
       if (ConnectionService.isOnline()) {
-        const apiKeyPexels = this.settingsService.settings.get(SettingType.API_KEY_PEXELS_IMAGE);
-        const apiKeyMicrosoftTextTranslate = this.settingsService.settings.get(SettingType.API_KEY_MICROSOFT_TEXT_TRANSLATE);
+        const apiKeyMicrosoftTextTranslateSetting = this.settingsService.settings.get(SettingType.API_KEY_MICROSOFT_TEXT_TRANSLATE);
+        const apiKeyPexelsImagesSetting = this.settingsService.settings.get(SettingType.API_KEY_PEXELS_IMAGE);
+
+        const apiKeyMicrosoftTextTranslate = apiKeyMicrosoftTextTranslateSetting != null ? apiKeyMicrosoftTextTranslateSetting.value : '';
+        const apiKeyPexelsImages = apiKeyPexelsImagesSetting != null ? apiKeyPexelsImagesSetting.value : '';
 
         // Reject if no API key is specified
-        if (apiKeyPexels === null) {
+        if (apiKeyPexelsImages === null || apiKeyPexelsImages === '') {
           reject();
         }
 
@@ -1080,7 +1083,7 @@ export class StacksComponent implements OnInit, OnChanges, AfterViewInit, OnDest
           }
         });
 
-        if (apiKeyMicrosoftTextTranslate !== null) {
+        if (apiKeyMicrosoftTextTranslate !== null && apiKeyMicrosoftTextTranslate !== '') {
           // Try to translate into English, then call Pexels service
           const translationEmitter: EventEmitter<string> = new EventEmitter<string>();
           translationEmitter.subscribe(result => {
