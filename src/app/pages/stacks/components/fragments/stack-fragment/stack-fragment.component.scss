@@ -27,9 +27,14 @@ mat-card {
   font-weight: 700;
   font-size: 1.8em;
   width: 255px;
+
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .icons-holder, .tags-holder {
+  min-height: 60px;
   padding: 0 24px 24px;
 }
 
