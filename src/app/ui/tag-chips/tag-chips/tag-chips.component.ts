@@ -20,9 +20,9 @@ export class TagChipsComponent implements OnChanges {
   /** Array of options */
   @Input() tagOptions: string[] = [];
   /** Text color of the tag */
-  @Input() color = 'black';
+  @Input() color = null;
   /** Background color of the tag */
-  @Input() background = 'white';
+  @Input() background = null;
   /** Placeholder for new elements */
   @Input() placeholder = 'New tag';
   /** Event emitter indicating changes in tags */
