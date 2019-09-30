@@ -12,22 +12,24 @@
     <div class="details-box">
       <div class="flexcontainer">
         <mat-icon svgIcon="vpn_key" class="icon"></mat-icon>
-        <span>Microsoft Text Translate API key</span>
-        <div class="flexbox"></div>
-        <div class="text-input">
-          <input matInput type="text" placeholder="API key" [ngModel]="apiKeyMicrosoftTextTranslate"
-                 (ngModelChange)="onValueChanged(settingsType.API_KEY_MICROSOFT_TEXT_TRANSLATE, $event)"/>
+        <div>
+          <div>Microsoft text translation API key</div>
+          <div class="text-input">
+            <input matInput type="text" placeholder="API key" [ngModel]="apiKeyMicrosoftTextTranslate"
+                   (ngModelChange)="onValueChanged(settingsType.API_KEY_MICROSOFT_TEXT_TRANSLATE, $event)"/>
+          </div>
         </div>
       </div>
     </div>
     <div class="details-box">
       <div class="flexcontainer">
         <mat-icon svgIcon="vpn_key" class="icon"></mat-icon>
-        <span>Pexels API key</span>
-        <div class="flexbox"></div>
-        <div class="text-input">
-          <input matInput type="text" placeholder="API key" [ngModel]="apiKeyPexelsImages"
-                 (ngModelChange)="onValueChanged(settingsType.API_KEY_PEXELS_IMAGE, $event)"/>
+        <div>
+          <div>Pexels API key</div>
+          <div class="text-input">
+            <input matInput type="text" placeholder="API key" [ngModel]="apiKeyPexelsImages"
+                   (ngModelChange)="onValueChanged(settingsType.API_KEY_PEXELS_IMAGE, $event)"/>
+          </div>
         </div>
       </div>
     </div>
