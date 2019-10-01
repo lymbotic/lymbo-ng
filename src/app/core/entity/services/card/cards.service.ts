@@ -177,7 +177,7 @@ export class CardsService {
    * @param card card to be created
    */
   public createCard(stack: Stack, card: Card): Promise<any> {
-    LogService.trace(`createCard`);
+    LogService.trace(`CardsService#createCard`);
     return new Promise((resolve, reject) => {
       if (card == null) {
         reject();
@@ -196,7 +196,7 @@ export class CardsService {
    * @param card card to be updated
    */
   public updateCard(stack: Stack, card: Card): Promise<any> {
-    LogService.trace(`updateCard`);
+    LogService.trace(`CardsService#updateCard`);
     return new Promise((resolve, reject) => {
       if (card == null) {
         reject();
@@ -359,7 +359,7 @@ export class CardsService {
    * @param favorite favorite
    */
   public setFavorite(card: Card, favorite: boolean) {
-    LogService.trace(`setFavorite`);
+    LogService.trace(`CardsService#setFavorite`);
     return new Promise((resolve) => {
       card.favorite = favorite;
       resolve();

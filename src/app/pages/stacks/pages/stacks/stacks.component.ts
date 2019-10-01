@@ -356,7 +356,7 @@ export class StacksComponent implements OnInit, OnChanges, AfterViewInit, OnDest
    * Initializes existing user after navigation
    */
   private initializeFirebaseUser() {
-    LogService.trace('initializeFirebaseUser');
+    LogService.trace('StacksComponent#initializeFirebaseUser');
     const user = this.firebaseAuthenticationService.user;
 
     if (user != null) {
@@ -368,7 +368,7 @@ export class StacksComponent implements OnInit, OnChanges, AfterViewInit, OnDest
    * Initializes suggestion subscription
    */
   private initializeSuggestionSubscription() {
-    LogService.trace('initializeSuggestionSubscription');
+    LogService.trace('StacksComponent#initializeSuggestionSubscription');
     this.searchOptions = Array.from(this.suggestionService.searchOptions.values()).reverse();
     this.suggestionService.searchOptionsSubject.pipe(
       takeUntil(this.unsubscribeSubject)
@@ -927,7 +927,7 @@ export class StacksComponent implements OnInit, OnChanges, AfterViewInit, OnDest
    * Handles sidenav opening event
    */
   onSidenavOpened() {
-    LogService.trace(`onSidenavOpened`);
+    LogService.trace(`StacksComponent#onSidenavOpened`);
     this.settingsService.updateSetting(new Setting(SettingType.STACKS_SIDENAV_OPENED, true));
   }
 
@@ -935,7 +935,7 @@ export class StacksComponent implements OnInit, OnChanges, AfterViewInit, OnDest
    * Handles sidenav closing event
    */
   onSidenavClosed() {
-    LogService.trace(`onSidenavClosed`);
+    LogService.trace(`StacksComponent#onSidenavClosed`);
     this.settingsService.updateSetting(new Setting(SettingType.STACKS_SIDENAV_OPENED, false));
   }
 
@@ -959,6 +959,7 @@ export class StacksComponent implements OnInit, OnChanges, AfterViewInit, OnDest
    * @param stack stack
    */
   private addStack(stack: Stack) {
+    LogService.trace(`StacksComponent#addStack`);
     this.stacksPersistenceService.clearStacks();
     this.stacksPersistenceService.createStack(stack).then(() => {
       this.snackbarService.showSnackbar('Added stack');

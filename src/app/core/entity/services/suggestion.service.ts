@@ -63,7 +63,7 @@ export class SuggestionService {
    * @param cards new array of cards
    */
   public updateByCards(cards: Card[]) {
-    LogService.trace(`updateByCards`);
+    LogService.trace(`SuggestionService#updateByCards`);
     cards.sort((cardA: Card, cardB: Card) => {
       return new Date(cardA.modificationDate).getTime() - new Date(cardB.modificationDate).getTime();
     }).forEach(c => {
@@ -90,7 +90,7 @@ export class SuggestionService {
    * @param tags new array of tags
    */
   public updateByTags(tags: Tag[]) {
-    LogService.trace(`updateByTags`);
+    LogService.trace(`SuggestionService#updateByTags`);
     tags.forEach(t => {
       if (t != null) {
         // Add person name to search options
@@ -112,6 +112,7 @@ export class SuggestionService {
    * Notifies subscribers that something has changed
    */
   private notify() {
+    LogService.trace(`SuggestionService#notify`);
     this.searchOptions = new Map(Array.from(this.searchOptions).sort());
 
     // Turns search options map into an array

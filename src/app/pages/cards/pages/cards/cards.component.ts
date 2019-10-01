@@ -244,7 +244,7 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
    * Initializes stack subscription
    */
   private initializeStackSubscription() {
-    LogService.trace(`initializeStackSubscription`);
+    LogService.trace(`CardsComponent#initializeStackSubscription`);
     this.stacksPersistenceService.stackSubject.pipe(
       takeUntil(this.unsubscribeSubject)
     ).subscribe((value) => {
@@ -266,7 +266,7 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
    * Initializes card subscription
    */
   private initializeCardSubscription() {
-    LogService.trace(`initializeCardSubscription`);
+    LogService.trace(`CardsComponent#initializeCardSubscription`);
     this.cardsService.cardsSubject.pipe(
       takeUntil(this.unsubscribeSubject)
     ).subscribe((value) => {
@@ -486,7 +486,7 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
    * @param stack stack
    */
   private initializeStack(stack: Stack) {
-    LogService.trace(`initializeStack`);
+    LogService.trace(`CardsComponent#initializeStack`);
     this.stack = stack;
 
     if (stack != null) {
@@ -598,7 +598,7 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
    * @param tags tags
    */
   private initializeTags(tags: Tag[]) {
-    LogService.trace(`initializeTags`);
+    LogService.trace(`CardsComponent#initializeTags`);
 
     this.tags = tags.filter(tag => {
       return this.cardsService.tagIsContainedInCards(this.cards, tag);
@@ -1135,7 +1135,7 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
    * @param card card
    */
   private addCard(stack: Stack, card: Card): Promise<any> {
-    LogService.trace(`addCard`);
+    LogService.trace(`CardsComponent#addCard`);
     return new Promise((resolve, reject) => {
       this.cardsService.createCard(stack, card).then(() => {
 
@@ -1159,7 +1159,7 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
    * @param card card
    */
   private updateCard(stack: Stack, card: Card): Promise<any> {
-    LogService.trace(`updateCard`);
+    LogService.trace(`CardsComponent#updateCard`);
 
     return new Promise((resolve, reject) => {
       this.cardsService.updateCard(stack, card).then(() => {

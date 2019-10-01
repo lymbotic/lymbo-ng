@@ -5,6 +5,7 @@ import {User} from 'firebase';
 import {Observable, Subject} from 'rxjs';
 import {map, takeUntil} from 'rxjs/operators';
 import {CloneService} from '../../entity/services/clone.service';
+import {LogService} from '../../log/services/log.service';
 
 /**
  * Handles Cloud Firestore access
@@ -97,6 +98,7 @@ export class FirebaseCloudFirestoreService {
    * @param stack stack
    */
   addStack(stack: Stack): Promise<any> {
+    LogService.trace(`FirebaseCloudFirestore#addStack`);
     const s = CloneService.cloneStack(stack);
 
     return new Promise((resolve) => {

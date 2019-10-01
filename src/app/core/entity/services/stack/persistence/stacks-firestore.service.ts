@@ -39,8 +39,6 @@ export class StacksFirestoreService implements StacksPersistenceService {
               private tagsService: TagsService) {
     this.initializeStacksSubscription();
     this.initializeStackSubscription();
-    this.notifyMultipleStacks();
-    this.notifySingleStack();
   }
 
   //
@@ -51,6 +49,7 @@ export class StacksFirestoreService implements StacksPersistenceService {
    * Initializes stacks subscription from Firestore
    */
   private initializeStacksSubscription() {
+    LogService.trace(`StacksFirestoreService#initializeStacksSubscription`);
     this.firebaseCloudFirestoreService.stacksSubject.subscribe(stacks => {
       stacks.forEach(element => {
         const stack = element as Stack;
@@ -90,7 +89,7 @@ export class StacksFirestoreService implements StacksPersistenceService {
    * @param user user
    */
   public findStacks(user: User) {
-    LogService.trace(`findStacks`);
+    LogService.trace(`StacksFirestoreService#findStacks`);
     this.firebaseCloudFirestoreService.readStacks(user);
   }
 
@@ -100,6 +99,7 @@ export class StacksFirestoreService implements StacksPersistenceService {
    * @param user user
    */
   public findStackByID(id: string, user: User) {
+    LogService.trace(`StacksFirestoreService#findStackById`);
     this.firebaseCloudFirestoreService.readStacksByID(user, id);
   }
 
@@ -112,6 +112,7 @@ export class StacksFirestoreService implements StacksPersistenceService {
    * @param stack stack to be created
    */
   public createStack(stack: Stack): Promise<any> {
+    LogService.trace(`StacksFirestoreService#createStack`);
     return new Promise((resolve, reject) => {
       if (stack == null) {
         reject();
@@ -123,7 +124,6 @@ export class StacksFirestoreService implements StacksPersistenceService {
       if (ConnectionService.isOnline()) {
         // Create stack
         return this.firebaseCloudFirestoreService.addStack(stack).then(() => {
-          this.notifyMultipleStacks();
           resolve();
         }).catch(error => {
           this.notifyDatabaseError(error);
@@ -143,12 +143,12 @@ export class StacksFirestoreService implements StacksPersistenceService {
    * @param stacks stacks to be created
    */
   public createStacks(stacks: Stack[]): Promise<any> {
+    LogService.trace(`StacksFirestoreService#createStacks`);
     return new Promise((resolve) => {
 
       // Create stacks
       if (ConnectionService.isOnline()) {
         return this.firebaseCloudFirestoreService.addStacks(stacks).then(() => {
-          this.notifyMultipleStacks();
           resolve();
         });
       } else {
@@ -171,7 +171,7 @@ export class StacksFirestoreService implements StacksPersistenceService {
    * @param stack stack to be updated
    */
   public updateStack(stack: Stack): Promise<any> {
-    LogService.trace(`updateStack ${stack.id}`);
+    LogService.trace(`StacksFirestoreService#updateStack ${stack.id}`);
     return new Promise((resolve, reject) => {
       if (stack == null) {
         reject();
@@ -186,8 +186,6 @@ export class StacksFirestoreService implements StacksPersistenceService {
       if (ConnectionService.isOnline()) {
         // Update stack
         return this.firebaseCloudFirestoreService.updateStack(stack).then(() => {
-          this.notifyMultipleStacks();
-          this.notifySingleStack();
           resolve();
         });
       } else {
@@ -205,12 +203,12 @@ export class StacksFirestoreService implements StacksPersistenceService {
    * @param stacks stacks to be updated
    */
   public updateStacks(stacks: Stack[]): Promise<any> {
+    LogService.trace(`StacksFirestoreService#updateStacks`);
     return new Promise((resolve) => {
 
       if (ConnectionService.isOnline()) {
         // Create stacks
         return this.firebaseCloudFirestoreService.updatesStacks(stacks).then(() => {
-          this.notifyMultipleStacks();
           resolve();
         });
       } else {
@@ -233,6 +231,7 @@ export class StacksFirestoreService implements StacksPersistenceService {
    * @param stack stack to be deleted
    */
   public deleteStack(stack: Stack): Promise<any> {
+    LogService.trace(`StacksFirestoreService#deleteStack`);
     return new Promise((resolve, reject) => {
       if (stack == null) {
         reject();
@@ -240,7 +239,6 @@ export class StacksFirestoreService implements StacksPersistenceService {
 
       // Delete stack
       return this.firebaseCloudFirestoreService.deleteStack(stack).then(() => {
-        this.notifyMultipleStacks();
         resolve();
       });
     });
@@ -251,11 +249,11 @@ export class StacksFirestoreService implements StacksPersistenceService {
    * @param stacks stacks
    */
   public deleteStacks(stacks: Stack[]): Promise<any> {
+    LogService.trace(`StacksFirestoreService#deleteStacks`);
     return new Promise((resolve) => {
 
       // Delete stacks
       return this.firebaseCloudFirestoreService.deleteStacks(stacks).then(() => {
-        this.notifyMultipleStacks();
         resolve();
       });
     });
@@ -271,6 +269,7 @@ export class StacksFirestoreService implements StacksPersistenceService {
    * @param owner user that will be the new owner of this stack
    */
   public uploadStack(stack: Stack, owner: User): Promise<any> {
+    LogService.trace(`StacksFirestoreService#uploadStack`);
     stack.id = new UUID().toString();
     stack.owner = owner.uid;
 
@@ -288,7 +287,7 @@ export class StacksFirestoreService implements StacksPersistenceService {
    * Informs subscribers that something has changed
    */
   public notifyMultipleStacks() {
-    LogService.trace(`notifyMultipleStacks`);
+    LogService.trace(`StacksFirestoreService#notifyMultipleStacks`);
     this.stacksSubject.next(Array.from(this.stacks.values()).sort((t1, t2) => {
       return new Date(t2.modificationDate).getTime() - new Date(t1.modificationDate).getTime();
     }));
@@ -298,7 +297,7 @@ export class StacksFirestoreService implements StacksPersistenceService {
    * Informs subscribers that something has changed
    */
   public notifySingleStack() {
-    LogService.trace(`notifySingleStack`);
+    LogService.trace(`StacksFirestoreService#notifySingleStack`);
     this.stackSubject.next(this.stack);
   }
 
@@ -321,6 +320,7 @@ export class StacksFirestoreService implements StacksPersistenceService {
    * @param tagIds tag IDs
    */
   private updateRelatedTags(stack: Stack, tagIds: string[]) {
+    LogService.trace(`StacksFirestoreService#updateRelatedTags`);
     tagIds.forEach(id => {
       const tag = this.tagsService.getTagById(id);
       if (tag != null) {
