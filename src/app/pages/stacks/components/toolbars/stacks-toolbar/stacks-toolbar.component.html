@@ -1,11 +1,10 @@
 <mat-toolbar class="toolbar flexcontainer">
-  <div class="toolbar-block start">
+  <div class="toolbar-block start flexbox flexcontainer">
     <button mat-button class="toolbar-menu-item" aria-label="Menu" (click)="onMenuItemClicked('menu')">
       <mat-icon svgIcon="menu"></mat-icon>
     </button>
-    <span *ngIf="media != mediaType.SMALL" class="toolbar-title">{{ title }}</span>
+    <div *ngIf="media != mediaType.SMALL" class="toolbar-title flexbox">{{ title }}</div>
   </div>
-  <div class="flexbox"></div>
   <div class="searchbox">
     <mat-form-field floatLabel="never" class="search-form-field">
       <button mat-button *ngIf="!searchItem" matSuffix mat-icon-button aria-label="Search">
@@ -31,8 +30,7 @@
 
     </mat-autocomplete>
   </div>
-  <div class="flexbox"></div>
-  <div class="toolbar-block end">
+  <div class="toolbar-block end flexbox">
     <!-- Optional buttons desktop -->
     <div *ngIf="media > mediaType.MEDIUM" class="inline">
       <button mat-button

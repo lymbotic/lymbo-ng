@@ -1,17 +1,16 @@
 <mat-toolbar class="toolbar flexcontainer">
-  <div *ngIf="media > mediaType.MEDIUM" class="toolbar-block start">
+  <div *ngIf="media > mediaType.MEDIUM" class="toolbar-block start flexbox flexcontainer">
     <button mat-button class="toolbar-menu-item" aria-label="Back" (click)="onMenuItemClicked('back')">
       <mat-icon svgIcon="arrow_back"></mat-icon>
     </button>
-    <span *ngIf="media != mediaType.SMALL" class="toolbar-title" [style.color]="titleColor">{{ title }}</span>
+    <div *ngIf="media != mediaType.SMALL" class="toolbar-title flexbox" [style.color]="titleColor">{{ title }}</div>
   </div>
-  <div *ngIf="media < mediaType.LARGE" class="toolbar-block start">
+  <div *ngIf="media < mediaType.LARGE" class="toolbar-block start flexbox flexcontainer">
     <button mat-button class="toolbar-menu-item" aria-label="Menu" (click)="onMenuItemClicked('menu')">
       <mat-icon svgIcon="menu"></mat-icon>
     </button>
-    <span *ngIf="media != mediaType.SMALL" class="toolbar-title" [style.color]="titleColor">{{ title }}</span>
+    <div *ngIf="media != mediaType.SMALL" class="toolbar-title flexbox" [style.color]="titleColor">{{ title }}</div>
   </div>
-  <div class="flexbox"></div>
   <div class="searchbox">
     <mat-form-field floatLabel="never" class="search-form-field">
       <button mat-button *ngIf="!searchItem" matSuffix mat-icon-button aria-label="Search">
@@ -36,9 +35,8 @@
       </mat-option>
     </mat-autocomplete>
   </div>
-  <div class="flexbox"></div>
 
-  <div class="toolbar-block end">
+  <div class="toolbar-block end flexbox">
     <!-- Optional buttons desktop -->
     <div *ngIf="media > mediaType.MEDIUM" class="inline">
       <button *ngIf="cardsDisplayMode === cardsDisplayModeType.LIST"
