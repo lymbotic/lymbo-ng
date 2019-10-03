@@ -33,6 +33,8 @@ export class StackFragmentComponent implements OnInit {
   titleColor = 'black';
   /** Tag color */
   tagColor = 'white';
+  /** Tag text color */
+  tagTextColor = 'white';
 
   /** Enum of display aspects */
   displayAspectType = DisplayAspect;
@@ -83,10 +85,19 @@ export class StackFragmentComponent implements OnInit {
   private initializeColors() {
     if (this.stack != null && this.stack.imagePalette != null) {
       const swatchMuted = this.stack.imagePalette.muted;
-      this.titleColor = `rgb(${swatchMuted.rgb[0]},${swatchMuted.rgb[1]},${swatchMuted.rgb[2]})`;
-
       const swatchLightMuted = this.stack.imagePalette.lightMuted;
-      this.tagColor = `rgb(${swatchLightMuted.rgb[0]},${swatchLightMuted.rgb[1]},${swatchLightMuted.rgb[2]})`;
+
+      const lightMutedR = swatchLightMuted.rgb[0];
+      const lightMutedG = swatchLightMuted.rgb[1];
+      const lightMutedB = swatchLightMuted.rgb[2];
+
+      this.titleColor = `rgb(${swatchMuted.rgb[0]},${swatchMuted.rgb[1]},${swatchMuted.rgb[2]})`;
+      this.tagColor = `rgb(${lightMutedR},${lightMutedG},${lightMutedB})`;
+      this.tagTextColor = Math.sqrt(
+        0.299 * (lightMutedR * lightMutedR) +
+        0.587 * (lightMutedG * lightMutedG) +
+        0.114 * (lightMutedB * lightMutedB)
+      ) < 127.5 ? 'white' : 'black';
     }
   }
 

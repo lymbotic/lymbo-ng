@@ -74,11 +74,14 @@
         <mat-tab *ngFor="let box of boxes; let index = index;">
           <!-- <ng-template mat-tab-label *ngIf="cardsAreInMultipleBoxes -->
           <ng-template mat-tab-label>
-            <button mat-flat-button [disableRipple]="true" [style.background]="getBackgroundColor(index, selectedTab.value)">
+            <button mat-flat-button [disableRipple]="true"
+                    [style.background]="getBackgroundColor(index, selectedTab.value)">
               <mat-icon svgIcon="inbox" class="box-icon"
                         [style.fill]="getTitleColor(index, selectedTab.value, getCardsOfBox(index).length)"></mat-icon>
-              <span [style.color]="getTitleColor(index, selectedTab.value, getCardsOfBox(index).length)">Box {{ index + 1 }}</span>
-              <span [style.color]="getTitleColor(index, selectedTab.value, getCardsOfBox(index).length)" style="margin-left: 16px;"
+              <span [style.color]="getTitleColor(index, selectedTab.value, getCardsOfBox(index).length)">
+                Box {{ index + 1 }}</span>
+              <span [style.color]="getTitleColor(index, selectedTab.value, getCardsOfBox(index).length)"
+                    style="margin-left: 16px;"
                     *ngIf="getCardsOfBox(index).length > 0">({{ getCardsOfBox(index).length }})</span>
             </button>
           </ng-template>
@@ -99,8 +102,8 @@
 
             <app-cards-stack-fragment *ngIf="stack != null && cardsDisplayMode === cardsDisplayModeType.STACK"
                                       class="flexbox" [stack]="stack" [cards]="getCardsOfBox(index)"
-                                      [viceVersa]="viceVersa"
-                                      [tags]="tags" [media]="media"
+                                      [viceVersa]="viceVersa" [tags]="tags" [backgroundColor]="boxColor"
+                                      [textColor]="boxTextColor" [media]="media"
                                       (cardEventEmitter)="onCardEvent($event)">
             </app-cards-stack-fragment>
           </div>
@@ -131,6 +134,7 @@
   </mat-sidenav>
 </mat-sidenav-container>
 
-<button mat-fab class="fab" aria-label="Floating Action Button" (click)="onAddCardClicked()" [style.background]="fabColor">
+<button mat-fab class="fab" aria-label="Floating Action Button" (click)="onAddCardClicked()"
+        [style.background]="fabColor">
   <mat-icon svgIcon="add" class="icon-accent-contrast"></mat-icon>
 </button>

@@ -41,11 +41,12 @@
              (click)="onStackClicked()">
           <span *ngIf="containsDisplayAspect(displayAspectType.LANGUAGE, stack)
                 && stack.sourceLanguage !=null
-                && stack.targetLanguage !=null" class="language" [style.background-color]="tagColor">
+                && stack.targetLanguage !=null" class="language" [style.background-color]="tagColor"
+                [style.color]="tagTextColor">
             <label class="language-label">{{ stack.sourceLanguage }} > {{ stack.targetLanguage }}</label>
           </span>
           <span *ngFor="let t of stack.tagIds">
-            <span class="tag" *ngIf="tagsMap.get(t) != null">
+            <span class="tag" *ngIf="tagsMap.get(t) != null && tagsMap.get(t).name != ''">
               <label class="tag-label">{{ tagsMap.get(t).name }}</label>
             </span>
           </span>

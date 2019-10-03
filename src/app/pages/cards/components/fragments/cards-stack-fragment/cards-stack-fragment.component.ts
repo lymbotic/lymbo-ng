@@ -26,6 +26,10 @@ export class CardsStackFragmentComponent implements OnInit {
   @Input() viceVersa = false;
   /** Array of tags */
   @Input() tags: Tag[] = [];
+  /** Text color */
+  @Input() backgroundColor = 'transparent';
+  /** Background color */
+  @Input() textColor = 'black';
   /** Current media */
   @Input() media: Media = Media.UNDEFINED;
   /** Event emitter indicating click on card */
@@ -39,9 +43,6 @@ export class CardsStackFragmentComponent implements OnInit {
   cardX = 0;
   /** Ammount of pixels a card bumps back when snapped back */
   cardBumpBack = 75;
-
-  /** Favorite color */
-  favoriteColor = 'transparent';
 
   /** Stack configuration */
   stackConfig: StackConfig;
@@ -71,7 +72,6 @@ export class CardsStackFragmentComponent implements OnInit {
    * Handles on-init lifecycle phase
    */
   ngOnInit() {
-    this.initializeColors();
     this.initializeThrowOutFactor();
     this.initializeStackConfig();
   }
@@ -79,21 +79,6 @@ export class CardsStackFragmentComponent implements OnInit {
   //
   // Initialization
   //
-
-  /**
-   * Initializes colors
-   */
-  private initializeColors() {
-    if (this.stack.imagePalette != null) {
-      const vibrant = this.stack.imagePalette.vibrant;
-      const lightMuted = this.stack.imagePalette.lightMuted;
-      this.favoriteColor = `rgb(${lightMuted.rgb[0]},${lightMuted.rgb[1]},${lightMuted.rgb[2]})`;
-    } else {
-      this.favoriteColor = this.materialColorService.accent;
-    }
-
-    console.log(`favoriteColor ${this.favoriteColor}`);
-  }
 
   /**
    * Initializes throw-out factor

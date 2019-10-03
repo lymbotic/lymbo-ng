@@ -114,6 +114,8 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
   public titleColor = 'black';
   /** Box color */
   public boxColor = 'transparent';
+  /** Box text color */
+  public boxTextColor = 'black';
   /** FAB color */
   public fabColor = 'black';
 
@@ -511,12 +513,22 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
    */
   private initializeColors(stack: Stack) {
     if (stack.imagePalette != null) {
-      const muted = stack.imagePalette.muted;
-      const lightMuted = stack.imagePalette.lightMuted;
-      const vibrant = stack.imagePalette.vibrant;
-      this.titleColor = `rgb(${muted.rgb[0]},${muted.rgb[1]},${muted.rgb[2]})`;
-      this.boxColor = `rgb(${lightMuted.rgb[0]},${lightMuted.rgb[1]},${lightMuted.rgb[2]})`;
-      this.fabColor = `rgb(${vibrant.rgb[0]},${vibrant.rgb[1]},${vibrant.rgb[2]})`;
+      const swatchMuted = stack.imagePalette.muted;
+      const swatchLightMuted = stack.imagePalette.lightMuted;
+      const swatchVibrant = stack.imagePalette.vibrant;
+
+      const lightMutedR = swatchLightMuted.rgb[0];
+      const lightMutedG = swatchLightMuted.rgb[1];
+      const lightMutedB = swatchLightMuted.rgb[2];
+
+      this.titleColor = `rgb(${swatchMuted.rgb[0]},${swatchMuted.rgb[1]},${swatchMuted.rgb[2]})`;
+      this.boxColor = `rgb(${lightMutedR},${lightMutedG},${lightMutedB})`;
+      this.boxTextColor = Math.sqrt(
+        0.299 * (lightMutedR * lightMutedR) +
+        0.587 * (lightMutedG * lightMutedG) +
+        0.114 * (lightMutedB * lightMutedB)
+      ) < 127.5 ? 'white' : 'black';
+      this.fabColor = `rgb(${swatchVibrant.rgb[0]},${swatchVibrant.rgb[1]},${swatchVibrant.rgb[2]})`;
     } else {
       const primary = this.materialColorService.primary;
       const accent = this.materialColorService.accent;
@@ -1383,7 +1395,7 @@ export class CardsComponent implements OnInit, AfterViewInit, OnDestroy {
    */
   getTitleColor(boxIndex: number, selectedIndex: number, cardCount: number) {
     return (boxIndex === selectedIndex)
-      ? `black`
+      ? this.boxTextColor
       : (cardCount > 0) ? null : this.materialColorService.color(PaletteType.GREY, HueType._400);
   }
 
