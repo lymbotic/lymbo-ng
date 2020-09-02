@@ -89,7 +89,7 @@
     "@types/jasmine": "~2.8.8",
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "^8.10.40",
-    "bestzip": "^2.1.2",
+    "bestzip": "^2.1.7",
     "codelyzer": "^5.0.1",
     "copyfiles": "^2.0.0",
     "cordova": "^8.1.2",
